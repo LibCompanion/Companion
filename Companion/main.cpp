@@ -33,21 +33,23 @@ int main() {
 	}
 
 	// Compare matching - Fast but results can vary
-	//Compare image = companion.search_compare_image_mp(search_file_path, card_images, 0.05);
-
+	Compare image = companion.search_compare_image_mp(search_file_path, card_images, 0.05);
+	
 	// Template matching - Moderrate result good
 	// http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html
 	// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
 	// CV_TM_SQDIFF, CV_TM_SQDIFF_NORMED, CV_TM_CCORR, CV_TM_CCORR_NORMED, CV_TM_CCOEFF, CV_TM_CCOEFF_NORMED
-	TemplateMatch image = companion.search_template_matching_mp(search_file_path, card_images, 0.8 , CV_TM_CCORR_NORMED);
+	//TemplateMatch image = companion.search_template_matching_mp(search_file_path, card_images, 0.8 , CV_TM_CCORR_NORMED);
 
 	// Flann matching - Slowest but best results
+	// Requires OpenCV NonFree libs... be careful !!
+	// http://docs.opencv.org/2.4/modules/nonfree/doc/nonfree.html
 	// http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_flann_matcher/feature_flann_matcher.html
 	//Flann image = companion.search_flann_mp(search_file_path, card_images, 0.1);
 
 	if (!image.get_compare_image_path().empty()) {
 		std::cout << "Accordance : " << image.get_accordance() << "\n";
-		companion.show_cards(image.get_search_image_path(), image.get_compare_image_path());
+		image.show_images();
 	}
 	else
 	{

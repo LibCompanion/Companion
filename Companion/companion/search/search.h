@@ -1,12 +1,17 @@
 #pragma once
 
 #include <iostream>
+#include <opencv2\core\core.hpp>
+#include <opencv2\highgui\highgui.hpp>
 
 using namespace std;
+using namespace cv;
 
 class Search
 {
 public:
+
+	void show_images();
 
 	void set_search_image_path(string search_image_path);
 

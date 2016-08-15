@@ -289,31 +289,6 @@ Flann Companion::search_flann(string search_img_path, string compare_img_path)
 	return Flann::Flann(search_img_path, compare_img_path, score, good_matches.size());
 }
 
-void Companion::show_cards(string img1, string img2)
-{
-	Mat searched_img = imread(img1);
-	Mat find_img = imread(img2);
-
-	Mat img_display;
-	Mat tmp_display;
-
-	char* image_window = "Searched Image";
-	char* template_window = "Found Image";
-
-	namedWindow(image_window, CV_WINDOW_AUTOSIZE);
-	namedWindow(template_window, CV_WINDOW_AUTOSIZE);
-
-	searched_img.copyTo(img_display);
-	find_img.copyTo(tmp_display);
-
-	imshow(image_window, img_display);
-	imshow(template_window, tmp_display);
-	waitKey(0);
-
-	searched_img.release();
-	find_img.release();
-}
-
 string Companion::get_error(Error error_code)
 {
 	string error = "";
