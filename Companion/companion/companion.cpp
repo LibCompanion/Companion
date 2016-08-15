@@ -1,27 +1,36 @@
 #include "companion.h"
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Constructor                                 //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Companion::Companion()
 {
 }
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Destructor                                  //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Companion::~Companion()
 {
 }
 
-Compare Companion::search_compare_image_mp(string img_path, vector<string> images, double min_threshold)
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Public Methods                              //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+Compare Companion::search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold)
 {
-	Compare best_image = Compare::Compare();
+	Compare best_image;
 
 	#pragma omp parallel 
 	{
 		// ToDo := Stop if card found with 100%
-		for (auto const& check_image_path : images)
+		for (auto const& check_image_path : compare_image_paths)
 		{
 			#pragma omp single nowait 
 			{
 				try 
 				{
-					Compare result = search_compare_image(img_path, check_image_path);
+					Compare result = search_compare_image(search_img_path, check_image_path);
 					if (result.get_accordance() >= min_threshold && result.get_accordance() > best_image.get_accordance())
 					{
 						#pragma omp critical
@@ -81,20 +90,20 @@ Compare Companion::search_compare_image(string search_img_path, string compare_i
 	return Compare::Compare(search_img_path, compare_img_path, accordance);
 }
 
-TemplateMatch Companion::search_template_matching_mp(string img_path, vector<string> images, double threshold, int match_method)
+TemplateMatch Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method)
 {
 	TemplateMatch best_image = TemplateMatch::TemplateMatch();
 
 	#pragma omp parallel 
 	{
 		// ToDo := Stop if card found with 100%
-		for (auto const& check_image_path : images)
+		for (auto const& check_image_path : compare_img_paths)
 		{
 			#pragma omp single nowait 
 			{
 				try
 				{
-					TemplateMatch result = search_template_matching(img_path, check_image_path, match_method);
+					TemplateMatch result = search_template_matching(search_img_path, check_image_path, match_method);
 					/// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
 					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) {
 						if (result.get_accordance() <= threshold 
@@ -171,20 +180,20 @@ TemplateMatch Companion::search_template_matching(string search_img_path, string
 	return TemplateMatch::TemplateMatch(search_img_path, template_img_path, maxVal);
 }
 
-Flann Companion::search_flann_mp(string img_path, vector<string> images, double min_threshold)
+Flann Companion::search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold)
 {
 	Flann best_image = Flann::Flann();
 
 	#pragma omp parallel 
 	{
 		// ToDo := Stop if card found with 100%
-		for (auto const& check_image_path : images)
+		for (auto const& check_image_path : compare_img_paths)
 		{
 			#pragma omp single nowait 
 			{
 				try
 				{
-					Flann result = search_flann(img_path, check_image_path);
+					Flann result = search_flann(search_img_path, check_image_path);
 					if (result.get_accordance() < min_threshold
 						&& result.get_accordance() < best_image.get_accordance()
 						&& result.get_matches_size() > best_image.get_matches_size())
@@ -308,6 +317,9 @@ string Companion::get_error(Error error_code)
 	return error;
 }
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Private Methods                             //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 void Companion::resize_image_equal(Mat &img1, Mat &img2)
 {
 	Mat resized;

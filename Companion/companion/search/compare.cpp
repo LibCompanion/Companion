@@ -1,5 +1,8 @@
 #include "compare.h"
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Constructor                                 //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Compare::Compare()
 {
 	this->search_image_path = "";
@@ -14,6 +17,9 @@ Compare::Compare(string search_image_path, string compare_image_path, double acc
 	this->accordance = accordance;
 }
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Destructor                                  //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Compare::~Compare()
 {
 }

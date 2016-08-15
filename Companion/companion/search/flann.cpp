@@ -1,5 +1,8 @@
 #include "flann.h"
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Constructor                                 //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Flann::Flann()
 {
 	this->search_image_path = "";
@@ -16,10 +19,16 @@ Flann::Flann(string search_image_path, string compare_image_path, double accorda
 	this->matches_size = matches_size;
 }
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Destructor                                  //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Flann::~Flann()
 {
 }
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Public Methods                              //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 void Flann::set_matches_size(int matches_size)
 {
 	this->matches_size = matches_size;

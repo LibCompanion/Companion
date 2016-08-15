@@ -11,7 +11,7 @@ using namespace cv;
 int main() {
 
 	string check_files_path = "D:/Magic_Cards_Img/All/";
-	string search_file_path = "D:/Magic_Cards_Img/Test/Sub/testcard1.jpg";
+	string search_file_path = "D:/Magic_Cards_Img/Test/Sub/testcard6.jpg";
 
 	vector<string> card_images;
 	Companion companion = Companion::Companion();

@@ -1,5 +1,8 @@
 #include "search.h"
 
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// Public Methods                              //
+//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 void Search::show_images()
 {
 	Mat searched_img = imread(this->search_image_path);
