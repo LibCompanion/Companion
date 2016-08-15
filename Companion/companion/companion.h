@@ -1,8 +1,8 @@
 #pragma once
 
-#include "compare.h"
-#include "flann.h"
-#include "templatematch.h"
+#include "search\compare.h"
+#include "search\flann.h"
+#include "search\templatematch.h"
 
 #include <stdlib.h>
 #include <omp.h>

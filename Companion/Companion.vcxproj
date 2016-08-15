@@ -84,7 +84,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -153,29 +153,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <ClInclude Include="companion\companion.h" />
+    <ClInclude Include="companion\search\compare.h" />
+    <ClInclude Include="companion\search\flann.h" />
+    <ClInclude Include="companion\search\search.h" />
+    <ClInclude Include="companion\search\templatematch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="companion.h" />
-    <ClInclude Include="compare.h" />
-    <ClInclude Include="flann.h" />
-    <ClInclude Include="search.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="templatematch.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="companion.cpp" />
-    <ClCompile Include="compare.cpp" />
-    <ClCompile Include="flann.cpp" />
+    <ClCompile Include="companion\companion.cpp" />
+    <ClCompile Include="companion\search\compare.cpp" />
+    <ClCompile Include="companion\search\flann.cpp" />
+    <ClCompile Include="companion\search\search.cpp" />
+    <ClCompile Include="companion\search\templatematch.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="search.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="templatematch.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

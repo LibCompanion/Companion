@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "search.h"
 
 void Search::set_search_image_path(string search_image_path)

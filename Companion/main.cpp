@@ -1,7 +1,7 @@
 // CompareCV.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
 //
 
-#include "stdafx.h"
+#include "companion\companion.h"
 
 using namespace std;
 using namespace cv;

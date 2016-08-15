@@ -9,55 +9,54 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Quelldateien\companion">
+      <UniqueIdentifier>{409bf36e-3c4b-4433-ab73-6952231894c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\companion\search">
+      <UniqueIdentifier>{461469ca-9912-4ebc-8f48-16f793ccf28c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\companion">
+      <UniqueIdentifier>{ba8da328-15f6-4115-80f3-ddc38bf19291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\companion\search">
+      <UniqueIdentifier>{b173212c-7758-4d70-804c-17cb533647b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="companion\companion.h">
+      <Filter>Headerdateien\companion</Filter>
     </ClInclude>
-    <ClInclude Include="companion.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="companion\search\compare.h">
+      <Filter>Headerdateien\companion\search</Filter>
     </ClInclude>
-    <ClInclude Include="templatematch.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="companion\search\flann.h">
+      <Filter>Headerdateien\companion\search</Filter>
     </ClInclude>
-    <ClInclude Include="flann.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="companion\search\search.h">
+      <Filter>Headerdateien\companion\search</Filter>
     </ClInclude>
-    <ClInclude Include="compare.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="search.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="companion\search\templatematch.h">
+      <Filter>Headerdateien\companion\search</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="companion.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="templatematch.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="companion\companion.cpp">
+      <Filter>Quelldateien\companion</Filter>
     </ClCompile>
-    <ClCompile Include="flann.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="companion\search\compare.cpp">
+      <Filter>Quelldateien\companion\search</Filter>
     </ClCompile>
-    <ClCompile Include="compare.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="companion\search\flann.cpp">
+      <Filter>Quelldateien\companion\search</Filter>
     </ClCompile>
-    <ClCompile Include="search.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="companion\search\search.cpp">
+      <Filter>Quelldateien\companion\search</Filter>
+    </ClCompile>
+    <ClCompile Include="companion\search\templatematch.cpp">
+      <Filter>Quelldateien\companion\search</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

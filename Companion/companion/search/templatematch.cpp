@@ -1,20 +1,20 @@
-#include "stdafx.h"
-#include "compare.h"
+#include "templatematch.h"
 
-Compare::Compare()
+TemplateMatch::TemplateMatch()
 {
 	this->search_image_path = "";
 	this->compare_image_path = "";
 	this->accordance = 0;
 }
 
-Compare::Compare(string search_image_path, string compare_image_path, double accordance)
+TemplateMatch::TemplateMatch(string search_image_path, string compare_image_path, double accordance)
 {
 	this->search_image_path = search_image_path;
 	this->compare_image_path = compare_image_path;
 	this->accordance = accordance;
 }
 
-Compare::~Compare()
+
+TemplateMatch::~TemplateMatch()
 {
 }
