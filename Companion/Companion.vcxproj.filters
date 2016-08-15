@@ -38,6 +38,9 @@
     <ClInclude Include="companion\search\templatematch.h">
       <Filter>Headerdateien\companion\search</Filter>
     </ClInclude>
+    <ClInclude Include="dirent.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

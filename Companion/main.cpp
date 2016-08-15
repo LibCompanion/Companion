@@ -2,6 +2,8 @@
 //
 
 #include "companion\companion.h"
+#include "dirent.h"
+#include <stdlib.h>
 
 using namespace std;
 using namespace cv;

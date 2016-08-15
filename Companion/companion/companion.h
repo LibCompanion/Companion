@@ -4,9 +4,7 @@
 #include "search\flann.h"
 #include "search\templatematch.h"
 
-#include <stdlib.h>
 #include <omp.h>
-#include <dirent.h>
 #include <iostream>
 #include <opencv2\highgui\highgui.hpp>
 #include <opencv2\imgproc\imgproc.hpp>

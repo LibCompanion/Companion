@@ -158,6 +158,7 @@
     <ClInclude Include="companion\search\flann.h" />
     <ClInclude Include="companion\search\search.h" />
     <ClInclude Include="companion\search\templatematch.h" />
+    <ClInclude Include="dirent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="companion\companion.cpp" />
