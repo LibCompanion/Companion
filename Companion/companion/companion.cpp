@@ -41,6 +41,7 @@ Compare Companion::search_compare_image_mp(string search_img_path, vector<string
 				}
 				catch (Error e)
 				{
+					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
 				}
 			}
@@ -54,7 +55,7 @@ Compare Companion::search_compare_image(string search_img_path, string compare_i
 {
 	int pixels;
 	int equalPixels;
-	int accordance;
+	double accordance;
 
 	Mat result;
 	Mat img = imread(search_img_path, CV_LOAD_IMAGE_GRAYSCALE);
@@ -82,7 +83,7 @@ Compare Companion::search_compare_image(string search_img_path, string compare_i
 	compare(img, compare_img, result, CMP_EQ);
 
 	equalPixels = countNonZero(result);
-	accordance = equalPixels * 100 / pixels;
+	accordance = (double) equalPixels / (double) pixels;
 
 	img.release();
 	compare_img.release();
@@ -90,7 +91,7 @@ Compare Companion::search_compare_image(string search_img_path, string compare_i
 	return Compare::Compare(search_img_path, compare_img_path, accordance);
 }
 
-TemplateMatch Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method)
+TemplateMatch Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size)
 {
 	TemplateMatch best_image = TemplateMatch::TemplateMatch();
 
@@ -103,12 +104,13 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 			{
 				try
 				{
-					TemplateMatch result = search_template_matching(search_img_path, check_image_path, match_method);
-					/// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) {
+					TemplateMatch result = search_template_matching(search_img_path, check_image_path, match_method, resize_same_size);
+					// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
+					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) 
+					{
+
 						if (result.get_accordance() <= threshold 
-							&& result.get_accordance() < best_image.get_accordance()
-							|| best_image.get_compare_image_path().empty())
+							&& (result.get_accordance() < best_image.get_accordance() || best_image.get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{
@@ -118,8 +120,7 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 					}
 					else {
 						if (result.get_accordance() >= threshold 
-							&& result.get_accordance() > best_image.get_accordance()
-							|| best_image.get_compare_image_path().empty())
+							&& (result.get_accordance() > best_image.get_accordance() || best_image.get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{
@@ -130,6 +131,7 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 				}
 				catch (Error e)
 				{
+					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
 				}
 			}
@@ -139,7 +141,7 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 	return best_image;
 }
 
-TemplateMatch Companion::search_template_matching(string search_img_path, string template_img_path, int match_method)
+TemplateMatch Companion::search_template_matching(string search_img_path, string template_img_path, int match_method, bool resize_same_size)
 {
 	Mat search_img = imread(search_img_path);
 	Mat template_img = imread(template_img_path);
@@ -151,13 +153,18 @@ TemplateMatch Companion::search_template_matching(string search_img_path, string
 		throw Error::image_not_found;
 	}
 
+	if (resize_same_size) 
+	{
+		resize_image_equal(search_img, template_img);
+	}	
+
 	// If template is greater than image size
 	if (search_img.cols < template_img.cols || search_img.rows < template_img.rows)
 	{
 		throw Error::template_dimension_error;
 	}
 
-	/// Create the result matrix
+	// Create the result matrix
 	int result_cols = search_img.cols - template_img.cols + 1;
 	int result_rows = search_img.rows - template_img.rows + 1;
 
@@ -167,7 +174,7 @@ TemplateMatch Companion::search_template_matching(string search_img_path, string
 	matchTemplate(search_img, template_img, result, match_method);
 	threshold(result, result, 0.1, 1., CV_THRESH_TOZERO);
 
-	/// Localizing the best match with minMaxLoc
+	// Localizing the best match with minMaxLoc
 	double minVal;
 	double maxVal;
 
@@ -206,6 +213,7 @@ Flann Companion::search_flann_mp(string search_img_path, vector<string> compare_
 				}
 				catch (Error e)
 				{
+					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
 				}
 				
@@ -224,15 +232,6 @@ Flann Companion::search_flann(string search_img_path, string compare_img_path)
 	// Check if image is loaded
 	if (img_1.empty() || img_2.empty()) {
 		throw Error::image_not_found;
-	}
-
-	// Resize image to same size
-	resize_image_equal(img_1, img_2);
-
-	// Check if dimension from img is equal to compare_image
-	if (img_1.cols != img_2.cols || img_1.rows != img_2.rows || img_1.dims != img_2.dims)
-	{
-		throw Error::dimension_error;
 	}
 
 	//-- Step 1: Detect the keypoints using SURF Detector
