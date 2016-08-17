@@ -1,0 +1,5 @@
+project(Companion)
+cmake_minimum_required(VERSION 2.8)
+find_package(OpenCV REQUIRED)
+find_package(OpenMP REQUIRED)
+add_subdirectory(src)

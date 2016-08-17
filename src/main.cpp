@@ -1,20 +1,19 @@
-// CompareCV.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
-//
-
-#include "companion\companion.h"
-#include "dirent.h"
+#include "companion.h"
 #include <stdlib.h>
 #include <ctime>
+#include <string>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace cv;
 
-void out_message(string header, Search search) {
-	if (!search.get_compare_image_path().empty()) {
-		cout << header << "\n" << "Accordance : " << search.get_accordance() << "\n";
-		cout << "Search Image : " << search.get_search_image_path() << "\n";
-		cout << "Compare Image : " << search.get_compare_image_path() << "\n";
-		//search.show_images();
+void out_message(string header, Search *search) {
+    if (!search->get_compare_image_path().empty()) {
+        cout << header << "\n" << "Accordance : " << search->get_accordance() << "\n";
+        cout << "Search Image : " << search->get_search_image_path() << "\n";
+        cout << "Compare Image : " << search->get_compare_image_path() << "\n";
+        //search->show_images();
 	}
 	else
 	{
@@ -24,41 +23,43 @@ void out_message(string header, Search search) {
 
 int main() {
 
-	string check_files_path = "D:/Magic_Cards_Img/Sub/";
-	string seach_file_path_name = "D:/Magic_Cards_Img/Test/testcard";
+    string check_files_path = "D:/Magic_Cards_Img/data_b.txt";
+    string seach_file_path_name = "D:/Magic_Cards_Img/Test/testcard";
 	string search_file_path;
 
 	vector<string> card_images;
-	Companion companion = Companion::Companion();
+    Companion companion;
 
-	DIR *dir;
-	struct dirent *ent;
-	if ((dir = opendir(check_files_path.c_str())) != NULL)
+	string path;
+	ifstream myfile(check_files_path);
+	if (myfile.is_open())
 	{
-		// print all the files and directories within directory
-		while ((ent = readdir(dir)) != NULL) 
+		while (getline(myfile, path))
 		{
-			card_images.push_back(check_files_path + std::string(ent->d_name));
+			card_images.push_back(path);
 		}
-		closedir(dir);
+		myfile.close();
 	}
-	else 
+	else
 	{
-		printf("Could not open directory \n");
+		cout << "Testdata not found\n";
+		system("pause");
+		return 0;
 	}
 
 	int start_s;
-	Search image;
+    Search *image;
 	int stop_s;
 
 	// Compare matching - Fast but results can vary
+
 	for (int i = 1; i <= 5; i++) 
 	{
 		search_file_path = seach_file_path_name + to_string(i) + ".jpg";
-		start_s = clock();
-		image = companion.search_compare_image_mp(search_file_path, card_images, 0.05);
-		stop_s = clock();
-		out_message("Simple_Compare", image);
+        start_s = clock();
+        image = companion.search_compare_image_mp(search_file_path, card_images, 0.05);
+        stop_s = clock();
+        out_message("Simple_Compare", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
 	}
 
@@ -66,7 +67,8 @@ int main() {
 	// http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html
 	// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
 	// CV_TM_SQDIFF, CV_TM_SQDIFF_NORMED, CV_TM_CCORR, CV_TM_CCORR_NORMED, CV_TM_CCOEFF, CV_TM_CCOEFF_NORMED
-	for (int i = 1; i <= 5; i++)
+
+    for (int i = 1; i <= 5; i++)
 	{
 		search_file_path = seach_file_path_name + to_string(i) + ".jpg";
 		start_s = clock();
@@ -95,12 +97,12 @@ int main() {
 		out_message("Template_Matching_CV_TM_CCOEFF_NORMED", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
 	}
-	
+
 	// Flann matching - Slowest but best results
 	// Requires OpenCV NonFree libs... be careful !!
 	// http://docs.opencv.org/2.4/modules/nonfree/doc/nonfree.html
 	// http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_flann_matcher/feature_flann_matcher.html
-	for (int i = 1; i <= 5; i++)
+    for (int i = 1; i <= 5; i++)
 	{
 		search_file_path = seach_file_path_name + to_string(i) + ".jpg";
 		start_s = clock();
@@ -109,8 +111,7 @@ int main() {
 		out_message("FLANN", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
 	}
-	
-	std::system("pause");
 
+	system("pause");
 	return 0;
 }

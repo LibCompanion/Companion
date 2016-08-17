@@ -17,27 +17,28 @@ Companion::~Companion()
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 // Public Methods                              //
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
-Compare Companion::search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold)
+Compare *Companion::search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold)
 {
-	Compare best_image;
+    Compare *best_image = new Compare();
 
-	#pragma omp parallel 
+    #pragma omp parallel
 	{
 		// ToDo := Stop if card found with 100%
 		for (auto const& check_image_path : compare_image_paths)
 		{
-			#pragma omp single nowait 
+            #pragma omp single nowait
 			{
 				try 
 				{
-					Compare result = search_compare_image(search_img_path, check_image_path);
-					if (result.get_accordance() >= min_threshold && result.get_accordance() > best_image.get_accordance())
-					{
-						#pragma omp critical
-						{
-							best_image = result;
-						}
-					}
+                    Compare *result = search_compare_image(search_img_path, check_image_path);
+
+                    if (result->get_accordance() >= min_threshold && result->get_accordance() > best_image->get_accordance())
+                    {
+                        #pragma omp critical
+                        {
+                            best_image = result;
+                        }
+                    }
 				}
 				catch (Error e)
 				{
@@ -51,7 +52,7 @@ Compare Companion::search_compare_image_mp(string search_img_path, vector<string
 	return best_image;
 }
 
-Compare Companion::search_compare_image(string search_img_path, string compare_img_path)
+Compare *Companion::search_compare_image(string search_img_path, string compare_img_path)
 {
 	int pixels;
 	int equalPixels;
@@ -88,12 +89,12 @@ Compare Companion::search_compare_image(string search_img_path, string compare_i
 	img.release();
 	compare_img.release();
 
-	return Compare::Compare(search_img_path, compare_img_path, accordance);
+    return new Compare(search_img_path, compare_img_path, accordance);
 }
 
-TemplateMatch Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size)
+TemplateMatch *Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size)
 {
-	TemplateMatch best_image = TemplateMatch::TemplateMatch();
+    TemplateMatch *best_image = new TemplateMatch();
 
 	#pragma omp parallel 
 	{
@@ -104,13 +105,13 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 			{
 				try
 				{
-					TemplateMatch result = search_template_matching(search_img_path, check_image_path, match_method, resize_same_size);
+                    TemplateMatch *result = search_template_matching(search_img_path, check_image_path, match_method, resize_same_size);
 					// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
 					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) 
 					{
 
-						if (result.get_accordance() <= threshold 
-							&& (result.get_accordance() < best_image.get_accordance() || best_image.get_compare_image_path().empty()))
+                        if (result->get_accordance() <= threshold
+                            && (result->get_accordance() < best_image->get_accordance() || best_image->get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{
@@ -119,8 +120,8 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 						}
 					}
 					else {
-						if (result.get_accordance() >= threshold 
-							&& (result.get_accordance() > best_image.get_accordance() || best_image.get_compare_image_path().empty()))
+                        if (result->get_accordance() >= threshold
+                            && (result->get_accordance() > best_image->get_accordance() || best_image->get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{
@@ -141,7 +142,7 @@ TemplateMatch Companion::search_template_matching_mp(string search_img_path, vec
 	return best_image;
 }
 
-TemplateMatch Companion::search_template_matching(string search_img_path, string template_img_path, int match_method, bool resize_same_size)
+TemplateMatch *Companion::search_template_matching(string search_img_path, string template_img_path, int match_method, bool resize_same_size)
 {
 	Mat search_img = imread(search_img_path);
 	Mat template_img = imread(template_img_path);
@@ -184,12 +185,12 @@ TemplateMatch Companion::search_template_matching(string search_img_path, string
 
 	minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
 
-	return TemplateMatch::TemplateMatch(search_img_path, template_img_path, maxVal);
+    return new TemplateMatch(search_img_path, template_img_path, maxVal);
 }
 
-Flann Companion::search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold)
+Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold)
 {
-	Flann best_image = Flann::Flann();
+    Flann *best_image = new Flann();
 
 	#pragma omp parallel 
 	{
@@ -200,10 +201,10 @@ Flann Companion::search_flann_mp(string search_img_path, vector<string> compare_
 			{
 				try
 				{
-					Flann result = search_flann(search_img_path, check_image_path);
-					if (result.get_accordance() < min_threshold
-						&& result.get_accordance() < best_image.get_accordance()
-						&& result.get_matches_size() > best_image.get_matches_size())
+                    Flann *result = search_flann(search_img_path, check_image_path);
+                    if (result->get_accordance() < min_threshold
+                        && result->get_accordance() < best_image->get_accordance()
+                        && result->get_matches_size() > best_image->get_matches_size())
 					{
 						#pragma omp critical
 						{
@@ -224,7 +225,7 @@ Flann Companion::search_flann_mp(string search_img_path, vector<string> compare_
 	return best_image;
 }
 
-Flann Companion::search_flann(string search_img_path, string compare_img_path)
+Flann *Companion::search_flann(string search_img_path, string compare_img_path)
 {
 	Mat img_1 = imread(search_img_path);
 	Mat img_2 = imread(compare_img_path);
@@ -294,7 +295,7 @@ Flann Companion::search_flann(string search_img_path, string compare_img_path)
 	img_1.release();
 	img_2.release();
 
-	return Flann::Flann(search_img_path, compare_img_path, score, good_matches.size());
+    return new Flann(search_img_path, compare_img_path, score, good_matches.size());
 }
 
 string Companion::get_error(Error error_code)
@@ -321,8 +322,7 @@ string Companion::get_error(Error error_code)
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 void Companion::resize_image_equal(Mat &img1, Mat &img2)
 {
-	Mat resized;
-	int x;
+    int x;
 	int y;
 
 	// Check if size from img is equal to compare image

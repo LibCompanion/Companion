@@ -1,15 +1,15 @@
 #pragma once
 
-#include "search\compare.h"
-#include "search\flann.h"
-#include "search\templatematch.h"
+#include "search/compare.h"
+#include "search/flann.h"
+#include "search/templatematch.h"
 
 #include <omp.h>
 #include <iostream>
-#include <opencv2\core\core.hpp>
-#include <opencv2\imgproc\imgproc.hpp>
-#include <opencv2\highgui\highgui.hpp>
-#include <opencv2\nonfree\features2d.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/nonfree/features2d.hpp>
 
 using namespace cv;
 using namespace std;
@@ -50,7 +50,7 @@ public:
 	 *
 	 * @return Gives best compare object if exists otherwise an empty compare object.
 	 */
-	Compare search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold);
+    Compare *search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold);
 
 	/**
 	 * @brief Simple search compares compare_img_path for similarity.<br>
@@ -62,7 +62,7 @@ public:
 	 *
 	 * @return Gives an compare result model with an given accordance to search_img_path and compare_img_path.
 	 */
-	Compare search_compare_image(string search_img_path, string compare_img_path);
+    Compare *search_compare_image(string search_img_path, string compare_img_path);
 
 	/**
 	 * @brief Multi-Processing template matching search.<br> 
@@ -79,7 +79,7 @@ public:
 	 *
 	 * @return Gives best template match object if exists otherwise an empty compare object.
 	 */
-	TemplateMatch search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
+    TemplateMatch *search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
 
 	/**
 	 * @brief Template matching search implementation from <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html">OpenCV</a>.<br>
@@ -97,7 +97,7 @@ public:
 	 *
 	 * @return Gives an template match result model with an given accordance to search_img_path and compare_img_path.
 	 */
-	TemplateMatch search_template_matching(string search_img_path, string template_img_path, int match_method, bool resize_same_size);
+    TemplateMatch *search_template_matching(string search_img_path, string template_img_path, int match_method, bool resize_same_size);
 
 	/**
 	 * @brief Multi-Processing fast library for approximate nearest neighbors search.<br>
@@ -109,7 +109,7 @@ public:
 	 *
 	 * @return Gives best flann match object if exists otherwise an empty compare object.
 	 */
-	Flann search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold);
+    Flann *search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold);
 
 	/**
 	 * @brief Fast library for approximate nearest neighbors search from <a href="http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_flann_matcher/feature_flann_matcher.html">OpenCV</a>.<br>
@@ -121,7 +121,7 @@ public:
 	 *
 	 * @return Gives an flann match result model with an given accordance to search_img_path and compare_img_path.
 	 */
-	Flann search_flann(string search_img_path, string compare_img_path);
+    Flann *search_flann(string search_img_path, string compare_img_path);
 
 	/**
 	 * @brief Gets from given error an corresponding error message.
