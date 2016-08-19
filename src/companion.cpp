@@ -92,9 +92,9 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
     return new Compare(search_img_path, compare_img_path, accordance);
 }
 
-TemplateMatch *Companion::search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size)
+TemplateMatch *Companion::search_vector_template_matching(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size)
 {
-    TemplateMatch *best_image = new TemplateMatch();
+	TemplateMatch *best_image = new TemplateMatch();
 
 	#pragma omp parallel 
 	{
@@ -105,13 +105,13 @@ TemplateMatch *Companion::search_template_matching_mp(string search_img_path, ve
 			{
 				try
 				{
-                    TemplateMatch *result = search_template_matching(search_img_path, check_image_path, match_method, resize_same_size);
+					TemplateMatch *result = search_template_matching(search_img_path, check_image_path, match_method, resize_same_size);
 					// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) 
+					if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED)
 					{
 
-                        if (result->get_accordance() <= threshold
-                            && (result->get_accordance() < best_image->get_accordance() || best_image->get_compare_image_path().empty()))
+						if (result->get_accordance() <= threshold
+							&& (result->get_accordance() < best_image->get_accordance() || best_image->get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{
@@ -120,8 +120,8 @@ TemplateMatch *Companion::search_template_matching_mp(string search_img_path, ve
 						}
 					}
 					else {
-                        if (result->get_accordance() >= threshold
-                            && (result->get_accordance() > best_image->get_accordance() || best_image->get_compare_image_path().empty()))
+						if (result->get_accordance() >= threshold
+							&& (result->get_accordance() > best_image->get_accordance() || best_image->get_compare_image_path().empty()))
 						{
 							#pragma omp critical
 							{

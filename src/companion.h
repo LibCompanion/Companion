@@ -6,6 +6,7 @@
 
 #include <omp.h>
 #include <iostream>
+#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -65,7 +66,7 @@ public:
     Compare *search_compare_image(string search_img_path, string compare_img_path);
 
 	/**
-	 * @brief Multi-Processing template matching search.<br> 
+	 * @brief Template matching search which used openmp multi processing or cuda. Use of cuda will be faster than multi processing.<br> 
 	 *        Best matches depends on match_method.
 	 *
 	 * @param search_img_path   The search image path to check for similarity.
@@ -79,7 +80,7 @@ public:
 	 *
 	 * @return Gives best template match object if exists otherwise an empty compare object.
 	 */
-    TemplateMatch *search_template_matching_mp(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
+	TemplateMatch *search_vector_template_matching(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
 
 	/**
 	 * @brief Template matching search implementation from <a href="http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html">OpenCV</a>.<br>
@@ -150,5 +151,4 @@ private:
 	 * @param size_y  The size y to resize.
 	 */
 	void resize_image(Mat &img, int size_x, int size_y);
-
 };
