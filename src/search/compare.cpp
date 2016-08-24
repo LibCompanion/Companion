@@ -5,8 +5,6 @@
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 Compare::Compare()
 {
-	this->search_image_path = "";
-	this->compare_image_path = "";
 	this->accordance = 0;
 }
 

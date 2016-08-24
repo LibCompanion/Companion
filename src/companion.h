@@ -41,6 +41,9 @@ public:
 	 */
 	~Companion();
 
+	/* ToDo Documentation */
+	void calc_histogram(string img_path);
+
 	/**
 	 * @brief Multi-Processing simple search compare.<br>
 	 *        Best matches are high results and approach goes to one.

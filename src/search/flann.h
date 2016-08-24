@@ -2,8 +2,10 @@
 
 #include "search.h"
 #include <iostream>
+#include "opencv2/features2d/features2d.hpp"
 
 using namespace std;
+using namespace cv;
 
 /**
  * @brief Fast library for approximate nearest neighbors match model search class for an flann search.
@@ -24,9 +26,9 @@ public:
 	 * @param search_image_path   The search image path from search.
 	 * @param compare_image_path  The compare image path from search.
 	 * @param accordance          The accordance value from search.
-	 * @param matches_size        The match poitns which match from search.
+	 * @param matches             The match poitns which match from search.
 	 */
-	Flann(string search_image_path, string compare_image_path, double accordance, int matches_size);
+	Flann(string search_image_path, string compare_image_path, double accordance, vector<DMatch> matches, vector<KeyPoint> keypoints_1, vector<KeyPoint> keypoints_2);
 
 	/**
 	 * @brief Destroys the object.
@@ -36,18 +38,27 @@ public:
 	/**
 	 * @brief Sets match points from search.
 	 *
-	 * @param matches_size  Match points which match.
+	 * @param matches Match points which match.
 	 */
-	void set_matches_size(int matches_size);
+	void set_matches(vector<DMatch> matches);
 
 	/**
 	 * @brief Gets the match points from search.
 	 *
 	 * @return All match points from search.
 	 */
-	int get_matches_size();
+	vector<DMatch> get_matches();
+
+	/**
+	* @brief show_compare_points Shows given result to an window to compare if match points are correctly.
+	*/
+	void show_compare_points();
 
 private:
 
-	int matches_size; ///< Counter from match points from search between search and compare image.
+	vector<DMatch> matches; ///< Match points from search between search and compare image.
+
+	vector<KeyPoint> keypoints_1;
+
+	vector<KeyPoint> keypoints_2;
 };

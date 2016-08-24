@@ -5,6 +5,11 @@
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 void Search::show_images()
 {
+	if (search_image_path.empty() || compare_image_path.empty())
+	{
+		return;
+	}
+
 	Mat searched_img = imread(this->search_image_path);
 	Mat find_img = imread(this->compare_image_path);
 
