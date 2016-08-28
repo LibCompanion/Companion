@@ -15,14 +15,6 @@
 using namespace cv;
 using namespace std;
 
-/// Enumeration class for errors
-enum Error
-{
-	image_not_found, ///< If image not found error
-	dimension_error, ///< If dimensions from given images inequal
-	template_dimension_error ///< If dimensions from template is wrong
-};
-
 /**
  * @brief Companion class to use image recognition methods like simple compare, template matching or flann.
  * @author Andreas Sekulski
@@ -30,6 +22,46 @@ enum Error
 class Companion
 {
 public:
+
+	/// Enumeration class for errors
+	enum class error
+	{
+		image_not_found, ///< If image not found error.
+		dimension_error, ///< If dimensions from given images inequal.
+		template_dimension_error, ///< If dimensions from template is wrong.
+		feature_detector_not_found, ///< If given feature detector not supported.
+		descriptor_extractor_not_found,  ///< If given descriptor extractor not supported.
+		descriptor_matcher_not_found ///< If given descriptor matcher not supported.
+	};
+
+	enum class detector {
+		FAST,
+		STAR,
+		ORB,
+		BRISK,
+		MSER,
+		GFTT,
+		HARRIS,
+		Dense,
+		SimpleBlob
+	};
+
+	enum class extractor {
+		SIFT,
+		SURF,
+		BRIEF,
+		BRISK,
+		ORB,
+		FREAK
+	};
+
+	enum class matcher {
+		BruteForce_L2,
+		BruteForce_L1,
+		BruteForce_Hamming,
+		BruteForce_Hamming_2,
+		FlannBased
+	};
 
 	/**
 	 * @brief Companion default constructor.
@@ -127,6 +159,8 @@ public:
 	 */
     Flann *search_flann(string search_img_path, string compare_img_path);
 
+	void feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher);
+
 	/**
 	 * @brief Gets from given error an corresponding error message.
 	 *
@@ -134,7 +168,7 @@ public:
 	 *
 	 * @return String message from given error.
 	 */
-	string get_error(Error error_code);
+	string get_error(error error_code);
 
 private:
 
@@ -154,4 +188,24 @@ private:
 	 * @param size_y  The size y to resize.
 	 */
 	void resize_image(Mat &img, int size_x, int size_y);
+
+	/**
+	 * ToDo Documentation
+	 */
+	bool is_image_loaded(Mat &img);
+
+	/**
+	* ToDo Documentation
+	*/
+	string get_feature_detector(detector detector);
+	
+	/**
+	* ToDo Documentation
+	*/
+	string get_descriptor_extractor(extractor extractor);
+
+	/**
+	 * ToDo Documentation
+	 */
+	string get_decriptor_matcher(matcher matcher);
 };

@@ -106,7 +106,7 @@ Compare *Companion::search_compare_image_mp(string search_img_path, vector<strin
                         }
                     }
 				}
-				catch (Error e)
+				catch (error e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -131,7 +131,7 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
 	// Check if image is loaded
 	if (img.empty() || compare_img.empty())
 	{
-		throw Error::image_not_found;
+		throw error::image_not_found;
 	}
 
 	// Resize image to same size
@@ -140,7 +140,7 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
 	// Check if dimension from img is equal to compare_image
 	if (img.cols != compare_img.cols || img.rows != compare_img.rows || img.dims != compare_img.dims)
 	{
-		throw Error::dimension_error;
+		throw error::dimension_error;
 	}
 
 	// Calculate pixel size from image.
@@ -196,7 +196,7 @@ TemplateMatch *Companion::search_vector_template_matching(string search_img_path
 						}
 					}
 				}
-				catch (Error e)
+				catch (error e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -217,7 +217,7 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	// Check if image is loaded
 	if (search_img.empty() || template_img.empty())
 	{
-		throw Error::image_not_found;
+		throw error::image_not_found;
 	}
 
 	if (resize_same_size) 
@@ -228,7 +228,7 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	// If template is greater than image size
 	if (search_img.cols < template_img.cols || search_img.rows < template_img.rows)
 	{
-		throw Error::template_dimension_error;
+		throw error::template_dimension_error;
 	}
 
 	// Create the result matrix
@@ -300,7 +300,7 @@ Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare
 						}
 					}
 				}
-				catch (Error e)
+				catch (error e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -320,7 +320,7 @@ Flann *Companion::search_flann(string search_img_path, string compare_img_path)
 
 	// Check if image is loaded
 	if (img_1.empty() || img_2.empty()) {
-		throw Error::image_not_found;
+		throw error::image_not_found;
 	}
 
 	//-- Step 1: Detect the keypoints using SURF Detector
@@ -368,6 +368,7 @@ Flann *Companion::search_flann(string search_img_path, string compare_img_path)
 	//-- PS.- radiusMatch can also be used here.
 	vector<DMatch> good_matches;
 	double good_matches_sum = 0.0;
+	double score = 1;
 
 	for (int i = 0; i < descriptors_1.rows; i++) {
 		if (matches[i].distance <= max(2 * min_dist, 0.02))
@@ -377,28 +378,149 @@ Flann *Companion::search_flann(string search_img_path, string compare_img_path)
 		}
 	}
 
-	// If score = 0 img is equal > 0 threshold decision
-	double score = good_matches_sum / good_matches.size();
+	if (good_matches.size() > 0)
+	{
+		// If score = 0 img is equal > 0 threshold decision
+		score = good_matches_sum / good_matches.size();
+		if (score > 1)
+		{
+			score = 1;
+		}
+		else if (score < 0)
+		{
+			score = 0;
+		}
+	}
 
 	img_1.release();
 	img_2.release();
 
+	cout << "Score := " << score << "\n" << "Matches := " << good_matches.size() << "\n";
+
     return new Flann(search_img_path, compare_img_path, score, good_matches, keypoints_1, keypoints_2);
 }
 
-string Companion::get_error(Error error_code)
+void Companion::feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher)
+{
+	Mat img_object;
+	Mat img_scene;
+	string fd_type; // Feature detector type
+	string de_type; // Descriptor extractor type
+	string dm_type; // Decriptor matcher type
+
+	try
+	{
+		// Check if given solution set from feature matching is supported.
+		fd_type = get_feature_detector(detector);
+		de_type = get_descriptor_extractor(extractor);
+		dm_type = get_decriptor_matcher(matcher);
+	}
+	catch (error e)
+	{
+		throw e;
+	}
+
+	img_object = imread(search_img_path, CV_LOAD_IMAGE_GRAYSCALE);
+	img_scene = imread(compare_img_path, CV_LOAD_IMAGE_GRAYSCALE);
+	// Check if images are loaded
+	if (!is_image_loaded(img_object) || !is_image_loaded(img_scene)) {
+		throw error::image_not_found;
+	}
+
+	// ToDo : For FeatureDetector, DescriptorExtractor and DescriptorMatcher check to setup variable indicators.
+
+	//-- Step 1: Detect the keypoints using SURF Detector
+	Ptr<FeatureDetector> feature_detector = FeatureDetector::create(fd_type);
+	vector<KeyPoint> keypoints_object, keypoints_scene;
+	feature_detector->detect(img_object, keypoints_object);
+	feature_detector->detect(img_scene, keypoints_scene);
+
+	//-- Step 2: Calculate descriptors (feature vectors)
+	Ptr<DescriptorExtractor> descriptor_extractor = DescriptorExtractor::create(de_type);
+	Mat descriptors_object, descriptors_scene;
+	descriptor_extractor->compute(img_object, keypoints_object, descriptors_object);
+	descriptor_extractor->compute(img_scene, keypoints_scene, descriptors_scene);
+
+	//-- Step 3: Matching descriptor vectors
+	Ptr<DescriptorMatcher> descriptor_matcher = DescriptorMatcher::create(dm_type);
+	vector<DMatch> matches;
+	descriptor_matcher->match(descriptors_object, descriptors_scene, matches);
+
+	//-- Step 4: Result creating for matching
+	double max_dist = 0;
+	double min_dist = 100;
+
+	//-- Quick calculation of max and min distances between keypoints
+	for (int i = 0; i < descriptors_object.rows; i++)
+	{
+		double dist = matches[i].distance;
+		if (dist < min_dist)
+		{
+			min_dist = dist;
+		}	
+		if (dist > max_dist)
+		{
+			max_dist = dist;
+		}
+	}
+
+	//-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
+	//-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
+	//-- small)
+	//-- PS.- radiusMatch can also be used here.
+	vector<DMatch> good_matches;
+	double good_matches_sum = 0.0;
+	double score = 1;
+
+	for (int i = 0; i < descriptors_object.rows; i++) {
+		if (matches[i].distance <= max(2 * min_dist, 0.02))
+		{
+			good_matches.push_back(matches[i]);
+			good_matches_sum += matches[i].distance;
+		}
+	}
+
+	// If score = 0 img is equal > 0 threshold decision
+	if (good_matches.size() > 0)
+	{
+		score = good_matches_sum / good_matches.size();
+		if (score > 1)
+		{
+			score = 1;
+		}
+		else if (score < 0)
+		{
+			score = 0;
+		}
+	}
+	
+	cout << "Score := " << score << "\n" << "Matches := " << good_matches.size() << "\n";
+	Flann *flann = new Flann(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
+	flann->show_compare_points();
+}
+
+string Companion::get_error(error error_code)
 {
 	string error = "";
 	switch (error_code)
 	{
-	case image_not_found : 
+	case error::image_not_found:
 		error = "Could not open or find image";
 		break;
-	case dimension_error:
+	case error::dimension_error:
 		error = "Dimensions not equal";
 		break;
-	case template_dimension_error:
+	case error::template_dimension_error:
 		error = "Template size must be smaller or equal than image";
+		break;
+	case error::descriptor_extractor_not_found:
+		error = "Given descriptor not supported";
+		break;
+	case error::feature_detector_not_found:
+		error = "Given feature not supported";
+		break;
+	default:
+		error = "Unknown error";
 		break;
 	}
 
@@ -443,4 +565,111 @@ void Companion::resize_image_equal(Mat &img1, Mat &img2)
 void Companion::resize_image(Mat &img, int size_x, int size_y)
 {
 	resize(img, img, Size(size_x, size_y));
+}
+
+bool Companion::is_image_loaded(Mat &img) 
+{
+	return !img.empty();
+}
+
+string Companion::get_feature_detector(detector detector)
+{
+	string feature;
+
+	switch (detector)
+	{
+		case detector::FAST:
+			feature = "FAST";
+			break;
+		case detector::STAR:
+			feature = "STAR";
+			break;
+		case detector::ORB:
+			feature = "ORB";
+			break;
+		case detector::BRISK:
+			feature = "BRISK";
+			break;
+		case detector::MSER:
+			feature = "MSER";
+			break;
+		case detector::GFTT:
+			feature = "GFTT";
+			break;
+		case detector::HARRIS:
+			feature = "HARRIS";
+			break;
+		case detector::Dense:
+			feature = "Dense";
+			break;
+		case detector::SimpleBlob:
+			feature = "SimpleBlob";
+			break;
+		default:
+			throw error::feature_detector_not_found;
+			break;
+	}
+
+	return feature;
+}
+
+string Companion::get_descriptor_extractor(extractor extractor)
+{
+	string extractor_type;
+
+	switch (extractor)
+	{
+	case extractor::SIFT:
+		extractor_type = "SIFT";
+		break;
+	case extractor::SURF:
+		extractor_type = "SURF";
+		break;
+	case extractor::BRIEF:
+		extractor_type = "BRIEF";
+		break;
+	case extractor::BRISK:
+		extractor_type = "BRISK";
+		break;
+	case extractor::ORB:
+		extractor_type = "ORB";
+		break;
+	case extractor::FREAK:
+		extractor_type = "FREAK";
+		break;
+	default:
+		throw error::descriptor_extractor_not_found;
+		break;
+	}
+
+	return extractor_type;
+}
+
+string Companion::get_decriptor_matcher(matcher matcher)
+{
+	string descriptor_matcher_type;
+
+	switch (matcher)
+	{
+	case matcher::BruteForce_L2:
+		descriptor_matcher_type = "BruteForce";
+		break;
+	case matcher::BruteForce_L1:
+		descriptor_matcher_type = "BruteForce-L1";
+		break;
+	case matcher::BruteForce_Hamming:
+		descriptor_matcher_type = "BruteForce-Hamming";
+		break;
+	case matcher::BruteForce_Hamming_2:
+		descriptor_matcher_type = "BruteForce-Hamming(2)";
+		break;
+	case matcher::FlannBased:
+		descriptor_matcher_type = "FlannBased";
+		break;
+	default:
+		throw error::descriptor_matcher_not_found;
+		break;
+	}
+
+	return descriptor_matcher_type;
 }
