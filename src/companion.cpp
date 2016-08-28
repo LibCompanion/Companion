@@ -102,9 +102,14 @@ Compare *Companion::search_compare_image_mp(string search_img_path, vector<strin
                     {
                         #pragma omp critical
                         {
+							delete best_image;
                             best_image = result;
                         }
                     }
+					else
+					{
+						delete result;
+					}
 				}
 				catch (error e)
 				{
@@ -129,7 +134,7 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
 	Mat compare_img = imread(compare_img_path, CV_LOAD_IMAGE_GRAYSCALE);
 
 	// Check if image is loaded
-	if (img.empty() || compare_img.empty())
+	if (!is_image_loaded(img) || !is_image_loaded(compare_img))
 	{
 		throw error::image_not_found;
 	}
@@ -191,8 +196,13 @@ TemplateMatch *Companion::search_vector_template_matching(string search_img_path
 						{
 							#pragma omp critical
 							{
+								delete best_image;
 								best_image = result;
 							}
+						}
+						else
+						{
+							delete result;
 						}
 					}
 				}
@@ -215,7 +225,7 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	Mat result;
 
 	// Check if image is loaded
-	if (search_img.empty() || template_img.empty())
+	if (!is_image_loaded(search_img) || !is_image_loaded(template_img))
 	{
 		throw error::image_not_found;
 	}
@@ -273,9 +283,9 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	return new TemplateMatch(search_img_path, template_img_path, accordance, matchLoc, matchOffset);
 }
 
-Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold)
+FeatureMatch* Companion::search_feature_matching_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold, detector detector, extractor extractor, matcher matcher)
 {
-    Flann *best_image = new Flann();
+	FeatureMatch *best_image = new FeatureMatch();
 
 	#pragma omp parallel 
 	{
@@ -286,7 +296,7 @@ Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare
 			{
 				try
 				{
-                    Flann *result = search_flann(search_img_path, check_image_path);
+					FeatureMatch *result = search_feature_matching(search_img_path, check_image_path, detector, extractor, matcher);
 					double accordance = result->get_accordance();
 					size_t matches_size = result->get_matches().size();
 					double compare_accordance = best_image->get_accordance();
@@ -296,8 +306,15 @@ Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare
 					{
 						#pragma omp critical
 						{
+							// Delete last result and store new best result
+							delete best_image;
 							best_image = result;
 						}
+					}
+					else
+					{
+						// Delete result
+						delete result;
 					}
 				}
 				catch (error e)
@@ -313,94 +330,7 @@ Flann *Companion::search_flann_mp(string search_img_path, vector<string> compare
 	return best_image;
 }
 
-Flann *Companion::search_flann(string search_img_path, string compare_img_path)
-{
-	Mat img_1 = imread(search_img_path);
-	Mat img_2 = imread(compare_img_path);
-
-	// Check if image is loaded
-	if (img_1.empty() || img_2.empty()) {
-		throw error::image_not_found;
-	}
-
-	//-- Step 1: Detect the keypoints using SURF Detector
-	int minHessian = 400;
-
-	SurfFeatureDetector detector(minHessian);
-
-	vector<KeyPoint> keypoints_1, keypoints_2;
-
-	detector.detect(img_1, keypoints_1);
-	detector.detect(img_2, keypoints_2);
-
-	//-- Step 2: Calculate descriptors (feature vectors)
-	SurfDescriptorExtractor extractor;
-
-	Mat descriptors_1, descriptors_2;
-
-	extractor.compute(img_1, keypoints_1, descriptors_1);
-	extractor.compute(img_2, keypoints_2, descriptors_2);
-
-	//-- Step 3: Matching descriptor vectors using FLANN matcher
-	FlannBasedMatcher matcher;
-	vector<DMatch> matches;
-	matcher.match(descriptors_1, descriptors_2, matches);
-
-	double max_dist = 0;
-	double min_dist = 100;
-
-	//-- Quick calculation of max and min distances between keypoints
-	for (int i = 0; i < descriptors_1.rows; i++) {
-		double dist = matches[i].distance;
-		if (dist < min_dist)
-		{
-			min_dist = dist;
-		}
-		if (dist > max_dist)
-		{
-			max_dist = dist;
-		}
-	}
-
-	//-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
-	//-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
-	//-- small)
-	//-- PS.- radiusMatch can also be used here.
-	vector<DMatch> good_matches;
-	double good_matches_sum = 0.0;
-	double score = 1;
-
-	for (int i = 0; i < descriptors_1.rows; i++) {
-		if (matches[i].distance <= max(2 * min_dist, 0.02))
-		{
-			good_matches.push_back(matches[i]);
-			good_matches_sum += matches[i].distance;
-		}
-	}
-
-	if (good_matches.size() > 0)
-	{
-		// If score = 0 img is equal > 0 threshold decision
-		score = good_matches_sum / good_matches.size();
-		if (score > 1)
-		{
-			score = 1;
-		}
-		else if (score < 0)
-		{
-			score = 0;
-		}
-	}
-
-	img_1.release();
-	img_2.release();
-
-	cout << "Score := " << score << "\n" << "Matches := " << good_matches.size() << "\n";
-
-    return new Flann(search_img_path, compare_img_path, score, good_matches, keypoints_1, keypoints_2);
-}
-
-void Companion::feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher)
+FeatureMatch* Companion::search_feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher)
 {
 	Mat img_object;
 	Mat img_scene;
@@ -493,10 +423,11 @@ void Companion::feature_matching(string search_img_path, string compare_img_path
 			score = 0;
 		}
 	}
+
+	img_object.release();
+	img_scene.release();
 	
-	cout << "Score := " << score << "\n" << "Matches := " << good_matches.size() << "\n";
-	Flann *flann = new Flann(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
-	flann->show_compare_points();
+	return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
 }
 
 string Companion::get_error(error error_code)

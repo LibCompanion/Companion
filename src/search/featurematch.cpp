@@ -1,14 +1,14 @@
-#include "flann.h"
+#include "featurematch.h"
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 // Constructor                                 //
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
-Flann::Flann()
+FeatureMatch::FeatureMatch()
 {
 	this->accordance = 1;
 }
 
-Flann::Flann(string search_image_path, string compare_image_path, double accordance, vector<DMatch> matches, vector<KeyPoint> keypoints_1, vector<KeyPoint> keypoints_2)
+FeatureMatch::FeatureMatch(string search_image_path, string compare_image_path, double accordance, vector<DMatch> matches, vector<KeyPoint> keypoints_1, vector<KeyPoint> keypoints_2)
 {
 	this->search_image_path = search_image_path;
 	this->compare_image_path = compare_image_path;
@@ -21,24 +21,24 @@ Flann::Flann(string search_image_path, string compare_image_path, double accorda
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 // Destructor                                  //
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
-Flann::~Flann()
+FeatureMatch::~FeatureMatch()
 {
 }
 
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
 // Public Methods                              //
 //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
-void Flann::set_matches(vector<DMatch> matches)
+void FeatureMatch::set_matches(vector<DMatch> matches)
 {
 	this->matches = matches;
 }
 
-vector<DMatch> Flann::get_matches()
+vector<DMatch> FeatureMatch::get_matches()
 {
 	return this->matches;
 }
 
-void Flann::show_compare_points()
+void FeatureMatch::show_compare_points()
 {
 	Mat img_1;
 	Mat img_2;

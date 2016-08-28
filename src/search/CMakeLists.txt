@@ -1,16 +1,16 @@
 SET(SOURCE
   search.cpp
   compare.cpp
-  flann.cpp
+  featurematch.cpp
   templatematch.cpp
 )
 
 SET(HEADERS
   search.h
   compare.h
-  flann.h
+  featurematch.h
   templatematch.h
 )
 
-add_library(${PROJECT_NAME}_Search ${SOURCE})
+add_library(${PROJECT_NAME}_Search ${SOURCE} ${HEADERS})
 target_link_libraries(${PROJECT_NAME}_Search ${OpenCV_LIBS})

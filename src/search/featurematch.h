@@ -8,32 +8,32 @@ using namespace std;
 using namespace cv;
 
 /**
- * @brief Fast library for approximate nearest neighbors match model search class for an flann search.
+ * @brief FeatureMatch match model search class for an feature search.
  * @author Andreas Sekulski
  */
-class Flann : public Search
+class FeatureMatch : public Search
 {
 public:
 
 	/**
-	 * @brief Constructor to create an empty flann model for an flann search.
+	 * @brief Constructor to create an empty feature model.
 	 */
-	Flann();
+	FeatureMatch();
 
 	/**
-	 * @brief Constructor to create an flann match model for an flann search.
+	 * @brief Constructor to create an feature match model.
 	 *
 	 * @param search_image_path   The search image path from search.
 	 * @param compare_image_path  The compare image path from search.
 	 * @param accordance          The accordance value from search.
 	 * @param matches             The match poitns which match from search.
 	 */
-	Flann(string search_image_path, string compare_image_path, double accordance, vector<DMatch> matches, vector<KeyPoint> keypoints_1, vector<KeyPoint> keypoints_2);
+	FeatureMatch(string search_image_path, string compare_image_path, double accordance, vector<DMatch> matches, vector<KeyPoint> keypoints_1, vector<KeyPoint> keypoints_2);
 
 	/**
 	 * @brief Destroys the object.
 	 */
-	~Flann();
+	~FeatureMatch();
 
 	/**
 	 * @brief Sets match points from search.

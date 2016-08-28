@@ -35,6 +35,7 @@ void compare_matching(string seach_file_path_name, vector<string> card_images, v
 		stop_s = clock();
 		out_message("Simple_Compare", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
+		delete image;
 	}
 }
 
@@ -58,6 +59,7 @@ void template_matching(string seach_file_path_name, vector<string> card_images, 
 		stop_s = clock();
 		out_message("Template_Matching_CV_TM_SQDIFF_NORMED", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
+		delete image;
 	}
 
 
@@ -69,6 +71,7 @@ void template_matching(string seach_file_path_name, vector<string> card_images, 
 		stop_s = clock();
 		out_message("Template_Matching_CV_TM_CCORR_NORMED", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
+		delete image;
 	}
 
 	for (int i = 0; i < test_cards.size(); i++)
@@ -79,30 +82,66 @@ void template_matching(string seach_file_path_name, vector<string> card_images, 
 		stop_s = clock();
 		out_message("Template_Matching_CV_TM_CCOEFF_NORMED", image);
 		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
+		delete image;
 	}
 }
 
-void flann_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion)
+Companion::extractor get_extractor(int i) {
+	if (i == 0)
+	{
+		return Companion::extractor::BRIEF;
+	}
+	else if (i == 1)
+	{
+		return Companion::extractor::BRISK;
+	}
+	else if (i == 2)
+	{
+		return Companion::extractor::FREAK;
+	}
+	else if (i == 3)
+	{
+		return Companion::extractor::ORB;
+	}
+	else if (i == 4)
+	{
+		return Companion::extractor::SIFT;
+	}
+	else if (i == 5)
+	{
+		return Companion::extractor::SURF;
+	}
+
+	return Companion::extractor::BRIEF;
+}
+
+void feature_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion)
 {
 	string search_file_path;
 	int start_s;
-	Flann *image;
+	FeatureMatch *image;
 	int stop_s;
-
-	// Flann matching - Slowest but best results
-	// Requires OpenCV NonFree libs... be careful !!
-	// http://docs.opencv.org/2.4/modules/nonfree/doc/nonfree.html
-	// http://docs.opencv.org/2.4/doc/tutorials/features2d/feature_flann_matcher/feature_flann_matcher.html
 
 	for (int i = 0; i < test_cards.size(); i++)
 	{
-		search_file_path = test_cards.at(i);
-		start_s = clock();
-		image = companion.search_flann_mp(search_file_path, card_images, 0.1);
-		stop_s = clock();
-		out_message("FLANN", image);
-		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-		image->show_compare_points();
+		//for (int z = 0; z < 5; z++)
+		{
+			search_file_path = test_cards.at(i);
+			start_s = clock();
+			image = companion.search_feature_matching_mp(
+				search_file_path,
+				card_images,
+				0.1,
+				Companion::detector::FAST,
+				Companion::extractor::SURF,
+				Companion::matcher::BruteForce_L2);
+			stop_s = clock();
+			out_message("Feature Matching", image);
+			cout << " time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
+			image->show_compare_points();
+			delete image;
+		}
+		
 	}
 }
 
@@ -134,8 +173,7 @@ int main() {
 
 	vector<string> test_cards;
 	test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg");
-	test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/white.jpg");
-	test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/glurak.jpg");
+	//test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/white.jpg");
 
 	/*
 	string test_img_template = "D:/Magic_Cards_Img/Test/Template/template.jpg";
@@ -155,15 +193,15 @@ int main() {
 	*/
 
 	string img1 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";
-	string img2 = "D:/Magic_Cards_Img/Color_Classifier/ztest/glurak.jpg";
+	string img2 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";
 
 	//companion.search_flann(img1, img2)->show_compare_points();
-	companion.feature_matching(img1, img2, Companion::detector::ORB, Companion::extractor::ORB, Companion::matcher::BruteForce_L2);
+	//companion.search_feature_matching(img1, img2, Companion::detector::FAST, Companion::extractor::ORB, Companion::matcher::BruteForce_L2);
 
 	//companion.calc_histogram(seach_file_path_name + to_string(4) + ".jpg");
-//	compare_matching(seach_file_path_name, card_images, test_cards, companion);
-//	template_matching(seach_file_path_name, card_images, test_cards, companion);
-	//flann_matching(seach_file_path_name, card_images, test_cards, companion);
+	//compare_matching(seach_file_path_name, card_images, test_cards, companion);
+	//template_matching(seach_file_path_name, card_images, test_cards, companion);
+	feature_matching(seach_file_path_name, card_images, test_cards, companion);
 	
 	return 0;
 }
