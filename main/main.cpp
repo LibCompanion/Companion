@@ -1,4 +1,4 @@
-#include <companion.h>
+#include <companion/companion.h>
 #include <stdlib.h>
 #include <ctime>
 #include <string>
