@@ -1,4 +1,4 @@
-#include "companion.h"
+#include <companion.h>
 #include <stdlib.h>
 #include <ctime>
 #include <string>
@@ -132,8 +132,8 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 				search_file_path,
 				card_images,
 				0.1,
-				Companion::detector::FAST,
-				Companion::extractor::SURF,
+				Companion::detector::ORB,
+				Companion::extractor::ORB,
 				Companion::matcher::BruteForce_L2);
 			stop_s = clock();
 			out_message("Feature Matching", image);

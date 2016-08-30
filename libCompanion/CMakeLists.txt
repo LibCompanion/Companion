@@ -14,6 +14,6 @@ SET(HEADERS
 )
 
 add_subdirectory(search)
-add_executable(${PROJECT_NAME} main.cpp ${SOURCE} ${HEADERS})
-#add_library(${PROJECT_NAME} SHARED ${SOURCE})
-target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_Search ${OpenCV_LIBS})
+add_library(libCompanion ${SOURCE})
+target_include_directories (libCompanion PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(libCompanion libCompanionSearch ${OpenCV_LIBS})
