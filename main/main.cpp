@@ -89,30 +89,30 @@ void template_matching(string seach_file_path_name, vector<string> card_images, 
 Companion::extractor get_extractor(int i) {
 	if (i == 0)
 	{
-		return Companion::extractor::BRIEF;
+        return Companion::extractor::BRIEF;
 	}
 	else if (i == 1)
 	{
-		return Companion::extractor::BRISK;
+        return Companion::extractor::BRISK;
 	}
 	else if (i == 2)
 	{
-		return Companion::extractor::FREAK;
+        return Companion::extractor::FREAK;
 	}
 	else if (i == 3)
 	{
-		return Companion::extractor::ORB;
+        return Companion::extractor::ORB;
 	}
 	else if (i == 4)
 	{
-		return Companion::extractor::SIFT;
+        return Companion::extractor::SIFT;
 	}
 	else if (i == 5)
 	{
-		return Companion::extractor::SURF;
+        return Companion::extractor::SURF;
 	}
 
-	return Companion::extractor::BRIEF;
+    return Companion::extractor::BRIEF;
 }
 
 void feature_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion)
@@ -132,9 +132,9 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 				search_file_path,
 				card_images,
 				0.1,
-				Companion::detector::ORB,
-				Companion::extractor::ORB,
-				Companion::matcher::BruteForce_L2);
+                Companion::detector::ORB,
+                Companion::extractor::ORB,
+                Companion::matcher::BruteForce_L2);
 			stop_s = clock();
 			out_message("Feature Matching", image);
 			cout << " time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
@@ -149,7 +149,7 @@ int main() {
 
     string check_files_path = "D:/Magic_Cards_Img/Color_Classifier/black.txt";
     string seach_file_path_name = "D:/Magic_Cards_Img/Test/testcard";
-	string search_file_path;
+    string search_file_path;
 
 	vector<string> card_images;
     Companion companion;
@@ -190,7 +190,7 @@ int main() {
 		// ToDo := Better Error Handling
 		cout << companion.get_error(e) << "\n";
 	}
-	*/
+    */
 
 	string img1 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";
 	string img2 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";

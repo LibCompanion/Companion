@@ -111,7 +111,7 @@ Compare *Companion::search_compare_image_mp(string search_img_path, vector<strin
 						delete result;
 					}
 				}
-				catch (error e)
+                catch (error_code e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -136,7 +136,7 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
 	// Check if image is loaded
 	if (!is_image_loaded(img) || !is_image_loaded(compare_img))
 	{
-		throw error::image_not_found;
+        throw error_code::image_not_found;
 	}
 
 	// Resize image to same size
@@ -145,7 +145,7 @@ Compare *Companion::search_compare_image(string search_img_path, string compare_
 	// Check if dimension from img is equal to compare_image
 	if (img.cols != compare_img.cols || img.rows != compare_img.rows || img.dims != compare_img.dims)
 	{
-		throw error::dimension_error;
+        throw error_code::dimension_error;
 	}
 
 	// Calculate pixel size from image.
@@ -206,7 +206,7 @@ TemplateMatch *Companion::search_vector_template_matching(string search_img_path
 						}
 					}
 				}
-				catch (error e)
+                catch (error_code e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -227,7 +227,7 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	// Check if image is loaded
 	if (!is_image_loaded(search_img) || !is_image_loaded(template_img))
 	{
-		throw error::image_not_found;
+        throw error_code::image_not_found;
 	}
 
 	if (resize_same_size) 
@@ -238,7 +238,7 @@ TemplateMatch *Companion::search_template_matching(string search_img_path, strin
 	// If template is greater than image size
 	if (search_img.cols < template_img.cols || search_img.rows < template_img.rows)
 	{
-		throw error::template_dimension_error;
+        throw error_code::template_dimension_error;
 	}
 
 	// Create the result matrix
@@ -317,7 +317,7 @@ FeatureMatch* Companion::search_feature_matching_mp(string search_img_path, vect
 						delete result;
 					}
 				}
-				catch (error e)
+                catch (error_code e)
 				{
 					// ToDo := Better Error Handling
 					cout << get_error(e) << "\n";
@@ -345,7 +345,7 @@ FeatureMatch* Companion::search_feature_matching(string search_img_path, string 
 		de_type = get_descriptor_extractor(extractor);
 		dm_type = get_decriptor_matcher(matcher);
 	}
-	catch (error e)
+    catch (error_code e)
 	{
 		throw e;
 	}
@@ -354,7 +354,7 @@ FeatureMatch* Companion::search_feature_matching(string search_img_path, string 
 	img_scene = imread(compare_img_path, CV_LOAD_IMAGE_GRAYSCALE);
 	// Check if images are loaded
 	if (!is_image_loaded(img_object) || !is_image_loaded(img_scene)) {
-		throw error::image_not_found;
+        throw error_code::image_not_found;
 	}
 
 	// ToDo : For FeatureDetector, DescriptorExtractor and DescriptorMatcher check to setup variable indicators.
@@ -430,24 +430,24 @@ FeatureMatch* Companion::search_feature_matching(string search_img_path, string 
 	return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
 }
 
-string Companion::get_error(error error_code)
+string Companion::get_error(error_code e_code)
 {
 	string error = "";
-	switch (error_code)
-	{
-	case error::image_not_found:
+    switch (e_code)
+    {
+    case error_code::image_not_found:
 		error = "Could not open or find image";
 		break;
-	case error::dimension_error:
+    case error_code::dimension_error:
 		error = "Dimensions not equal";
 		break;
-	case error::template_dimension_error:
+    case error_code::template_dimension_error:
 		error = "Template size must be smaller or equal than image";
 		break;
-	case error::descriptor_extractor_not_found:
+    case error_code::descriptor_extractor_not_found:
 		error = "Given descriptor not supported";
 		break;
-	case error::feature_detector_not_found:
+    case error_code::feature_detector_not_found:
 		error = "Given feature not supported";
 		break;
 	default:
@@ -503,102 +503,102 @@ bool Companion::is_image_loaded(Mat &img)
 	return !img.empty();
 }
 
-string Companion::get_feature_detector(detector detector)
+string Companion::get_feature_detector(detector f_detector)
 {
 	string feature;
 
-	switch (detector)
+    switch (f_detector)
 	{
-		case detector::FAST:
+        case detector::FAST:
 			feature = "FAST";
 			break;
-		case detector::STAR:
+        case detector::STAR:
 			feature = "STAR";
 			break;
-		case detector::ORB:
+        case detector::ORB:
 			feature = "ORB";
 			break;
-		case detector::BRISK:
+        case detector::BRISK:
 			feature = "BRISK";
 			break;
-		case detector::MSER:
+        case detector::MSER:
 			feature = "MSER";
 			break;
-		case detector::GFTT:
+        case detector::GFTT:
 			feature = "GFTT";
 			break;
-		case detector::HARRIS:
+        case detector::HARRIS:
 			feature = "HARRIS";
 			break;
-		case detector::Dense:
+        case detector::Dense:
 			feature = "Dense";
 			break;
-		case detector::SimpleBlob:
+        case detector::SimpleBlob:
 			feature = "SimpleBlob";
 			break;
 		default:
-			throw error::feature_detector_not_found;
+            throw error_code::feature_detector_not_found;
 			break;
 	}
 
 	return feature;
 }
 
-string Companion::get_descriptor_extractor(extractor extractor)
+string Companion::get_descriptor_extractor(extractor f_extractor)
 {
 	string extractor_type;
 
-	switch (extractor)
+    switch (f_extractor)
 	{
-	case extractor::SIFT:
+    case extractor::SIFT:
 		extractor_type = "SIFT";
 		break;
-	case extractor::SURF:
+    case extractor::SURF:
 		extractor_type = "SURF";
 		break;
-	case extractor::BRIEF:
+    case extractor::BRIEF:
 		extractor_type = "BRIEF";
 		break;
-	case extractor::BRISK:
+    case extractor::BRISK:
 		extractor_type = "BRISK";
 		break;
-	case extractor::ORB:
+    case extractor::ORB:
 		extractor_type = "ORB";
 		break;
-	case extractor::FREAK:
+    case extractor::FREAK:
 		extractor_type = "FREAK";
 		break;
 	default:
-		throw error::descriptor_extractor_not_found;
+        throw error_code::descriptor_extractor_not_found;
 		break;
 	}
 
 	return extractor_type;
 }
 
-string Companion::get_decriptor_matcher(matcher matcher)
+string Companion::get_decriptor_matcher(matcher f_matcher)
 {
 	string descriptor_matcher_type;
 
-	switch (matcher)
+    switch (f_matcher)
 	{
-	case matcher::BruteForce_L2:
+    case matcher::BruteForce_L2:
 		descriptor_matcher_type = "BruteForce";
 		break;
-	case matcher::BruteForce_L1:
+    case matcher::BruteForce_L1:
 		descriptor_matcher_type = "BruteForce-L1";
 		break;
-	case matcher::BruteForce_Hamming:
+    case matcher::BruteForce_Hamming:
 		descriptor_matcher_type = "BruteForce-Hamming";
 		break;
-	case matcher::BruteForce_Hamming_2:
+    case matcher::BruteForce_Hamming_2:
 		descriptor_matcher_type = "BruteForce-Hamming(2)";
 		break;
-	case matcher::FlannBased:
+    case matcher::FlannBased:
 		descriptor_matcher_type = "FlannBased";
 		break;
 	default:
-		throw error::descriptor_matcher_not_found;
+        throw error_code::descriptor_matcher_not_found;
 		break;
 	}
 

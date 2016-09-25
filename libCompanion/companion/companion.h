@@ -6,7 +6,6 @@
 
 #include <omp.h>
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -23,47 +22,47 @@ class Companion
 {
 public:
 
-	/// Enumeration class for errors
-	enum class error
-	{
-		image_not_found, ///< If image not found error.
-		dimension_error, ///< If dimensions from given images inequal.
-		template_dimension_error, ///< If dimensions from template is wrong.
-		feature_detector_not_found, ///< If given feature detector not supported.
-		descriptor_extractor_not_found,  ///< If given descriptor extractor not supported.
-		descriptor_matcher_not_found ///< If given descriptor matcher not supported.
-	};
+    /// Enumeration class for error codes
+    enum class error_code
+    {
+        image_not_found, ///< If image not found error.
+        dimension_error, ///< If dimensions from given images inequal.
+        template_dimension_error, ///< If dimensions from template is wrong.
+        feature_detector_not_found, ///< If given feature detector not supported.
+        descriptor_extractor_not_found,  ///< If given descriptor extractor not supported.
+        descriptor_matcher_not_found ///< If given descriptor matcher not supported.
+    };
 
-	enum class detector {
-		FAST,
-		STAR,
-		ORB,
-		BRISK,
-		MSER,
-		GFTT,
-		HARRIS,
-		Dense,
-		SimpleBlob
-	};
+    enum class detector {
+        FAST,
+        STAR,
+        ORB,
+        BRISK,
+        MSER,
+        GFTT,
+        HARRIS,
+        Dense,
+        SimpleBlob
+    };
 
-	enum class extractor {
-		SIFT,
-		SURF,
-		BRIEF,
-		BRISK,
-		ORB,
-		FREAK
-	};
+    enum class extractor {
+        SIFT,
+        SURF,
+        BRIEF,
+        BRISK,
+        ORB,
+        FREAK
+    };
 
-	enum class matcher {
-		BruteForce_L2,
-		BruteForce_L1,
-		BruteForce_Hamming,
-		BruteForce_Hamming_2,
-		FlannBased
-	};
+    enum class matcher {
+        BruteForce_L2,
+        BruteForce_L1,
+        BruteForce_Hamming,
+        BruteForce_Hamming_2,
+        FlannBased
+    };
 
-	/**
+    /**
 	 * @brief Companion default constructor.
 	 */
 	Companion();
@@ -145,18 +144,18 @@ public:
 	 *
 	 * @return Gives best flann match object if exists otherwise an empty compare object.
 	 */
-	FeatureMatch* search_feature_matching_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold, detector detector, extractor extractor, matcher matcher);
+    FeatureMatch* search_feature_matching_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold, detector detector, extractor extractor, matcher matcher);
 
-	FeatureMatch* search_feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher);
+    FeatureMatch* search_feature_matching(string search_img_path, string compare_img_path, detector detector, extractor extractor, matcher matcher);
 
 	/**
 	 * @brief Gets from given error an corresponding error message.
 	 *
-	 * @param error_code The error code to get corresponding error message.
+     * @param e_code The error code to get corresponding error message.
 	 *
 	 * @return String message from given error.
 	 */
-	string get_error(error error_code);
+    string get_error(error_code e_code);
 
 private:
 
@@ -185,15 +184,15 @@ private:
 	/**
 	* ToDo Documentation
 	*/
-	string get_feature_detector(detector detector);
+    string get_feature_detector(detector f_detector);
 	
 	/**
 	* ToDo Documentation
 	*/
-	string get_descriptor_extractor(extractor extractor);
+    string get_descriptor_extractor(extractor f_extractor);
 
 	/**
 	 * ToDo Documentation
 	 */
-	string get_decriptor_matcher(matcher matcher);
+    string get_decriptor_matcher(matcher f_matcher);
 };
