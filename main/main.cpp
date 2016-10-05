@@ -147,8 +147,9 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 
 int main() {
 
-    string check_files_path = "D:/Magic_Cards_Img/Color_Classifier/black.txt";
-    string seach_file_path_name = "D:/Magic_Cards_Img/Test/testcard";
+    string card_image_path = "D:/Magic_Cards_Img";
+    string check_files_path = card_image_path + "/Color_Classifier/black.txt";
+    string seach_file_path_name = card_image_path + "/Test/testcard";
     string search_file_path;
 
 	vector<string> card_images;
@@ -172,7 +173,7 @@ int main() {
 	}
 
 	vector<string> test_cards;
-	test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg");
+	test_cards.push_back(card_image_path + "/Color_Classifier/ztest/black.jpg");
 	//test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/white.jpg");
 
 	/*
@@ -192,16 +193,16 @@ int main() {
 	}
     */
 
-	string img1 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";
-	string img2 = "D:/Magic_Cards_Img/Color_Classifier/ztest/black.jpg";
-
-	//companion.search_flann(img1, img2)->show_compare_points();
-	//companion.search_feature_matching(img1, img2, Companion::detector::FAST, Companion::extractor::ORB, Companion::matcher::BruteForce_L2);
-
+	string img1 = card_image_path + "/Color_Classifier/ztest/black.jpg";
+	string img2 = card_image_path + "/Color_Classifier/ztest/black.jpg";
+	FeatureMatch *fm = companion.search_feature_matching(img1, img2, Companion::detector::FAST, Companion::extractor::ORB, Companion::matcher::BruteForce_L2);
+	fm->show_images();
+	fm->show_compare_points();
+	
 	//companion.calc_histogram(seach_file_path_name + to_string(4) + ".jpg");
 	//compare_matching(seach_file_path_name, card_images, test_cards, companion);
 	//template_matching(seach_file_path_name, card_images, test_cards, companion);
-	feature_matching(seach_file_path_name, card_images, test_cards, companion);
+	//feature_matching(seach_file_path_name, card_images, test_cards, companion);
 	
 	return 0;
 }
