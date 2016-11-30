@@ -5,7 +5,7 @@
 #include <fstream>
 
 #include <companion/companion.h>
-#include <companion/openCV3/stream/VideoCapture.h>
+#include <companion/openCV3/stream/Video.h>
 #include <companion/openCV3/search/ImageRecognition.h>
 #include <companion/openCV3/search/SimpleCompareImage.h>
 #include <companion/openCV3/search/TemplateMatch.h>

@@ -9,16 +9,16 @@
 
 using namespace cv;
 
-class VideoCapture {
+class Video {
 
 public:
 
-    VideoCapture();
+    Video();
 
-    ~VideoCapture();
+    ~Video();
 
     /* ToDo Documentation */
-    int realtime_video();
+    int realtime();
 
 };
 

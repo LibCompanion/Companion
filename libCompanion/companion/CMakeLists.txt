@@ -9,7 +9,7 @@ option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 
 SET(SOURCE
         companion.cpp companion.h
-        openCV3/stream/VideoCapture.cpp openCV3/stream/VideoCapture.h
+        openCV3/stream/Video.cpp openCV3/stream/Video.h
         openCV3/search/ImageRecognition.cpp openCV3/search/ImageRecognition.h
         openCV3/search/SimpleCompareImage.cpp openCV3/search/SimpleCompareImage.h
         openCV3/search/TemplateMatch.cpp openCV3/search/TemplateMatch.h

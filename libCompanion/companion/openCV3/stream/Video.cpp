@@ -2,17 +2,17 @@
 // Created by andre on 26.11.2016.
 //
 
-#include "VideoCapture.h"
+#include "Video.h"
 
-VideoCapture::video_capture() {
-
-}
-
-VideoCapture::~video_capture() {
+Video::Video() {
 
 }
 
-int VideoCapture::realtime_video() {
+Video::~Video() {
+
+}
+
+int Video::realtime() {
 
     VideoCapture cap(0); // open the default camera
     if(!cap.isOpened()) {
