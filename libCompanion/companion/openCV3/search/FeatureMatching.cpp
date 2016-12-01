@@ -6,16 +6,11 @@
 
 FeatureMatching::FeatureMatching() {
     this->detector = FeatureMatcher::detector::KAZE;
-    // ToDO : Do i need it?
-    this->extractor = FeatureMatcher::extractor::SURF;
     this->matcher = FeatureMatcher::matcher::FlannBased;
 }
 
-FeatureMatching::FeatureMatching(FeatureMatcher::detector detector, FeatureMatcher::extractor extractor,
-                                 FeatureMatcher::matcher) {
+FeatureMatching::FeatureMatching(FeatureMatcher::detector detector, FeatureMatcher::matcher) {
     this->detector = detector;
-    // ToDO : Do i need it?
-    this->extractor = extractor;
     this->matcher = matcher;
 }
 
@@ -31,29 +26,20 @@ Comparison* FeatureMatching::algo(Mat search_img, Mat compare_img) {
     // http://docs.opencv.org/3.1.0/d5/d51/group__features2d__main.html
     // https://stackoverflow.com/questions/36691050/opencv-3-list-of-available-featuredetectorcreate-and-descriptorextractorc
     // http://docs.opencv.org/3.1.0/d7/d66/tutorial_feature_detection.html
+    // http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html
     // ToDo := All feature detectors used?
-
     vector<DMatch> matches;
     vector<KeyPoint> keypoints_object, keypoints_scene;
     Mat descriptors_object, descriptors_scene;
 
-    // Step 1 & 2 can now be used with detectAndCompute
-    // ToDo Maybe you take it...
-
-    //-- Step 1: Detect the keypoints
+    // Step 1 : Detect the keypoints & 2 : Calculate descriptors (feature vectors)
     Ptr<Feature2D> feature = get_feature_detector(detector);
-    feature->detect(search_img, keypoints_object);
-    feature->detect(compare_img, keypoints_scene);
-
-	//-- Step 2: Calculate descriptors (feature vectors)
-    feature->compute(search_img, keypoints_object, descriptors_object);
-    feature->compute(compare_img, keypoints_scene, descriptors_scene);
+    feature->detectAndCompute(search_img, Mat(), keypoints_object, descriptors_object);
+    feature->detectAndCompute(compare_img, Mat(), keypoints_scene, descriptors_scene);
 
 	//-- Step 3: Matching descriptor vectors
     Ptr<DescriptorMatcher> descriptor_matcher = DescriptorMatcher::create(get_decriptor_matcher(matcher));
-    // find the best 2 matches of each descriptor
-    // ToDo I don't like it...
-	descriptor_matcher->match(descriptors_object, descriptors_scene, matches, 0);
+    descriptor_matcher->match(descriptors_object, descriptors_scene, matches, 0);
 
 	//-- Step 4: Result creating for matching
 	double max_dist = 0;
@@ -103,7 +89,11 @@ Comparison* FeatureMatching::algo(Mat search_img, Mat compare_img) {
 		}
 	}
 
-    return new Comparison(score);
+    // ToDo get Position from image
+    Point matchLoc = Point(0, 0);
+    Point matchOffset = Point(compare_img.cols, compare_img.rows);
+
+    return new Comparison(score, matchLoc, matchOffset);
 
     // ToDo Store Informations
     //return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
@@ -144,36 +134,7 @@ Ptr<Feature2D> FeatureMatching::get_feature_detector(FeatureMatcher::detector f_
     return feature;
 }
 
-string FeatureMatching::get_descriptor_extractor(FeatureMatcher::extractor f_extractor) {
-    string extractor_type;
-
-    switch (f_extractor)
-    {
-        case FeatureMatcher::extractor::SIFT:
-            extractor_type = "SIFT";
-            break;
-        case FeatureMatcher::extractor::SURF:
-            extractor_type = "SURF";
-            break;
-        case FeatureMatcher::extractor::BRIEF:
-            extractor_type = "BRIEF";
-            break;
-        case FeatureMatcher::extractor::BRISK:
-            extractor_type = "BRISK";
-            break;
-        case FeatureMatcher::extractor::ORB:
-            extractor_type = "ORB";
-            break;
-        case FeatureMatcher::extractor::FREAK:
-            extractor_type = "FREAK";
-            break;
-    }
-
-    return extractor_type;
-}
-
-string FeatureMatching::get_decriptor_matcher(FeatureMatcher::matcher f_matcher)
-{
+string FeatureMatching::get_decriptor_matcher(FeatureMatcher::matcher f_matcher) {
     string descriptor_matcher_type;
 
     switch (f_matcher)

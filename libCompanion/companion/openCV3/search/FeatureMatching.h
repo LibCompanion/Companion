@@ -20,15 +20,6 @@ namespace FeatureMatcher {
         SimpleBlobDetector
     };
 
-    enum class extractor {
-        SIFT,
-        SURF,
-        BRIEF,
-        BRISK,
-        ORB,
-        FREAK
-    };
-
     enum class matcher {
         BruteForce_L2,
         BruteForce_L1,
@@ -48,15 +39,13 @@ class FeatureMatching : public ImageRecognition {
     public:
         FeatureMatching();
 
-        FeatureMatching(FeatureMatcher::detector detector, FeatureMatcher::extractor extractor, FeatureMatcher::matcher);
+        FeatureMatching(FeatureMatcher::detector detector, FeatureMatcher::matcher);
 
         ~FeatureMatching();
 
     private:
 
         FeatureMatcher::detector detector;
-
-        FeatureMatcher::extractor extractor;
 
         FeatureMatcher::matcher matcher;
 
@@ -66,19 +55,12 @@ class FeatureMatching : public ImageRecognition {
         Ptr<Feature2D> get_feature_detector(FeatureMatcher::detector f_detector);
 
         /**
-        * ToDo Documentation
-        */
-        string get_descriptor_extractor(FeatureMatcher::extractor f_extractor);
-
-        /**
          * ToDo Documentation
          */
         string get_decriptor_matcher(FeatureMatcher::matcher f_matcher);
 
     protected:
         virtual Comparison* algo(Mat search_img, Mat compare_img);
-
-
 };
 
 

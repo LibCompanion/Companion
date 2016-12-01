@@ -19,23 +19,8 @@ class Companion
 {
 public:
 
-    /**
-	 * @brief Companion default constructor.
-	 */
-	Companion();
-
-	/**
-	 * @brief Destroys the object.
-	 */
-	~Companion();
-
 	/* ToDo Documentation */
 	void calc_histogram(string img_path);
-
-	/**
-	 * OpenCV Link := http://docs.opencv.org/2.4/doc/tutorials/features2d/trackingmotion/harris_detector/harris_detector.html
-	 */
-	void harris_corner_detection(string img_path);
 
 	/**
 	 * @brief Multi-Processing simple search compare.<br>

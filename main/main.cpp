@@ -133,27 +133,27 @@ int main() {
 
 	vector<string> card_images;
     Companion companion;
-    VideoCapture video;
+    Video video;
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
     try {
-        ImageRecognition *recognition = new FeatureMatching();
-        Comparison *comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-        cout << comparison->getAccordance() << "\n";
+        ImageRecognition *recognition = new TemplateMatch();
+        //Comparison *comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+        //cout << comparison->getAccordance() << "\n";
 
-        comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard2.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-        cout << comparison->getAccordance() << "\n";
+        //comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard2.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+        //cout << comparison->getAccordance() << "\n";
 
-        delete comparison;
+        if(video.realtime(recognition, imread("/home/asekulsk/Bilder/Magic_Cards_Img/Test/testcard1.jpg", CV_BGR2GRAY)) == -1); {
+            cout << "Scotty we have a problem";
+        }
+
+        //delete comparison;
         delete recognition;
     } catch (CompanionError::error_code error) {
         cout << Util::get_error(error);
     }
-
-//    if(video.realtime_video() == -1); {
-//        cout << "Scotty we have a problem";
-//    }
 
 	//companion.harris_corner_detection("C:/Users/andre/Desktop/Master/845_0M.jpg");
 

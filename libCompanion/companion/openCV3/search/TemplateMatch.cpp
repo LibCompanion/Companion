@@ -60,8 +60,5 @@ Comparison* TemplateMatch::algo(Mat search_img, Mat compare_img) {
 
     matchOffset = Point(matchLoc.x + compare_img.cols, matchLoc.y + compare_img.rows);
 
-    // ToDo Store matchlocation to result.
-    //return new TemplateMatch(search_img_path, template_img_path, accordance, matchLoc, matchOffset);
-
-    return new Comparison(accordance);
+    return new Comparison(accordance, matchLoc, matchOffset);
 }

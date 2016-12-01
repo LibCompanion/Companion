@@ -5,11 +5,14 @@
 #ifndef COMPANION_COMPARISON_H
 #define COMPANION_COMPARISON_H
 
+#include <opencv2/core/core.hpp>
+
+using namespace cv;
 
 class Comparison {
 
     public:
-        Comparison(double accordance);
+        Comparison(double accordance, Point location, Point offset);
 
         ~Comparison();
 
@@ -17,9 +20,21 @@ class Comparison {
 
         void setAccordance(double accordance);
 
+        void setLocation(Point location);
+
+        Point getLocation();
+
+        void setOffset(Point offset);
+
+        Point getOffset();
+
 private:
 
         double accordance;
+
+        Point location;
+
+        Point offset;
 
 };
 

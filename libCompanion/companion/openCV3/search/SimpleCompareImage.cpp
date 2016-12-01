@@ -34,5 +34,9 @@ Comparison* SimpleCompareImage::algo(Mat search_img, Mat compare_img) {
     equalPixels = countNonZero(result);
     accordance = (double) equalPixels / (double) pixels;
 
-    return new Comparison(accordance);
+    // Image location is complete image in simple compare image.
+    Point matchLoc = Point(0, 0);
+    Point matchOffset = Point(compare_img.cols, compare_img.rows);
+
+    return new Comparison(accordance, matchLoc, matchOffset);
 }
