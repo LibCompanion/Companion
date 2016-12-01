@@ -11,6 +11,7 @@
 #include <opencv2/features2d.hpp>
 
 using namespace cv;
+using namespace std;
 
 class HarrisCorner {
 
@@ -20,6 +21,8 @@ class HarrisCorner {
         ~HarrisCorner();
 
         void doNothing(Mat image);
+
+        void doConturs(Mat image);
 };
 
 
