@@ -19,8 +19,12 @@ public:
 
     ~Video();
 
+    bool isRecording;
+
     /* ToDo Documentation */
-    int realtime(ImageRecognition *algo, Mat img);
+    int startRealtime(ImageRecognition *algo, Mat img, int device);
+
+    void stopRealtime();
 
 };
 

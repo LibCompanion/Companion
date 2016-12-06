@@ -132,20 +132,20 @@ int main() {
     string search_file_path;
 
 	vector<string> card_images;
-    Companion companion;
+
     Video video;
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
     try {
-        ImageRecognition *recognition = new TemplateMatch();
+        ImageRecognition *recognition = new FeatureMatching();
         //Comparison *comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
         //cout << comparison->getAccordance() << "\n";
 
         //comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard2.jpg", CV_LOAD_IMAGE_GRAYSCALE);
         //cout << comparison->getAccordance() << "\n";
 
-        if(video.realtime(recognition, imread("/home/asekulsk/Bilder/Magic_Cards_Img/Test/testcard1.jpg", CV_BGR2GRAY)) == -1); {
+        if(video.startRealtime(recognition, imread("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", IMREAD_GRAYSCALE), 0) != 0); {
             cout << "Scotty we have a problem";
         }
 
