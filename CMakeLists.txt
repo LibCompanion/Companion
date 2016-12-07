@@ -27,7 +27,8 @@ set(OpenCV_LIBS
         opencv_ts
         opencv_video
         opencv_videoio
-        opencv_videostab)
+        opencv_videostab
+        opencv_xfeatures2d)
 
 add_subdirectory(libCompanion)
 add_subdirectory(main)

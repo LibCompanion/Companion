@@ -126,36 +126,59 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 
 int main() {
 
-    string card_image_path = "D:/Magic_Cards_Img";
-    string check_files_path = card_image_path + "/Color_Classifier/black.txt";
-    string seach_file_path_name = card_image_path + "/Test/testcard";
-    string search_file_path;
-
-	vector<string> card_images;
-
-    Video video;
+	Video video;
+	string testcard = "/home/asekulsk/Bilder/Room/1998.jpg";
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
     try {
-        ImageRecognition *recognition = new FeatureMatching();
-        //Comparison *comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-        //cout << comparison->getAccordance() << "\n";
+        // https://stackoverflow.com/questions/36691050/opencv-3-list-of-available-featuredetectorcreate-and-descriptorextractorc
+        /*
+        BRISK: detector + descriptor
+        ORB: detector + descriptor
+        MSER: detector
+        FAST: detector
+        AGAST: detector
+        GFFT: detector
+        SimpleBlobDetector: detector
+        KAZE: detector + descriptor
+        AKAZE: detector + descriptor
+        FREAK: descriptor
+        StarDetector: detector
+        BriefDescriptorExtractor: descriptor
+        LUCID: descriptor
+        LATCH: descriptor
+        DAISY: descriptor
+        MSDDetector: detector
+        SIFT: detector + descriptor (NonFree)
+        SURF: detector + descriptor (NonFree)
+        */
+        Ptr<FeatureDetector> detector = ORB::create();
+        Ptr<DescriptorExtractor> extractor = ORB::create();
 
-        //comparison = recognition->search("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", "D:/Data/Magic_Cards_Img/Test/testcard2.jpg", CV_LOAD_IMAGE_GRAYSCALE);
-        //cout << comparison->getAccordance() << "\n";
+        /*
+        BruteForce (it uses L2 )
+        BruteForce-L1
+        BruteForce-Hamming
+        BruteForce-Hamming(2)
+        FlannBased
+        */
+        Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
 
-        if(video.startRealtime(recognition, imread("D:/Data/Magic_Cards_Img/Test/testcard1.jpg", IMREAD_GRAYSCALE), 0) != 0); {
+		ImageRecognition *recognition = new FeatureMatching(
+                detector,
+                extractor,
+                matcher);
+
+        if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 1) != 0); {
             cout << "Scotty we have a problem";
         }
 
-        //delete comparison;
         delete recognition;
+
     } catch (CompanionError::error_code error) {
         cout << Util::get_error(error);
     }
-
-	//companion.harris_corner_detection("C:/Users/andre/Desktop/Master/845_0M.jpg");
 
 	/*
 	string path;
