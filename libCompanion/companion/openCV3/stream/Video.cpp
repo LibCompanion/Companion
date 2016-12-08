@@ -4,9 +4,6 @@
 
 #include "Video.h"
 
-#include <thread>
-
-
 Mat src; Mat src_gray;
 int thresh = 100;
 int max_thresh = 255;
@@ -57,15 +54,12 @@ void thresh_callback(int, void* )
 }
 
 Video::Video() {
-    isRecording = false;
 }
 
 Video::~Video() {
-    if(isRecording) {
-        stopRealtime();
-    }
 }
 
+/*
 int Video::startRealtime(ImageRecognition *algo, Mat img, int device) {
 
     Comparison *comparison;
@@ -92,12 +86,12 @@ int Video::startRealtime(ImageRecognition *algo, Mat img, int device) {
         if(!frame.empty()) {
             cvtColor(frame, grey_frame, cv::COLOR_BGR2GRAY);
             comparison = algo->search(img, grey_frame);
-/*
+
             loc = comparison->getLocation();
             offset = comparison->getOffset();
             rectangle(frame, loc, Point( loc.x + offset.x , loc.y + offset.y ), Scalar::all(0), 2, 8, 0 );
             imshow("RC", frame);
-*/
+
             waitKey(100);
         }
     }
@@ -105,7 +99,31 @@ int Video::startRealtime(ImageRecognition *algo, Mat img, int device) {
     // the camera will be deinitialized automatically in VideoCapture destructor
     return 0;
 }
+*/
 
-void Video::stopRealtime() {
-    isRecording = false;
+int Video::connectToDevice(int device) {
+
+    VideoCapture cap(device);
+
+    if(!cap.isOpened()) {
+        // ToDo := Error Handling
+        return -1;
+    }
+
+    capture = cap;
+
+    return 0;
+}
+
+Mat Video::obtainImage() {
+
+    Mat frame;
+
+    if(!capture.isOpened()) {
+        // ToDo := Error Handling
+    }
+
+    // Obtain image frame.
+    capture >> frame;
+    return frame;
 }

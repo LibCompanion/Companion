@@ -19,12 +19,15 @@ public:
 
     ~Video();
 
-    bool isRecording;
+    int connectToDevice(int device);
 
-    /* ToDo Documentation */
-    int startRealtime(ImageRecognition *algo, Mat img, int device);
+    Mat obtainImage();
 
-    void stopRealtime();
+private:
+
+    VideoCapture capture;
+
+    bool isDeviceOpen();
 
 };
 

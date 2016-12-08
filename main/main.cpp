@@ -10,6 +10,7 @@
 #include <companion/openCV3/search/SimpleCompareImage.h>
 #include <companion/openCV3/search/TemplateMatch.h>
 #include <companion/openCV3/search/FeatureMatching.h>
+#include <companion/openCV3/detection/ObjectTracking.h>
 
 using namespace std;
 
@@ -127,8 +128,8 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 int main() {
 
 	Video video;
-	//string testcard = "/home/asekulsk/Bilder/Room/1998.jpg";
-	string testcard = "D:/Data/Magic_Cards_Img/Test/testcard1.jpg";
+	string testcard = "/home/asekulsk/Bilder/Magic_Cards_Img/Test/testcard1.jpg";
+	//string testcard = "D:/Data/Magic_Cards_Img/Test/testcard1.jpg";
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
@@ -154,8 +155,8 @@ int main() {
         SIFT: detector + descriptor (NonFree)
         SURF: detector + descriptor (NonFree)
         */
-        Ptr<FeatureDetector> detector = SIFT::create();
-        Ptr<DescriptorExtractor> extractor = SIFT::create();
+        Ptr<FeatureDetector> detector = GFTTDetector::create();
+        Ptr<DescriptorExtractor> extractor = LATCH::create();
 
         /*
         BruteForce (it uses L2 )
@@ -164,17 +165,41 @@ int main() {
         BruteForce-Hamming(2)
         FlannBased
         */
-        Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce");
+        Ptr<DescriptorMatcher> matcher;
+		matcher = DescriptorMatcher::create("BruteForce");
+		//matcher = DescriptorMatcher::create("BruteForce-L1");
+		//matcher = DescriptorMatcher::create("BruteForce-Hamming");
+		//matcher = DescriptorMatcher::create("BruteForce-Hamming(2)");
+		//matcher = DescriptorMatcher::create("FlannBased");
 
 		ImageRecognition *recognition = new FeatureMatching(
                 detector,
                 extractor,
                 matcher);
 
-        if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 0) != 0); {
-            cout << "Scotty we have a problem";
-        }
+		Mat frame;
+		video.connectToDevice(0);
+		while(true) {
+			// Camera api
+			frame = video.obtainImage();
+			// Image recognition
+			cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
+			recognition->search(imread(testcard, IMREAD_GRAYSCALE), frame);
+			// Wait to obtain next image or store to buffer
+			waitKey(1);
+		}
 
+
+        //if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 0) != 0); {
+        //    cout << "Scotty we have a problem";
+        //}
+
+		// Intresting maybe could help...
+		// https://www.youtube.com/watch?v=bSeFrPrqZ2A
+		ObjectTracking *tracking = new ObjectTracking();
+		tracking->start();
+
+		delete tracking;
         delete recognition;
 
     } catch (CompanionError::error_code error) {
