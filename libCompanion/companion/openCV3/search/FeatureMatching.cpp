@@ -11,7 +11,8 @@ FeatureMatching::FeatureMatching() {
     this->matcher = DescriptorMatcher::create("FlannBased");
 }
 
-FeatureMatching::FeatureMatching(Ptr<FeatureDetector> detector, Ptr<DescriptorExtractor> extractor, Ptr<DescriptorMatcher> matcher) {
+FeatureMatching::FeatureMatching(Ptr<FeatureDetector> detector, Ptr<DescriptorExtractor> extractor,
+                                 Ptr<DescriptorMatcher> matcher) {
     this->detector = detector;
     this->extractor = extractor;
     this->matcher = matcher;
@@ -27,15 +28,11 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
     }
 
     // Variables
-    vector<vector<DMatch>> matches;
+    vector<vector<DMatch>> matches_one;
     vector<DMatch> good_matches;
     vector<KeyPoint> keypoints_object, keypoints_scene;
+    vector<Point2f> obj, scene;
     Mat descriptors_object, descriptors_scene;
-    double max_dist = 0;
-    double min_dist = 100;
-    double dist;
-    double good_matches_sum = 0.0;
-    double score = 1;
 
     // Step 1 : Detect the keypoints
     detector->detect(object_img, keypoints_object);
@@ -53,57 +50,17 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
         descriptors_object.convertTo(descriptors_object, CV_32F);
 
         //-- Step 3: Matching descriptor vectors
-        matcher->knnMatch(descriptors_object, descriptors_scene, matches, 2);
+        matcher->knnMatch(descriptors_object, descriptors_scene, matches_one, 2);
 
-        //-- Step 4: Result creating for matching ToDo := Do I need it
-        //-- Quick calculation of max and min distances between keypoints
-        /*
-        for (int i = 0; i < descriptors_object.rows; i++) {
-            dist = matches[i].distance;
+        // Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
+        // Neighbourhoods comparison
+        ratio_test(matches_one, good_matches, 0.80);
 
-            if (dist < min_dist) {
-                min_dist = dist;
-            }
-
-            if (dist > max_dist) {
-                max_dist = dist;
-            }
-        }
-        */
-
-        //-- Draw only "good" matches (i.e. whose distance is less than 2*min_dist,
-        //-- or a small arbitary value ( 0.02 ) in the event that min_dist is very
-        //-- small)
-        //-- PS.- radiusMatch can also be used here.
-        for (int i = 0; i < matches.size(); ++i) {
-            // http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
-            // Neighbourhoods comparison <-- Better comparison
-            const float ratio = 0.80; // As in Lowe's paper; can be tuned
-            if (matches[i][0].distance < ratio * matches[i][1].distance) {
-                good_matches.push_back(matches[i][0]);
-            }
-
-            /* Old comparison contains many false positives
-            cout << matches[i].distance << "\n";
-            if (matches[i].distance <= max(2 * min_dist, 0.02)) {
-                good_matches.push_back(matches[i]);
-                good_matches_sum += matches[i].distance;
-            }
-             */
-        }
-
-        // Calculating scoring
-        // If score = 0 img is equal > 0 threshold decision
-        /*
-        if (good_matches.size() > 0) {
-            score = good_matches_sum / good_matches.size();
-            if (score > 1) {
-                score = 1;
-            } else if (score < 0) {
-                score = 0;
-            }
-        }
-        */
+        // Symmetric matches
+        // ToDo := How does it works?
+        //vector<DMatch> symMatches;
+        //symmetry_test(good_matches, good_matches_two, symMatches);
+        //good_matches = symMatches;
 
         //-- Draw only "good" matches
         Mat img_matches = scene_img;
@@ -112,9 +69,6 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
                     vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
 
         //-- Localize the object
-        vector<Point2f> obj;
-        vector<Point2f> scene;
-
         if (good_matches.size() > 0) {
 
             for (int i = 0; i < good_matches.size(); i++) {
@@ -142,6 +96,7 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
                 Scalar color = Scalar(0, 255, 0);
                 // Point2f offset = Point2f(0, 0); // Original offset from default window is zero
                 Point2f offset = Point2f(object_img.cols, 0); // Offset if image draw will be used
+
                 line(img_matches, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
                 line(img_matches, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
                 line(img_matches, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
@@ -158,4 +113,34 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
 
     // ToDo Store Informations
     //return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
+}
+
+void FeatureMatching::ratio_test(const vector<vector<DMatch>> &matches, vector<DMatch> &good_matches, float ratio) {
+    for (int i = 0; i < matches.size(); ++i) {
+        if (matches[i][0].distance < ratio * matches[i][1].distance) {
+            good_matches.push_back(matches[i][0]);
+        }
+    }
+}
+
+void FeatureMatching::symmetry_test(const vector<DMatch> &matches1, const vector<DMatch> &matches2,
+                                    vector<DMatch> &symMatches) {
+    symMatches.clear();
+
+    for (vector<DMatch>::const_iterator matchIterator1 = matches1.begin();
+         matchIterator1 != matches1.end(); ++matchIterator1) {
+
+        for (vector<DMatch>::const_iterator matchIterator2 = matches2.begin();
+             matchIterator2 != matches2.end(); ++matchIterator2) {
+
+            if ((*matchIterator1).queryIdx == (*matchIterator2).trainIdx &&
+                (*matchIterator2).queryIdx == (*matchIterator1).trainIdx) {
+                symMatches.push_back(
+                        DMatch((*matchIterator1).queryIdx, (*matchIterator1).trainIdx, (*matchIterator1).distance));
+                break;
+            }
+
+        }
+
+    }
 }

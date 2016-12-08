@@ -127,7 +127,8 @@ void feature_matching(string seach_file_path_name, vector<string> card_images, v
 int main() {
 
 	Video video;
-	string testcard = "/home/asekulsk/Bilder/Room/1998.jpg";
+	//string testcard = "/home/asekulsk/Bilder/Room/1998.jpg";
+	string testcard = "D:/Data/Magic_Cards_Img/Test/testcard1.jpg";
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
@@ -153,8 +154,8 @@ int main() {
         SIFT: detector + descriptor (NonFree)
         SURF: detector + descriptor (NonFree)
         */
-        Ptr<FeatureDetector> detector = ORB::create();
-        Ptr<DescriptorExtractor> extractor = ORB::create();
+        Ptr<FeatureDetector> detector = SIFT::create();
+        Ptr<DescriptorExtractor> extractor = SIFT::create();
 
         /*
         BruteForce (it uses L2 )
@@ -163,14 +164,14 @@ int main() {
         BruteForce-Hamming(2)
         FlannBased
         */
-        Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("FlannBased");
+        Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce");
 
 		ImageRecognition *recognition = new FeatureMatching(
                 detector,
                 extractor,
                 matcher);
 
-        if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 1) != 0); {
+        if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 0) != 0); {
             cout << "Scotty we have a problem";
         }
 

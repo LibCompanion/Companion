@@ -34,6 +34,10 @@ private:
 
     Ptr<DescriptorMatcher> matcher;
 
+    void ratio_test(const vector<vector<DMatch>> &matches, vector<DMatch> &good_matches, float ratio);
+
+    void symmetry_test(const vector<DMatch> &matches1, const vector<DMatch> &matches2, vector<DMatch> &symMatches);
+
 protected:
     virtual Comparison *algo(Mat object_img, Mat scene_img);
 };
