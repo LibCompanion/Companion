@@ -9,9 +9,6 @@
 #include <opencv2/calib3d/calib3d.hpp>
 #include <opencv2/xfeatures2d.hpp>
 
-using namespace cv;
-using namespace cv::xfeatures2d;
-
 /**
  * Feature matching algo implementation from <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
  *
@@ -22,24 +19,24 @@ class FeatureMatching : public ImageRecognition {
 public:
     FeatureMatching();
 
-    FeatureMatching(Ptr<FeatureDetector> detector, Ptr<DescriptorExtractor> extractor, Ptr<DescriptorMatcher> matcher);
+    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor, cv::Ptr<cv::DescriptorMatcher> matcher);
 
     ~FeatureMatching();
 
 private:
 
-    Ptr<FeatureDetector> detector;
+    cv::Ptr<cv::FeatureDetector> detector;
 
-    Ptr<DescriptorExtractor> extractor;
+    cv::Ptr<cv::DescriptorExtractor> extractor;
 
-    Ptr<DescriptorMatcher> matcher;
+    cv::Ptr<cv::DescriptorMatcher> matcher;
 
-    void ratio_test(const vector<vector<DMatch>> &matches, vector<DMatch> &good_matches, float ratio);
+    void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches, float ratio);
 
-    void symmetry_test(const vector<DMatch> &matches1, const vector<DMatch> &matches2, vector<DMatch> &symMatches);
+    void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2, std::vector<cv::DMatch> &symMatches);
 
 protected:
-    virtual Comparison *algo(Mat object_img, Mat scene_img);
+    virtual Comparison *algo(cv::Mat object_img, cv::Mat scene_img);
 };
 
 

@@ -50,7 +50,7 @@ class TemplateMatch : public ImageRecognition {
          *         For SQDIFF and SQDIFF_NORMED, the best matches are lower values (0).<br>
          *         All other methods higher values are best matches (1)
          */
-        virtual Comparison* algo(Mat search_img, Mat compare_img);
+        virtual Comparison* algo(cv::Mat search_img, cv::Mat compare_img);
 
     private:
 

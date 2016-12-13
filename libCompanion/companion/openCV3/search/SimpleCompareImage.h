@@ -34,7 +34,7 @@ class SimpleCompareImage : public ImageRecognition {
          *
          * @return Accordance from equality from 0 image not equal and 1 image are equal.
          */
-        virtual Comparison* algo(Mat search_img, Mat compare_img);
+        virtual Comparison* algo(cv::Mat search_img, cv::Mat compare_img);
 };
 
 #endif //COMPANION_SIMPLECOMPAREIMAGE_H

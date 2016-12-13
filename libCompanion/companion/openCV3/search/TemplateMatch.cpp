@@ -12,9 +12,9 @@ void TemplateMatch::set_match_method(int match_method) {
     TemplateMatch::match_method = match_method;
 }
 
-Comparison* TemplateMatch::algo(Mat search_img, Mat compare_img) {
+Comparison* TemplateMatch::algo(cv::Mat search_img, cv::Mat compare_img) {
 
-    Mat result;
+    cv::Mat result;
 
     // Check if image is loaded
     if (!Util::is_image_loaded(search_img) || !Util::is_image_loaded(compare_img)) {
@@ -41,12 +41,12 @@ Comparison* TemplateMatch::algo(Mat search_img, Mat compare_img) {
     double maxVal;
     double accordance;
 
-    Point minLoc;
-    Point maxLoc;
-    Point matchLoc;
-    Point matchOffset;
+    cv::Point minLoc;
+    cv::Point maxLoc;
+    cv::Point matchLoc;
+    cv::Point matchOffset;
 
-    minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, Mat());
+    minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat());
 
     /// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all other methods higher values are best.
     if (match_method == CV_TM_SQDIFF || match_method == CV_TM_SQDIFF_NORMED) {
@@ -58,7 +58,7 @@ Comparison* TemplateMatch::algo(Mat search_img, Mat compare_img) {
         accordance = maxVal;
     }
 
-    matchOffset = Point(matchLoc.x + compare_img.cols, matchLoc.y + compare_img.rows);
+    matchOffset = cv::Point(matchLoc.x + compare_img.cols, matchLoc.y + compare_img.rows);
 
     return new Comparison(accordance, matchLoc, matchOffset);
 }

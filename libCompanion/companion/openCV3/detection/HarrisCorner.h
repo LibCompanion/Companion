@@ -10,9 +10,6 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 
-using namespace cv;
-using namespace std;
-
 class HarrisCorner {
 
     public:
@@ -20,9 +17,9 @@ class HarrisCorner {
 
         ~HarrisCorner();
 
-        void doNothing(Mat image);
+        void doNothing(cv::Mat image);
 
-        void doConturs(Mat image);
+        void doConturs(cv::Mat image);
 };
 
 

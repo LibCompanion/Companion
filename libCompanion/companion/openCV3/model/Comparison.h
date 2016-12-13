@@ -7,12 +7,10 @@
 
 #include <opencv2/core/core.hpp>
 
-using namespace cv;
-
 class Comparison {
 
     public:
-        Comparison(double accordance, Point location, Point offset);
+        Comparison(double accordance, cv::Point location, cv::Point offset);
 
         ~Comparison();
 
@@ -20,21 +18,21 @@ class Comparison {
 
         void setAccordance(double accordance);
 
-        void setLocation(Point location);
+        void setLocation(cv::Point location);
 
-        Point getLocation();
+        cv::Point getLocation();
 
-        void setOffset(Point offset);
+        void setOffset(cv::Point offset);
 
-        Point getOffset();
+        cv::Point getOffset();
 
 private:
 
         double accordance;
 
-        Point location;
+        cv::Point location;
 
-        Point offset;
+        cv::Point offset;
 
 };
 

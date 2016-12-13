@@ -1,6 +1,6 @@
 #include "ImageRecognition.h"
 
-Comparison* ImageRecognition::search(Mat search_img, Mat compare_img) {
+Comparison* ImageRecognition::search(cv::Mat search_img, cv::Mat compare_img) {
     try {
         return algo(search_img, compare_img);
     } catch (CompanionError::error_code error) {
@@ -8,11 +8,11 @@ Comparison* ImageRecognition::search(Mat search_img, Mat compare_img) {
     }
 }
 
-Comparison* ImageRecognition::search(string search_image_path, string compare_image_path, int cv_color) {
+Comparison* ImageRecognition::search(std::string search_image_path, std::string compare_image_path, int cv_color) {
     Comparison *comparison;
 
-    Mat search_img = imread(search_image_path, cv_color);
-    Mat compare_img = imread(compare_image_path, cv_color);
+    cv::Mat search_img = cv::imread(search_image_path, cv_color);
+    cv::Mat compare_img = cv::imread(compare_image_path, cv_color);
 
     try {
         comparison = algo(search_img, compare_img);

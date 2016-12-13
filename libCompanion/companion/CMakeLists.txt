@@ -16,7 +16,9 @@ SET(SOURCE
         openCV3/util/Util.cpp openCV3/util/Util.h
         openCV3/model/Comparison.cpp openCV3/model/Comparison.h
         openCV3/search/FeatureMatching.cpp openCV3/search/FeatureMatching.h
-        openCV3/util/CompanionError.h openCV3/detection/HarrisCorner.cpp openCV3/detection/HarrisCorner.h openCV3/detection/ObjectTracking.cpp openCV3/detection/ObjectTracking.h)
+        openCV3/detection/HarrisCorner.cpp openCV3/detection/HarrisCorner.h
+        openCV3/detection/ObjectTracking.cpp openCV3/detection/ObjectTracking.h
+        openCV3/util/CompanionError.h openCV3/thread/ConsumerStream.cpp openCV3/thread/ConsumerStream.h openCV3/thread/ProducerStream.cpp openCV3/thread/ProducerStream.h openCV3/thread/wqueue.h)
 
 add_library(libCompanion ${SOURCE})
 target_link_libraries(libCompanion ${OpenCV_LIBS})

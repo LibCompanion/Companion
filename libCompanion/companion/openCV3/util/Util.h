@@ -6,9 +6,6 @@
 
 #include "companion/openCV3/util/CompanionError.h"
 
-using namespace std;
-using namespace cv;
-
 /**
  * Utility class for opencv.
  *
@@ -25,7 +22,7 @@ class Util {
          *
          * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
          */
-        static bool is_image_loaded(Mat &img);
+        static bool is_image_loaded(cv::Mat &img);
 
         /**
          * @brief Gets from given error code an corresponding error message.
@@ -34,7 +31,7 @@ class Util {
          *
          * @return String message from given error.
          */
-        static string get_error(CompanionError::error_code code);
+        static std::string get_error(CompanionError::error_code code);
 
 };
 

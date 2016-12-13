@@ -5,7 +5,7 @@
 #include "Comparison.h"
 
 
-Comparison::Comparison(double accordance, Point location, Point offset) {
+Comparison::Comparison(double accordance, cv::Point location, cv::Point offset) {
     this->accordance = accordance;
     this->location = location;
     this->offset = offset;
@@ -22,18 +22,18 @@ void Comparison::setAccordance(double accordance) {
 }
 
 
-void Comparison::setLocation(Point location) {
+void Comparison::setLocation(cv::Point location) {
     Comparison::location = location;
 }
 
-Point Comparison::getLocation() {
+cv::Point Comparison::getLocation() {
     return location;
 }
 
-void Comparison::setOffset(Point offset) {
+void Comparison::setOffset(cv::Point offset) {
     Comparison::offset = offset;
 }
 
-Point Comparison::getOffset() {
+cv::Point Comparison::getOffset() {
     return offset;
 }

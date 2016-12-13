@@ -11,9 +11,6 @@
 #include "companion/openCV3/model/Comparison.h"
 #include "companion/openCV3/util/Util.h"
 
-using namespace std;
-using namespace cv;
-
 /**
  * Image recognition abstract class to implement specific image recognition algorithms.
  *
@@ -34,7 +31,7 @@ class ImageRecognition {
           *
           * @return An comparison model which contains all search results from algo.
           */
-        Comparison* search(string search_image_path, string compare_image_path, int cv_color);
+        Comparison* search(std::string search_image_path, std::string compare_image_path, int cv_color);
 
          /**
           * Image recognition method to obtain comparison from two loaded images.
@@ -46,7 +43,7 @@ class ImageRecognition {
           *
           * @return An comparison model which contains all search results from algo.
           */
-        Comparison* search(Mat search_img, Mat compare_img);
+        Comparison* search(cv::Mat search_img, cv::Mat compare_img);
 
     protected:
 
@@ -60,7 +57,7 @@ class ImageRecognition {
          *
          * @return An comparison model which contains all search results from algo.
          */
-        virtual Comparison* algo(Mat search_img, Mat compare_img) = 0;
+        virtual Comparison* algo(cv::Mat search_img, cv::Mat compare_img) = 0;
 };
 
 #endif //COMPANION_IMAGERECOGNITION_H

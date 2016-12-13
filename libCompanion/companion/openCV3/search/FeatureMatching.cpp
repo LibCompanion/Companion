@@ -6,13 +6,13 @@
 
 FeatureMatching::FeatureMatching() {
 
-    this->detector = ORB::create();
-    this->extractor = BRISK::create();
-    this->matcher = DescriptorMatcher::create("FlannBased");
+    this->detector = cv::ORB::create();
+    this->extractor = cv::BRISK::create();
+    this->matcher = cv::DescriptorMatcher::create("FlannBased");
 }
 
-FeatureMatching::FeatureMatching(Ptr<FeatureDetector> detector, Ptr<DescriptorExtractor> extractor,
-                                 Ptr<DescriptorMatcher> matcher) {
+FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
+                                 cv::Ptr<cv::DescriptorMatcher> matcher) {
     this->detector = detector;
     this->extractor = extractor;
     this->matcher = matcher;
@@ -20,7 +20,7 @@ FeatureMatching::FeatureMatching(Ptr<FeatureDetector> detector, Ptr<DescriptorEx
 
 FeatureMatching::~FeatureMatching() {}
 
-Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
+Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
 
     // Check if images are loaded
     if (!Util::is_image_loaded(object_img) || !Util::is_image_loaded(scene_img)) {
@@ -28,11 +28,11 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
     }
 
     // Variables
-    vector<vector<DMatch>> matches_one;
-    vector<DMatch> good_matches;
-    vector<KeyPoint> keypoints_object, keypoints_scene;
-    vector<Point2f> obj, scene;
-    Mat descriptors_object, descriptors_scene;
+    std::vector<std::vector<cv::DMatch>> matches_one;
+    std::vector<cv::DMatch> good_matches;
+    std::vector<cv::KeyPoint> keypoints_object, keypoints_scene;
+    std::vector<cv::Point2f> obj, scene;
+    cv::Mat descriptors_object, descriptors_scene;
 
     // Step 1 : Detect the keypoints
     detector->detect(object_img, keypoints_object);
@@ -63,10 +63,10 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
         //good_matches = symMatches;
 
         //-- Draw only "good" matches
-        Mat img_matches = scene_img;
-        drawMatches(object_img, keypoints_object, scene_img, keypoints_scene,
-                    good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
-                    vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+        cv::Mat img_matches = scene_img;
+        //drawMatches(object_img, keypoints_object, scene_img, keypoints_scene,
+        //            good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
+        //            vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
 
         //-- Localize the object
         if (good_matches.size() > 0) {
@@ -78,35 +78,35 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
             }
 
             // Find Homography
-            Mat H = findHomography(obj, scene, CV_RANSAC);
+            cv::Mat H = cv::findHomography(obj, scene, CV_RANSAC);
 
             if (!H.empty()) {
                 //-- Get the corners from the image_1 ( the object to be "detected" )
-                std::vector<Point2f> obj_corners(4);
+                std::vector<cv::Point2f> obj_corners(4);
                 obj_corners[0] = cvPoint(0, 0);
                 obj_corners[1] = cvPoint(object_img.cols, 0);
                 obj_corners[2] = cvPoint(object_img.cols, object_img.rows);
                 obj_corners[3] = cvPoint(0, object_img.rows);
-                std::vector<Point2f> scene_corners(4);
+                std::vector<cv::Point2f> scene_corners(4);
 
-                perspectiveTransform(obj_corners, scene_corners, H);
+                cv::perspectiveTransform(obj_corners, scene_corners, H);
 
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
-                Scalar color = Scalar(0, 255, 0);
-                // Point2f offset = Point2f(0, 0); // Original offset from default window is zero
-                Point2f offset = Point2f(object_img.cols, 0); // Offset if image draw will be used
+                cv::Scalar color = cv::Scalar(0, 255, 0);
+                cv::Point2f offset = cv::Point2f(0, 0); // Original offset from default window is zero
+                //Point2f offset = Point2f(object_img.cols, 0); // Offset if image draw will be used
 
-                line(img_matches, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
-                line(img_matches, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
-                line(img_matches, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
-                line(img_matches, scene_corners[3] + offset, scene_corners[0] + offset, color, thickness);
+                cv::line(img_matches, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
+                cv::line(img_matches, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
+                cv::line(img_matches, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
+                cv::line(img_matches, scene_corners[3] + offset, scene_corners[0] + offset, color, thickness);
             }
 
         }
 
         //-- Show detected matches
-        imshow("Good Matches & Object detection", img_matches);
+        cv::imshow("Good Matches & Object detection", img_matches);
     }
 
     return nullptr;
@@ -115,7 +115,7 @@ Comparison *FeatureMatching::algo(Mat object_img, Mat scene_img) {
     //return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
 }
 
-void FeatureMatching::ratio_test(const vector<vector<DMatch>> &matches, vector<DMatch> &good_matches, float ratio) {
+void FeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches, float ratio) {
     for (int i = 0; i < matches.size(); ++i) {
         if (matches[i][0].distance < ratio * matches[i][1].distance) {
             good_matches.push_back(matches[i][0]);
@@ -123,20 +123,20 @@ void FeatureMatching::ratio_test(const vector<vector<DMatch>> &matches, vector<D
     }
 }
 
-void FeatureMatching::symmetry_test(const vector<DMatch> &matches1, const vector<DMatch> &matches2,
-                                    vector<DMatch> &symMatches) {
+void FeatureMatching::symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2,
+                                    std::vector<cv::DMatch> &symMatches) {
     symMatches.clear();
 
-    for (vector<DMatch>::const_iterator matchIterator1 = matches1.begin();
+    for (std::vector<cv::DMatch>::const_iterator matchIterator1 = matches1.begin();
          matchIterator1 != matches1.end(); ++matchIterator1) {
 
-        for (vector<DMatch>::const_iterator matchIterator2 = matches2.begin();
+        for (std::vector<cv::DMatch>::const_iterator matchIterator2 = matches2.begin();
              matchIterator2 != matches2.end(); ++matchIterator2) {
 
             if ((*matchIterator1).queryIdx == (*matchIterator2).trainIdx &&
                 (*matchIterator2).queryIdx == (*matchIterator1).trainIdx) {
                 symMatches.push_back(
-                        DMatch((*matchIterator1).queryIdx, (*matchIterator1).trainIdx, (*matchIterator1).distance));
+                        cv::DMatch((*matchIterator1).queryIdx, (*matchIterator1).trainIdx, (*matchIterator1).distance));
                 break;
             }
 

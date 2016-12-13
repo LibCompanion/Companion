@@ -9,8 +9,6 @@
 #include <companion/openCV3/search/ImageRecognition.h>
 #include <companion/openCV3/detection/HarrisCorner.h>
 
-using namespace cv;
-
 class Video {
 
 public:
@@ -21,11 +19,13 @@ public:
 
     int connectToDevice(int device);
 
-    Mat obtainImage();
+    int playVideo(std::string url);
+
+    cv::Mat obtainImage();
 
 private:
 
-    VideoCapture capture;
+    cv::VideoCapture capture;
 
     bool isDeviceOpen();
 

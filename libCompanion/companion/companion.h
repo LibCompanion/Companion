@@ -8,9 +8,6 @@
 #include <opencv2/features2d.hpp>
 #include "companion/openCV3/util/CompanionError.h"
 
-using namespace cv;
-using namespace std;
-
 /**
  * @brief Companion class to use image recognition methods like simple compare, template matching or flann.
  * @author Andreas Sekulski
@@ -20,7 +17,7 @@ class Companion
 public:
 
 	/* ToDo Documentation */
-	void calc_histogram(string img_path);
+	void calc_histogram(std::string img_path);
 
 	/**
 	 * @brief Multi-Processing simple search compare.<br>
@@ -32,7 +29,7 @@ public:
 	 *
 	 * @return Gives best compare object if exists otherwise an empty compare object.
 	 */
-    void search_compare_image_mp(string search_img_path, vector<string> compare_image_paths, double min_threshold);
+    void search_compare_image_mp(std::string search_img_path, std::vector<std::string> compare_image_paths, double min_threshold);
 
 	/**
 	 * @brief Template matching search which used openmp multi processing or cuda. Use of cuda will be faster than multi processing.<br>
@@ -49,7 +46,7 @@ public:
 	 *
 	 * @return Gives best template match object if exists otherwise an empty compare object.
 	 */
-    void search_vector_template_matching(string search_img_path, vector<string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
+    void search_vector_template_matching(std::string search_img_path, std::vector<std::string> compare_img_paths, double threshold, int match_method, bool resize_same_size);
 
 	/**
 	 * @brief Multi-Processing feature matching search.<br>
@@ -61,7 +58,7 @@ public:
 	 *
 	 * @return Gives best flann match object if exists otherwise an empty compare object.
 	 */
-    void search_feature_matching_mp(string search_img_path, vector<string> compare_img_paths, double min_threshold);
+    void search_feature_matching_mp(std::string search_img_path, std::vector<std::string> compare_img_paths, double min_threshold);
 
 private:
 
@@ -71,7 +68,7 @@ private:
 	 * @param img1 Image to resize.
 	 * @param img2 Image to resize.
 	 */
-	void resize_image_equal(Mat &img1, Mat &img2);
+	void resize_image_equal(cv::Mat &img1, cv::Mat &img2);
 
 	/**
 	 * @brief Sets given image to size.
@@ -80,5 +77,5 @@ private:
 	 * @param size_x  The size x to resize.
 	 * @param size_y  The size y to resize.
 	 */
-	void resize_image(Mat &img, int size_x, int size_y);
+	void resize_image(cv::Mat &img, int size_x, int size_y);
 };

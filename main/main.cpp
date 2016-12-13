@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 #include <companion/companion.h>
 #include <companion/openCV3/stream/Video.h>
@@ -11,125 +12,26 @@
 #include <companion/openCV3/search/TemplateMatch.h>
 #include <companion/openCV3/search/FeatureMatching.h>
 #include <companion/openCV3/detection/ObjectTracking.h>
-
-using namespace std;
-
-/*
-void out_message(string header, Search *search) {
-    if (!search->get_compare_image_path().empty()) {
-        cout << header << "\n" << "Accordance : " << search->get_accordance() << "\n";
-        cout << "Search Image : " << search->get_search_image_path() << "\n";
-        cout << "Compare Image : " << search->get_compare_image_path() << "\n";
-	}
-	else
-	{
-		std::cout << header << "\n" << "No image found\n";
-	}
-}
- */
-
-void compare_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion) {
-
-	string search_file_path; 
-	int start_s;
-	//Search *image;
-	int stop_s;
-
-	// Compare matching - Fast but results can vary
-	for (int i = 0; i < test_cards.size(); i++)
-	{
-		search_file_path = test_cards.at(i);
-		start_s = clock();
-		//image = companion.search_compare_image_mp(search_file_path, card_images, 0.05);
-		stop_s = clock();
-		//out_message("Simple_Compare", image);
-		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-		//delete image;
-	}
-}
-
-void template_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion)
-{
-	string search_file_path;
-	int start_s;
-	//Search *image;
-	int stop_s;
-
-	// Template matching - Moderrate result good
-	// http://docs.opencv.org/2.4/doc/tutorials/imgproc/histograms/template_matching/template_matching.html
-	// For SQDIFF and SQDIFF_NORMED, the best matches are lower values. For all the other methods, the higher the better
-	// CV_TM_SQDIFF, CV_TM_SQDIFF_NORMED, CV_TM_CCORR, CV_TM_CCORR_NORMED, CV_TM_CCOEFF, CV_TM_CCOEFF_NORMED
-
-	for (int i = 0; i < test_cards.size(); i++)
-	{
-		search_file_path = test_cards.at(i);
-		start_s = clock();
-		//image = companion.search_vector_template_matching(search_file_path, card_images, 0.20, CV_TM_SQDIFF_NORMED, true);
-		stop_s = clock();
-		//out_message("Template_Matching_CV_TM_SQDIFF_NORMED", image);
-		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-		//delete image;
-	}
-
-
-	for (int i = 0; i < test_cards.size(); i++)
-	{
-		search_file_path = test_cards.at(i);
-		start_s = clock();
-		//image = companion.search_vector_template_matching(search_file_path, card_images, 0.80, CV_TM_CCORR_NORMED, true);
-		stop_s = clock();
-		//out_message("Template_Matching_CV_TM_CCORR_NORMED", image);
-		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-		//delete image;
-	}
-
-	for (int i = 0; i < test_cards.size(); i++)
-	{
-		search_file_path = test_cards.at(i);
-		start_s = clock();
-		//image = companion.search_vector_template_matching(search_file_path, card_images, 0.80, CV_TM_CCOEFF_NORMED, true);
-		stop_s = clock();
-		//out_message("Template_Matching_CV_TM_CCOEFF_NORMED", image);
-		cout << "time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-		//delete image;
-	}
-}
-
-void feature_matching(string seach_file_path_name, vector<string> card_images, vector<string> test_cards, Companion companion)
-{
-	string search_file_path;
-	int start_s;
-	//FeatureMatch *image;
-	int stop_s;
-
-	for (int i = 0; i < test_cards.size(); i++)
-	{
-		//for (int z = 0; z < 5; z++)
-		{
-			search_file_path = test_cards.at(i);
-			start_s = clock();
-			//image = companion.search_feature_matching_mp(
-			//	search_file_path,
-			//	card_images,
-			//	0.1,
-            //    Companion::detector::ORB,
-            //    Companion::extractor::ORB,
-            //    Companion::matcher::BruteForce_L2);
-			stop_s = clock();
-			//out_message("Feature Matching", image);
-			cout << " time: " << (stop_s - start_s) / double(CLOCKS_PER_SEC) * 1000 << "\n";
-			//image->show_compare_points();
-			//delete image;
-		}
-		
-	}
-}
+#include <companion/openCV3/thread/ProducerStream.h>
+#include <companion/openCV3/thread/ConsumerStream.h>
 
 int main() {
 
 	Video video;
-	string testcard = "/home/asekulsk/Bilder/Magic_Cards_Img/Test/testcard1.jpg";
-	//string testcard = "D:/Data/Magic_Cards_Img/Test/testcard1.jpg";
+	//string testImg = "/home/asekulsk/Bilder/Magic_Cards_Img/Test/testcard1.jpg";
+	//string testImg = "D:/Data/Magic_Cards_Img/Test/testcard1.jpg";
+	std::string path = "/media/asekulsk/F898585998581908/Data/Master/Testcase/HBF/";
+    std::string testImg = path + std::string("Sample_Right.jpg");
+    std::string testVideo = path + std::string("Muelheim_HBF.mp4");
+
+    wqueue<cv::Mat> queue;
+    ProducerStream ps(queue);
+    ConsumerStream cs(queue);
+
+    std::thread t1(&ProducerStream::run, ps, testVideo);
+    std::thread t2(&ConsumerStream::run, cs, testImg);
+    t1.join();
+    t2.join();
 
     // ToDo all totally changed...
     // New version from image recognition companion lib...
@@ -155,8 +57,8 @@ int main() {
         SIFT: detector + descriptor (NonFree)
         SURF: detector + descriptor (NonFree)
         */
-        Ptr<FeatureDetector> detector = GFTTDetector::create();
-        Ptr<DescriptorExtractor> extractor = LATCH::create();
+        cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create();
+        cv::Ptr<cv::DescriptorExtractor> extractor = cv::BRISK::create();
 
         /*
         BruteForce (it uses L2 )
@@ -165,8 +67,8 @@ int main() {
         BruteForce-Hamming(2)
         FlannBased
         */
-        Ptr<DescriptorMatcher> matcher;
-		matcher = DescriptorMatcher::create("BruteForce");
+        cv::Ptr<cv::DescriptorMatcher> matcher;
+		matcher = cv::DescriptorMatcher::create("BruteForce");
 		//matcher = DescriptorMatcher::create("BruteForce-L1");
 		//matcher = DescriptorMatcher::create("BruteForce-Hamming");
 		//matcher = DescriptorMatcher::create("BruteForce-Hamming(2)");
@@ -177,18 +79,21 @@ int main() {
                 extractor,
                 matcher);
 
+        /*
 		Mat frame;
-		video.connectToDevice(0);
-		while(true) {
-			// Camera api
-			frame = video.obtainImage();
+		//video.connectToDevice(0);
+        video.playVideo(testVideo);
+        // Camera api
+        frame = video.obtainImage();
+		while(!frame.empty()) {
 			// Image recognition
 			cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
-			recognition->search(imread(testcard, IMREAD_GRAYSCALE), frame);
+			recognition->search(imread(testImg, IMREAD_GRAYSCALE), frame);
 			// Wait to obtain next image or store to buffer
 			waitKey(1);
+            frame = video.obtainImage();
 		}
-
+        */
 
         //if(video.startRealtime(recognition, imread(testcard, IMREAD_GRAYSCALE), 0) != 0); {
         //    cout << "Scotty we have a problem";
@@ -196,66 +101,15 @@ int main() {
 
 		// Intresting maybe could help...
 		// https://www.youtube.com/watch?v=bSeFrPrqZ2A
-		ObjectTracking *tracking = new ObjectTracking();
-		tracking->start();
+		//ObjectTracking *tracking = new ObjectTracking();
+		//tracking->start();
 
-		delete tracking;
+		//delete tracking;
         delete recognition;
 
     } catch (CompanionError::error_code error) {
-        cout << Util::get_error(error);
+        std::cout << Util::get_error(error);
     }
 
-	/*
-	string path;
-	ifstream myfile(check_files_path);
-	if (myfile.is_open())
-	{
-		while (getline(myfile, path))
-		{
-			card_images.push_back(path);
-		}
-		myfile.close();
-	}
-	else
-	{
-		cout << "Testdata not found\n";
-		system("pause");
-		return 0;
-	}
-
-	vector<string> test_cards;
-	test_cards.push_back(card_image_path + "/Color_Classifier/ztest/black.jpg");
-	*/
-	//test_cards.push_back("D:/Magic_Cards_Img/Color_Classifier/ztest/white.jpg");
-
-	/*
-	string test_img_template = "D:/Magic_Cards_Img/Test/Template/template.jpg";
-	string test_img_path = "D:/Magic_Cards_Img/Test/Template/inverse.jpg";
-	try
-	{
-		//Search *search = companion.search_flann(test_img_path, test_img_template);
-		TemplateMatch *search = companion.search_template_matching(test_img_path, test_img_template, CV_TM_CCOEFF_NORMED, false);
-		cout << search->get_accordance() << "\n";
-        search->show_compare_points();
-	}
-	catch (Error e)
-	{
-		// ToDo := Better Error Handling
-		cout << companion.get_error(e) << "\n";
-	}
-    */
-	/*
-	string img1 = card_image_path + "/Color_Classifier/ztest/black.jpg";
-	string img2 = card_image_path + "/Color_Classifier/ztest/black.jpg";
-	FeatureMatch *fm = companion.search_feature_matching(img1, img2, Companion::detector::FAST, Companion::extractor::ORB, Companion::matcher::BruteForce_L2);
-	fm->show_images();
-	fm->show_compare_points();
-	*/
-	//companion.calc_histogram(seach_file_path_name + to_string(4) + ".jpg");
-	//compare_matching(seach_file_path_name, card_images, test_cards, companion);
-	//template_matching(seach_file_path_name, card_images, test_cards, companion);
-	//feature_matching(seach_file_path_name, card_images, test_cards, companion);
-	
 	return 0;
 }

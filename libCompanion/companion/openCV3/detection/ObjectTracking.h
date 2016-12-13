@@ -13,9 +13,6 @@
 #include <opencv2/features2d.hpp>
 #include <cv.hpp>
 
-using namespace std;
-using namespace cv;
-
 class ObjectTracking {
 
 public:

@@ -1,11 +1,11 @@
 #include "Util.h"
 
-bool Util::is_image_loaded(Mat &img) {
+bool Util::is_image_loaded(cv::Mat &img) {
     return !img.empty();
 }
 
-string Util::get_error(CompanionError::error_code code) {
-        string error = "";
+std::string Util::get_error(CompanionError::error_code code) {
+        std::string error = "";
 
         switch (code)
         {

@@ -13,12 +13,12 @@ HarrisCorner::~HarrisCorner() {
 
 }
 
-void HarrisCorner::doNothing(Mat image) {
+void HarrisCorner::doNothing(cv::Mat image) {
 
     int thresh = 220;
 
-    Mat dst, dst_norm, dst_norm_scaled;
-    dst = Mat::zeros(image.size(), CV_32FC1);
+    cv::Mat dst, dst_norm, dst_norm_scaled;
+    dst = cv::Mat::zeros(image.size(), CV_32FC1);
 
     /// Detector parameters
     int blockSize = 6;
@@ -29,7 +29,7 @@ void HarrisCorner::doNothing(Mat image) {
     cornerHarris(image, dst, blockSize, apertureSize, k);
 
     /// Normalizing
-    normalize(dst, dst_norm, 0, 255, NORM_MINMAX, CV_32FC1, Mat());
+    normalize(dst, dst_norm, 0, 255, cv::NORM_MINMAX, CV_32FC1, cv::Mat());
     convertScaleAbs(dst_norm, dst_norm_scaled);
 
     /// Drawing a circle around corners
@@ -40,7 +40,7 @@ void HarrisCorner::doNothing(Mat image) {
         {
             if ((int)dst_norm.at<float>(j, i) > thresh)
             {
-                circle(dst_norm_scaled, Point(i, j), 5, Scalar(224, 245, 255), 2, 8, 0);
+                circle(dst_norm_scaled, cv::Point(i, j), 5, cv::Scalar(224, 245, 255), 2, 8, 0);
             }
         }
     }
@@ -49,20 +49,20 @@ void HarrisCorner::doNothing(Mat image) {
     imshow("Corners detected", dst_norm_scaled);
 }
 
-void HarrisCorner::doConturs(Mat image) {
+void HarrisCorner::doConturs(cv::Mat image) {
     int largest_area=0;
     int largest_contour_index=0;
-    Rect bounding_rect;
+    cv::Rect bounding_rect;
 
-    Mat src = image;
+    cv::Mat src = image;
 
-    Mat thr(src.rows,src.cols,CV_8UC1);
-    Mat dst(src.rows,src.cols,CV_8UC1,Scalar::all(0));
+    cv::Mat thr(src.rows,src.cols,CV_8UC1);
+    cv::Mat dst(src.rows,src.cols,CV_8UC1, cv::Scalar::all(0));
 
-    threshold(thr, thr,25, 255,THRESH_BINARY); //Threshold the gray
+    cv::threshold(thr, thr,25, 255,cv::THRESH_BINARY); //Threshold the gray
 
-    vector<vector<Point>> contours; // Vector for storing contour
-    vector<Vec4i> hierarchy;
+    std::vector<std::vector<cv::Point>> contours; // Vector for storing contour
+    std::vector<cv::Vec4i> hierarchy;
 
     findContours(thr, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE ); // Find the contours in the image
 
@@ -76,9 +76,9 @@ void HarrisCorner::doConturs(Mat image) {
         }
     }
 
-    Scalar color( 255,255,255);
+    cv::Scalar color( 255,255,255);
     drawContours( dst, contours,largest_contour_index, color, CV_FILLED, 8, hierarchy ); // Draw the largest contour using previously stored index.
-    rectangle(src, bounding_rect,  Scalar(0,255,0),1, 8,0);
+    rectangle(src, bounding_rect, cv::Scalar(0,255,0),1, 8,0);
     imshow( "src", src );
     imshow( "largest Contour", dst );
 }
