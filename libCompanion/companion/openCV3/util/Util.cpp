@@ -1,5 +1,11 @@
 #include "Util.h"
 
+void Util::resize_image(cv::Mat &img, int size_x, int size_y)
+{
+    cv::resize(img, img, cv::Size(size_x, size_y));
+}
+
+
 bool Util::is_image_loaded(cv::Mat &img) {
     return !img.empty();
 }

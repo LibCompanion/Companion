@@ -4,10 +4,6 @@
 
 #include "ProducerStream.h"
 
-ProducerStream::ProducerStream(wqueue<cv::Mat> &queue) {
-    this->queue = queue;
-}
-
 void ProducerStream::run(std::string videoPath) {
     try {
         Video video;

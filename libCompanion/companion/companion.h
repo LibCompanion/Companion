@@ -59,23 +59,4 @@ public:
 	 * @return Gives best flann match object if exists otherwise an empty compare object.
 	 */
     void search_feature_matching_mp(std::string search_img_path, std::vector<std::string> compare_img_paths, double min_threshold);
-
-private:
-
-	/**
-	 * @brief Resize both given image to same size.
-	 *
-	 * @param img1 Image to resize.
-	 * @param img2 Image to resize.
-	 */
-	void resize_image_equal(cv::Mat &img1, cv::Mat &img2);
-
-	/**
-	 * @brief Sets given image to size.
-	 *
-	 * @param img     The image to resize.
-	 * @param size_x  The size x to resize.
-	 * @param size_y  The size y to resize.
-	 */
-	void resize_image(cv::Mat &img, int size_x, int size_y);
 };

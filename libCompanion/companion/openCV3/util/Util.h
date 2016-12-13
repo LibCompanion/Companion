@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "companion/openCV3/util/CompanionError.h"
 
@@ -32,6 +33,8 @@ class Util {
          * @return String message from given error.
          */
         static std::string get_error(CompanionError::error_code code);
+
+        static void resize_image(cv::Mat &img, int size_x, int size_y);
 
 };
 

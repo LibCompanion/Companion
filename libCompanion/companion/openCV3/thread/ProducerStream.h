@@ -13,12 +13,13 @@
 class ProducerStream {
 
 public:
-    ProducerStream(wqueue<cv::Mat> &queue);
+
+    ProducerStream(wqueue<cv::Mat>& queue) : queue(queue) {}
 
     void run(std::string videoPath);
 
 private:
-    wqueue<cv::Mat> queue;
+    wqueue<cv::Mat>& queue;
 };
 
 

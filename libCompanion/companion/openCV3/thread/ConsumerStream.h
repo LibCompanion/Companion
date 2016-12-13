@@ -14,15 +14,14 @@
 class ConsumerStream {
 
 public:
-    ConsumerStream(wqueue<cv::Mat> &queue);
+
+    ConsumerStream(wqueue<cv::Mat>& queue) : queue(queue) {}
 
     void run(std::string imgPath);
 
 private:
 
-    wqueue<cv::Mat> queue;
-
-
+    wqueue<cv::Mat>& queue;
 };
 
 
