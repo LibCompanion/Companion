@@ -15,6 +15,10 @@ void ProducerStream::run(std::string videoPath) {
         while(!frame.empty()) {
             queue.add(frame);
             frame = video.obtainImage();
+            while (queue.size() > 30) {
+                // Queue size should not be overflow from images... :D
+                // ToDo := Cleaner Solution
+            }
         }
 
     } catch (CompanionError::error_code error) {

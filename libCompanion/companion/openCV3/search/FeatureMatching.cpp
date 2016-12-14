@@ -8,14 +8,16 @@ FeatureMatching::FeatureMatching() {
 
     this->detector = cv::ORB::create();
     this->extractor = cv::BRISK::create();
-    this->matcher = cv::DescriptorMatcher::create("FlannBased");
+    this->matchingType = "FlannBased";
+    this->matcher = cv::DescriptorMatcher::create(matchingType);
 }
 
 FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                                 cv::Ptr<cv::DescriptorMatcher> matcher) {
+                                 cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType) {
     this->detector = detector;
     this->extractor = extractor;
     this->matcher = matcher;
+    this->matchingType = matchingType;
 }
 
 FeatureMatching::~FeatureMatching() {}
@@ -45,9 +47,11 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
     if (!descriptors_object.empty() && !descriptors_scene.empty()
         && keypoints_object.size() > 0 && keypoints_scene.size() > 0) {
 
-        // Flan based needs CV_32F ToDo: Check others...
-        descriptors_scene.convertTo(descriptors_scene, CV_32F);
-        descriptors_object.convertTo(descriptors_object, CV_32F);
+        // Flan based needs CV_32F
+        if(matchingType.compare("FlannBased") == 0) {
+            descriptors_scene.convertTo(descriptors_scene, CV_32F);
+            descriptors_object.convertTo(descriptors_object, CV_32F);
+        }
 
         //-- Step 3: Matching descriptor vectors
         matcher->knnMatch(descriptors_object, descriptors_scene, matches_one, 2);
@@ -65,11 +69,13 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
         //-- Draw only "good" matches
         cv::Mat img_matches = scene_img;
         //drawMatches(object_img, keypoints_object, scene_img, keypoints_scene,
-        //            good_matches, img_matches, Scalar::all(-1), Scalar::all(-1),
-        //            vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+        //            good_matches, img_matches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+        //            std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
 
         //-- Localize the object
-        if (good_matches.size() > 0) {
+        if (good_matches.size() > 40) {
+
+            std::cout << good_matches.size() << "\n";
 
             for (int i = 0; i < good_matches.size(); i++) {
                 //-- Get the keypoints from the good matches
@@ -95,7 +101,7 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 int thickness = 4;
                 cv::Scalar color = cv::Scalar(0, 255, 0);
                 cv::Point2f offset = cv::Point2f(0, 0); // Original offset from default window is zero
-                //Point2f offset = Point2f(object_img.cols, 0); // Offset if image draw will be used
+                //cv::Point2f offset = cv::Point2f(object_img.cols, 0); // Offset if image draw will be used
 
                 cv::line(img_matches, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
                 cv::line(img_matches, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);

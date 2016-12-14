@@ -19,11 +19,13 @@ class FeatureMatching : public ImageRecognition {
 public:
     FeatureMatching();
 
-    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor, cv::Ptr<cv::DescriptorMatcher> matcher);
+    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor, cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType);
 
     ~FeatureMatching();
 
 private:
+
+    std::string matchingType;
 
     cv::Ptr<cv::FeatureDetector> detector;
 
