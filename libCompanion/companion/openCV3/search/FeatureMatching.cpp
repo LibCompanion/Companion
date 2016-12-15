@@ -24,9 +24,18 @@ FeatureMatching::~FeatureMatching() {}
 
 Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
 
+    // Temp image if image will be cutted.
+    cv::Mat temp;
+
     // Check if images are loaded
     if (!Util::is_image_loaded(object_img) || !Util::is_image_loaded(scene_img)) {
         throw CompanionError::error_code::image_not_found;
+    }
+
+    if(subImage.width > 0 && subImage.height > 0)  {
+        temp = scene_img;
+        scene_img = cv::Mat(scene_img, subImage);
+        cv::imshow("Cut_Image", scene_img);
     }
 
     // Variables
@@ -66,16 +75,10 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
         //symmetry_test(good_matches, good_matches_two, symMatches);
         //good_matches = symMatches;
 
-        //-- Draw only "good" matches
-        cv::Mat img_matches = scene_img;
-        //drawMatches(object_img, keypoints_object, scene_img, keypoints_scene,
-        //            good_matches, img_matches, cv::Scalar::all(-1), cv::Scalar::all(-1),
-        //            std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-
         //-- Localize the object
         if (good_matches.size() > 40) {
 
-            std::cout << good_matches.size() << "\n";
+//            std::cout << good_matches.size() << "\n";
 
             for (int i = 0; i < good_matches.size(); i++) {
                 //-- Get the keypoints from the good matches
@@ -100,19 +103,76 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
                 cv::Scalar color = cv::Scalar(0, 255, 0);
-                cv::Point2f offset = cv::Point2f(0, 0); // Original offset from default window is zero
-                //cv::Point2f offset = cv::Point2f(object_img.cols, 0); // Offset if image draw will be used
+                cv::Point2f offset = cv::Point2f(subImage.x, subImage.y); // Offset is recalculate position from last recognition
 
-                cv::line(img_matches, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
-                cv::line(img_matches, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
-                cv::line(img_matches, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
-                cv::line(img_matches, scene_corners[3] + offset, scene_corners[0] + offset, color, thickness);
+                // Focus area - Scene Corners
+                //   0               1
+                //   -----------------
+                //   |               |
+                //   |               |
+                //   |               |
+                //   |               |
+                //   -----------------
+                //   3               2
+                float width = (scene_corners[1] - scene_corners[0]).x;
+                float height = (scene_corners[3] - scene_corners[0]).y;
+                cv::Point2f scale = cv::Point2f(width / 2, height / 2);
+                cv::Point2f start = scene_corners[0] + offset - scale;
+                cv::Point2f end = scene_corners[2] + offset + scale;
+
+                if(!temp.empty()) {
+                    // Restore to original image.
+                    scene_img = temp;
+                }
+
+                cv::line(scene_img, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
+                cv::line(scene_img, scene_corners[3] + offset, scene_corners[0] + offset, color, thickness);
+                cv::line(scene_img, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
+                cv::line(scene_img, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
+
+                subImage.x = start.x;
+                subImage.y = start.y;
+                subImage.width = end.x - start.x;
+                subImage.height = end.y - start.y;
+
+                int valid_x = scene_img.cols - (subImage.x + subImage.width);
+                int valid_y = scene_img.rows - (subImage.y + subImage.height);
+
+                if(valid_x < 0) {
+                    subImage.width = subImage.width + valid_x;
+                } else if(subImage.x < 0) {
+                    subImage.x = 0;
+                }
+
+                if(valid_y < 0) {
+                    subImage.height = subImage.height + valid_y;
+                } else if(subImage.y < 0) {
+                    subImage.y = 0;
+                }
+
+                if(subImage.width < 0 || subImage.height < 0) {
+                    subImage.x = 0;
+                    subImage.y = 0;
+                    subImage.width = 0;
+                    subImage.height = 0;
+                }
+
+                //std::cout << "y:= " << subImage.y << " x:= " << subImage.x << " width:= " << subImage.width << " height:= " << subImage.height << "\n";
+                cv::imshow("Good Matches & Object detection", scene_img);
             }
-
+        } else {
+            // If no match found and temp is not empty repeat search with scene
+            if(!temp.empty()) {
+                scene_img = temp;
+                subImage.x = 0;
+                subImage.y = 0;
+                subImage.width = 0;
+                subImage.height = 0;
+                algo(object_img, scene_img);
+            }
+            cv::imshow("Good Matches & Object detection", scene_img);
         }
 
-        //-- Show detected matches
-        cv::imshow("Good Matches & Object detection", img_matches);
     }
 
     return nullptr;

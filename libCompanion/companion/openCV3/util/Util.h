@@ -14,27 +14,27 @@
  */
 class Util {
 
-    public:
+public:
 
-        /**
-         * Checks if given image is loaded.
-         *
-         * @param img Image to check if it's not null.
-         *
-         * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
-         */
-        static bool is_image_loaded(cv::Mat &img);
+    /**
+     * Checks if given image is loaded.
+     *
+     * @param img Image to check if it's not null.
+     *
+     * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
+     */
+    static bool is_image_loaded(cv::Mat &img);
 
-        /**
-         * @brief Gets from given error code an corresponding error message.
-         *
-         * @param e_code The error code to get corresponding error message.
-         *
-         * @return String message from given error.
-         */
-        static std::string get_error(CompanionError::error_code code);
+    /**
+     * @brief Gets from given error code an corresponding error message.
+     *
+     * @param e_code The error code to get corresponding error message.
+     *
+     * @return String message from given error.
+     */
+    static std::string get_error(CompanionError::error_code code);
 
-        static void resize_image(cv::Mat &img, int size_x, int size_y);
+    static void resize_image(cv::Mat &img, int size_x, int size_y);
 
 };
 

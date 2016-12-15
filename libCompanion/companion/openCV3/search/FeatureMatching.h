@@ -25,6 +25,8 @@ public:
 
 private:
 
+    cv::Rect subImage;
+
     std::string matchingType;
 
     cv::Ptr<cv::FeatureDetector> detector;

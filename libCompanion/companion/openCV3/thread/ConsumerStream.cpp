@@ -35,12 +35,12 @@ void ConsumerStream::run(std::string imgPath) {
     // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
     // int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
     // int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-    cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
 
     // Intresting
-    //cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create(60);
-    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::BRISK::create(60);
+    cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create(60);
+    cv::Ptr<cv::DescriptorExtractor> extractor = cv::BRISK::create(60);
 
     /*
         BruteForce (it uses L2 )

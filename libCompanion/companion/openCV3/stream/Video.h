@@ -26,9 +26,6 @@ public:
 private:
 
     cv::VideoCapture capture;
-
-    bool isDeviceOpen();
-
 };
 
 

@@ -5,7 +5,7 @@
 int main() {
 
 	std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
-    std::string testImg = path + std::string("Sample_Right.jpg");
+    std::string testImg = path + std::string("Sample_Middle.jpg");
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
 
     wqueue<cv::Mat> queue;
