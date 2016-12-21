@@ -11,8 +11,6 @@ SET(SOURCE
         companion.cpp companion.h
         openCV3/stream/Video.cpp openCV3/stream/Video.h
         openCV3/search/ImageRecognition.cpp openCV3/search/ImageRecognition.h
-        openCV3/search/SimpleCompareImage.cpp openCV3/search/SimpleCompareImage.h
-        openCV3/search/TemplateMatch.cpp openCV3/search/TemplateMatch.h
         openCV3/util/Util.cpp openCV3/util/Util.h
         openCV3/model/Comparison.cpp openCV3/model/Comparison.h
         openCV3/search/FeatureMatching.cpp openCV3/search/FeatureMatching.h
