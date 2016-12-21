@@ -1,8 +1,6 @@
 #include "companion.h"
 
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
-// Public Methods                              //
-//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//
+// ToDo := This class should be deleted later because all implementations should be moved to opencv3 Package!!!
 
 void Companion::calc_histogram(std::string img_path)
 {

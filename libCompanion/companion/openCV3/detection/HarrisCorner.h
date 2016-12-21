@@ -10,6 +10,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/features2d.hpp>
 
+// ToDo := Do i need it?!
 class HarrisCorner {
 
     public:

@@ -13,6 +13,7 @@
 #include <opencv2/features2d.hpp>
 #include <cv.hpp>
 
+// ToDo := Do i need it?!
 class ObjectTracking {
 
 public:

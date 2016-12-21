@@ -4,9 +4,12 @@ Video::Video() {
 }
 
 Video::~Video() {
+    // No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
 int Video::connectToDevice(int device) {
+
+    // ToDo := check if an video device is already running.
 
     cv::VideoCapture cap(device);
 
@@ -22,6 +25,8 @@ int Video::connectToDevice(int device) {
 }
 
 int Video::playVideo(std::string url) {
+
+    // ToDo := check if an video device is already running.
 
     cv::VideoCapture cap(url);
 
@@ -42,6 +47,7 @@ cv::Mat Video::obtainImage() {
 
     if(!capture.isOpened()) {
         // ToDo := Error Handling
+        return frame;
     }
 
     // Obtain image frame.

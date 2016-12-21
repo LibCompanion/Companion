@@ -50,7 +50,11 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
     detector->detect(scene_img, keypoints_scene);
 
     // 2 : Calculate descriptors (feature vectors)
+
+    // ToDo := Object can be changed to search so recalculate each time.
     extractor->compute(object_img, keypoints_object, descriptors_object);
+
+    // ToDo := I think i could store this all the time i compare all images.
     extractor->compute(scene_img, keypoints_scene, descriptors_scene);
 
     if (!descriptors_object.empty() && !descriptors_scene.empty()
