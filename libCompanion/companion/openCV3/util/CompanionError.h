@@ -23,11 +23,9 @@
  * Enumeration namespace for errors.
  * @author Andreas Sekulski
  */
-namespace CompanionError
-{
+namespace CompanionError {
     /// Enumeration class for error codes
-    enum class error_code
-    {
+    enum class error_code {
         image_not_found, ///< If image not found error.
         dimension_error, ///< If dimensions from given images inequal.
         template_dimension_error, ///< If dimensions from template is wrong.

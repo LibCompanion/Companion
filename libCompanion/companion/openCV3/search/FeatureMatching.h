@@ -42,7 +42,8 @@ public:
      * @param matcher FeatureMatcher to set.
      * @param matchingType FeatureMatcher type which is used like FlannBased or Bruteforce. // ToDo := Enumeration will be better.
      */
-    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor, cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType);
+    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
+                    cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType);
 
     /**
      * Default destructor.
@@ -83,7 +84,8 @@ private:
      * @param good_matches Vector to store good matches.
      * @param ratio Ratio which matches are good enough.
      */
-    void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches, float ratio);
+    void
+    ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches, float ratio);
 
     /**
      * Symmetry test to improve results. Currently not using because i do not understand this algo...
@@ -91,7 +93,8 @@ private:
      * @param matches2
      * @param symMatches
      */
-    void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2, std::vector<cv::DMatch> &symMatches);
+    void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2,
+                       std::vector<cv::DMatch> &symMatches);
 
 protected:
 

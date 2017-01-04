@@ -30,7 +30,7 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
         throw CompanionError::error_code::image_not_found;
     }
 
-    if(subImage.width > 0 && subImage.height > 0)  {
+    if (subImage.width > 0 && subImage.height > 0) {
         temp = scene_img;
         scene_img = cv::Mat(scene_img, subImage);
         cv::imshow("Cut_Image", scene_img);
@@ -59,7 +59,7 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
         && keypoints_object.size() > 0 && keypoints_scene.size() > 0) {
 
         // Flan based needs CV_32F
-        if(matchingType.compare("FlannBased") == 0) {
+        if (matchingType.compare("FlannBased") == 0) {
             descriptors_scene.convertTo(descriptors_scene, CV_32F);
             descriptors_object.convertTo(descriptors_object, CV_32F);
         }
@@ -105,7 +105,8 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
                 cv::Scalar color = cv::Scalar(0, 255, 0);
-                cv::Point2f offset = cv::Point2f(subImage.x, subImage.y); // Offset is recalculate position from last recognition
+                cv::Point2f offset = cv::Point2f(subImage.x,
+                                                 subImage.y); // Offset is recalculate position from last recognition
 
                 // Focus area - Scene Corners
                 //   0               1
@@ -122,7 +123,7 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 cv::Point2f start = scene_corners[0] + offset - scale;
                 cv::Point2f end = scene_corners[2] + offset + scale;
 
-                if(!temp.empty()) {
+                if (!temp.empty()) {
                     // Restore to original image.
                     scene_img = temp;
                 }
@@ -140,19 +141,19 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 int valid_x = scene_img.cols - (subImage.x + subImage.width);
                 int valid_y = scene_img.rows - (subImage.y + subImage.height);
 
-                if(valid_x < 0) {
+                if (valid_x < 0) {
                     subImage.width = subImage.width + valid_x;
-                } else if(subImage.x < 0) {
+                } else if (subImage.x < 0) {
                     subImage.x = 0;
                 }
 
-                if(valid_y < 0) {
+                if (valid_y < 0) {
                     subImage.height = subImage.height + valid_y;
-                } else if(subImage.y < 0) {
+                } else if (subImage.y < 0) {
                     subImage.y = 0;
                 }
 
-                if(subImage.width < 0 || subImage.height < 0) {
+                if (subImage.width < 0 || subImage.height < 0) {
                     subImage.x = 0;
                     subImage.y = 0;
                     subImage.width = 0;
@@ -164,7 +165,7 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
             }
         } else {
             // If no match found and temp is not empty repeat search with scene
-            if(!temp.empty()) {
+            if (!temp.empty()) {
                 scene_img = temp;
                 subImage.x = 0;
                 subImage.y = 0;
@@ -183,7 +184,9 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
     //return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
 }
 
-void FeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches, float ratio) {
+void
+FeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches, std::vector<cv::DMatch> &good_matches,
+                            float ratio) {
     for (int i = 0; i < matches.size(); ++i) {
         if (matches[i][0].distance < ratio * matches[i][1].distance) {
             good_matches.push_back(matches[i][0]);

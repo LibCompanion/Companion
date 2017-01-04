@@ -38,7 +38,7 @@ public:
      * Constructor to create an producer streaming class to obtain images from an video and store to an queue.
      * @param queue Queue to store obtained images.
      */
-    ProducerStream(boost::lockfree::spsc_queue<cv::Mat>& queue) : queue(queue) {}
+    ProducerStream(boost::lockfree::spsc_queue<cv::Mat> &queue) : queue(queue) {}
 
     /**
      * Run method to start an video stream and store an queue.

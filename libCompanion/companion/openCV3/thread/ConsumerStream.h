@@ -37,7 +37,7 @@ public:
      * Constructor to create an consumer stream class.
      * @param queue Queue to store all images.
      */
-    ConsumerStream(boost::lockfree::spsc_queue<cv::Mat>& queue) : queue(queue) {}
+    ConsumerStream(boost::lockfree::spsc_queue<cv::Mat> &queue) : queue(queue) {}
 
     /**
      * Run method for an thread operation.

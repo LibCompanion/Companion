@@ -56,8 +56,8 @@ void ConsumerStream::run(std::string imgPath) {
             type);
 
     while (true) {
-        while(queue.pop(frame)) {
-            if(!frame.empty()) {
+        while (queue.pop(frame)) {
+            if (!frame.empty()) {
                 // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
                 Util::resize_image(frame, 1024, 576);
                 recognition->search(search_img, frame);

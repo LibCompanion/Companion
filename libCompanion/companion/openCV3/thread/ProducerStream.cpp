@@ -7,7 +7,7 @@ void ProducerStream::run(std::string videoPath) {
         video.playVideo(videoPath);
         frame = video.obtainImage(); // Camera api
 
-        while(!frame.empty()) {
+        while (!frame.empty()) {
             while (!queue.push(frame)) {
                 // If buffer full wait and loop current frame and do nothing.
             }

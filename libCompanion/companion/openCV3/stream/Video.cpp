@@ -14,7 +14,7 @@ int Video::connectToDevice(int device) {
     cv::VideoCapture cap(device);
 
     // ToDo Method
-    if(!cap.isOpened()) {
+    if (!cap.isOpened()) {
         // ToDo := Error Handling
         return -1;
     }
@@ -31,7 +31,7 @@ int Video::playVideo(std::string url) {
     cv::VideoCapture cap(url);
 
     // ToDo Method
-    if(!cap.isOpened()) {
+    if (!cap.isOpened()) {
         // ToDo := Error Handling
         return -1;
     }
@@ -45,7 +45,7 @@ cv::Mat Video::obtainImage() {
 
     cv::Mat frame;
 
-    if(!capture.isOpened()) {
+    if (!capture.isOpened()) {
         // ToDo := Error Handling
         return frame;
     }

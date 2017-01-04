@@ -27,39 +27,39 @@
  */
 class Comparison {
 
-    public:
+public:
 
-        // ToDo := Redesign this model for an default search entity...
+    // ToDo := Redesign this model for an default search entity...
 
-        /**
-         * Comparison model to store accordance, location and offset position from search.
-         * @param accordance
-         * @param location
-         * @param offset
-         */
-        Comparison(double accordance, cv::Point location, cv::Point offset);
+    /**
+     * Comparison model to store accordance, location and offset position from search.
+     * @param accordance
+     * @param location
+     * @param offset
+     */
+    Comparison(double accordance, cv::Point location, cv::Point offset);
 
-        ~Comparison();
+    ~Comparison();
 
-        double getAccordance();
+    double getAccordance();
 
-        void setAccordance(double accordance);
+    void setAccordance(double accordance);
 
-        void setLocation(cv::Point location);
+    void setLocation(cv::Point location);
 
-        cv::Point getLocation();
+    cv::Point getLocation();
 
-        void setOffset(cv::Point offset);
+    void setOffset(cv::Point offset);
 
-        cv::Point getOffset();
+    cv::Point getOffset();
 
 private:
 
-        double accordance;
+    double accordance;
 
-        cv::Point location;
+    cv::Point location;
 
-        cv::Point offset;
+    cv::Point offset;
 
 };
 

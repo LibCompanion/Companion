@@ -12,14 +12,14 @@
 // ToDo := Do i need it?!
 class HarrisCorner {
 
-    public:
-        HarrisCorner();
+public:
+    HarrisCorner();
 
-        ~HarrisCorner();
+    ~HarrisCorner();
 
-        void doNothing(cv::Mat image);
+    void doNothing(cv::Mat image);
 
-        void doConturs(cv::Mat image);
+    void doConturs(cv::Mat image);
 };
 
 
