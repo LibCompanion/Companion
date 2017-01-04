@@ -1,4 +1,3 @@
-
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
@@ -16,7 +15,11 @@ SET(SOURCE
         openCV3/search/FeatureMatching.cpp openCV3/search/FeatureMatching.h
         openCV3/detection/HarrisCorner.cpp openCV3/detection/HarrisCorner.h
         openCV3/detection/ObjectTracking.cpp openCV3/detection/ObjectTracking.h
-        openCV3/util/CompanionError.h openCV3/thread/ConsumerStream.cpp openCV3/thread/ConsumerStream.h openCV3/thread/ProducerStream.cpp openCV3/thread/ProducerStream.h openCV3/thread/wqueue.h)
+        openCV3/util/CompanionError.h
+        openCV3/thread/ConsumerStream.cpp openCV3/thread/ConsumerStream.h
+        openCV3/thread/ProducerStream.cpp openCV3/thread/ProducerStream.h
+        )
 
 add_library(libCompanion ${SOURCE})
-target_link_libraries(libCompanion ${OpenCV_LIBS})
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+target_link_libraries(libCompanion ${OpenCV_LIBS} ${Boost_LIBRARIES})

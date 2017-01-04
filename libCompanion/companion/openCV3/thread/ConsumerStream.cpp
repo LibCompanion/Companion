@@ -1,13 +1,11 @@
-//
-// Created by asekulsk on 13.12.16.
-//
-
 #include "ConsumerStream.h"
 
 void ConsumerStream::run(std::string imgPath) {
 
     cv::Mat frame;
     cv::Mat search_img = cv::imread(imgPath, cv::IMREAD_GRAYSCALE);
+
+    // ToDo := Data Model to setup configuration.
 
     // https://stackoverflow.com/questions/36691050/opencv-3-list-of-available-featuredetectorcreate-and-descriptorextractorc
     /*
@@ -58,14 +56,14 @@ void ConsumerStream::run(std::string imgPath) {
             type);
 
     while (true) {
-        frame = queue.remove();
-        if(!frame.empty()) {
-            // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-            Util::resize_image(frame, 1024, 576);
-            recognition->search(search_img, frame);
-            cv::waitKey(1);
-            frame.release();
+        while(queue.pop(frame)) {
+            if(!frame.empty()) {
+                // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
+                Util::resize_image(frame, 1024, 576);
+                recognition->search(search_img, frame);
+                cv::waitKey(1);
+                frame.release();
+            }
         }
     }
-
 }

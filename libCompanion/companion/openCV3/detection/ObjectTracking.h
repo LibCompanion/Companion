@@ -1,6 +1,5 @@
-//
-// Created by asekulsk on 08.12.16.
-//
+// This is currently temporarily implemented.
+// ToDo := Do i need it?
 
 #ifndef COMPANION_OBJECTTRACKING_H
 #define COMPANION_OBJECTTRACKING_H

@@ -1,6 +1,5 @@
-//
-// Created by asekulsk on 01.12.16.
-//
+// This is currently temporarily implemented.
+// ToDo := Do i need it?
 
 #ifndef COMPANION_HARRISCORNER_H
 #define COMPANION_HARRISCORNER_H

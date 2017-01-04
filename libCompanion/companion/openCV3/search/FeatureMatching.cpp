@@ -1,7 +1,3 @@
-//
-// Created by andre on 28.11.2016.
-//
-
 #include "FeatureMatching.h"
 
 FeatureMatching::FeatureMatching() {
@@ -23,6 +19,8 @@ FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<
 FeatureMatching::~FeatureMatching() {}
 
 Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
+
+    // ToDo := Code cleanup...
 
     // Temp image if image will be cutted.
     cv::Mat temp;
