@@ -8,4 +8,5 @@ SET(SOURCE
 )
 
 add_executable(Example ${SOURCE})
-target_link_libraries(Example libCompanion)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+target_link_libraries(Example libCompanion ${Boost_LIBRARIES})

@@ -19,10 +19,12 @@
 #include <thread>
 #include <companion/openCV3/thread/ProducerStream.h>
 #include <companion/openCV3/thread/ConsumerStream.h>
+#include <boost/lockfree/spsc_queue.hpp>
 
 int main() {
 
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+	std::string path = "D:/Data/Master/Testcase/HBF/";
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     std::string testImg = path + std::string("Sample_Middle.jpg");
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
 

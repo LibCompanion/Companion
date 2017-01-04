@@ -22,7 +22,6 @@ set(OpenCV_LIBS
         opencv_shape
         opencv_stitching
         opencv_superres
-        opencv_ts
         opencv_video
         opencv_videoio
         opencv_videostab)
