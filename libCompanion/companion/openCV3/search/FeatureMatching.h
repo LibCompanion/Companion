@@ -20,6 +20,7 @@
 #define COMPANION_FEATUREMATCHING_H
 
 #include "ImageRecognition.h"
+#include <companion/openCV3/draw/Lines.h>
 #include <opencv2/calib3d/calib3d.hpp>
 
 /**
@@ -51,11 +52,6 @@ public:
     ~FeatureMatching();
 
 private:
-
-    /**
-     * Stores sub image from last founded image, to obtain an better performance in search.
-     */
-    cv::Rect subImage;
 
     /**
      * FeatureMatching type which is used, if is necessary to convert obtained images.
@@ -100,11 +96,11 @@ protected:
 
     /**
      * Default feature matching algorithm which will be used for search.
-     * @param object_img Object image to search.
-     * @param scene_img Scene image to search object in scene.
+     * @param scene ToDo
+     * @param objects ToDo
      * @return Comparison entity model with given result from search.
      */
-    virtual Comparison *algo(cv::Mat object_img, cv::Mat scene_img);
+    virtual Comparison *algo(Comparison *searchModel, Comparison *compareModel);
 };
 
 #endif //COMPANION_FEATUREMATCHING_H

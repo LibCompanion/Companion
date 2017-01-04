@@ -1,39 +1,64 @@
-//
-// Created by andre on 27.11.2016.
-//
-
 #include "Comparison.h"
 
-
-Comparison::Comparison(double accordance, cv::Point location, cv::Point offset) {
-    this->accordance = accordance;
-    this->location = location;
-    this->offset = offset;
+Comparison::Comparison() {
 }
 
-Comparison::~Comparison() {}
-
-double Comparison::getAccordance() {
-    return accordance;
+Comparison::~Comparison() {
+    image.release();
+    descriptors.release();
 }
 
-void Comparison::setAccordance(double accordance) {
-    Comparison::accordance = accordance;
+const cv::Mat &Comparison::getImage() const {
+    return image;
 }
 
-
-void Comparison::setLocation(cv::Point location) {
-    Comparison::location = location;
+void Comparison::setImage(const cv::Mat &image) {
+    Comparison::image = image;
 }
 
-cv::Point Comparison::getLocation() {
-    return location;
+const cv::Rect &Comparison::getLastPosition() const {
+    return lastPosition;
 }
 
-void Comparison::setOffset(cv::Point offset) {
-    Comparison::offset = offset;
+void Comparison::setLastPosition(int x, int y, int width, int height) {
+    lastPosition.x = x;
+    lastPosition.y = y;
+    lastPosition.width = width;
+    lastPosition.height = height;
 }
 
-cv::Point Comparison::getOffset() {
-    return offset;
+void Comparison::setLastPositionWidth(int width) {
+    lastPosition.width = width;
+}
+
+void Comparison::setLastPositionHeight(int height) {
+    lastPosition.height = height;
+}
+
+void Comparison::setLastPositionX(int x) {
+    lastPosition.x = x;
+}
+
+void Comparison::setLastPositionY(int y) {
+    lastPosition.y = y;
+}
+
+bool Comparison::isLastPositionSet() {
+    return lastPosition.width > 0 && lastPosition.height > 0;
+}
+
+const cv::Mat &Comparison::getDescriptors() const {
+    return descriptors;
+}
+
+void Comparison::setDescriptors(const cv::Mat &descriptors) {
+    Comparison::descriptors = descriptors;
+}
+
+const std::vector<cv::KeyPoint> &Comparison::getKeypoints() const {
+    return keypoints;
+}
+
+void Comparison::setKeypoints(const std::vector<cv::KeyPoint> &keypoints) {
+    Comparison::keypoints = keypoints;
 }

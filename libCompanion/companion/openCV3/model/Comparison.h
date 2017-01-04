@@ -29,37 +29,47 @@ class Comparison {
 
 public:
 
-    // ToDo := Redesign this model for an default search entity...
+    // ToDo Model name and abstract class implementation.
 
-    /**
-     * Comparison model to store accordance, location and offset position from search.
-     * @param accordance
-     * @param location
-     * @param offset
-     */
-    Comparison(double accordance, cv::Point location, cv::Point offset);
+    Comparison();
 
     ~Comparison();
 
-    double getAccordance();
+    const cv::Mat &getImage() const;
 
-    void setAccordance(double accordance);
+    void setImage(const cv::Mat &image);
 
-    void setLocation(cv::Point location);
+    const cv::Rect &getLastPosition() const;
 
-    cv::Point getLocation();
+    void setLastPosition(int x, int y, int width, int height);
 
-    void setOffset(cv::Point offset);
+    void setLastPositionWidth(int width);
 
-    cv::Point getOffset();
+    void setLastPositionHeight(int height);
+
+    void setLastPositionX(int x);
+
+    void setLastPositionY(int y);
+
+    bool isLastPositionSet();
+
+    const cv::Mat &getDescriptors() const;
+
+    void setDescriptors(const cv::Mat &descriptors);
+
+    const std::vector<cv::KeyPoint> &getKeypoints() const;
+
+    void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
 private:
 
-    double accordance;
+    cv::Mat image;
 
-    cv::Point location;
+    cv::Rect lastPosition;
 
-    cv::Point offset;
+    cv::Mat descriptors;
+
+    std::vector<cv::KeyPoint> keypoints;
 
 };
 

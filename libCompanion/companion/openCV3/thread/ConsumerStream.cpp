@@ -4,6 +4,9 @@ void ConsumerStream::run(std::string imgPath) {
 
     cv::Mat frame;
     cv::Mat search_img = cv::imread(imgPath, cv::IMREAD_GRAYSCALE);
+    Comparison *comparison = new Comparison();
+    Comparison *compare;
+    comparison->setImage(search_img);
 
     // ToDo := Data Model to setup configuration.
 
@@ -31,10 +34,10 @@ void ConsumerStream::run(std::string imgPath) {
 
     // https://stackoverflow.com/questions/28024048/how-to-get-efficient-result-in-orb-using-opencv-2-4-9
     // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    // int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
-    // int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
+    //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
+    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(2000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(2000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
 
     // Intresting
     cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create(60);
@@ -58,11 +61,13 @@ void ConsumerStream::run(std::string imgPath) {
     while (true) {
         while (queue.pop(frame)) {
             if (!frame.empty()) {
+                compare = new Comparison();
                 // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
                 Util::resize_image(frame, 1024, 576);
-                recognition->search(search_img, frame);
+                compare->setImage(frame);
+                recognition->algo(compare, comparison);
                 cv::waitKey(1);
-                frame.release();
+                delete compare;
             }
         }
     }

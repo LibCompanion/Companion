@@ -7,18 +7,15 @@ unset(CUDA_USE_STATIC_CUDA_RUNTIME CACHE)
 option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
 
 SET(SOURCE
-        companion.cpp companion.h
         openCV3/stream/Video.cpp openCV3/stream/Video.h
-        openCV3/search/ImageRecognition.cpp openCV3/search/ImageRecognition.h
+        openCV3/search/ImageRecognition.h
         openCV3/util/Util.cpp openCV3/util/Util.h
         openCV3/model/Comparison.cpp openCV3/model/Comparison.h
         openCV3/search/FeatureMatching.cpp openCV3/search/FeatureMatching.h
-        openCV3/detection/HarrisCorner.cpp openCV3/detection/HarrisCorner.h
-        openCV3/detection/ObjectTracking.cpp openCV3/detection/ObjectTracking.h
         openCV3/util/CompanionError.h
         openCV3/thread/ConsumerStream.cpp openCV3/thread/ConsumerStream.h
         openCV3/thread/ProducerStream.cpp openCV3/thread/ProducerStream.h
-        )
+        openCV3/draw/Drawable.h openCV3/draw/Lines.cpp openCV3/draw/Lines.h openCV3/draw/Line.cpp openCV3/draw/Line.h)
 
 add_library(libCompanion ${SOURCE})
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})

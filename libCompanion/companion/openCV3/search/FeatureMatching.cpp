@@ -18,23 +18,10 @@ FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<
 
 FeatureMatching::~FeatureMatching() {}
 
-Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
+Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareModel) {
 
-    // ToDo := Code cleanup...
-
-    // Temp image if image will be cutted.
-    cv::Mat temp;
-
-    // Check if images are loaded
-    if (!Util::is_image_loaded(object_img) || !Util::is_image_loaded(scene_img)) {
-        throw CompanionError::error_code::image_not_found;
-    }
-
-    if (subImage.width > 0 && subImage.height > 0) {
-        temp = scene_img;
-        scene_img = cv::Mat(scene_img, subImage);
-        cv::imshow("Cut_Image", scene_img);
-    }
+    cv::Mat sceneImage = searchModel->getImage();
+    cv::Mat objectImage = compareModel->getImage();
 
     // Variables
     std::vector<std::vector<cv::DMatch>> matches_one;
@@ -43,17 +30,38 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
     std::vector<cv::Point2f> obj, scene;
     cv::Mat descriptors_object, descriptors_scene;
 
+    // Check if images are loaded
+    //if (!Util::is_image_loaded(object_img) || !Util::is_image_loaded(scene)) {
+    //    throw CompanionError::error_code::image_not_found;
+    //}
+
+    if (compareModel->isLastPositionSet()) {
+        sceneImage = cv::Mat(sceneImage, compareModel->getLastPosition());
+        cv::imshow("Cut_Image", sceneImage);
+    }
+
     // Step 1 : Detect the keypoints
-    detector->detect(object_img, keypoints_object);
-    detector->detect(scene_img, keypoints_scene);
+    detector->detect(sceneImage, keypoints_scene);
+    searchModel->setKeypoints(keypoints_scene);
 
     // 2 : Calculate descriptors (feature vectors)
+    extractor->compute(sceneImage, keypoints_scene, descriptors_scene);
+    searchModel->setDescriptors(descriptors_scene);
 
-    // ToDo := Object can be changed to search so recalculate each time.
-    extractor->compute(object_img, keypoints_object, descriptors_object);
+    // --- ToDo Method implementation ---
+    if(compareModel->getKeypoints().empty()) {
+        // Step 1 : Detect the keypoints
+        detector->detect(objectImage, keypoints_object);
+        searchModel->setKeypoints(keypoints_object);
 
-    // ToDo := I think i could store this all the time i compare all images.
-    extractor->compute(scene_img, keypoints_scene, descriptors_scene);
+        // 2 : Calculate descriptors (feature vectors)
+        extractor->compute(objectImage, keypoints_object, descriptors_object);
+        searchModel->setDescriptors(descriptors_object);
+    } else {
+        // Step 1 : Keypoints already detected from model
+        keypoints_object = compareModel->getKeypoints();
+        descriptors_object = compareModel->getDescriptors();
+    }
 
     if (!descriptors_object.empty() && !descriptors_scene.empty()
         && keypoints_object.size() > 0 && keypoints_scene.size() > 0) {
@@ -95,9 +103,9 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 //-- Get the corners from the image_1 ( the object to be "detected" )
                 std::vector<cv::Point2f> obj_corners(4);
                 obj_corners[0] = cvPoint(0, 0);
-                obj_corners[1] = cvPoint(object_img.cols, 0);
-                obj_corners[2] = cvPoint(object_img.cols, object_img.rows);
-                obj_corners[3] = cvPoint(0, object_img.rows);
+                obj_corners[1] = cvPoint(objectImage.cols, 0);
+                obj_corners[2] = cvPoint(objectImage.cols, objectImage.rows);
+                obj_corners[3] = cvPoint(0, objectImage.rows);
                 std::vector<cv::Point2f> scene_corners(4);
 
                 cv::perspectiveTransform(obj_corners, scene_corners, H);
@@ -105,8 +113,9 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
                 cv::Scalar color = cv::Scalar(0, 255, 0);
-                cv::Point2f offset = cv::Point2f(subImage.x,
-                                                 subImage.y); // Offset is recalculate position from last recognition
+                cv::Rect lastRect = compareModel->getLastPosition();
+                cv::Point2f offset = cv::Point2f(lastRect.x,
+                                                 lastRect.y); // Offset is recalculate position from last recognition
 
                 // Focus area - Scene Corners
                 //   0               1
@@ -123,65 +132,57 @@ Comparison *FeatureMatching::algo(cv::Mat object_img, cv::Mat scene_img) {
                 cv::Point2f start = scene_corners[0] + offset - scale;
                 cv::Point2f end = scene_corners[2] + offset + scale;
 
-                if (!temp.empty()) {
+                if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
                     // Restore to original image.
-                    scene_img = temp;
+                    sceneImage = searchModel->getImage();
                 }
 
-                cv::line(scene_img, scene_corners[0] + offset, scene_corners[1] + offset, color, thickness);
-                cv::line(scene_img, scene_corners[3] + offset, scene_corners[0] + offset, color, thickness);
-                cv::line(scene_img, scene_corners[1] + offset, scene_corners[2] + offset, color, thickness);
-                cv::line(scene_img, scene_corners[2] + offset, scene_corners[3] + offset, color, thickness);
+                // ToDo:= Lines from position will be returned...
+                Lines *lines = new Lines();
+                lines->addLine(new Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
+                lines->addLine(new Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
+                lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
+                lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
+                lines->draw(sceneImage);
 
-                subImage.x = start.x;
-                subImage.y = start.y;
-                subImage.width = end.x - start.x;
-                subImage.height = end.y - start.y;
+                compareModel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
 
-                int valid_x = scene_img.cols - (subImage.x + subImage.width);
-                int valid_y = scene_img.rows - (subImage.y + subImage.height);
+                int valid_x = sceneImage.cols - (compareModel->getLastPosition().x + compareModel->getLastPosition().width);
+                int valid_y = sceneImage.rows - (compareModel->getLastPosition().y + compareModel->getLastPosition().height);
 
                 if (valid_x < 0) {
-                    subImage.width = subImage.width + valid_x;
-                } else if (subImage.x < 0) {
-                    subImage.x = 0;
+                    compareModel->setLastPositionWidth(compareModel->getLastPosition().width + valid_x);
+                } else if (compareModel->getLastPosition().x < 0) {
+                    compareModel->setLastPositionX(0);
                 }
 
                 if (valid_y < 0) {
-                    subImage.height = subImage.height + valid_y;
-                } else if (subImage.y < 0) {
-                    subImage.y = 0;
+                    compareModel->setLastPositionHeight(compareModel->getLastPosition().height + valid_y);
+                } else if (compareModel->getLastPosition().y < 0) {
+                    compareModel->setLastPositionY(0);
                 }
 
-                if (subImage.width < 0 || subImage.height < 0) {
-                    subImage.x = 0;
-                    subImage.y = 0;
-                    subImage.width = 0;
-                    subImage.height = 0;
+                if (compareModel->getLastPosition().width < 0 || compareModel->getLastPosition().height < 0) {
+                    compareModel->setLastPosition(0, 0, 0, 0);
                 }
 
                 //std::cout << "y:= " << subImage.y << " x:= " << subImage.x << " width:= " << subImage.width << " height:= " << subImage.height << "\n";
-                cv::imshow("Good Matches & Object detection", scene_img);
+                cv::imshow("Good Matches & Object detection", sceneImage);
             }
         } else {
-            // If no match found and temp is not empty repeat search with scene
-            if (!temp.empty()) {
-                scene_img = temp;
-                subImage.x = 0;
-                subImage.y = 0;
-                subImage.width = 0;
-                subImage.height = 0;
-                algo(object_img, scene_img);
+            // If no match found and image was cutted.
+            if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
+                compareModel->setLastPosition(0, 0, 0, 0);
+                algo(searchModel, compareModel);
+                cv::imshow("Good Matches & Object detection", searchModel->getImage());
+            } else {
+                cv::imshow("Good Matches & Object detection", sceneImage);
             }
-            cv::imshow("Good Matches & Object detection", scene_img);
         }
 
     }
 
     return nullptr;
-
-    // ToDo Store Informations
-    //return new FeatureMatch(search_img_path, compare_img_path, score, good_matches, keypoints_object, keypoints_scene);
 }
 
 void
