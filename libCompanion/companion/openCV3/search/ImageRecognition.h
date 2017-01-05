@@ -24,9 +24,10 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d.hpp>
-#include <companion/openCV3/util/CompanionError.h>
-#include <companion/openCV3/model/Comparison.h>
-#include <companion/openCV3/util/Util.h>
+#include <companion/openCV3/draw/Drawable.h>
+#include "companion/openCV3/util/CompanionError.h"
+#include "companion/openCV3/model/FeatureMatchingModel.h"
+#include "companion/openCV3/util/Util.h"
 
 /**
  * Image recognition abstract class to implement specific image recognition algorithms.
@@ -38,12 +39,11 @@ public:
 
     /**
      * Specific algorithm implementation like simple compare or template matching.
-     * @param search_img Image file to compare.
-     * @param entities Model entities to compare with given search image.
+     * @param searchModel Search model to compare.
+     * @param compareModel Compare model to check if contains in search model.
      * @throws CompanionError::error_code If an error occured in search operation.
-     * @return An comparison model which contains all search results from algo.
      */
-    virtual Comparison *algo(Comparison *searchModel, Comparison *compareModel) = 0;
+    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) = 0;
 };
 
 #endif //COMPANION_IMAGERECOGNITION_H

@@ -18,66 +18,91 @@ FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<
 
 FeatureMatching::~FeatureMatching() {}
 
-Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareModel) {
+Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
 
-    cv::Mat sceneImage = searchModel->getImage();
-    cv::Mat objectImage = compareModel->getImage();
-
-    // Variables
-    std::vector<std::vector<cv::DMatch>> matches_one;
+    // Set of variables for feature matching.
+    cv::Mat homography;
+    cv::Mat sceneImage;
+    cv::Mat objectImage;
+    std::vector<std::vector<cv::DMatch>> matches;
     std::vector<cv::DMatch> good_matches;
     std::vector<cv::KeyPoint> keypoints_object, keypoints_scene;
-    std::vector<cv::Point2f> obj, scene;
+    std::vector<cv::Point2f> feature_points_object, feature_points_scene;
     cv::Mat descriptors_object, descriptors_scene;
+    Lines *lines = nullptr;
 
-    // Check if images are loaded
-    //if (!Util::is_image_loaded(object_img) || !Util::is_image_loaded(scene)) {
-    //    throw CompanionError::error_code::image_not_found;
-    //}
+    FeatureMatchingModel *smodel = dynamic_cast<FeatureMatchingModel *>(searchModel);
+    FeatureMatchingModel *cmodel = dynamic_cast<FeatureMatchingModel *>(compareModel);
 
-    if (compareModel->isLastPositionSet()) {
-        sceneImage = cv::Mat(sceneImage, compareModel->getLastPosition());
-        cv::imshow("Cut_Image", sceneImage);
+    // If wrong model types are used...
+    if(!smodel || !cmodel) {
+        throw CompanionError::error_code::wrong_model_type;
     }
 
-    // Step 1 : Detect the keypoints
-    detector->detect(sceneImage, keypoints_scene);
-    searchModel->setKeypoints(keypoints_scene);
+    sceneImage = smodel->getImage();
+    objectImage = cmodel->getImage();
 
-    // 2 : Calculate descriptors (feature vectors)
-    extractor->compute(sceneImage, keypoints_scene, descriptors_scene);
-    searchModel->setDescriptors(descriptors_scene);
+    // Check if images are loaded...
+    if (!Util::is_image_loaded(sceneImage) || !Util::is_image_loaded(objectImage)) {
+        throw CompanionError::error_code::image_not_found;
+    }
+
+    // Check if from last scene object was detected...
+    if (compareModel->isLastPositionSet()) {
+        // Object from last scene detected take this last position as scene.
+        sceneImage = cv::Mat(sceneImage, compareModel->getLastPosition());
+        // ToDo -> Methods
+        // Step 1 : Detect the keypoints from scene
+        detector->detect(sceneImage, keypoints_scene);
+        // 2 : Calculate descriptors (feature vectors)
+        extractor->compute(sceneImage, keypoints_scene, descriptors_scene);
+    } else {
+        // --- ToDo Method implementation ---
+        // If model has already keypoints calculated from object...
+        if(smodel->getKeypoints().empty()) {
+            // Step 1 : Detect the keypoints
+            detector->detect(sceneImage, keypoints_scene);
+            smodel->setKeypoints(keypoints_scene);
+            // Step 2 : Calculate descriptors (feature vectors)
+            extractor->compute(sceneImage, keypoints_scene, descriptors_scene);
+            smodel->setDescriptors(descriptors_scene);
+        } else {
+            // Keypoints and descriptors already calculated from model
+            keypoints_scene = smodel->getKeypoints();
+            descriptors_scene = smodel->getDescriptors();
+        }
+    }
 
     // --- ToDo Method implementation ---
-    if(compareModel->getKeypoints().empty()) {
+    // If model has already keypoints calculated from object...
+    if(cmodel->getKeypoints().empty()) {
         // Step 1 : Detect the keypoints
         detector->detect(objectImage, keypoints_object);
-        searchModel->setKeypoints(keypoints_object);
-
-        // 2 : Calculate descriptors (feature vectors)
+        cmodel->setKeypoints(keypoints_object);
+        // Step 2 : Calculate descriptors (feature vectors)
         extractor->compute(objectImage, keypoints_object, descriptors_object);
-        searchModel->setDescriptors(descriptors_object);
+        cmodel->setDescriptors(descriptors_object);
     } else {
-        // Step 1 : Keypoints already detected from model
-        keypoints_object = compareModel->getKeypoints();
-        descriptors_object = compareModel->getDescriptors();
+        // Keypoints and descriptors already calculated from model
+        keypoints_object = cmodel->getKeypoints();
+        descriptors_object = cmodel->getDescriptors();
     }
 
     if (!descriptors_object.empty() && !descriptors_scene.empty()
         && keypoints_object.size() > 0 && keypoints_scene.size() > 0) {
 
-        // Flan based needs CV_32F
+        // If matching type is flan based, scene and object must be in CV_32F format.
         if (matchingType.compare("FlannBased") == 0) {
             descriptors_scene.convertTo(descriptors_scene, CV_32F);
             descriptors_object.convertTo(descriptors_object, CV_32F);
         }
 
-        //-- Step 3: Matching descriptor vectors
-        matcher->knnMatch(descriptors_object, descriptors_scene, matches_one, 2);
+        // Step 3: Matching descriptor vectors
+        matcher->knnMatch(descriptors_object, descriptors_scene, matches, 2);
 
         // Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
         // Neighbourhoods comparison
-        ratio_test(matches_one, good_matches, 0.80);
+        ratio_test(matches, good_matches, 0.80);
 
         // Symmetric matches
         // ToDo := How does it works?
@@ -85,21 +110,19 @@ Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareMo
         //symmetry_test(good_matches, good_matches_two, symMatches);
         //good_matches = symMatches;
 
-        //-- Localize the object
+        // Count of good matches if results are good enough.
         if (good_matches.size() > 40) {
 
-//            std::cout << good_matches.size() << "\n";
-
+            // Get the keypoints from the good matches
             for (int i = 0; i < good_matches.size(); i++) {
-                //-- Get the keypoints from the good matches
-                obj.push_back(keypoints_object[good_matches[i].queryIdx].pt);
-                scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
+                feature_points_object.push_back(keypoints_object[good_matches[i].queryIdx].pt);
+                feature_points_scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
             }
 
             // Find Homography
-            cv::Mat H = cv::findHomography(obj, scene, CV_RANSAC);
+            homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
 
-            if (!H.empty()) {
+            if (!homography.empty()) {
                 //-- Get the corners from the image_1 ( the object to be "detected" )
                 std::vector<cv::Point2f> obj_corners(4);
                 obj_corners[0] = cvPoint(0, 0);
@@ -108,7 +131,7 @@ Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareMo
                 obj_corners[3] = cvPoint(0, objectImage.rows);
                 std::vector<cv::Point2f> scene_corners(4);
 
-                cv::perspectiveTransform(obj_corners, scene_corners, H);
+                cv::perspectiveTransform(obj_corners, scene_corners, homography);
 
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
@@ -137,15 +160,13 @@ Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareMo
                     sceneImage = searchModel->getImage();
                 }
 
-                // ToDo:= Lines from position will be returned...
-                Lines *lines = new Lines();
+                lines = new Lines();
                 lines->addLine(new Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
-                lines->draw(sceneImage);
 
-                compareModel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
+                cmodel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
 
                 int valid_x = sceneImage.cols - (compareModel->getLastPosition().x + compareModel->getLastPosition().width);
                 int valid_y = sceneImage.rows - (compareModel->getLastPosition().y + compareModel->getLastPosition().height);
@@ -165,24 +186,17 @@ Comparison *FeatureMatching::algo(Comparison *searchModel, Comparison *compareMo
                 if (compareModel->getLastPosition().width < 0 || compareModel->getLastPosition().height < 0) {
                     compareModel->setLastPosition(0, 0, 0, 0);
                 }
-
-                //std::cout << "y:= " << subImage.y << " x:= " << subImage.x << " width:= " << subImage.width << " height:= " << subImage.height << "\n";
-                cv::imshow("Good Matches & Object detection", sceneImage);
             }
         } else {
-            // If no match found and image was cutted.
+            // If result is not good enough and last image was cutted from scene.
             if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
-                compareModel->setLastPosition(0, 0, 0, 0);
-                algo(searchModel, compareModel);
-                cv::imshow("Good Matches & Object detection", searchModel->getImage());
-            } else {
-                cv::imshow("Good Matches & Object detection", sceneImage);
+                compareModel->setLastPosition(0, 0, 0, 0); // Reset position because object is no more detected...
+                return algo(searchModel, compareModel);
             }
         }
-
     }
 
-    return nullptr;
+    return lines;
 }
 
 void

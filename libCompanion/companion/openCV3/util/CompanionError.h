@@ -30,8 +30,9 @@ namespace CompanionError {
         dimension_error, ///< If dimensions from given images inequal.
         template_dimension_error, ///< If dimensions from template is wrong.
         feature_detector_not_found, ///< If given feature detector not supported.
-        descriptor_extractor_not_found,  ///< If given descriptor extractor not supported.
-        descriptor_matcher_not_found ///< If given descriptor matcher not supported.
+        descriptor_extractor_not_found, ///< If given descriptor extractor not supported.
+        descriptor_matcher_not_found, ///< If given descriptor matcher not supported.
+        wrong_model_type ///< If given model class type is not supported for an image recognition search.
     };
 }
 

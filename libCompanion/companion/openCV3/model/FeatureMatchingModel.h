@@ -20,55 +20,60 @@
 #define COMPANION_COMPARISON_H
 
 #include <opencv2/core/core.hpp>
+#include "ImageRecognitionModel.h"
 
 /**
  * Comparison data model to store search results from an image recognition.
  * @author Andreas Sekulski
  */
-class Comparison {
+class FeatureMatchingModel : public ImageRecognitionModel {
 
 public:
 
-    // ToDo Model name and abstract class implementation.
+    /**
+     * Constructor to create an feature matching model.
+     */
+    FeatureMatchingModel();
 
-    Comparison();
+    /**
+     * Destructor from feature matching model.
+     */
+    virtual ~FeatureMatchingModel();
 
-    ~Comparison();
-
-    const cv::Mat &getImage() const;
-
-    void setImage(const cv::Mat &image);
-
-    const cv::Rect &getLastPosition() const;
-
-    void setLastPosition(int x, int y, int width, int height);
-
-    void setLastPositionWidth(int width);
-
-    void setLastPositionHeight(int height);
-
-    void setLastPositionX(int x);
-
-    void setLastPositionY(int y);
-
-    bool isLastPositionSet();
-
+    /**
+     * Get descriptors from feature matching if exists.
+     * @return An empty cv::Mat descriptor if no matching exists otherwise an cv::Mat descriptor.
+     */
     const cv::Mat &getDescriptors() const;
 
+    /**
+     * Sets an descriptor matching.
+     * @param descriptors Descriptor matching to set.
+     */
     void setDescriptors(const cv::Mat &descriptors);
 
+    /**
+     * Get all keypoints from matching.
+     * @return If keypoints not exists keypoints is empty otherwise an filled keypoints set.
+     */
     const std::vector<cv::KeyPoint> &getKeypoints() const;
 
+    /**
+     * Sets given keypoints from matching.
+     * @param keypoints Keypoints to set.
+     */
     void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
 private:
 
-    cv::Mat image;
-
-    cv::Rect lastPosition;
-
+    /**
+     * Feature descriptors from matching.
+     */
     cv::Mat descriptors;
 
+    /**
+     * Keypoints from matching.
+     */
     std::vector<cv::KeyPoint> keypoints;
 
 };

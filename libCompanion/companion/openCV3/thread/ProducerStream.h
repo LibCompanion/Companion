@@ -21,10 +21,10 @@
 
 #include <queue>
 #include <opencv2/core.hpp>
-#include <companion/openCV3/stream/Video.h>
-#include <companion/openCV3/util/CompanionError.h>
-#include <companion/openCV3/util/Util.h>
 #include <boost/lockfree/spsc_queue.hpp>
+#include "companion/openCV3/stream/Video.h"
+#include "companion/openCV3/util/CompanionError.h"
+#include "companion/openCV3/util/Util.h"
 
 /**
  * Producer stream class implementation to generate images from an video source.

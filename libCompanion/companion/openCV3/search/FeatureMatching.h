@@ -19,9 +19,9 @@
 #ifndef COMPANION_FEATUREMATCHING_H
 #define COMPANION_FEATUREMATCHING_H
 
-#include "ImageRecognition.h"
-#include <companion/openCV3/draw/Lines.h>
 #include <opencv2/calib3d/calib3d.hpp>
+#include "ImageRecognition.h"
+#include "companion/openCV3/draw/Lines.h"
 
 /**
  * Feature matching algo implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
@@ -92,15 +92,13 @@ private:
     void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2,
                        std::vector<cv::DMatch> &symMatches);
 
-protected:
-
     /**
-     * Default feature matching algorithm which will be used for search.
-     * @param scene ToDo
-     * @param objects ToDo
-     * @return Comparison entity model with given result from search.
+     * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
+     * @param searchModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @param compareModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @throws CompanionError::error_code If an error occured in search operation.
      */
-    virtual Comparison *algo(Comparison *searchModel, Comparison *compareModel);
+    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 };
 
 #endif //COMPANION_FEATUREMATCHING_H

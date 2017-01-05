@@ -21,9 +21,9 @@
 
 #include <queue>
 #include <opencv2/core.hpp>
-#include <companion/openCV3/search/ImageRecognition.h>
-#include <companion/openCV3/search/FeatureMatching.h>
 #include <boost/lockfree/spsc_queue.hpp>
+#include "companion/openCV3/search/ImageRecognition.h"
+#include "companion/openCV3/search/FeatureMatching.h"
 
 /**
  * Consumer class implementation for an video stream.
@@ -41,9 +41,9 @@ public:
 
     /**
      * Run method for an thread operation.
-     * @param imgPath Image to compare with produced images.
+     * @param images Images to compare with produced images.
      */
-    void run(std::string imgPath);
+    void run(std::vector<std::string> images);
 
 private:
 

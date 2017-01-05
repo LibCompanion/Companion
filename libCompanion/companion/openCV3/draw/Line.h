@@ -27,7 +27,7 @@
  * Class implementation to draw an single line.
  * @author Andreas Sekulski
  */
-class Line : Drawable {
+class Line : public Drawable {
 
 public:
 
@@ -40,20 +40,52 @@ public:
      */
     Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness);
 
+    /**
+     * Get starting point from line to draw.
+     * @return Starting point from line.
+     */
     const cv::Point &getStart() const;
 
+    /**
+     * Sets an given starting point from line.
+     * @param start Starting point to set from line.
+     */
     void setStart(const cv::Point &start);
 
+    /**
+     * Get endpoint from line.
+     * @return Endpoint from line.
+     */
     const cv::Point &getEnd() const;
 
+    /**
+     * Sets given endpoint from line.
+     * @param end Endpoint to set.
+     */
     void setEnd(const cv::Point &end);
 
+    /**
+     * Get color from line.
+     * @return Color code from line.
+     */
     const cv::Scalar &getColor() const;
 
+    /**
+     * Sets given color code for line.
+     * @param color Color to draw line.
+     */
     void setColor(const cv::Scalar &color);
 
+    /**
+     * Get thickness from line.
+     * @return Line thicknees.
+     */
     int getThickness() const;
 
+    /**
+     * Sets given line thickness must be greater or equal 1.
+     * @param thickness Thickness to set.
+     */
     void setThickness(int thickness);
 
     /**
@@ -64,14 +96,25 @@ public:
 
 private:
 
+    /**
+     * Starting point from line.
+     */
     cv::Point start;
 
+    /**
+     * Endpoint from line.
+     */
     cv::Point end;
 
+    /**
+     * Color code from line.
+     */
     cv::Scalar color;
 
+    /**
+     * Line thickness.
+     */
     int thickness;
 };
-
 
 #endif //COMPANION_LINE_H

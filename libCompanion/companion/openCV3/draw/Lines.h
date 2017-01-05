@@ -27,14 +27,24 @@
  * Implementation class to draw multiple lines.
  * @author Andreas Sekulski
  */
-class Lines : Drawable {
+class Lines : public Drawable {
 
 public:
 
+    /**
+     * Constructor to create an lines class to store single lines.
+     */
     Lines();
 
+    /**
+     * Destructor.
+     */
     ~Lines();
 
+    /**
+     * Adds an new line.
+     * @param line Line to add.
+     */
     void addLine(Line *line);
 
     /**
@@ -45,8 +55,10 @@ public:
 
 private:
 
+    /**
+     * Set from all lines which should be drawn.
+     */
     std::vector<Line*> lines;
 };
-
 
 #endif //COMPANION_LINES_H

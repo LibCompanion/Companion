@@ -32,6 +32,9 @@ std::string Util::get_error(CompanionError::error_code code) {
         case CompanionError::error_code::template_dimension_error:
             error = "Template size must be smaller or equal than image";
             break;
+        case CompanionError::error_code::wrong_model_type:
+            error = "This model type class is not supported for this image recognition algorithm";
+            break;
     }
 
     return error;

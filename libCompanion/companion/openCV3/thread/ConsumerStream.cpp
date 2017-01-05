@@ -1,12 +1,19 @@
 #include "ConsumerStream.h"
 
-void ConsumerStream::run(std::string imgPath) {
+void ConsumerStream::run(std::vector<std::string> images) {
 
     cv::Mat frame;
-    cv::Mat search_img = cv::imread(imgPath, cv::IMREAD_GRAYSCALE);
-    Comparison *comparison = new Comparison();
-    Comparison *compare;
-    comparison->setImage(search_img);
+    ImageRecognitionModel *object;
+    ImageRecognitionModel *scene;
+    Drawable *drawable;
+    std::vector<ImageRecognitionModel*> sImages;
+    std::vector<Drawable*> draws;
+
+    for (auto &image : images) {
+        object = new FeatureMatchingModel();
+        object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+        sImages.push_back(object);
+    }
 
     // ToDo := Data Model to setup configuration.
 
@@ -36,8 +43,8 @@ void ConsumerStream::run(std::string imgPath) {
     // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
     //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
     //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(2000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(2000, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
 
     // Intresting
     cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create(60);
@@ -61,13 +68,30 @@ void ConsumerStream::run(std::string imgPath) {
     while (true) {
         while (queue.pop(frame)) {
             if (!frame.empty()) {
-                compare = new Comparison();
+                scene = new FeatureMatchingModel();
                 // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
                 Util::resize_image(frame, 1024, 576);
-                compare->setImage(frame);
-                recognition->algo(compare, comparison);
+                scene->setImage(frame);
+                draws.clear();
+
+                // ToDo := Multiple Sub Methods
+
+                // ToDo := This operation can be used with OpenMP for an parallel search.
+                for (auto &sObject : sImages) {
+                    drawable = recognition->algo(scene, sObject);
+                    if(drawable != nullptr) {
+                        draws.push_back(drawable);
+                    }
+                }
+
+                // Draw all founded object...
+                for(auto &sDraw : draws) {
+                    sDraw->draw(frame);
+                }
+                cv::imshow("Object detection", frame);
+
                 cv::waitKey(1);
-                delete compare;
+                delete scene;
             }
         }
     }
