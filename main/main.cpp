@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <thread>
 #include <companion/openCV3/thread/ProducerStream.h>
 #include <companion/openCV3/thread/ConsumerStream.h>
 #include <boost/lockfree/spsc_queue.hpp>
+#include <boost/thread.hpp>
 
 int main() {
 
-	//std::string path = "D:/Data/Master/Testcase/HBF/";
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+	std::string path = "D:/Data/Master/Testcase/HBF/";
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     std::string testImg1 = path + std::string("Sample_Middle.jpg");
     std::string testImg2 = path + std::string("Sample_Left.jpg");
     std::string testImg3 = path + std::string("Sample_Right.jpg");
@@ -38,8 +38,8 @@ int main() {
     ProducerStream ps(queue);
     ConsumerStream cs(queue);
 
-    std::thread t1(&ProducerStream::run, ps, testVideo);
-    std::thread t2(&ConsumerStream::run, cs, testImages);
+    boost::thread t1(boost::bind(&ProducerStream::run, &ps, testVideo));
+    boost::thread t2(boost::bind(&ConsumerStream::run, &cs, testImages));
     t1.join();
     t2.join();
 
