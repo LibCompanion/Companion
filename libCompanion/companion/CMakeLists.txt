@@ -3,9 +3,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-unset(CUDA_USE_STATIC_CUDA_RUNTIME CACHE)
-option(CUDA_USE_STATIC_CUDA_RUNTIME OFF)
-
 SET(SOURCE
         openCV3/stream/Video.cpp openCV3/stream/Video.h
         openCV3/search/ImageRecognition.h
@@ -15,7 +12,10 @@ SET(SOURCE
         openCV3/util/CompanionError.h
         openCV3/thread/ConsumerStream.cpp openCV3/thread/ConsumerStream.h
         openCV3/thread/ProducerStream.cpp openCV3/thread/ProducerStream.h
-        openCV3/draw/Drawable.h openCV3/draw/Lines.cpp openCV3/draw/Lines.h openCV3/draw/Line.cpp openCV3/draw/Line.h openCV3/model/ImageRecognitionModel.cpp openCV3/model/ImageRecognitionModel.h)
+        openCV3/draw/Drawable.h
+        openCV3/draw/Lines.cpp openCV3/draw/Lines.h
+        openCV3/draw/Line.cpp openCV3/draw/Line.h
+        openCV3/model/ImageRecognitionModel.cpp openCV3/model/ImageRecognitionModel.h)
 
 add_library(libCompanion ${SOURCE})
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
