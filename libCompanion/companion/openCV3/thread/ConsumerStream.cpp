@@ -7,7 +7,6 @@ void ConsumerStream::run(std::vector<std::string> images) {
     ImageRecognitionModel *scene;
     Drawable *drawable;
     std::vector<ImageRecognitionModel*> sImages;
-    std::vector<Drawable*> draws;
 
     for (auto &image : images) {
         object = new FeatureMatchingModel();
@@ -72,24 +71,18 @@ void ConsumerStream::run(std::vector<std::string> images) {
                 // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
                 Util::resize_image(frame, 1024, 576);
                 scene->setImage(frame);
-                draws.clear();
 
                 // ToDo := Multiple Sub Methods
 
-                // ToDo := This operation can be used with OpenMP for an parallel search.
-                for (auto &sObject : sImages) {
-                    drawable = recognition->algo(scene, sObject);
+                #pragma omp parallel for
+                for(int x = 0; x < sImages.size(); x++) {
+                    drawable = recognition->algo(scene, sImages.at(x));
                     if(drawable != nullptr) {
-                        draws.push_back(drawable);
+                        drawable->draw(frame);
                     }
                 }
 
-                // Draw all founded object...
-                for(auto &sDraw : draws) {
-                    sDraw->draw(frame);
-                }
                 cv::imshow("Object detection", frame);
-
                 cv::waitKey(1);
                 delete scene;
             }
