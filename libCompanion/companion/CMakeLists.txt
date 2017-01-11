@@ -15,7 +15,7 @@ SET(SOURCE
         openCV3/draw/Drawable.h
         openCV3/draw/Lines.cpp openCV3/draw/Lines.h
         openCV3/draw/Line.cpp openCV3/draw/Line.h
-        openCV3/model/ImageRecognitionModel.cpp openCV3/model/ImageRecognitionModel.h)
+        openCV3/model/ImageRecognitionModel.cpp openCV3/model/ImageRecognitionModel.h openCV3/detection/RectangleDetection.cpp openCV3/detection/RectangleDetection.h)
 
 add_library(libCompanion ${SOURCE})
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})

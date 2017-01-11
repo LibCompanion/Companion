@@ -37,7 +37,7 @@ public:
     /**
      * Default destructor.
      */
-    ~Video();
+    virtual ~Video();
 
     /**
      * Connects to an given device number.

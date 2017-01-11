@@ -23,8 +23,8 @@
 
 int main() {
 
-	std::string path = "D:/Data/Master/Testcase/HBF/";
-    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+	//std::string path = "D:/Data/Master/Testcase/HBF/";
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     std::string testImg1 = path + std::string("Sample_Middle.jpg");
     std::string testImg2 = path + std::string("Sample_Left.jpg");
     std::string testImg3 = path + std::string("Sample_Right.jpg");

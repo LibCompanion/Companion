@@ -39,7 +39,7 @@ public:
     /**
      * Destructor.
      */
-    ~Lines();
+    virtual ~Lines();
 
     /**
      * Adds an new line.

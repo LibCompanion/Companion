@@ -1,3 +1,4 @@
+#include <companion/openCV3/detection/RectangleDetection.h>
 #include "ConsumerStream.h"
 
 void ConsumerStream::run(std::vector<std::string> images) {
@@ -64,6 +65,8 @@ void ConsumerStream::run(std::vector<std::string> images) {
             matcher,
             type);
 
+    RectangleDetection *detection = new RectangleDetection();
+
     while (true) {
         while (queue.pop(frame)) {
             if (!frame.empty()) {
@@ -74,6 +77,10 @@ void ConsumerStream::run(std::vector<std::string> images) {
 
                 // ToDo := Multiple Sub Methods
 
+                detection->detect(frame);
+
+
+                /*
                 #pragma omp parallel for
                 for(int x = 0; x < sImages.size(); x++) {
                     drawable = recognition->algo(scene, sImages.at(x));
@@ -83,7 +90,9 @@ void ConsumerStream::run(std::vector<std::string> images) {
                 }
 
                 cv::imshow("Object detection", frame);
-                cv::waitKey(1);
+                */
+
+                cv::waitKey(0);
                 delete scene;
             }
         }

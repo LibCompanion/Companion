@@ -49,7 +49,7 @@ public:
     /**
      * Default destructor.
      */
-    ~FeatureMatching();
+    virtual ~FeatureMatching();
 
 private:
 

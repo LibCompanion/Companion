@@ -5,6 +5,8 @@ void ProducerStream::run(std::string videoPath) {
         Video video;
         cv::Mat frame;
         video.playVideo(videoPath);
+        //video.connectToDevice(0);
+
         frame = video.obtainImage(); // Camera api
 
         while (!frame.empty()) {
