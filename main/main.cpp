@@ -24,15 +24,17 @@
 int main() {
 
 	//std::string path = "D:/Data/Master/Testcase/HBF/";
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
-    std::string testImg1 = path + std::string("Sample_Middle.jpg");
-    std::string testImg2 = path + std::string("Sample_Left.jpg");
-    std::string testImg3 = path + std::string("Sample_Right.jpg");
-    std::string testVideo = path + std::string("Muelheim_HBF.mp4");
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/UNI/";
+    //std::string testImg1 = path + std::string("Sample_Middle.jpg");
+    //std::string testImg2 = path + std::string("Sample_Left.jpg");
+    //std::string testImg3 = path + std::string("Sample_Right.jpg");
+    //std::string testVideo = path + std::string("Muelheim_HBF.mp4");
+    std::string testVideo = path + std::string("UG.mp4");
     std::vector<std::string> testImages;
-    testImages.push_back(testImg1);
-    testImages.push_back(testImg2);
-    testImages.push_back(testImg3);
+    //testImages.push_back(testImg1);
+    //testImages.push_back(testImg2);
+    //testImages.push_back(testImg3);
 
     boost::lockfree::spsc_queue<cv::Mat> queue(30);
     ProducerStream ps(queue);

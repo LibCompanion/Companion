@@ -20,50 +20,88 @@ RectangleDetection::~RectangleDetection() {
 
 void variant_one() {
     // http://docs.opencv.org/2.4/doc/tutorials/imgproc/shapedescriptors/bounding_rects_circles/bounding_rects_circles.html
+
+    std::vector<std::vector<cv::Point> > contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::Mat threshold_output;
+
     /// Reduce noise with a kernel 3x3
     blur(src_gray, src_gray, cv::Size(3,3));
 
-    cv::Mat threshold_output;
-    std::vector<std::vector<cv::Point> > contours;
-    std::vector<cv::Vec4i> hierarchy;
-
     /// Detect edges using Threshold
-    threshold(src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY );
+    Canny(src_gray, threshold_output, 10, thresh);
+    //threshold(src_gray, threshold_output, thresh, 255, cv::THRESH_BINARY); // Creates an radius
+
     /// Find contours
-    findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0) );
+    findContours(threshold_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
-    /// Approximate contours to polygons + get bounding rects and circles
-    std::vector<std::vector<cv::Point>> contours_poly( contours.size() );
-    std::vector<cv::Rect> boundRect( contours.size() );
-    std::vector<cv::Point2f>center( contours.size() );
-    std::vector<float>radius( contours.size() );
+    /// Approximate contours to polygons + get bounding rects
+    std::vector<std::vector<cv::Point>> contours_poly(contours.size());
+    std::vector<cv::Rect> boundRect;
+    cv::Rect bound, compareBound;
 
-    for( int i = 0; i < contours.size(); i++ ) {
+    for(int i = 0; i < contours.size(); i++ ) {
         approxPolyDP(cv::Mat(contours[i]), contours_poly[i], 3, true );
-        boundRect[i] = boundingRect(cv::Mat(contours_poly[i]) );
-    }
+        bound = boundingRect(cv::Mat(contours_poly[i]));
 
-    int x = 0;
-
-    /// Draw polygonal contour + bonding rects + circles
-    cv::Mat drawing = cv::Mat::zeros( threshold_output.size(), CV_8UC3 );
-    for( int i = 0; i< contours.size(); i++ ) {
-        if(boundRect[i].area() > 1000) {
-
-            // ToDo := Add Areas if they cross it...
-
-            cv::Scalar color = cv::Scalar(rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-            //drawContours(drawing, contours_poly, i, color, 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point() );
-            rectangle(drawing, boundRect[i].tl(), boundRect[i].br(), color, 2, 8, 0 );
-
-            cv::imshow("Area_" + std::to_string(x), cv::Mat(src_gray, boundRect[i]));
-            x++;
+        // Don't use small areas from bounding rects
+        if(bound.area() > 1000) {
+            boundRect.push_back(bound);
         }
     }
 
+    // ToDo := Implement CA-Algo (Cross Area)
+    // ToDo := Nice name ;-)
+    unsigned long z = 0, x = 0;
+
+    while (z < boundRect.size()) {
+
+        bound = boundRect.at(z);
+        compareBound = boundRect.at(x);
+
+        // Check if rectangles overlapping
+        // http://answers.opencv.org/question/67091/how-to-find-if-2-rectangles-are-overlapping-each-other/
+        if(z != x && (compareBound & bound).area() > 0) {
+            // Erase rectangles
+            boundRect.erase (boundRect.begin() + z);
+            boundRect.erase (boundRect.begin() + x - 1);
+
+            // Union rectangles
+            boundRect.push_back((compareBound | bound));
+
+            z = 0; // Begin comparison on the scratch
+            x = 0; // Begin comparison on the scratch
+        } else {
+            x++;
+        }
+
+        if(x == boundRect.size()) {
+            z++;
+            x = 0;
+        }
+    }
+
+    /// Draw contours
+    cv::Scalar color;
+    cv::Mat drawing = cv::Mat::zeros(threshold_output.size(), CV_8UC3 );
+    for(int i = 0; i< contours.size(); i++ ) {
+        color = cv::Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+        drawContours( drawing, contours, i, color, 2, 8, hierarchy, 0, cv::Point());
+    }
+
+    cv::Mat result;
+    src.copyTo(result);
+    /// Draw bonding rects
+    for(unsigned long i = 0; i< boundRect.size(); i++ ) {
+        color = cv::Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+        bound = boundRect.at(i);
+        rectangle(result, bound.tl(), bound.br(), color, 2, 8, 0 );
+    }
+
     /// Show in a window
-    cv::namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
-    imshow( "Contours", drawing );
+    cv::namedWindow("Contours", CV_WINDOW_AUTOSIZE);
+    imshow("Contours", drawing);
+    imshow("Result", result);
 }
 
 void variant_two() {
@@ -113,7 +151,9 @@ void RectangleDetection::thresh_callback(int, void *) {
 void RectangleDetection::detect(cv::Mat img) {
 
     src = img;
-    src = cv::imread("/home/asekulsk/Dokumente/Master/gemaelde02g.jpg");
+    //src = cv::imread("/home/asekulsk/Dokumente/Master/handmade-oil-painting-on-canvas-modern-100-Best-Art-scenery-oil-painting-original-directly-from-font.jpg");
+    //src = cv::imread("/home/asekulsk/Dokumente/Master/books.jpg");
+    //src = cv::imread("/home/asekulsk/Dokumente/Master/gemaelde02g.jpg");
 
     /// Convert the image to grayscale
     cvtColor(src, src_gray, CV_BGR2GRAY );
@@ -121,7 +161,7 @@ void RectangleDetection::detect(cv::Mat img) {
     /// Create Window
     char* source_window = "Source";
     cv::namedWindow( source_window, CV_WINDOW_AUTOSIZE );
-    imshow( source_window, src );
+    imshow(source_window, src);
     /// Create a Trackbar for user to enter threshold
     cv::createTrackbar("Threshold:", source_window, &thresh, max_thresh, thresh_callback );
 
