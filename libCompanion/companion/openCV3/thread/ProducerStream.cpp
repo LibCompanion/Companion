@@ -15,7 +15,7 @@ void ProducerStream::run(std::string videoPath) {
             }
             frame = video.obtainImage();
         }
-    } catch (CompanionError::error_code error) {
-        std::cout << Util::get_error(error);
+    } catch (CompanionError::errorCode error) {
+        std::cout << CompanionError::getError(error);
     }
 }

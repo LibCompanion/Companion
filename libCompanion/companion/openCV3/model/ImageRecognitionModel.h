@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 
 /**
- * Default model type for an image recognition implementation class for an scene or object in feature matching.
+ * Default model type for an image recognition implementation class for an scene or object.
  * @author Andreas Sekulski
  */
 class ImageRecognitionModel {

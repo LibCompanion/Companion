@@ -23,7 +23,7 @@
 #include "ImageRecognitionModel.h"
 
 /**
- * Comparison data model to store search results from an image recognition.
+ * Comparison data model to store search results from an feature matching algo.
  * @author Andreas Sekulski
  */
 class FeatureMatchingModel : public ImageRecognitionModel {

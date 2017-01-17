@@ -24,33 +24,33 @@
 int main() {
 
     // Windows
-	//std::string path = "D:/Data/Master/Testcase/HBF/";
-	std::string path = "D:/Data/Master/Testcase/UNI/";
+	std::string path = "D:/Data/Master/Testcase/HBF/";
+	//std::string path = "D:/Data/Master/Testcase/UNI/";
 
     // Linux
     //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/UNI/";
 
     // Sample files hbf
-    //std::string testImg1 = path + std::string("Sample_Middle.jpg");
-    //std::string testImg2 = path + std::string("Sample_Left.jpg");
-    //std::string testImg3 = path + std::string("Sample_Right.jpg");
+    std::string testImg1 = path + std::string("Sample_Middle.jpg");
+    std::string testImg2 = path + std::string("Sample_Left.jpg");
+    std::string testImg3 = path + std::string("Sample_Right.jpg");
 
     // Sample files ug
-    std::string testImg1 = path + std::string("karl.PNG");
-    std::string testImg2 = path + std::string("max.PNG");
-    std::string testImg3 = path + std::string("mrx.PNG");
-    std::string testImg4 = path + std::string("mry.PNG");
+    //std::string testImg1 = path + std::string("karl.PNG");
+    //std::string testImg2 = path + std::string("max.PNG");
+    //std::string testImg3 = path + std::string("mrx.PNG");
+    //std::string testImg4 = path + std::string("mry.PNG");
 
     // Sample videos
-    //std::string testVideo = path + std::string("Muelheim_HBF.mp4");
-    std::string testVideo = path + std::string("UG.mp4");
+    std::string testVideo = path + std::string("Muelheim_HBF.mp4");
+    //std::string testVideo = path + std::string("UG.mp4");
 
     std::vector<std::string> testImages;
     testImages.push_back(testImg1);
     testImages.push_back(testImg2);
     testImages.push_back(testImg3);
-    testImages.push_back(testImg4);
+    //testImages.push_back(testImg4);
 
     boost::lockfree::spsc_queue<cv::Mat> queue(30);
     ProducerStream ps(queue);

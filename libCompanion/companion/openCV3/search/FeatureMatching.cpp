@@ -36,15 +36,15 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
 
     // If wrong model types are used...
     if(!smodel || !cmodel) {
-        throw CompanionError::error_code::wrong_model_type;
+        throw CompanionError::errorCode::wrong_model_type;
     }
 
     sceneImage = smodel->getImage();
     objectImage = cmodel->getImage();
 
     // Check if images are loaded...
-    if (!Util::is_image_loaded(sceneImage) || !Util::is_image_loaded(objectImage)) {
-        throw CompanionError::error_code::image_not_found;
+    if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage)) {
+        throw CompanionError::errorCode::image_not_found;
     }
 
     // Check if from last scene object was detected...

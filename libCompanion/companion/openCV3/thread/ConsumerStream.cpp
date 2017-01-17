@@ -73,15 +73,15 @@ void ConsumerStream::run(std::vector<std::string> images) {
             if (!frame.empty()) {
                 scene = new FeatureMatchingModel();
                 // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-                Util::resize_image(frame, 1024, 576);
+                Util::resizeImage(frame, 1024, 576);
                 scene->setImage(frame);
 
                 // ToDo := Multiple Sub Methods
 
-                //detection->detect(frame);
+                detection->detect(frame);
 
 
-
+/*
                 #pragma omp parallel for
                 for(int x = 0; x < sImages.size(); x++) {
                     drawable = recognition->algo(scene, sImages.at(x));
@@ -89,11 +89,11 @@ void ConsumerStream::run(std::vector<std::string> images) {
                         drawable->draw(frame);
                     }
                 }
-
+*/
                 cv::imshow("Object detection", frame);
                 
 
-                cv::waitKey(1);
+                cv::waitKey(0);
                 delete scene;
             }
         }
