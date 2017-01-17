@@ -68,6 +68,7 @@ void ConsumerStream::run(std::vector<std::string> images) {
     RectangleDetection *detection = new RectangleDetection();
 
     while (true) {
+		
         while (queue.pop(frame)) {
             if (!frame.empty()) {
                 scene = new FeatureMatchingModel();
@@ -77,10 +78,10 @@ void ConsumerStream::run(std::vector<std::string> images) {
 
                 // ToDo := Multiple Sub Methods
 
-                detection->detect(frame);
+                //detection->detect(frame);
 
 
-                /*
+
                 #pragma omp parallel for
                 for(int x = 0; x < sImages.size(); x++) {
                     drawable = recognition->algo(scene, sImages.at(x));
@@ -90,11 +91,12 @@ void ConsumerStream::run(std::vector<std::string> images) {
                 }
 
                 cv::imshow("Object detection", frame);
-                */
+                
 
-                cv::waitKey(0);
+                cv::waitKey(1);
                 delete scene;
             }
         }
+		
     }
 }

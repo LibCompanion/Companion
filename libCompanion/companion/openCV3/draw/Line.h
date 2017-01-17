@@ -20,7 +20,7 @@
 #define COMPANION_LINE_H
 
 #include <opencv2/core/core.hpp>
-#include <cv.hpp>
+#include <opencv2/opencv.hpp>
 #include "Drawable.h"
 
 /**

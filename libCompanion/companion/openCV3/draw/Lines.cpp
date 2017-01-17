@@ -1,7 +1,3 @@
-//
-// Created by asekulsk on 04.01.17.
-//
-
 #include "Lines.h"
 
 Lines::Lines() {

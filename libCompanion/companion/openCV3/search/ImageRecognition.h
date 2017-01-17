@@ -24,7 +24,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/features2d.hpp>
-#include <companion/openCV3/draw/Drawable.h>
+#include "companion/openCV3/draw/Drawable.h"
 #include "companion/openCV3/util/CompanionError.h"
 #include "companion/openCV3/model/FeatureMatchingModel.h"
 #include "companion/openCV3/util/Util.h"
