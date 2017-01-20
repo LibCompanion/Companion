@@ -12,3 +12,4 @@ find_package(Boost REQUIRED COMPONENTS thread system)
 
 add_subdirectory(libCompanion)
 add_subdirectory(main)
+add_subdirectory(testing)
