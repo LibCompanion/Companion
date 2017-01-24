@@ -78,10 +78,10 @@ void ConsumerStream::run(std::vector<std::string> images) {
 
                 // ToDo := Multiple Sub Methods
 
-                detection->detect(frame);
+               // detection->detect(frame);
 
 
-/*
+
                 #pragma omp parallel for
                 for(int x = 0; x < sImages.size(); x++) {
                     drawable = recognition->algo(scene, sImages.at(x));
@@ -89,11 +89,11 @@ void ConsumerStream::run(std::vector<std::string> images) {
                         drawable->draw(frame);
                     }
                 }
-*/
+
                 cv::imshow("Object detection", frame);
                 
 
-                cv::waitKey(0);
+                cv::waitKey(1);
                 delete scene;
             }
         }
