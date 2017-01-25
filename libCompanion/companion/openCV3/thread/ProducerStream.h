@@ -22,6 +22,7 @@
 #include <queue>
 #include <opencv2/core.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
+#include <companion/openCV3/configuration/CompanionConfig.h>
 #include "companion/openCV3/stream/Video.h"
 #include "companion/openCV3/util/CompanionError.h"
 #include "companion/openCV3/util/Util.h"
@@ -42,11 +43,9 @@ public:
 
     /**
      * Run method to start an video stream and store an queue.
-     * @param videoPath Video to load and store images to his queue.
+     * @param config Configuration file which includes an video source.
      */
-    void run(std::string videoPath);
-
-    // ToDo := Obtain livestream images.
+    void run(CompanionConfig *config);
 
 private:
 

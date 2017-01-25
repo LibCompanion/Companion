@@ -46,5 +46,5 @@ void ImageRecognitionModel::setLastPositionY(int y) {
 }
 
 bool ImageRecognitionModel::isLastPositionSet() {
-    return lastPosition.width > 0 && lastPosition.height > 0;
+    return lastPosition.width != 0 && lastPosition.height != 0;
 }

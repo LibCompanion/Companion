@@ -9,4 +9,4 @@ SET(SOURCE
 
 add_executable(Main ${SOURCE})
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-target_link_libraries(Main libCompanion ${Boost_LIBRARIES})
+target_link_libraries(Main Companion ${Boost_LIBRARIES})

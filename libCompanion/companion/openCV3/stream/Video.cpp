@@ -1,6 +1,7 @@
 #include "Video.h"
 
 Video::Video() {
+
 }
 
 Video::~Video() {
@@ -43,10 +44,10 @@ int Video::playVideo(std::string url) {
 
 cv::Mat Video::obtainImage() {
 
-    cv::Mat frame;
+    cv::Mat frame = cv::Mat::zeros(cv::Size(1,1), CV_8UC3 );;
 
     if (!capture.isOpened()) {
-        // ToDo := Error Handling
+        // ToDo := Error Handling or empty black image?
         return frame;
     }
 

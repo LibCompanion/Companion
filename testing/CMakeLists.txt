@@ -1,2 +1,2 @@
-add_executable(camshift camshift.cpp)
-target_link_libraries(camshift ${OpenCV_LIBS})
+add_executable(Camshift camshift.cpp)
+target_link_libraries(Camshift ${OpenCV_LIBS})

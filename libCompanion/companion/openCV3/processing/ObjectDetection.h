@@ -1,0 +1,71 @@
+/*
+ * This program is an image recognition library written with OpenCV.
+ * Copyright (C) 2016-2017 Andreas Sekulski
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef COMPANION_OBJECTDETECTION_H
+#define COMPANION_OBJECTDETECTION_H
+
+#include "ImageProcessing.h"
+#include <opencv2/core/core.hpp>
+#include <companion/openCV3/model/ImageRecognitionModel.h>
+#include <companion/openCV3/draw/Drawable.h>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <companion/openCV3/algo/ImageRecognition.h>
+#include <companion/openCV3/algo/FeatureMatching.h>
+#include <companion/openCV3/configuration/CompanionConfig.h>
+
+/**
+ * Object detection implementation which includes feature matching algo.
+ * @author Andreas Sekulski
+ */
+class ObjectDetection : public ImageProcessing {
+
+public:
+
+    /**
+     * Constructor to create an object detection algorithm implementation.
+     * @param config Configuration class to obtain model entities to verify.
+     * @param featureMatching FeatureMatching class.
+     */
+    ObjectDetection(CompanionConfig *config, FeatureMatching *featureMatching);
+
+    /**
+     * Destructor
+     */
+    virtual ~ObjectDetection();
+
+    /**
+     * Try to detect all objects from give frame.
+     * @param frame Frame to check for an object location.
+     */
+    virtual void execute(cv::Mat frame);
+
+private:
+
+    /**
+     * Companion configuration which contains model data to search.
+     */
+    CompanionConfig *config;
+
+    /**
+     * FeatureMatching algorithm setup.
+     */
+    FeatureMatching *featureMatching;
+
+};
+
+#endif //COMPANION_OBJECTDETECTION_H

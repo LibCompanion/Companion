@@ -30,6 +30,7 @@
 class FeatureMatching : public ImageRecognition {
 
 public:
+
     /**
      * Default constructor to create feature matching algorithm implementation. Following default settings are used:<br>
      * FeatureDetector = ORB, FeatureExtractor = BRISK, FeatureMatcher = FlannBased
@@ -37,11 +38,21 @@ public:
     FeatureMatching();
 
     /**
+     *
      * Constructor to set an specific feature matching algorithms.
+     *
+     * Following feature matching algorithms are supported.
+     * Detector   : BRISK, ORB, MSER, FAST, AGAST, GFFT, SimpleBlobDetector, KAZE, AKAZE, StarDetector, MSDDetector.
+     * Extractor  : BRISK, ORB, KAZE, AKAZE, FREAK, BriefDescriptorExtractor, LUCID, LATCH, DAISY.
+     * Matcher    : BruteForce (it uses L2), BruteForce-L1, BruteForce-Hamming, BruteForce-Hamming(2), FlannBased.
+     *
+     * If you want to use SIFT: detector + descriptor and  SURF: detector + descriptor you must build this lib with
+     * XFeatures2D support.
+     *
      * @param detector FeatureDetector to set.
      * @param extractor FeatureExtractor to set.
      * @param matcher FeatureMatcher to set.
-     * @param matchingType FeatureMatcher type which is used like FlannBased or Bruteforce. // ToDo := Enumeration will be better.
+     * @param matchingType FeatureMatcher type which is used like FlannBased or Bruteforce. // ToDo := Enumeration class should be better.
      */
     FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
                     cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType);
@@ -50,6 +61,14 @@ public:
      * Default destructor.
      */
     virtual ~FeatureMatching();
+
+    /**
+     * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
+     * @param searchModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @param compareModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @throws CompanionError::error_code If an error occured in search operation.
+     */
+    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 
 private:
 
@@ -91,14 +110,6 @@ private:
      */
     void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2,
                        std::vector<cv::DMatch> &symMatches);
-
-    /**
-     * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
-     * @param searchModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
-     * @param compareModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
-     * @throws CompanionError::error_code If an error occured in search operation.
-     */
-    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 };
 
 #endif //COMPANION_FEATUREMATCHING_H

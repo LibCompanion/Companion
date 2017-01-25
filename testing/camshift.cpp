@@ -87,7 +87,7 @@ int main( int argc, const char** argv )
     }
     int camNum = parser.get<int>(0);
     cap.open(camNum);
-    cap.open("D:/Data/Master/Testcase/UNI/UG.mp4");
+    //cap.open("D:/Data/Master/Testcase/UNI/UG.mp4");
 
 
     if( !cap.isOpened() )

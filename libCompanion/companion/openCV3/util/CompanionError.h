@@ -33,7 +33,8 @@ namespace CompanionError {
         feature_detector_not_found, ///< If given feature detector not supported.
         descriptor_extractor_not_found, ///< If given descriptor extractor not supported.
         descriptor_matcher_not_found, ///< If given descriptor matcher not supported.
-        wrong_model_type ///< If given model class type is not supported for an image recognition search.
+        wrong_model_type, ///< If given model class type is not supported for an image recognition search.
+        invalid_companion_config ///< If given configuration is invalid.
     };
 
     /**
@@ -47,25 +48,28 @@ namespace CompanionError {
 
         switch (code) {
             case errorCode::descriptor_extractor_not_found:
-                error = "Given descriptor not supported";
+                error = "Given descriptor not supported.";
                 break;
             case errorCode::descriptor_matcher_not_found:
-                error = "Given descriptor matcher not supported";
+                error = "Given descriptor matcher not supported.";
                 break;
             case errorCode::dimension_error:
-                error = "Dimensions not equal";
+                error = "Dimensions not equal.";
                 break;
             case errorCode::feature_detector_not_found:
-                error = "Given feature not supported";
+                error = "Given feature not supported.";
                 break;
             case errorCode::image_not_found:
-                error = "Could not open or find image";
+                error = "Could not open or find image.";
                 break;
             case errorCode::template_dimension_error:
-                error = "Template size must be smaller or equal than image";
+                error = "Template size must be smaller or equal than image.";
                 break;
             case errorCode::wrong_model_type:
-                error = "This model type class is not supported for this image recognition algorithm";
+                error = "This model type class is not supported for this image recognition algorithm.";
+                break;
+            case errorCode::invalid_companion_config:
+                error = "Invalid companion configuration.";
                 break;
         }
 

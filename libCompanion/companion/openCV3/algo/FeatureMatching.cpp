@@ -51,6 +51,9 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
     if (compareModel->isLastPositionSet()) {
         // Object from last scene detected take this last position as scene.
         sceneImage = cv::Mat(sceneImage, compareModel->getLastPosition());
+
+        cv::imshow("Sub", sceneImage);
+
         // ToDo -> Methods
         // Step 1 : Detect the keypoints from scene
         detector->detect(sceneImage, keypoints_scene);
@@ -155,6 +158,25 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
                 cv::Point2f start = scene_corners[0] + offset - scale;
                 cv::Point2f end = scene_corners[2] + offset + scale;
 
+                // ToDo := Currently not working bugs are working...
+                // Disabled feature from sub image search query
+/*
+                if(start.x < 0) {
+                    start.x = 0;
+                }
+
+                if(start.y < 0) {
+                    start.y = 0;
+                }
+
+                if(end.x > sceneImage.cols) {
+                    end.x = sceneImage.cols;
+                }
+
+                if(end.y > sceneImage.rows) {
+                    end.y = sceneImage.rows;
+                }
+*/
                 if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
                     // Restore to original image.
                     sceneImage = searchModel->getImage();
@@ -166,8 +188,10 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
                 lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
 
-                cmodel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
-
+                // ToDo := Error by IFIS test
+                //cmodel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
+                //std::cout << "Start X :" << start.x << " Start Y :" << start.y << " End X :" << end.x << " End Y :" << end.y << "\n";
+/*
                 int valid_x = sceneImage.cols - (compareModel->getLastPosition().x + compareModel->getLastPosition().width);
                 int valid_y = sceneImage.rows - (compareModel->getLastPosition().y + compareModel->getLastPosition().height);
 
@@ -186,10 +210,11 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
                 if (compareModel->getLastPosition().width < 0 || compareModel->getLastPosition().height < 0) {
                     compareModel->setLastPosition(0, 0, 0, 0);
                 }
+*/
             }
         } else {
             // If result is not good enough and last image was cutted from scene.
-            if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
+            if(compareModel->isLastPositionSet()) {
                 compareModel->setLastPosition(0, 0, 0, 0); // Reset position because object is no more detected...
                 return algo(searchModel, compareModel);
             }
