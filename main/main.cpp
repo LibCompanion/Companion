@@ -27,11 +27,11 @@ int main() {
     std::vector<std::string> images;
 
     // Windows
-	std::string path = "D:/Data/Master/Testcase/HBF/";
+	//std::string path = "D:/Data/Master/Testcase/HBF/";
 	//std::string path = "D:/Data/Master/Testcase/UNI/";
 
     // Linux
-    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
     images.push_back(path + std::string("Sample_Right.jpg"));
@@ -92,7 +92,7 @@ int main() {
     }
 
     // Companion class to execute algorithm
-    boost::lockfree::spsc_queue<cv::Mat> queue(30);
+    boost::lockfree::spsc_queue<cv::Mat> queue(10);
     ProducerStream ps(queue);
     ConsumerStream cs(queue);
 
