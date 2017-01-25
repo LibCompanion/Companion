@@ -4,6 +4,7 @@ FeatureMatchingModel::FeatureMatchingModel() {
 }
 
 FeatureMatchingModel::~FeatureMatchingModel() {
+	keypoints.clear();
     descriptors.release();
 }
 
@@ -20,5 +21,6 @@ const std::vector<cv::KeyPoint> &FeatureMatchingModel::getKeypoints() const {
 }
 
 void FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints) {
+	FeatureMatchingModel::keypoints.clear();
     FeatureMatchingModel::keypoints = keypoints;
 }

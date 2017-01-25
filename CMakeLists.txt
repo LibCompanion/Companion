@@ -5,7 +5,7 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 
 find_package(OpenCV REQUIRED)
 find_package(OpenMP REQUIRED)
-find_package(Boost REQUIRED COMPONENTS thread system)
+find_package(Boost REQUIRED COMPONENTS thread system date_time chrono)
 
 add_subdirectory(libCompanion)
 add_subdirectory(main)

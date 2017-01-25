@@ -27,14 +27,14 @@ int main() {
     std::vector<std::string> images;
 
     // Windows
-	//std::string path = "D:/Data/Master/Testcase/HBF/";
+	std::string path = "D:/Data/Master/Testcase/HBF/";
 	//std::string path = "D:/Data/Master/Testcase/UNI/";
 
     // Linux
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
-    //images.push_back(path + std::string("Sample_Middle.jpg"));
-    //images.push_back(path + std::string("Sample_Left.jpg"));
-    //images.push_back(path + std::string("Sample_Right.jpg"));
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    images.push_back(path + std::string("Sample_Middle.jpg"));
+    images.push_back(path + std::string("Sample_Left.jpg"));
+    images.push_back(path + std::string("Sample_Right.jpg"));
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
 
 
@@ -66,14 +66,13 @@ int main() {
     //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
     //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
 
-    cv::Ptr<cv::FeatureDetector> detector = cv::BRISK::create(60);
-    cv::Ptr<cv::DescriptorExtractor> extractor = cv::BRISK::create(60);
+	cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
     std::string type = "BruteForce-Hamming(2)";
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     FeatureMatching *recognition = new FeatureMatching(
-            detector,
-            extractor,
+			brisk,
+			brisk,
             matcher,
             type);
 
