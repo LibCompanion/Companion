@@ -27,14 +27,15 @@ int main() {
     std::vector<std::string> images;
 
     // ToDo -> Perfomance
+    // Perfomance increase are ProducerConsumer Design Pattern (Libbost) and Frame skipping
     //std::string path = "D:/Data/Master/Testcase/HBF/";
-    /*
+
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
     images.push_back(path + std::string("Sample_Right.jpg"));
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
-    */
+
 
     // ToDo -> Detection
     /*
@@ -48,12 +49,14 @@ int main() {
     */
 
     // ToDo -> ImageRecognitionModel Bug
+    // ToDo := Area bug in model
+    /*
     //std::string path = "D:/Data/Master/Testcase/IFIS/";
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/IFIS/";
     images.push_back(path + std::string("left.jpg"));
     images.push_back(path + std::string("right.jpg"));
     std::string testVideo = path + std::string("info.mp4");
-
+    */
 
     CompanionConfig *config = new CompanionConfig();
 
@@ -70,6 +73,7 @@ int main() {
     std::string type = "BruteForce-Hamming(2)";
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
+    // ToDo := FeatureMatching setup and param configuration
     FeatureMatching *recognition = new FeatureMatching(
             brisk,
             brisk,
@@ -77,20 +81,20 @@ int main() {
             type);
 
     config->setProcessing(new ObjectDetection(config, recognition));
+    config->setSkipFrame(3);
 
     // Generate video source
     Video *video = new Video();
-    video->playVideo(testVideo);
+    video->playVideo(testVideo); // Load an video or single image
+    //video->connectToDevice(0); // Realtime stream
     config->setSource(video);
 
     // Store all searched data models
-    int x = 0;
     FeatureMatchingModel *object;
     for (auto &image : images) {
         object = new FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
         config->addModel(object);
-        x++;
     }
 
     // Companion class to execute algorithm

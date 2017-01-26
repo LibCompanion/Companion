@@ -3,13 +3,26 @@
 void ConsumerStream::run(CompanionConfig *config) {
     cv::Mat frame;
     ImageProcessing *processing = config->getProcessing();
+    int frameNr = 0;
+    bool finished = false;
 
-    // ToDo Stop function
-    while (true) {
+    while (!finished) {
         while (queue.pop(frame)) {
-            // --> Send frame to image processing component.
-            processing->execute(frame);
-            frame.release();
+            if(!frame.empty()) {
+                if(config->getSkipFrame() == -1) {
+                    // --> Send frame to image processing component.
+                    processing->execute(frame);
+                } else {
+                    if(frameNr == config->getSkipFrame()) {
+                        processing->execute(frame);
+                        frameNr = 0;
+                    }
+                    frameNr++;
+                }
+                frame.release();
+            } else {
+                finished = true;
+            }
         }
     }
 }

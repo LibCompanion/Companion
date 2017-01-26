@@ -48,6 +48,10 @@ public:
 
     void setProcessing(ImageProcessing *processing);
 
+    int getSkipFrame() const;
+
+    void setSkipFrame(int skipFrame);
+
 private:
 
     /**
@@ -60,9 +64,16 @@ private:
      */
     std::vector<ImageRecognitionModel*> models;
 
+    /**
+     * Image processing implementation for example an object detection.
+     */
     ImageProcessing *processing;
 
-};
+    /**
+     * Number of frames to skip to process next image.
+     */
+    int skipFrame;
 
+};
 
 #endif //COMPANION_COMPANIONCONFIG_H

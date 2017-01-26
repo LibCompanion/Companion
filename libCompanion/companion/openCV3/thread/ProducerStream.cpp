@@ -14,6 +14,9 @@ void ProducerStream::run(CompanionConfig *config) {
             }
             frame = video->obtainImage();
         }
+
+        queue.push(frame);
+
     } catch (CompanionError::errorCode error) {
         // ToDo := Error handling
         std::cout << CompanionError::getError(error);

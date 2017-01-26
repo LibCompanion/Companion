@@ -3,6 +3,7 @@
 
 CompanionConfig::CompanionConfig() {
     source = new Video();
+    skipFrame = -1;
 }
 
 CompanionConfig::~CompanionConfig() {
@@ -42,4 +43,17 @@ ImageProcessing *CompanionConfig::getProcessing() const {
 
 void CompanionConfig::setProcessing(ImageProcessing *processing) {
     CompanionConfig::processing = processing;
+}
+
+int CompanionConfig::getSkipFrame() const {
+    return skipFrame;
+}
+
+void CompanionConfig::setSkipFrame(int skipFrame) {
+
+    if(skipFrame < -1) {
+        skipFrame = -1;
+    }
+
+    CompanionConfig::skipFrame = skipFrame;
 }
