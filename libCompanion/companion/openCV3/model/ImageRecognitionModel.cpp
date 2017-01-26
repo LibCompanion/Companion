@@ -1,9 +1,14 @@
 #include "ImageRecognitionModel.h"
 
-ImageRecognitionModel::ImageRecognitionModel() {}
+ImageRecognitionModel::ImageRecognitionModel() {
+    lastPosition.x = -1;
+    lastPosition.y = -1;
+}
 
 ImageRecognitionModel::ImageRecognitionModel(cv::Mat image) {
     ImageRecognitionModel::image = image;
+    lastPosition.x = -1;
+    lastPosition.y = -1;
 }
 
 ImageRecognitionModel::~ImageRecognitionModel() {
@@ -46,5 +51,6 @@ void ImageRecognitionModel::setLastPositionY(int y) {
 }
 
 bool ImageRecognitionModel::isLastPositionSet() {
-    return lastPosition.width != 0 && lastPosition.height != 0;
+    // ToDo := Currently 10000 because of an IFIS video bug to small areas for IRA...
+    return lastPosition.area() > 10000 && lastPosition.width > 0 && lastPosition.height > 0;
 }

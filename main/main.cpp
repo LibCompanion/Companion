@@ -26,19 +26,19 @@ int main() {
 
     std::vector<std::string> images;
 
-    // Windows
-	//std::string path = "D:/Data/Master/Testcase/HBF/";
-	//std::string path = "D:/Data/Master/Testcase/UNI/";
-
-    // Linux
+    // ToDo -> Perfomance
+    //std::string path = "D:/Data/Master/Testcase/HBF/";
+    /*
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
     images.push_back(path + std::string("Sample_Right.jpg"));
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
+    */
 
-
+    // ToDo -> Detection
     /*
+    //std::string path = "D:/Data/Master/Testcase/UNI/";
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/UNI/";
     images.push_back(path + std::string("karl.PNG"));
     images.push_back(path + std::string("max.PNG"));
@@ -47,12 +47,13 @@ int main() {
     std::string testVideo = path + std::string("UG.mp4");
     */
 
-    /*
+    // ToDo -> ImageRecognitionModel Bug
+    //std::string path = "D:/Data/Master/Testcase/IFIS/";
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/IFIS/";
     images.push_back(path + std::string("left.jpg"));
     images.push_back(path + std::string("right.jpg"));
     std::string testVideo = path + std::string("info.mp4");
-    */
+
 
     CompanionConfig *config = new CompanionConfig();
 
@@ -63,16 +64,15 @@ int main() {
 
     //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
     //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-    //cv::Ptr<cv::FeatureDetector> detector = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    //cv::Ptr<cv::DescriptorExtractor> extractor = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    //cv::Ptr<cv::ORB> orb = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
 
-	cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
     std::string type = "BruteForce-Hamming(2)";
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     FeatureMatching *recognition = new FeatureMatching(
-			brisk,
-			brisk,
+            brisk,
+            brisk,
             matcher,
             type);
 
@@ -84,15 +84,17 @@ int main() {
     config->setSource(video);
 
     // Store all searched data models
+    int x = 0;
     FeatureMatchingModel *object;
     for (auto &image : images) {
         object = new FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
         config->addModel(object);
+        x++;
     }
 
     // Companion class to execute algorithm
-    boost::lockfree::spsc_queue<cv::Mat> queue(10);
+    boost::lockfree::spsc_queue<cv::Mat> queue(1);
     ProducerStream ps(queue);
     ConsumerStream cs(queue);
 

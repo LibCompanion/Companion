@@ -129,13 +129,14 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
                 obj_corners[1] = cvPoint(objectImage.cols, 0);
                 obj_corners[2] = cvPoint(objectImage.cols, objectImage.rows);
                 obj_corners[3] = cvPoint(0, objectImage.rows);
-                std::vector<cv::Point2f> scene_corners(4);
 
+                std::vector<cv::Point2f> scene_corners(4);
                 cv::perspectiveTransform(obj_corners, scene_corners, homography);
 
                 //-- Draw lines between the corners (the mapped object in the scene - image_2 )
                 int thickness = 4;
                 cv::Scalar color = cv::Scalar(0, 255, 0);
+
                 cv::Rect lastRect = compareModel->getLastPosition();
                 cv::Point2f offset = cv::Point2f(lastRect.x,
                                                  lastRect.y); // Offset is recalculate position from last recognition
@@ -155,66 +156,64 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
                 cv::Point2f start = scene_corners[0] + offset - scale;
                 cv::Point2f end = scene_corners[2] + offset + scale;
 
-                // ToDo := Currently not working bugs are working...
-                // Disabled feature from sub image search query
-/*
-                if(start.x < 0) {
-                    start.x = 0;
-                }
-
-                if(start.y < 0) {
-                    start.y = 0;
-                }
-
-                if(end.x > sceneImage.cols) {
-                    end.x = sceneImage.cols;
-                }
-
-                if(end.y > sceneImage.rows) {
-                    end.y = sceneImage.rows;
-                }
-*/
+                // If IRA was used...
                 if(sceneImage.cols != searchModel->getImage().cols || sceneImage.rows != searchModel->getImage().rows) {
                     // Restore to original image.
                     sceneImage = searchModel->getImage();
                 }
 
+                // Object area.
                 lines = new Lines();
                 lines->addLine(new Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
                 lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
 
-                // ToDo := Error by IFIS test
+                // IRA algo stores position from detected object with an scaling factor.
                 cmodel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
-                //std::cout << "Start X :" << start.x << " Start Y :" << start.y << " End X :" << end.x << " End Y :" << end.y << "\n";
 
-                int valid_x = sceneImage.cols - (compareModel->getLastPosition().x + compareModel->getLastPosition().width);
-                int valid_y = sceneImage.rows - (compareModel->getLastPosition().y + compareModel->getLastPosition().height);
-
-                if (valid_x < 0) {
-                    compareModel->setLastPositionWidth(compareModel->getLastPosition().width + valid_x);
-                } else if (compareModel->getLastPosition().x < 0) {
+                // Check if start point is set correctly
+                if (compareModel->getLastPosition().x < 0) {
                     compareModel->setLastPositionX(0);
                 }
 
-                if (valid_y < 0) {
-                    compareModel->setLastPositionHeight(compareModel->getLastPosition().height + valid_y);
-                } else if (compareModel->getLastPosition().y < 0) {
+                // Check if width is not oversized
+                if (compareModel->getLastPosition().width + compareModel->getLastPosition().x > sceneImage.cols) {
+                    compareModel->setLastPositionWidth(sceneImage.cols - compareModel->getLastPosition().x);
+                }
+
+                if (compareModel->getLastPosition().y < 0) {
                     compareModel->setLastPositionY(0);
                 }
 
-                if (compareModel->getLastPosition().width < 0 || compareModel->getLastPosition().height < 0) {
-                    compareModel->setLastPosition(0, 0, 0, 0);
+                if (compareModel->getLastPosition().height + compareModel->getLastPosition().y > sceneImage.rows) {
+                    compareModel->setLastPositionHeight(sceneImage.rows - compareModel->getLastPosition().y);
                 }
 
+                if(compareModel->getLastPosition().area() <= 0) {
+                    // Something goes wrong in area
+                    compareModel->setLastPosition(-1, -1, 0, 0);
+                }
+
+            } else {
+                // If result is not good enough and IRA was used.
+                if(compareModel->isLastPositionSet()) {
+                    compareModel->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
+                    return algo(searchModel, compareModel);
+                }
             }
         } else {
-            // If result is not good enough and last image was cutted from scene.
+            // If result is not good enough and IRA was used.
             if(compareModel->isLastPositionSet()) {
-                compareModel->setLastPosition(0, 0, 0, 0); // Reset position because object is no more detected...
+                compareModel->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
                 return algo(searchModel, compareModel);
             }
+        }
+    } else {
+        // If result is not good enough and IRA was used.
+        if(compareModel->isLastPositionSet()) {
+            compareModel->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
+            return algo(searchModel, compareModel);
         }
     }
 
