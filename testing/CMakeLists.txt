@@ -1,2 +1,2 @@
-add_executable(Camshift camshift.cpp)
-target_link_libraries(Camshift ${OpenCV_LIBS})
+add_subdirectory(camshift)
+add_subdirectory(svm)
