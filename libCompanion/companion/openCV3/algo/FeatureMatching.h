@@ -41,10 +41,10 @@ public:
      *
      * Constructor to set an specific feature matching algorithms.
      *
-     * Following feature matching algorithms are supported.
-     * Detector   : BRISK, ORB, MSER, FAST, AGAST, GFFT, SimpleBlobDetector, KAZE, AKAZE, StarDetector, MSDDetector.
-     * Extractor  : BRISK, ORB, KAZE, AKAZE, FREAK, BriefDescriptorExtractor, LUCID, LATCH, DAISY.
-     * Matcher    : BruteForce (it uses L2), BruteForce-L1, BruteForce-Hamming, BruteForce-Hamming(2), FlannBased.
+     * Following feature matching can be used for example.
+     * Detector   : BRISK, ORB, MSER, FastFeatureDetector, AgastFeatureDetector, GFTTDetector, SimpleBlobDetector, KAZE, AKAZE.
+     * Extractor  : BRISK, ORB, KAZE, AKAZE.
+     * Matcher    : FLANNBASED, BRUTEFORCE, BRUTEFORCE_L1, BruteForce-Hamming, BRUTEFORCE_HAMMINGLUT, BRUTEFORCE_SL2.
      *
      * If you want to use SIFT: detector + descriptor and  SURF: detector + descriptor you must build this lib with
      * XFeatures2D support.
@@ -52,10 +52,10 @@ public:
      * @param detector FeatureDetector to set.
      * @param extractor FeatureExtractor to set.
      * @param matcher FeatureMatcher to set.
-     * @param matchingType FeatureMatcher type which is used like FlannBased or Bruteforce. // ToDo := Enumeration class should be better.
+     * @param type FeatureMatcher type which is used like FlannBased or Bruteforce.
      */
     FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                    cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType);
+                    cv::Ptr<cv::DescriptorMatcher> matcher, int type);
 
     /**
      * Default destructor.
@@ -75,7 +75,7 @@ private:
     /**
      * FeatureMatching type which is used, if is necessary to convert obtained images.
      */
-    std::string matchingType;
+    int type;
 
     /**
      * FeatureDetector which is used by default ORB is used.

@@ -28,9 +28,9 @@ int main() {
 
     // ToDo -> Perfomance
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost) and Frame skipping
-    //std::string path = "D:/Data/Master/Testcase/HBF/";
+    std::string path = "D:/Data/Master/Testcase/HBF/";
 
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
     images.push_back(path + std::string("Sample_Right.jpg"));
@@ -69,8 +69,7 @@ int main() {
     //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
     //cv::Ptr<cv::ORB> orb = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
     cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-
-    std::string type = "BruteForce-Hamming(2)";
+    int type = cv::DescriptorMatcher::BRUTEFORCE;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // ToDo := FeatureMatching setup and param configuration
@@ -81,7 +80,7 @@ int main() {
             type);
 
     config->setProcessing(new ObjectDetection(config, recognition));
-    config->setSkipFrame(3);
+    config->setSkipFrame(-1);
 
     // Generate video source
     Video *video = new Video();

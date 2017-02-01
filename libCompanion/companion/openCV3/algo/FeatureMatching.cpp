@@ -4,16 +4,16 @@ FeatureMatching::FeatureMatching() {
 
     this->detector = cv::ORB::create();
     this->extractor = cv::BRISK::create();
-    this->matchingType = "FlannBased";
-    this->matcher = cv::DescriptorMatcher::create(matchingType);
+    this->type = cv::DescriptorMatcher::FLANNBASED;
+    this->matcher = cv::DescriptorMatcher::create(type);
 }
 
 FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                                 cv::Ptr<cv::DescriptorMatcher> matcher, std::string matchingType) {
+                                 cv::Ptr<cv::DescriptorMatcher> matcher, int type) {
     this->detector = detector;
     this->extractor = extractor;
+    this->type = type;
     this->matcher = matcher;
-    this->matchingType = matchingType;
 }
 
 FeatureMatching::~FeatureMatching() {}
@@ -92,7 +92,7 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
         && keypoints_object.size() > 0 && keypoints_scene.size() > 0) {
 
         // If matching type is flan based, scene and object must be in CV_32F format.
-        if (matchingType.compare("FlannBased") == 0) {
+        if (type == cv::DescriptorMatcher::FLANNBASED) {
             descriptors_scene.convertTo(descriptors_scene, CV_32F);
             descriptors_object.convertTo(descriptors_object, CV_32F);
         }
