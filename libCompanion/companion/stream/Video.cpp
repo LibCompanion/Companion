@@ -8,50 +8,39 @@ Video::~Video() {
     // No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
-int Video::connectToDevice(int device) {
-
-    // ToDo := check if an video device is already running.
+void Video::connectToDevice(int device) {
 
     cv::VideoCapture cap(device);
-
-    // ToDo Method
     if (!cap.isOpened()) {
-        // ToDo := Error Handling
-        return -1;
+        throw CompanionError::errorCode::invalid_video_src;
     }
 
     capture = cap;
-
-    return 0;
 }
 
-int Video::playVideo(std::string url) {
-
-    // ToDo := check if an video device is already running.
+void Video::playVideo(std::string url) {
 
     cv::VideoCapture cap(url);
-
-    // ToDo Method
     if (!cap.isOpened()) {
-        // ToDo := Error Handling
-        return -1;
+        throw CompanionError::errorCode::invalid_video_src;
     }
 
     capture = cap;
-
-    return 0;
 }
 
 cv::Mat Video::obtainImage() {
 
-    cv::Mat frame = cv::Mat::zeros(cv::Size(1,1), CV_8UC3 );;
+    cv::Mat frame = cv::Mat::zeros(cv::Size(1,1), CV_8UC3);
 
     if (!capture.isOpened()) {
-        // ToDo := Error Handling or empty black image?
         return frame;
     }
 
     // Obtain image frame.
     capture >> frame;
     return frame;
+}
+
+bool Video::isOpen() {
+    capture.isOpened();
 }

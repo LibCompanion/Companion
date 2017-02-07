@@ -19,14 +19,16 @@
 #ifndef COMPANION_OBJECTDETECTION_H
 #define COMPANION_OBJECTDETECTION_H
 
-#include "ImageProcessing.h"
+
 #include <opencv2/core/core.hpp>
-#include <companion/openCV3/model/ImageRecognitionModel.h>
-#include <companion/openCV3/draw/Drawable.h>
 #include <opencv2/calib3d/calib3d.hpp>
-#include <companion/openCV3/algo/ImageRecognition.h>
-#include <companion/openCV3/algo/FeatureMatching.h>
-#include <companion/openCV3/configuration/CompanionConfig.h>
+
+#include "ImageProcessing.h"
+#include "companion/model/ImageRecognitionModel.h"
+#include "companion/draw/Drawable.h"
+#include "companion/algo/ImageRecognition.h"
+#include "companion/algo/FeatureMatching.h"
+#include "companion/Companion.h"
 
 /**
  * Object detection implementation which includes feature matching algo.
@@ -38,10 +40,11 @@ public:
 
     /**
      * Constructor to create an object detection algorithm implementation.
-     * @param config Configuration class to obtain model entities to verify.
+     * @param companion Configuration class to obtain model entities to verify.
      * @param featureMatching FeatureMatching class.
+     * @param scale Scaling factor from frame. Default by one.
      */
-    ObjectDetection(CompanionConfig *config, FeatureMatching *featureMatching);
+    ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale = 1);
 
     /**
      * Destructor
@@ -51,15 +54,21 @@ public:
     /**
      * Try to detect all objects from give frame.
      * @param frame Frame to check for an object location.
+     * @return An empty vector if no objects are detected.
      */
-    virtual void execute(cv::Mat frame);
+    virtual std::vector<Drawable*> execute(cv::Mat frame);
 
 private:
 
     /**
+     * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size
+     */
+    float scale;
+
+    /**
      * Companion configuration which contains model data to search.
      */
-    CompanionConfig *config;
+    Companion *companion;
 
     /**
      * FeatureMatching algorithm setup.

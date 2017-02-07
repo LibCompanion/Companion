@@ -17,3 +17,9 @@ void Lines::draw(cv::Mat image) {
         line->draw(image);
     }
 }
+
+void Lines::ratio(int cWidth, int cHeight, int nWidth, int nHeight) {
+    for (auto &line : lines) {
+        line->ratio(cWidth, cHeight, nWidth, nHeight);
+    }
+};

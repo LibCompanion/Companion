@@ -16,11 +16,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <companion/openCV3/thread/ProducerStream.h>
-#include <companion/openCV3/thread/ConsumerStream.h>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <boost/thread.hpp>
-#include <companion/openCV3/processing/ObjectDetection.h>
+#include <companion/processing/ObjectDetection.h>
+#include <companion/thread/ProducerStream.h>
+#include <companion/thread/ConsumerStream.h>
+
+void callback(std::vector<Drawable*> objects, cv::Mat frame) {
+    Drawable *drawable;
+
+    for(int x = 0; x < objects.size(); x++) {
+        drawable = objects.at(x);
+        drawable->draw(frame);
+    }
+
+    cv::imshow("Object detection", frame);
+    cv::waitKey(1);
+    frame.release();
+}
+
+void error(CompanionError::errorCode code) {
+    // Obtain detailed error message from code
+    std::cout << CompanionError::getError(code) << "\n";
+}
 
 int main() {
 
@@ -58,53 +76,60 @@ int main() {
     std::string testVideo = path + std::string("info.mp4");
     */
 
-    CompanionConfig *config = new CompanionConfig();
+    try {
+        Companion *companion = new Companion();
 
-    // Setup used processing algo.
+        // Setup used processing algo.
 
-    // https://stackoverflow.com/questions/28024048/how-to-get-efficient-result-in-orb-using-opencv-2-4-9
-    // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+        // https://stackoverflow.com/questions/28024048/how-to-get-efficient-result-in-orb-using-opencv-2-4-9
+        // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
 
-    //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
-    //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-    //cv::Ptr<cv::ORB> orb = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-    int type = cv::DescriptorMatcher::BRUTEFORCE;
-    cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
+        //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
+        //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
+        //cv::Ptr<cv::ORB> orb = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
+        cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+        int type = cv::DescriptorMatcher::BRUTEFORCE;
+        cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
-    // ToDo := FeatureMatching setup and param configuration
-    FeatureMatching *recognition = new FeatureMatching(
-            brisk,
-            brisk,
-            matcher,
-            type);
+        // ToDo := FeatureMatching setup and param configuration
+        FeatureMatching *recognition = new FeatureMatching(
+                brisk,
+                brisk,
+                matcher,
+                type);
 
-    config->setProcessing(new ObjectDetection(config, recognition));
-    config->setSkipFrame(-1);
+        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
+        companion->setSkipFrame(2);
+        companion->setResultHandler(callback);
+        companion->setErrorHandler(error);
 
-    // Generate video source
-    Video *video = new Video();
-    video->playVideo(testVideo); // Load an video or single image
-    //video->connectToDevice(0); // Realtime stream
-    config->setSource(video);
+        // Generate video source
+        Video *video = new Video();
+        video->playVideo(testVideo); // Load an video
+        //video->connectToDevice(0); // Realtime stream
+        companion->setSource(video);
 
-    // Store all searched data models
-    FeatureMatchingModel *object;
-    for (auto &image : images) {
-        object = new FeatureMatchingModel();
-        object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
-        config->addModel(object);
+        // Store all searched data models
+        FeatureMatchingModel *object;
+        for (auto &image : images) {
+            object = new FeatureMatchingModel();
+            object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+            companion->addModel(object);
+        }
+
+        // Companion class to execute algorithm
+        boost::lockfree::spsc_queue<cv::Mat> queue(1);
+        ProducerStream ps(queue);
+        ConsumerStream cs(queue);
+
+        boost::thread t1(boost::bind(&ProducerStream::run, &ps, companion));
+        boost::thread t2(boost::bind(&ConsumerStream::run, &cs, companion));
+        t1.join();
+        t2.join();
+
+    } catch (CompanionError::errorCode errorCode) {
+        error(errorCode);
     }
-
-    // Companion class to execute algorithm
-    boost::lockfree::spsc_queue<cv::Mat> queue(1);
-    ProducerStream ps(queue);
-    ConsumerStream cs(queue);
-
-    boost::thread t1(boost::bind(&ProducerStream::run, &ps, config));
-    boost::thread t2(boost::bind(&ConsumerStream::run, &cs, config));
-    t1.join();
-    t2.join();
 
     return 0;
 }

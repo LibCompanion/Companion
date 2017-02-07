@@ -22,10 +22,11 @@
 #include <queue>
 #include <opencv2/core.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
-#include <companion/openCV3/configuration/CompanionConfig.h>
-#include "companion/openCV3/stream/Video.h"
-#include "companion/openCV3/util/CompanionError.h"
-#include "companion/openCV3/util/Util.h"
+
+#include "companion/Companion.h"
+#include "companion/stream/Video.h"
+#include "companion/util/CompanionError.h"
+#include "companion/util/Util.h"
 
 /**
  * Producer stream class implementation to generate images from an video source.
@@ -43,9 +44,9 @@ public:
 
     /**
      * Run method to start an video stream and store an queue.
-     * @param config Configuration file which includes an video source.
+     * @param companion Configuration file which includes an video source.
      */
-    void run(CompanionConfig *config);
+    void run(Companion *companion);
 
 private:
 

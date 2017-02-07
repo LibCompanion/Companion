@@ -20,8 +20,9 @@
 #define COMPANION_FEATUREMATCHING_H
 
 #include <opencv2/calib3d/calib3d.hpp>
+
 #include "ImageRecognition.h"
-#include "companion/openCV3/draw/Lines.h"
+#include "companion/draw/Lines.h"
 
 /**
  * Feature matching algo implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.

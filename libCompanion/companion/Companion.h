@@ -16,21 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_COMPANIONCONFIG_H
-#define COMPANION_COMPANIONCONFIG_H
+#ifndef COMPANION_COMPANION_H
+#define COMPANION_COMPANION_H
 
-#include <companion/openCV3/stream/Video.h>
-#include <companion/openCV3/model/ImageRecognitionModel.h>
-#include <companion/openCV3/algo/ImageRecognition.h>
-#include <companion/openCV3/processing/ImageProcessing.h>
+#include <functional>
 
-class CompanionConfig {
+#include "companion/stream/Video.h"
+#include "companion/model/ImageRecognitionModel.h"
+#include "companion/algo/ImageRecognition.h"
+#include "companion/processing/ImageProcessing.h"
+
+/**
+ * Companion class to setup an image processing search.
+ *
+ * @author Andreas Sekulski
+ */
+class Companion {
 
 public:
 
-    CompanionConfig();
+    Companion();
 
-    virtual ~CompanionConfig();
+    virtual ~Companion();
 
     Video *getSource() const;
 
@@ -52,7 +59,25 @@ public:
 
     void setSkipFrame(int skipFrame);
 
+    void setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
+
+    void executeResultHandler(std::vector<Drawable*> objects, cv::Mat frame);
+
+    void setErrorHandler(std::function<void(CompanionError::errorCode)> callback);
+
+    void executeError(CompanionError::errorCode code);
+
 private:
+
+    /**
+     * Callback event handler to send results back to main application.
+     */
+    std::function<void(std::vector<Drawable*>, cv::Mat)> callback;
+
+    /**
+     * Callback for an error.
+     */
+    std::function<void(CompanionError::errorCode)> errorCallback;
 
     /**
      * Video source to obtain images from an device.
@@ -76,4 +101,4 @@ private:
 
 };
 
-#endif //COMPANION_COMPANIONCONFIG_H
+#endif //COMPANION_COMPANION_H

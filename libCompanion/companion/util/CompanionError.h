@@ -34,7 +34,10 @@ namespace CompanionError {
         descriptor_extractor_not_found, ///< If given descriptor extractor not supported.
         descriptor_matcher_not_found, ///< If given descriptor matcher not supported.
         wrong_model_type, ///< If given model class type is not supported for an image recognition search.
-        invalid_companion_config ///< If given configuration is invalid.
+        invalid_companion_config, ///< If given configuration is invalid.
+        video_src_not_set, ///< If given video source is not set.
+        invalid_video_src, ///< If given video source is invalid like an error path.
+        no_image_processing_algo_set ///< If no image processing algo is used.
     };
 
     /**
@@ -70,6 +73,15 @@ namespace CompanionError {
                 break;
             case errorCode::invalid_companion_config:
                 error = "Invalid companion configuration.";
+                break;
+            case errorCode::video_src_not_set:
+                error = "Video source is not set.";
+                break;
+            case errorCode::invalid_video_src:
+                error = "Video src is not obtainable.";
+                break;
+            case errorCode::no_image_processing_algo_set:
+                error = "No image processing algorithm is used.";
                 break;
         }
 

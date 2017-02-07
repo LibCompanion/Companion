@@ -20,6 +20,7 @@
 #define COMPANION_COMPARISON_H
 
 #include <opencv2/core/core.hpp>
+
 #include "ImageRecognitionModel.h"
 
 /**

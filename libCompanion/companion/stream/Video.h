@@ -21,6 +21,8 @@
 
 #include <opencv2/opencv.hpp>
 
+#include "companion/util/CompanionError.h"
+
 /**
  * Video streaming OpenCV realization to obtain images from an video or livestream.
  * @author Andreas Sekulski
@@ -42,22 +44,28 @@ public:
     /**
      * Connects to an given device number.
      * @param device Device number to connect.
-     * @return 0 if connection successfully otherwise an negative value for an error.
+     * @throws CompanionError::error_code If wrong device number is selected.
      */
-    int connectToDevice(int device);
+    void connectToDevice(int device);
 
     /**
      * Plays an video stream from given url.
      * @param url Video path to stream.
-     * @return 0 if connection successfully otherwise an negative value for an error.
+     * @throws CompanionError::error_code If invalid url is used.
      */
-    int playVideo(std::string url);
+    void playVideo(std::string url);
 
     /**
      * Obtain next image from open video stream.
      * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
      */
     cv::Mat obtainImage();
+
+    /**
+     * Indicator if video stream is correct initialized.
+     * @return true if device can stream an video false if not.
+     */
+    bool isOpen();
 
 private:
 

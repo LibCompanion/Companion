@@ -20,6 +20,7 @@
 #define COMPANION_LINES_H
 
 #include <opencv2/core/core.hpp>
+
 #include "Drawable.h"
 #include "Line.h"
 
@@ -52,6 +53,15 @@ public:
      * @param image Image to draw lines.
      */
     virtual void draw(cv::Mat image);
+
+    /**
+     * Ratio to scale position from drawable to new location.
+     * @param cWidth Current width.
+     * @param cHeight Current height.
+     * @param nWidth New width.
+     * @param nHeight New height.
+     */
+    virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
 private:
 

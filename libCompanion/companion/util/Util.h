@@ -45,6 +45,16 @@ public:
      * @param size_y Resize image to given width in pixel.
      */
     static void resizeImage(cv::Mat &img, int size_x, int size_y);
+
+    /**
+     * Ratio to set new point from scaled frame.
+     * @param point Point to calculate new positions.
+     * @param cWidth Current width.
+     * @param cHeight Current height.
+     * @param nWidth New width.
+     * @param nHeight New height.
+     */
+    static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 };
 
 #endif //COMPANION_UTIL_H

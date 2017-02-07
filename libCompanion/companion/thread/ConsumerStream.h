@@ -22,10 +22,11 @@
 #include <queue>
 #include <opencv2/core.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
-#include "companion/openCV3/algo/ImageRecognition.h"
-#include "companion/openCV3/algo/FeatureMatching.h"
-#include <companion/openCV3/algo/RectangleDetection.h>
-#include <companion/openCV3/configuration/CompanionConfig.h>
+
+#include "companion/algo/ImageRecognition.h"
+#include "companion/algo/FeatureMatching.h"
+#include "../../../testing/rectangleDetection/RectangleDetection.h"
+#include "companion/Companion.h"
 
 /**
  * Consumer class implementation for an video stream.
@@ -43,9 +44,9 @@ public:
 
     /**
      * Run method for an thread operation.
-     * @param config Configuration files which includes search models.
+     * @param companion Configuration file which includes search models.
      */
-    void run(CompanionConfig *config);
+    void run(Companion *companion);
 
 private:
 

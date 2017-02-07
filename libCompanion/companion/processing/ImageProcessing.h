@@ -16,23 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_DRAWABLE_H
-#define COMPANION_DRAWABLE_H
+#ifndef COMPANION_IMAGEPROCESSING_H
+#define COMPANION_IMAGEPROCESSING_H
 
 #include <opencv2/core/core.hpp>
 
+#include "companion/draw/Drawable.h"
+
 /**
- * Abstract class implementation for an area.
- * @author Andreas Sekulski.
+ * Image processing interface class to create specific image processing jobs to detect objects or regions of interests.
+ *
+ * @author Andreas Sekulski
  */
-class Drawable {
+class ImageProcessing {
 
 public:
+
     /**
-     * Draw given object to image.
-     * @param image Image to draw an object.
+     * Execution from given image processing algo implementation like face recognition or object detection.
+     * @param frame Obtained image frame from producer thread.
+     * @return An empty vector if no objects are detected.
      */
-    virtual void draw(cv::Mat image) = 0;
+    virtual std::vector<Drawable*> execute(cv::Mat frame) = 0;
 };
 
-#endif //COMPANION_DRAWABLE_H
+#endif //COMPANION_IMAGEPROCESSING_H
