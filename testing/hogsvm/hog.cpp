@@ -178,15 +178,16 @@ void test_it( const Size & size )
     vector< Rect > locations;
 
     // Load the trained SVM.
-    svm = StatModel::load<SVM>( "my_people_detector.yml" );
+    svm = StatModel::load<SVM>("my_people_detector.yml");
     // Set the trained svm to my_hog
     vector< float > hog_detector;
     get_svm_detector( svm, hog_detector );
     my_hog.setSVMDetector( hog_detector );
     // Set the people detector.
-    hog.setSVMDetector( hog.getDefaultPeopleDetector() );
+    hog.setSVMDetector(hog.getDefaultPeopleDetector());
     // Open the camera.
-    video.open(0);
+    video.open("D:/Data/Master/Testcase/INRIA/people.mp4");
+    //video.open(0);
     if( !video.isOpened() )
     {
         cerr << "Unable to open the device 0" << endl;
@@ -194,26 +195,40 @@ void test_it( const Size & size )
     }
 
     bool end_of_process = false;
-    while( !end_of_process )
-    {
+    while( !end_of_process ) {
         video >> img;
-        if( img.empty() )
-            break;
 
-        draw = img.clone();
+        if (!img.empty()) {
 
-        locations.clear();
-        hog.detectMultiScale( img, locations );
-        draw_locations( draw, locations, reference );
+            // All black?
+            locations.clear();
+            my_hog.detectMultiScale(img, locations);
+            draw_locations(img, locations, trained);
 
-        locations.clear();
-        my_hog.detectMultiScale( img, locations );
-        draw_locations( draw, locations, trained );
+            imshow("Video", img);
+            waitKey(100);
+        }
 
-        imshow( "Video", draw );
-        key = (char)waitKey( 10 );
-        if( 27 == key )
-            end_of_process = true;
+
+
+        /*
+               draw = img.clone();
+
+               locations.clear();
+               hog.detectMultiScale( img, locations );
+               draw_locations( draw, locations, reference );
+
+               locations.clear();
+               my_hog.detectMultiScale( img, locations );
+               draw_locations( draw, locations, trained );
+
+               imshow( "Video", draw );
+               waitKey(0);
+
+               key = (char)waitKey( 10 );
+               if( 27 == key )
+                   end_of_process = true;
+                   */
     }
 }
 
@@ -225,13 +240,13 @@ int main( int argc, char** argv )
     vector< Mat > full_neg_lst;
     vector< Mat > gradient_lst;
     vector< int > labels;
-
+/*
     // Step 1 load positive and negative samples which are same size!!!
-    load_images("/home/asekulsk/Dokumente/Master/Testcase/INRIA/", "Train/pos.lst", pos_lst );
+    load_images("D:/Data/Master/Testcase/INRIA/96x160/", "pos.lst", pos_lst );
     labels.assign( pos_lst.size(), +1 );
     const unsigned int old = (unsigned int)labels.size();
 
-    load_images("/home/asekulsk/Dokumente/Master/Testcase/INRIA/", "Train/neg.lst", full_neg_lst );
+    load_images("D:/Data/Master/Testcase/INRIA/neg/", "neg.lst", full_neg_lst );
     // If samples are not same size
     sample_neg(full_neg_lst, neg_lst, Size(96,160)); // Only needs if samples are not equal take sub image from it !
     labels.insert(labels.end(), neg_lst.size(), -1 );
@@ -244,7 +259,7 @@ int main( int argc, char** argv )
 
     // If samples are not same size an error will be occurred by converting svm training data
     train_svm( gradient_lst, labels );
-
+*/
     test_it(Size(96, 160)); // change with your parameters
 
     return 0;
