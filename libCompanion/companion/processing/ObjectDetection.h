@@ -19,7 +19,6 @@
 #ifndef COMPANION_OBJECTDETECTION_H
 #define COMPANION_OBJECTDETECTION_H
 
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 
@@ -27,7 +26,7 @@
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/draw/Drawable.h"
 #include "companion/algo/ImageRecognition.h"
-#include "companion/algo/FeatureMatching.h"
+#include "companion/algo/cpu/FeatureMatching.h"
 #include "companion/Companion.h"
 
 /**

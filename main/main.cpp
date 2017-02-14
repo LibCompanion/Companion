@@ -21,6 +21,7 @@
 #include <companion/processing/ObjectDetection.h>
 #include <companion/thread/ProducerStream.h>
 #include <companion/thread/ConsumerStream.h>
+#include <companion/algo/cuda/CFeatureMatching.h>
 
 void callback(std::vector<Drawable*> objects, cv::Mat frame) {
     Drawable *drawable;
@@ -46,12 +47,12 @@ int main() {
 
     // ToDo -> Perfomance
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost) and Frame skipping
-    std::string path = "D:/Data/Master/Testcase/HBF/";
+    //std::string path = "D:/Data/Master/Testcase/HBF/";
 
-    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
-    images.push_back(path + std::string("Sample_Left.jpg"));
-    images.push_back(path + std::string("Sample_Right.jpg"));
+    //images.push_back(path + std::string("Sample_Left.jpg"));
+    //images.push_back(path + std::string("Sample_Right.jpg"));
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
 
 
@@ -86,17 +87,13 @@ int main() {
 
         //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
         //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-        //cv::Ptr<cv::ORB> orb = cv::ORB::create(1500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-        cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-        int type = cv::DescriptorMatcher::BRUTEFORCE;
+        cv::Ptr<cv::ORB> orb = cv::ORB::create(6000);
+        //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+        int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
         cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
-
         // ToDo := FeatureMatching setup and param configuration
-        FeatureMatching *recognition = new FeatureMatching(
-                brisk,
-                brisk,
-                matcher,
-                type);
+        //FeatureMatching *recognition = new FeatureMatching(orb, orb, matcher, type);
+        FeatureMatching *recognition = new CFeatureMatching();
 
         companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
         companion->setSkipFrame(2);

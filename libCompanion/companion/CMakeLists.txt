@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(SOURCE
         Companion.cpp Companion.h
         algo/ImageRecognition.h
-        algo/FeatureMatching.cpp algo/FeatureMatching.h
+        algo/cpu/FeatureMatching.cpp algo/cpu/FeatureMatching.h
         draw/Drawable.h
         draw/Lines.cpp draw/Lines.h
         draw/Line.cpp draw/Line.h
@@ -18,7 +18,7 @@ SET(SOURCE
         thread/ConsumerStream.cpp thread/ConsumerStream.h
         thread/ProducerStream.cpp thread/ProducerStream.h
         util/CompanionError.h
-        util/Util.cpp util/Util.h)
+        util/Util.cpp util/Util.h algo/cuda/CFeatureMatching.cpp algo/cuda/CFeatureMatching.h)
 
 add_library(Companion ${SOURCE})
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})

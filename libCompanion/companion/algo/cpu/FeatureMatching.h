@@ -21,7 +21,7 @@
 
 #include <opencv2/calib3d/calib3d.hpp>
 
-#include "ImageRecognition.h"
+#include "companion/algo/ImageRecognition.h"
 #include "companion/draw/Lines.h"
 
 /**
@@ -54,9 +54,10 @@ public:
      * @param extractor FeatureExtractor to set.
      * @param matcher FeatureMatcher to set.
      * @param type FeatureMatcher type which is used like FlannBased or Bruteforce.
+     * @param countMatches How much matches need to get an good matching result. Default is by 40.
      */
     FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                    cv::Ptr<cv::DescriptorMatcher> matcher, int type);
+                    cv::Ptr<cv::DescriptorMatcher> matcher, int type, int countMatches = 40);
 
     /**
      * Default destructor.
@@ -79,6 +80,11 @@ private:
     int type;
 
     /**
+     * Indicator how much matches need to get an good matching result.
+     */
+    int countMatches;
+
+    /**
      * FeatureDetector which is used by default ORB is used.
      */
     cv::Ptr<cv::FeatureDetector> detector;
@@ -92,6 +98,8 @@ private:
      * FeatureDescriptor which is used by default FlannBased is used.
      */
     cv::Ptr<cv::DescriptorMatcher> matcher;
+
+protected:
 
     /**
      * Ratio test implementation to improve results from matching to obtain only good results. <br>
@@ -111,6 +119,26 @@ private:
      */
     void symmetry_test(const std::vector<cv::DMatch> &matches1, const std::vector<cv::DMatch> &matches2,
                        std::vector<cv::DMatch> &symMatches);
+
+    void obtainKeypointsFromGoodMatches(std::vector<cv::DMatch> &good_matches,
+                                        std::vector<cv::KeyPoint> &keypoints_object,
+                                        std::vector<cv::KeyPoint> &keypoints_scene,
+                                        std::vector<cv::Point2f> &feature_points_object,
+                                        std::vector<cv::Point2f> &feature_points_scene);
+
+    Drawable* calculateArea(cv::Mat &homography,
+                            cv::Mat &sceneImage,
+                            cv::Mat &objectImage,
+                            FeatureMatchingModel *sModel,
+                            FeatureMatchingModel *cModel);
+
+    Drawable* obtainMatchingResult(cv::Mat &sceneImage,
+                                   cv::Mat &objectImage,
+                                   std::vector<cv::DMatch> &good_matches,
+                                   std::vector<cv::KeyPoint> &keypoints_object,
+                                   std::vector<cv::KeyPoint> &keypoints_scene,
+                                   FeatureMatchingModel *sModel,
+                                   FeatureMatchingModel *cModel);
 };
 
 #endif //COMPANION_FEATUREMATCHING_H

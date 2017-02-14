@@ -9,14 +9,9 @@ void ConsumerStream::run(Companion *companion) {
 
     try {
         processing = companion->getProcessing();
-    } catch (CompanionError::errorCode errorCode) {
-        companion->executeError(errorCode);
-    }
 
-    while (!finished) {
-        try {
+        while (!finished) {
             while (queue.pop(frame)) {
-
                 if(!frame.empty()) {
 
                     if(companion->getSkipFrame() == -1) {
@@ -35,8 +30,8 @@ void ConsumerStream::run(Companion *companion) {
                     finished = true;
                 }
             }
-        } catch (CompanionError::errorCode errorCode) {
-            companion->executeError(errorCode);
         }
+    } catch (CompanionError::errorCode errorCode) {
+        companion->executeError(errorCode);
     }
 }

@@ -16,44 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_CONSUMERSTREAM_H
-#define COMPANION_CONSUMERSTREAM_H
+#ifndef COMPANION_CFEATUREMATCHING_H
+#define COMPANION_CFEATUREMATCHING_H
 
-#include <queue>
-#include <opencv2/core.hpp>
-#include <boost/lockfree/spsc_queue.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/cudafeatures2d.hpp>
 
 #include "companion/algo/ImageRecognition.h"
 #include "companion/algo/cpu/FeatureMatching.h"
-#include "companion/Companion.h"
 
-/**
- * Consumer class implementation for an video stream.
- * @author Andreas Sekulski
- */
-class ConsumerStream {
+class CFeatureMatching : public FeatureMatching {
 
 public:
 
-    /**
-     * Constructor to create an consumer stream class.
-     * @param queue Queue to store all images.
-     */
-    ConsumerStream(boost::lockfree::spsc_queue<cv::Mat> &queue) : queue(queue) {}
+    CFeatureMatching();
+
+    virtual ~CFeatureMatching();
 
     /**
-     * Run method for an thread operation.
-     * @param companion Configuration file which includes search models.
+     * Cuda implementation from feature matching.
+     * @param searchModel Search model to compare.
+     * @param compareModel Compare model to check if contains in search model.
+     * @throws CompanionError::error_code If an error occured in search operation.
      */
-    void run(Companion *companion);
-
-private:
-
-    /**
-     * Boost lockfree queue to obtain stored images from queue.
-     */
-    boost::lockfree::spsc_queue<cv::Mat> &queue;
+    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 
 };
 
-#endif //COMPANION_CONSUMERSTREAM_H
+
+#endif //COMPANION_CFEATUREMATCHING_H

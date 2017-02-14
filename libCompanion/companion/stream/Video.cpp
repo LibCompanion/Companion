@@ -38,6 +38,7 @@ cv::Mat Video::obtainImage() {
 
     // Obtain image frame.
     capture >> frame;
+
     return frame;
 }
 
