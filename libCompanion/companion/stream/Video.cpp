@@ -43,5 +43,5 @@ cv::Mat Video::obtainImage() {
 }
 
 bool Video::isOpen() {
-    capture.isOpened();
+    return capture.isOpened();
 }
