@@ -42,8 +42,9 @@ public:
      * @param companion Configuration class to obtain model entities to verify.
      * @param featureMatching FeatureMatching class.
      * @param scale Scaling factor from frame. Default by one.
+     * @param useCuda True if cuda should be used.
      */
-    ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale = 1);
+    ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale = 1, bool useCuda = false);
 
     /**
      * Destructor
@@ -58,6 +59,11 @@ public:
     virtual std::vector<Drawable*> execute(cv::Mat frame);
 
 private:
+
+    /**
+     * Indicator if cuda should be used in object detection.
+     */
+    bool useCuda;
 
     /**
      * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size

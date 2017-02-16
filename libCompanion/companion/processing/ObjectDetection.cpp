@@ -1,9 +1,10 @@
 #include "ObjectDetection.h"
 
-ObjectDetection::ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale) {
+ObjectDetection::ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale, bool useCuda) {
     this->companion = companion;
     this->featureMatching = featureMatching;
     this->scale = scale;
+    this->useCuda = useCuda;
 }
 
 ObjectDetection::~ObjectDetection() {}
@@ -26,14 +27,30 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
         scene->setImage(frame);
 
         // Check for each model if it is in image...
-        #pragma omp parallel for
-        for(int x = 0; x < models.size(); x++) {
-            object = featureMatching->algo(scene, models.at(x));
-            if(object != nullptr) {
-                // Create old image size
-                object->ratio(frame.cols, frame.rows, oldX, oldY);
-                // Store detected object to vector.
-                objects.push_back(object);
+        // ToDo := Only use if CPU is used
+
+        if(useCuda) {
+            // Cuda don't use multithreading
+            for(int x = 0; x < models.size(); x++) {
+                object = featureMatching->algo(scene, models.at(x));
+                if(object != nullptr) {
+                    // Create old image size
+                    object->ratio(frame.cols, frame.rows, oldX, oldY);
+                    // Store detected object to vector.
+                    objects.push_back(object);
+                }
+            }
+        } else {
+            // Multithreading will be used for CPU usage
+            #pragma omp parallel for
+            for(int x = 0; x < models.size(); x++) {
+                object = featureMatching->algo(scene, models.at(x));
+                if(object != nullptr) {
+                    // Create old image size
+                    object->ratio(frame.cols, frame.rows, oldX, oldY);
+                    // Store detected object to vector.
+                    objects.push_back(object);
+                }
             }
         }
 

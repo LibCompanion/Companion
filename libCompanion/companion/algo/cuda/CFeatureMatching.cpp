@@ -10,6 +10,8 @@ CFeatureMatching::~CFeatureMatching() {
 
 Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
 
+    // ToDo := Better cuda and feature matching cpu abstraction
+
     Drawable *lines = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
 
@@ -19,20 +21,16 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
     cv::Mat scene;
     std::vector<cv::KeyPoint> keypoints_scene, keypoints_object;
 
+    // ToDo := Check if Image is in correct format
     cvtColor(scene_rgb, scene, CV_RGB2GRAY);
 
     FeatureMatchingModel *sModel = dynamic_cast<FeatureMatchingModel *>(searchModel);
     FeatureMatchingModel *cModel = dynamic_cast<FeatureMatchingModel *>(compareModel);
 
+    // ToDo := Code cleanup for IRA
     cModel->setLastPosition(-1, -1, 0, 0);
 
-    // If wrong model types are used...
-    if(!sModel || !cModel) {
-        throw CompanionError::errorCode::wrong_model_type;
-    }
-
     if(ngpus > 0) {
-
         // ---- Cuda start
         cv::cuda::GpuMat gpu_scene(scene);
         cv::cuda::GpuMat gpu_object(object);
@@ -48,9 +46,12 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
         std::vector<std::vector<cv::DMatch>> matches;
         gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
 
+        gpu_scene.release();
+        gpu_object.release();
+        // ---- Cuda end
+
         std::vector<cv::DMatch> good_matches;
         ratio_test(matches, good_matches, 0.80);
-        // ---- Cuda end
 
         lines = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, cModel);
         if(lines == nullptr) {
@@ -62,7 +63,6 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
         }
 
     }
-
 
     return lines;
 }

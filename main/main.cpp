@@ -45,14 +45,13 @@ int main() {
 
     std::vector<std::string> images;
 
-    // ToDo -> Perfomance
-    // Perfomance increase are ProducerConsumer Design Pattern (Libbost) and Frame skipping
+    // ToDo := Segmentation fault by end of video
+    // Perfomance increase are ProducerConsumer Design Pattern (Libbost), Frame skipping and Cuda
     //std::string path = "D:/Data/Master/Testcase/HBF/";
-
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
-    //images.push_back(path + std::string("Sample_Left.jpg"));
-    //images.push_back(path + std::string("Sample_Right.jpg"));
+    images.push_back(path + std::string("Sample_Left.jpg"));
+    images.push_back(path + std::string("Sample_Right.jpg"));
     std::string testVideo = path + std::string("Muelheim_HBF.mp4");
 
 
@@ -95,7 +94,7 @@ int main() {
         //FeatureMatching *recognition = new FeatureMatching(orb, orb, matcher, type);
         FeatureMatching *recognition = new CFeatureMatching();
 
-        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
+        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6, true));
         companion->setSkipFrame(2);
         companion->setResultHandler(callback);
         companion->setErrorHandler(error);
