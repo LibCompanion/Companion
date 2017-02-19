@@ -171,6 +171,8 @@ void FeatureMatching::obtainKeypointsFromGoodMatches(std::vector<cv::DMatch> &go
                                                      std::vector<cv::Point2f> &feature_points_scene) {
     // Get the keypoints from the good matches
     for (int i = 0; i < good_matches.size(); i++) {
+        // ToDo := Segmentation fault if video ends... why... :(
+        // Keypoints object is smaller then scene
         feature_points_scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
         feature_points_object.push_back(keypoints_object[good_matches[i].queryIdx].pt);
     }

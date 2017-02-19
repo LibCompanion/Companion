@@ -3,7 +3,7 @@
 Companion::Companion() {
     source = new Video();
     processing = nullptr;
-    skipFrame = -1;
+    skipFrame = 0;
 }
 
 Companion::~Companion() {
@@ -62,8 +62,8 @@ int Companion::getSkipFrame() const {
 
 void Companion::setSkipFrame(int skipFrame) {
 
-    if(skipFrame < -1) {
-        skipFrame = -1;
+    if(skipFrame <= 0) {
+        skipFrame = 0;
     }
 
     Companion::skipFrame = skipFrame;

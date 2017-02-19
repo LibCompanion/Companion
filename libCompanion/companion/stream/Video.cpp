@@ -30,7 +30,7 @@ void Video::playVideo(std::string url) {
 
 cv::Mat Video::obtainImage() {
 
-    cv::Mat frame = cv::Mat::zeros(cv::Size(1,1), CV_8UC3);
+    cv::Mat frame;
 
     if (!capture.isOpened()) {
         return frame;

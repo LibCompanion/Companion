@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/lockfree/spsc_queue.hpp>
-#include <boost/thread.hpp>
+#include <thread>
 #include <companion/processing/ObjectDetection.h>
-#include <companion/thread/ProducerStream.h>
-#include <companion/thread/ConsumerStream.h>
+#include <companion/thread/StreamWorker.h>
 #include <companion/algo/cuda/CFeatureMatching.h>
 
 void callback(std::vector<Drawable*> objects, cv::Mat frame) {
@@ -86,7 +84,7 @@ int main() {
 
         //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
         //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-        cv::Ptr<cv::ORB> orb = cv::ORB::create(6000);
+        cv::Ptr<cv::ORB> orb = cv::ORB::create(2000);
         //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
         int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
         cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
@@ -95,7 +93,7 @@ int main() {
         FeatureMatching *recognition = new CFeatureMatching();
 
         companion->setProcessing(new ObjectDetection(companion, recognition, 0.6, true));
-        companion->setSkipFrame(2);
+        companion->setSkipFrame(0);
         companion->setResultHandler(callback);
         companion->setErrorHandler(error);
 
@@ -114,12 +112,11 @@ int main() {
         }
 
         // Companion class to execute algorithm
-        boost::lockfree::spsc_queue<cv::Mat> queue(1);
-        ProducerStream ps(queue);
-        ConsumerStream cs(queue);
+        std::queue<cv::Mat> queue;
+        StreamWorker ps(queue);
 
-        boost::thread t1(boost::bind(&ProducerStream::run, &ps, companion));
-        boost::thread t2(boost::bind(&ConsumerStream::run, &cs, companion));
+        std::thread t1(&StreamWorker::consume, &ps, companion);
+        std::thread t2(&StreamWorker::produce, &ps, companion);
         t1.join();
         t2.join();
 

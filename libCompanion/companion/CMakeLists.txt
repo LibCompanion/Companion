@@ -15,11 +15,9 @@ SET(SOURCE
         processing/ImageProcessing.h
         processing/ObjectDetection.cpp processing/ObjectDetection.h
         stream/Video.cpp stream/Video.h
-        thread/ConsumerStream.cpp thread/ConsumerStream.h
-        thread/ProducerStream.cpp thread/ProducerStream.h
+        thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
         util/Util.cpp util/Util.h algo/cuda/CFeatureMatching.cpp algo/cuda/CFeatureMatching.h)
 
 add_library(Companion ${SOURCE})
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
-target_link_libraries(Companion ${OpenCV_LIBS} ${Boost_LIBRARIES})
+target_link_libraries(Companion ${OpenCV_LIBS})
