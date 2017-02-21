@@ -1,6 +1,7 @@
-#include "CFeatureMatching.h"
+#include "CudaFeatureMatching.h"
 
-CFeatureMatching::CFeatureMatching() {
+CFeatureMatching::CFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
+    this->cudaFeatureMatching = cudaFeatureMatching;
 
 }
 
@@ -9,8 +10,6 @@ CFeatureMatching::~CFeatureMatching() {
 }
 
 Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
-
-    // ToDo := Better cuda and feature matching cpu abstraction
 
     Drawable *lines = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
@@ -27,22 +26,21 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
     FeatureMatchingModel *sModel = dynamic_cast<FeatureMatchingModel *>(searchModel);
     FeatureMatchingModel *cModel = dynamic_cast<FeatureMatchingModel *>(compareModel);
 
-    // ToDo := Code cleanup for IRA
+    // ToDo := Code cleanup for IRA in Abstract feature matching and FeatureMatching
     cModel->setLastPosition(-1, -1, 0, 0);
 
     if(ngpus > 0) {
+
         // ---- Cuda start
         cv::cuda::GpuMat gpu_scene(scene);
         cv::cuda::GpuMat gpu_object(object);
-        cv::Ptr<cv::cuda::ORB> orb = cv::cuda::ORB::create(6000);
-        orb->setBlurForDescriptor(true);
 
         cv::cuda::GpuMat gpu_descriptors_scene, gpu_descriptors_object;
 
-        orb->detectAndCompute(gpu_scene, cv::noArray(), keypoints_scene, gpu_descriptors_scene);
-        orb->detectAndCompute(gpu_object, cv::noArray(), keypoints_object, gpu_descriptors_object);
+        cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypoints_scene, gpu_descriptors_scene);
+        cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypoints_object, gpu_descriptors_object);
 
-        cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(orb->defaultNorm());
+        cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(cudaFeatureMatching->defaultNorm());
         std::vector<std::vector<cv::DMatch>> matches;
         gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
 

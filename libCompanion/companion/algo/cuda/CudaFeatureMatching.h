@@ -22,15 +22,21 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/cudafeatures2d.hpp>
 
-#include "companion/algo/ImageRecognition.h"
-#include "companion/algo/cpu/FeatureMatching.h"
+#include "companion/algo/AbstractFeatureMatching.h"
 
-class CFeatureMatching : public FeatureMatching {
+class CFeatureMatching : public AbstractFeatureMatching {
 
 public:
 
-    CFeatureMatching();
+    /**
+     * Constructor to create an cuda based feature matching.
+     * @param cudaFeatureMatching Cuda based feature matching algorithm like cv::cuda::ORB.
+     */
+    CFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
 
+    /**
+     * Destructor
+     */
     virtual ~CFeatureMatching();
 
     /**
@@ -41,7 +47,13 @@ public:
      */
     virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 
-};
+private:
 
+    /**
+     * Cuda feature matching algorithm.
+     */
+    cv::Ptr<cv::Feature2D> cudaFeatureMatching;
+
+};
 
 #endif //COMPANION_CFEATUREMATCHING_H

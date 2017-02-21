@@ -19,7 +19,7 @@
 #include <thread>
 #include <companion/processing/ObjectDetection.h>
 #include <companion/thread/StreamWorker.h>
-#include <companion/algo/cuda/CFeatureMatching.h>
+#include <companion/algo/cuda/CudaFeatureMatching.h>
 
 void callback(std::vector<Drawable*> objects, cv::Mat frame) {
     Drawable *drawable;
@@ -84,16 +84,20 @@ int main() {
 
         //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
         //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-        cv::Ptr<cv::ORB> orb = cv::ORB::create(2000);
+        cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
         //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
         int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
         cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
+
         // ToDo := FeatureMatching setup and param configuration
-        //FeatureMatching *recognition = new FeatureMatching(orb, orb, matcher, type);
-        FeatureMatching *recognition = new CFeatureMatching();
+        //ImageRecognition *recognition = new FeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+
+        cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
+        GPU_ORB->setBlurForDescriptor(true);
+        ImageRecognition *recognition = new CFeatureMatching(GPU_ORB);
 
         companion->setProcessing(new ObjectDetection(companion, recognition, 0.6, true));
-        companion->setSkipFrame(0);
+        companion->setSkipFrame(2);
         companion->setResultHandler(callback);
         companion->setErrorHandler(error);
 
@@ -114,7 +118,7 @@ int main() {
         // Companion class to execute algorithm
         std::queue<cv::Mat> queue;
         StreamWorker ps(queue);
-
+        // ToDo := Maybe run class.
         std::thread t1(&StreamWorker::consume, &ps, companion);
         std::thread t2(&StreamWorker::produce, &ps, companion);
         t1.join();

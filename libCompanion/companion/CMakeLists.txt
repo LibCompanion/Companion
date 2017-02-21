@@ -6,6 +6,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(SOURCE
         Companion.cpp Companion.h
         algo/ImageRecognition.h
+        algo/AbstractFeatureMatching.cpp algo/AbstractFeatureMatching.h
+        algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h
         algo/cpu/FeatureMatching.cpp algo/cpu/FeatureMatching.h
         draw/Drawable.h
         draw/Lines.cpp draw/Lines.h
@@ -17,7 +19,7 @@ SET(SOURCE
         stream/Video.cpp stream/Video.h
         thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
-        util/Util.cpp util/Util.h algo/cuda/CFeatureMatching.cpp algo/cuda/CFeatureMatching.h)
+        util/Util.cpp util/Util.h)
 
 add_library(Companion ${SOURCE})
 target_link_libraries(Companion ${OpenCV_LIBS})

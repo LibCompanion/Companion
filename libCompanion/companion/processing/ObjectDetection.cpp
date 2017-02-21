@@ -1,8 +1,8 @@
 #include "ObjectDetection.h"
 
-ObjectDetection::ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale, bool useCuda) {
+ObjectDetection::ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale, bool useCuda) {
     this->companion = companion;
-    this->featureMatching = featureMatching;
+    this->imageRecognition = imageRecognition;
     this->scale = scale;
     this->useCuda = useCuda;
 }
@@ -32,7 +32,7 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
         if(useCuda) {
             // Cuda don't use multithreading
             for(int x = 0; x < models.size(); x++) {
-                object = featureMatching->algo(scene, models.at(x));
+                object = imageRecognition->algo(scene, models.at(x));
                 if(object != nullptr) {
                     // Create old image size
                     object->ratio(frame.cols, frame.rows, oldX, oldY);
@@ -44,7 +44,7 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
             // Multithreading will be used for CPU usage
             #pragma omp parallel for
             for(int x = 0; x < models.size(); x++) {
-                object = featureMatching->algo(scene, models.at(x));
+                object = imageRecognition->algo(scene, models.at(x));
                 if(object != nullptr) {
                     // Create old image size
                     object->ratio(frame.cols, frame.rows, oldX, oldY);

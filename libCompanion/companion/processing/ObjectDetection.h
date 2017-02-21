@@ -40,11 +40,11 @@ public:
     /**
      * Constructor to create an object detection algorithm implementation.
      * @param companion Configuration class to obtain model entities to verify.
-     * @param featureMatching FeatureMatching class.
+     * @param imageRecognition Image recognition algorithm to use, for example feature matching.
      * @param scale Scaling factor from frame. Default by one.
      * @param useCuda True if cuda should be used.
      */
-    ObjectDetection(Companion *companion, FeatureMatching *featureMatching, float scale = 1, bool useCuda = false);
+    ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale = 1, bool useCuda = false);
 
     /**
      * Destructor
@@ -78,7 +78,7 @@ private:
     /**
      * FeatureMatching algorithm setup.
      */
-    FeatureMatching *featureMatching;
+    ImageRecognition *imageRecognition;
 
 };
 
