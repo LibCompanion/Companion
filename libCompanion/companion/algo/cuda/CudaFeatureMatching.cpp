@@ -64,3 +64,7 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
 
     return lines;
 }
+
+bool CFeatureMatching::isCuda() {
+    return true;
+}

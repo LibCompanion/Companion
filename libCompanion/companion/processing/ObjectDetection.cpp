@@ -1,10 +1,9 @@
 #include "ObjectDetection.h"
 
-ObjectDetection::ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale, bool useCuda) {
+ObjectDetection::ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale) {
     this->companion = companion;
     this->imageRecognition = imageRecognition;
     this->scale = scale;
-    this->useCuda = useCuda;
 }
 
 ObjectDetection::~ObjectDetection() {}
@@ -26,11 +25,9 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
         Util::resizeImage(frame, oldX * scale, oldY * scale);
         scene->setImage(frame);
 
-        // Check for each model if it is in image...
-        // ToDo := Only use if CPU is used
-
-        if(useCuda) {
-            // Cuda don't use multithreading
+        // Check if image recognition implementation is an cuda implementation.
+        if(imageRecognition->isCuda()) {
+            // Cuda usage -> Don't use multithreading
             for(int x = 0; x < models.size(); x++) {
                 object = imageRecognition->algo(scene, models.at(x));
                 if(object != nullptr) {

@@ -132,3 +132,7 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
 
     return lines;
 }
+
+bool FeatureMatching::isCuda() {
+    return false;
+}

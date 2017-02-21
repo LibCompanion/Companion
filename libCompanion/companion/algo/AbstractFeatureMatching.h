@@ -110,6 +110,12 @@ public:
      */
     virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) = 0;
 
+    /**
+     * Indicator if this algorithm use cuda.
+     * @return True if cuda will be used otherwise false.
+     */
+    virtual bool isCuda() = 0;
+
 protected:
 
     /**

@@ -96,7 +96,7 @@ int main() {
         GPU_ORB->setBlurForDescriptor(true);
         ImageRecognition *recognition = new CFeatureMatching(GPU_ORB);
 
-        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6, true));
+        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
         companion->setSkipFrame(2);
         companion->setResultHandler(callback);
         companion->setErrorHandler(error);
