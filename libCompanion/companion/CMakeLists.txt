@@ -8,7 +8,7 @@ SET(SOURCE
         algo/ImageRecognition.h
         algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
         algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h
-        algo/cpu/FeatureMatching.cpp algo/cpu/FeatureMatching.h
+        algo/cpu/CPUFeatureMatching.cpp algo/cpu/CPUFeatureMatching.h
         draw/Drawable.h
         draw/Lines.cpp draw/Lines.h
         draw/Line.cpp draw/Line.h

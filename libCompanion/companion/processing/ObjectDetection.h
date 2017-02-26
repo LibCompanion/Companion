@@ -26,7 +26,7 @@
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/draw/Drawable.h"
 #include "companion/algo/ImageRecognition.h"
-#include "companion/algo/cpu/FeatureMatching.h"
+#include "companion/algo/cpu/CPUFeatureMatching.h"
 #include "companion/Companion.h"
 
 /**
