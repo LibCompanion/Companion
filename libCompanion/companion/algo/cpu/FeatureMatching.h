@@ -21,7 +21,7 @@
 
 #include <opencv2/calib3d/calib3d.hpp>
 
-#include "companion/algo/AbstractFeatureMatching.h"
+#include "companion/algo/abstract/AbstractFeatureMatching.h"
 #include "companion/draw/Lines.h"
 
 /**

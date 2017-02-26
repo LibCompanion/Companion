@@ -23,6 +23,7 @@
 #include <opencv2/opencv.hpp>
 
 #include "Drawable.h"
+#include "companion/util/Util.h"
 
 /**
  * Class implementation to draw an single line.

@@ -19,7 +19,7 @@
 #ifndef COMPANION_ABSTRACTFEATUREMATCHING_H
 #define COMPANION_ABSTRACTFEATUREMATCHING_H
 
-#include "ImageRecognition.h"
+#include "companion/algo/ImageRecognition.h"
 #include <opencv2/calib3d/calib3d.hpp>
 
 #include "companion/draw/Lines.h"

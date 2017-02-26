@@ -1,4 +1,3 @@
-#include <companion/util/Util.h>
 #include "Line.h"
 
 Line::Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness) {

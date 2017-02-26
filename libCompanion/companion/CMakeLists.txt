@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(SOURCE
         Companion.cpp Companion.h
         algo/ImageRecognition.h
-        algo/AbstractFeatureMatching.cpp algo/AbstractFeatureMatching.h
+        algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
         algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h
         algo/cpu/FeatureMatching.cpp algo/cpu/FeatureMatching.h
         draw/Drawable.h

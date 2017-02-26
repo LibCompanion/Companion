@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/cudafeatures2d.hpp>
 
-#include "companion/algo/AbstractFeatureMatching.h"
+#include "companion/algo/abstract/AbstractFeatureMatching.h"
 
 class CFeatureMatching : public AbstractFeatureMatching {
 
