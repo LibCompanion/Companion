@@ -43,7 +43,7 @@ public:
      * Cuda implementation from feature matching.
      * @param searchModel Search model to compare.
      * @param compareModel Compare model to check if contains in search model.
-     * @throws CompanionError::error_code If an error occured in search operation.
+     * @throws CompanionError::error_code If an error occurred in search operation.
      */
     virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
 
