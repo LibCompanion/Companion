@@ -16,9 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <thread>
+#include <companion/Companion.h>
 #include <companion/processing/ObjectDetection.h>
-#include <companion/thread/StreamWorker.h>
 #include <companion/algo/cuda/CudaFeatureMatching.h>
 #include <companion/algo/cpu/CPUFeatureMatching.h>
 
@@ -75,63 +74,51 @@ int main() {
     std::string testVideo = path + std::string("info.mp4");
     */
 
+    // -------------- Setup used processing algo. --------------
+    Companion *companion = new Companion();
+
+    // -------------- BRISK CPU FM --------------
+    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+    int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
+    cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
+    ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
+
+    // -------------- ORB CPU FM --------------
+    //CPU feature matching implementation.
+    //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
+    //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+
+    // -------------- ORB GPU FM - Needs CUDA --------------
+    //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
+    //GPU_ORB->setBlurForDescriptor(true);
+    //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
+
+    // -------------- Image Processing Setup --------------
+    companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
+    companion->setSkipFrame(2);
+    companion->setResultHandler(callback);
+    companion->setErrorHandler(error);
+
+    // Setup video source to obtain images.
+    Video *video = new Video();
+    video->playVideo(testVideo); // Load an video
+    //video->connectToDevice(0); // Realtime stream
+    companion->setSource(video);
+
+    // Store all searched data models
+    FeatureMatchingModel *object;
+    for (auto &image : images) {
+        object = new FeatureMatchingModel();
+        object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+        companion->addModel(object);
+    }
+
+    // Companion class to execute algorithm
+    std::queue<cv::Mat> queue;
+    StreamWorker ps(queue);
+
     try {
-        Companion *companion = new Companion();
-
-        // Setup used processing algo.
-
-        // https://stackoverflow.com/questions/28024048/how-to-get-efficient-result-in-orb-using-opencv-2-4-9
-        // ORB cv::ORB::create(500, 1.2f, 8, 31, 0, 2, cv::ORB::HARRIS_SCORE, 31, 20);
-
-        //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
-        //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-
-        // -------------- BRISK CPU FM --------------
-        cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-        int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
-        cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
-        ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
-
-        // -------------- ORB CPU FM --------------
-        //CPU feature matching implementation.
-        //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
-        //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
-
-        // -------------- ORB GPU FM --------------
-        //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
-        //GPU_ORB->setBlurForDescriptor(true);
-        //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
-
-        // -------------- Image Processing Setup --------------
-        companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
-        companion->setSkipFrame(2);
-        companion->setResultHandler(callback);
-        companion->setErrorHandler(error);
-
-        // Setup video source to obtain images.
-        Video *video = new Video();
-        video->playVideo(testVideo); // Load an video
-        //video->connectToDevice(0); // Realtime stream
-        companion->setSource(video);
-
-        // Store all searched data models
-        FeatureMatchingModel *object;
-        for (auto &image : images) {
-            object = new FeatureMatchingModel();
-            object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
-            companion->addModel(object);
-        }
-
-        // Companion class to execute algorithm
-        std::queue<cv::Mat> queue;
-        StreamWorker ps(queue);
-
-        // ToDo := Maybe run class.
-        std::thread t1(&StreamWorker::consume, &ps, companion);
-        std::thread t2(&StreamWorker::produce, &ps, companion);
-        t1.join();
-        t2.join();
-
+        companion->run(ps);
     } catch (CompanionError::errorCode errorCode) {
         error(errorCode);
     }

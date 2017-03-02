@@ -1,21 +1,22 @@
 #include "StreamWorker.h"
 
-void StreamWorker::produce(Companion *companion) {
+void StreamWorker::produce(Video *video, int skipFrame, std::function<void(CompanionError::errorCode)> errorCallback) {
 
     bool storedFrame;
     int skipFrameNr = 0;
 
     try {
 
-        Video *video = companion->getSource();
         cv::Mat frame = video->obtainImage();
 
         while (!frame.empty()) {
 
-            if(companion->getSkipFrame() > 0) {
+            // If skip frame is not used...
+            if(skipFrame > 0) {
                 storedFrame = storeFrame(frame);
             } else {
-                if(skipFrameNr == companion->getSkipFrame()) {
+                // ... check if skip frame nr is reached
+                if(skipFrameNr == skipFrame) {
                     storedFrame = storeFrame(frame);
                     skipFrameNr = 0;
                 } else {
@@ -37,26 +38,25 @@ void StreamWorker::produce(Companion *companion) {
         cv.notify_all();
 
     } catch (CompanionError::errorCode error) {
-        companion->executeError(error);
+        errorCallback(error);
     }
 }
 
-void StreamWorker::consume(Companion *companion) {
+void StreamWorker::consume(ImageProcessing *processing,
+                           std::function<void(CompanionError::errorCode)> errorCallback,
+                           std::function<void(std::vector<Drawable*>, cv::Mat)> callback) {
 
     cv::Mat frame;
-    ImageProcessing *processing;
     bool isFinished = true;
 
     try {
-        processing = companion->getProcessing();
-
         while (isFinished) {
 
             std::unique_lock<std::mutex> lk(mx);
             cv.wait(lk, [this]{return finished || !queue.empty();});
             frame = queue.front();
             queue.pop();
-            companion->executeResultHandler(processing->execute(frame), frame);
+            callback(processing->execute(frame), frame);
 
             if(finished) {
                 isFinished = finished;
@@ -64,14 +64,14 @@ void StreamWorker::consume(Companion *companion) {
         }
 
     } catch (CompanionError::errorCode errorCode) {
-        companion->executeError(errorCode);
+        errorCallback(errorCode);
     }
 }
 
 bool StreamWorker::storeFrame(cv::Mat &frame) {
     std::lock_guard<std::mutex> lk(mx);
     if(queue.size() >= buffer) {
-        // If buffer full wait and loop current frame and do nothing.
+        // If buffer full try to notify producer and wait current frame and do nothing.
         cv.notify_one();
         return false;
     } else {

@@ -24,7 +24,8 @@
 #include <condition_variable>
 #include <opencv2/core.hpp>
 
-#include "companion/Companion.h"
+#include "companion/processing/ImageProcessing.h"
+#include "companion/draw/Drawable.h"
 #include "companion/stream/Video.h"
 #include "companion/util/CompanionError.h"
 #include "companion/util/Util.h"
@@ -52,15 +53,23 @@ public:
 
     /**
      * Method to produce video stream data and store to his queue.
-     * @param companion Configuration file which includes an video source.
+     * @param video Video source to obtain images.
+     * @param skipFrame Skiping frame rate if set.
+     * @param errorCallback Error callback handler.
      */
-    void produce(Companion *companion);
+    void produce(Video *video,
+                 int skipFrame,
+                 std::function<void(CompanionError::errorCode)> errorCallback);
 
     /**
      * Method to obtain video stream data from stored queue and process it.
      * @param companion Configuration file which includes processing method.
+     * @param errorCallback Error callback handler.
+     * @param callback Callback handler to return results.
      */
-    void consume(Companion *companion);
+    void consume(ImageProcessing *processing,
+                 std::function<void(CompanionError::errorCode)> errorCallback,
+                 std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
 
 private:
 

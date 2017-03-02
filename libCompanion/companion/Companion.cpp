@@ -88,3 +88,10 @@ void Companion::executeError(CompanionError::errorCode code) {
         errorCallback(code);
     }
 }
+
+void Companion::run(StreamWorker &worker) {
+    this->consumer = std::thread(&StreamWorker::consume, &worker, this->getProcessing(), this->errorCallback, this->callback);
+    this->producer = std::thread(&StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->errorCallback);
+    consumer.join();
+    producer.join();
+}

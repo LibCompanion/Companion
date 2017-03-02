@@ -20,7 +20,9 @@
 #define COMPANION_COMPANION_H
 
 #include <functional>
+#include <thread>
 
+#include "companion/thread/StreamWorker.h"
 #include "companion/stream/Video.h"
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/algo/abstract/ImageRecognition.h"
@@ -44,6 +46,13 @@ public:
      * Default destructor.
      */
     virtual ~Companion();
+
+    /**
+     * Executes companion configuration.
+     * @param worker StreamWorker pointer to obtain video images.
+     * @throws error Companion error if invalid configuration is set.
+     */
+    void run(StreamWorker &worker);
 
     /**
      * Obtain video source pointer if set.
@@ -160,6 +169,16 @@ private:
      * Number of frames to skip to process next image.
      */
     int skipFrame;
+
+    /**
+     * Consumer thread to store image data.
+     */
+    std::thread consumer;
+
+    /**
+     * Producer thread to image processing given image data.
+     */
+    std::thread producer;
 
 };
 
