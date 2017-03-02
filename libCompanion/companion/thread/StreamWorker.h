@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_PRODUCERSTREAM_H
-#define COMPANION_PRODUCERSTREAM_H
+#ifndef COMPANION_STREAMWORKER_H
+#define COMPANION_STREAMWORKER_H
 
 #include <queue>
 #include <mutex>
@@ -96,4 +96,4 @@ private:
     bool storeFrame(cv::Mat &frame);
 };
 
-#endif //COMPANION_PRODUCERSTREAM_H
+#endif //COMPANION_STREAMWORKER_H

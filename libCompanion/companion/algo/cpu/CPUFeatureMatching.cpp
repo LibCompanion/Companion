@@ -1,6 +1,6 @@
 #include "CPUFeatureMatching.h"
 
-FeatureMatching::FeatureMatching() {
+CPUFeatureMatching::CPUFeatureMatching() {
 
     this->detector = cv::ORB::create();
     this->extractor = cv::BRISK::create();
@@ -9,7 +9,7 @@ FeatureMatching::FeatureMatching() {
     this->countMatches = 40;
 }
 
-FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
+CPUFeatureMatching::CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
                                  cv::Ptr<cv::DescriptorMatcher> matcher, int type, int countMatches) {
     this->detector = detector;
     this->extractor = extractor;
@@ -18,9 +18,9 @@ FeatureMatching::FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<
     this->countMatches = countMatches;
 }
 
-FeatureMatching::~FeatureMatching() {}
+CPUFeatureMatching::~CPUFeatureMatching() {}
 
-Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
+Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
 
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
@@ -133,6 +133,6 @@ Drawable *FeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogni
     return lines;
 }
 
-bool FeatureMatching::isCuda() {
+bool CPUFeatureMatching::isCuda() {
     return false;
 }

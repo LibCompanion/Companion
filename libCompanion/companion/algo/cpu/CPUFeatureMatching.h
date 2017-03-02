@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_FEATUREMATCHING_H
-#define COMPANION_FEATUREMATCHING_H
+#ifndef COMPANION_CPUFEATUREMATCHING_H
+#define COMPANION_CPUFEATUREMATCHING_H
 
 #include <opencv2/calib3d/calib3d.hpp>
 
@@ -28,7 +28,7 @@
  * Feature matching algo implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
  * @author Andreas Sekulski
  */
-class FeatureMatching : public AbstractFeatureMatching {
+class CPUFeatureMatching : public AbstractFeatureMatching {
 
 public:
 
@@ -36,7 +36,7 @@ public:
      * Default constructor to create feature matching algorithm implementation. Following default settings are used:<br>
      * FeatureDetector = ORB, FeatureExtractor = BRISK, FeatureMatcher = FlannBased
      */
-    FeatureMatching();
+    CPUFeatureMatching();
 
     /**
      *
@@ -56,13 +56,13 @@ public:
      * @param type FeatureMatcher type which is used like FlannBased or Bruteforce.
      * @param countMatches How much matches need to get an good matching result. Default is by 40.
      */
-    FeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
+    CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
                     cv::Ptr<cv::DescriptorMatcher> matcher, int type, int countMatches = 40);
 
     /**
      * Default destructor.
      */
-    virtual ~FeatureMatching();
+    virtual ~CPUFeatureMatching();
 
     /**
      * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
@@ -102,4 +102,4 @@ private:
 
 };
 
-#endif //COMPANION_FEATUREMATCHING_H
+#endif //COMPANION_CPUFEATUREMATCHING_H

@@ -16,15 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_CFEATUREMATCHING_H
-#define COMPANION_CFEATUREMATCHING_H
+#ifndef COMPANION_CUDAFEATUREMATCHING_H
+#define COMPANION_CUDAFEATUREMATCHING_H
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/cudafeatures2d.hpp>
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
 
-class CFeatureMatching : public AbstractFeatureMatching {
+class CudaFeatureMatching : public AbstractFeatureMatching {
 
 public:
 
@@ -32,12 +32,12 @@ public:
      * Constructor to create an cuda based feature matching.
      * @param cudaFeatureMatching Cuda based feature matching algorithm like cv::cuda::ORB.
      */
-    CFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
+    CudaFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
 
     /**
      * Destructor
      */
-    virtual ~CFeatureMatching();
+    virtual ~CudaFeatureMatching();
 
     /**
      * Cuda implementation from feature matching.
@@ -62,4 +62,4 @@ private:
 
 };
 
-#endif //COMPANION_CFEATUREMATCHING_H
+#endif //COMPANION_CUDAFEATUREMATCHING_H

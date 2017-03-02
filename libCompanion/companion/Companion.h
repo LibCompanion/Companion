@@ -23,7 +23,7 @@
 
 #include "companion/stream/Video.h"
 #include "companion/model/ImageRecognitionModel.h"
-#include "companion/algo/ImageRecognition.h"
+#include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
 
 /**
@@ -35,36 +35,98 @@ class Companion {
 
 public:
 
+    /**
+     * Constructor to create an companion helper class to start image processing setup.
+     */
     Companion();
 
+    /**
+     * Default destructor.
+     */
     virtual ~Companion();
 
+    /**
+     * Obtain video source pointer if set.
+     * @return If video source is set an valid pointer will be returned otherwise an nullptr.
+     */
     Video *getSource() const;
 
+    /**
+     * Set video soutce to companion.
+     * @param source Video source to set like an camera or video.
+     */
     void setSource(Video *source);
 
+    /**
+     * Add searching model type. For example an object (feature) which should be detected.
+     * @param model Model to search.
+     */
     void addModel(ImageRecognitionModel *model);
 
+    /**
+     * Remove searched model.
+     * @param model Model to remove.
+     */
     void removeModel(ImageRecognitionModel *model);
 
+    /**
+     * Clear all models which are searched.
+     */
     void clearModels();
 
+    /**
+     * Get model vector which contains all searched models.
+     * @return Vector from all searched models, if no models are set this vector is empty.
+     */
     const std::vector<ImageRecognitionModel *> &getModels() const;
 
+    /**
+     * Gets current processing algorithm which should be used.
+     * @return Image processing algorithm which should be used if set, otherwise an nullptr.
+     */
     ImageProcessing *getProcessing() const;
 
+    /**
+     * Set image processing algorithm for example ObjectDetection.
+     * @param processing Image processing algorithm to use.
+     */
     void setProcessing(ImageProcessing *processing);
 
+    /**
+     * Get skip frame rate.
+     * @return Skirp frame rate, how many frames should be skipped.
+     */
     int getSkipFrame() const;
 
+    /**
+     * Sets skip frame rate.
+     * @param skipFrame Number of frames which should be skipped after image processing should be used.
+     */
     void setSkipFrame(int skipFrame);
 
+    /**
+     * Sets an given result handler.
+     * @param callback Function pointer which contains result event handler.
+     */
     void setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
 
+    /**
+     * Executes result handler.
+     * @param objects Result objects from image processing to send to result handler.
+     * @param frame Current frame from detected objects.
+     */
     void executeResultHandler(std::vector<Drawable*> objects, cv::Mat frame);
 
+    /**
+     * Sets an error callback handler.
+     * @param callback Error handler to set.
+     */
     void setErrorHandler(std::function<void(CompanionError::errorCode)> callback);
 
+    /**
+     * Execution from error handler.
+     * @param code Companion error code.
+     */
     void executeError(CompanionError::errorCode code);
 
 private:

@@ -20,6 +20,7 @@
 #include <companion/processing/ObjectDetection.h>
 #include <companion/thread/StreamWorker.h>
 #include <companion/algo/cuda/CudaFeatureMatching.h>
+#include <companion/algo/cpu/CPUFeatureMatching.h>
 
 void callback(std::vector<Drawable*> objects, cv::Mat frame) {
     Drawable *drawable;
@@ -84,24 +85,30 @@ int main() {
 
         //int nfeatures=500, float scaleFactor=1.2f, int nlevels=8, int edgeThreshold=31,
         //int firstLevel=0, int WTA_K=2, int scoreType=ORB::HARRIS_SCORE, int patchSize=31, int fastThreshold=20
-        cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
-        //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+
+        // -------------- BRISK CPU FM --------------
+        cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
         int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
         cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
+        ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
 
-        // ToDo := FeatureMatching setup and param configuration
-        //ImageRecognition *recognition = new FeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+        // -------------- ORB CPU FM --------------
+        //CPU feature matching implementation.
+        //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
+        //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
 
-        cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
-        GPU_ORB->setBlurForDescriptor(true);
-        ImageRecognition *recognition = new CFeatureMatching(GPU_ORB);
+        // -------------- ORB GPU FM --------------
+        //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
+        //GPU_ORB->setBlurForDescriptor(true);
+        //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
 
+        // -------------- Image Processing Setup --------------
         companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
         companion->setSkipFrame(2);
         companion->setResultHandler(callback);
         companion->setErrorHandler(error);
 
-        // Generate video source
+        // Setup video source to obtain images.
         Video *video = new Video();
         video->playVideo(testVideo); // Load an video
         //video->connectToDevice(0); // Realtime stream
@@ -118,6 +125,7 @@ int main() {
         // Companion class to execute algorithm
         std::queue<cv::Mat> queue;
         StreamWorker ps(queue);
+
         // ToDo := Maybe run class.
         std::thread t1(&StreamWorker::consume, &ps, companion);
         std::thread t2(&StreamWorker::produce, &ps, companion);

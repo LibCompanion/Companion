@@ -1,15 +1,15 @@
 #include "CudaFeatureMatching.h"
 
-CFeatureMatching::CFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
+CudaFeatureMatching::CudaFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
     this->cudaFeatureMatching = cudaFeatureMatching;
 
 }
 
-CFeatureMatching::~CFeatureMatching() {
+CudaFeatureMatching::~CudaFeatureMatching() {
 
 }
 
-Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
+Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
 
     Drawable *lines = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
@@ -65,6 +65,6 @@ Drawable* CFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecogn
     return lines;
 }
 
-bool CFeatureMatching::isCuda() {
+bool CudaFeatureMatching::isCuda() {
     return true;
 }
