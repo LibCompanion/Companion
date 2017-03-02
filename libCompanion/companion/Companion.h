@@ -56,7 +56,8 @@ public:
 
     /**
      * Obtain video source pointer if set.
-     * @return If video source is set an valid pointer will be returned otherwise an nullptr.
+     * @throws CompanionError::errorCode Companion error code if video source is not set.
+     * @return Video source to obtain images.
      */
     Video *getSource() const;
 
@@ -91,7 +92,8 @@ public:
 
     /**
      * Gets current processing algorithm which should be used.
-     * @return Image processing algorithm which should be used if set, otherwise an nullptr.
+     * @throws CompanionError::errorCode Companion error code if image processing is not set.
+     * @return Image processing algorithm which should be used.
      */
     ImageProcessing *getProcessing() const;
 
@@ -120,11 +122,11 @@ public:
     void setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
 
     /**
-     * Executes result handler.
-     * @param objects Result objects from image processing to send to result handler.
-     * @param frame Current frame from detected objects.
+     * Gets an callback handler if set.
+     * @throws CompanionError::errorCode Companion error code if callback is not set.
+     * @return An callback handler if set.
      */
-    void executeResultHandler(std::vector<Drawable*> objects, cv::Mat frame);
+    const std::function<void(std::vector<Drawable *>, cv::Mat)> &getCallback() const;
 
     /**
      * Sets an error callback handler.
@@ -133,10 +135,11 @@ public:
     void setErrorHandler(std::function<void(CompanionError::errorCode)> callback);
 
     /**
-     * Execution from error handler.
-     * @param code Companion error code.
+     * Get error callback if exists.
+     * @throws CompanionError::errorCode Companion error code if callback is not set.
+     * @return Error callback if set.
      */
-    void executeError(CompanionError::errorCode code);
+    const std::function<void(CompanionError::errorCode)> &getErrorCallback() const;
 
 private:
 

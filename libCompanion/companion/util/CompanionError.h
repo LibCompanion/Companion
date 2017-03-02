@@ -37,7 +37,8 @@ namespace CompanionError {
         invalid_companion_config, ///< If given configuration is invalid.
         video_src_not_set, ///< If given video source is not set.
         invalid_video_src, ///< If given video source is invalid like an error path.
-        no_image_processing_algo_set ///< If no image processing algo is used.
+        no_image_processing_algo_set, ///< If no image processing algo is used.
+        no_handler_set ///< If no callback handler is set.
     };
 
     /**
@@ -82,6 +83,9 @@ namespace CompanionError {
                 break;
             case errorCode::no_image_processing_algo_set:
                 error = "No image processing algorithm is used.";
+                break;
+            case errorCode::no_handler_set:
+                error = "No callback handler set";
                 break;
         }
 

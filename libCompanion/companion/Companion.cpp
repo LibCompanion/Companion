@@ -73,25 +73,31 @@ void Companion::setResultHandler(std::function<void(std::vector<Drawable*>, cv::
     Companion::callback = callback;
 }
 
-void Companion::executeResultHandler(std::vector<Drawable*> objects, cv::Mat frame) {
-    if(callback) {
-        callback(objects, frame);
-    }
-}
-
 void Companion::setErrorHandler(std::function<void(CompanionError::errorCode)> callback) {
     Companion::errorCallback = callback;
 }
 
-void Companion::executeError(CompanionError::errorCode code) {
-    if(errorCallback) {
-        errorCallback(code);
-    }
-}
-
 void Companion::run(StreamWorker &worker) {
-    this->consumer = std::thread(&StreamWorker::consume, &worker, this->getProcessing(), this->errorCallback, this->callback);
-    this->producer = std::thread(&StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->errorCallback);
+    this->consumer = std::thread(&StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
+    this->producer = std::thread(&StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
     consumer.join();
     producer.join();
+}
+
+const std::function<void(std::vector<Drawable *>, cv::Mat)> &Companion::getCallback() const {
+
+    if(!callback) {
+        throw CompanionError::errorCode::no_handler_set;
+    }
+
+    return callback;
+}
+
+const std::function<void(CompanionError::errorCode)> &Companion::getErrorCallback() const {
+
+    if(!errorCallback) {
+        throw CompanionError::errorCode::no_handler_set;
+    }
+
+    return errorCallback;
 }
