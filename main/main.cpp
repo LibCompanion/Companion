@@ -43,8 +43,15 @@ int main() {
 
     std::vector<std::string> images;
 
-    // ToDo := Segmentation fault by end of video
+    // NPA Example - Only Realtime
+    /*
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/NPA_REAL/";
+    images.push_back(path + std::string("Andy.jpg"));
+    //images.push_back(path + std::string("Black_Andy.jpg"));
+    */
+
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost), Frame skipping and Cuda
+
     //std::string path = "D:/Data/Master/Testcase/HBF/";
     std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Middle.jpg"));
@@ -76,12 +83,12 @@ int main() {
 
     // -------------- Setup used processing algo. --------------
     Companion *companion = new Companion();
-
-    // -------------- BRISK CPU FM --------------
-    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
-    ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
+
+    // -------------- BRISK CPU FM --------------
+    //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+    //ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
@@ -89,20 +96,20 @@ int main() {
     //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
-    //GPU_ORB->setBlurForDescriptor(true);
-    //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
+    cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
+    GPU_ORB->setBlurForDescriptor(true);
+    ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
 
     // -------------- Image Processing Setup --------------
-    companion->setProcessing(new ObjectDetection(companion, recognition, 0.6));
+    companion->setProcessing(new ObjectDetection(companion, recognition, 1));
     companion->setSkipFrame(2);
     companion->setResultHandler(callback);
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
     Video *video = new Video();
-    video->playVideo(testVideo); // Load an video
-    //video->connectToDevice(0); // Realtime stream
+    //video->playVideo(testVideo); // Load an video
+    video->connectToDevice(0); // Realtime stream
     companion->setSource(video);
 
     // Store all searched data models
@@ -110,7 +117,9 @@ int main() {
     for (auto &image : images) {
         object = new FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
-        companion->addModel(object);
+        if(!companion->addModel(object)) {
+            std::cout << "Model not added";
+        }
     }
 
     // Companion class to execute algorithm

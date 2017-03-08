@@ -25,10 +25,14 @@ void Companion::setSource(Video *source) {
     Companion::source = source;
 }
 
-void Companion::addModel(ImageRecognitionModel *model) {
+bool Companion::addModel(ImageRecognitionModel *model) {
+
     if(!model->getImage().empty()) {
         models.push_back(model);
+        return true;
     }
+
+    return false;
 }
 
 void Companion::removeModel(ImageRecognitionModel *model) {

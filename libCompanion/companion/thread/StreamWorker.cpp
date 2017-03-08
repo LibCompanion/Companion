@@ -47,22 +47,24 @@ void StreamWorker::consume(ImageProcessing *processing,
                            std::function<void(std::vector<Drawable*>, cv::Mat)> callback) {
 
     cv::Mat frame;
-    bool isFinished = true;
+    bool isFinished = false;
 
     try {
-        while (isFinished) {
+        while (!isFinished) {
 
             std::unique_lock<std::mutex> lk(mx);
             cv.wait(lk, [this]{return finished || !queue.empty();});
-            frame = queue.front();
-            queue.pop();
-            callback(processing->execute(frame), frame);
+
+            if(!queue.empty()) {
+                frame = queue.front();
+                queue.pop();
+                callback(processing->execute(frame), frame);
+            }
 
             if(finished) {
                 isFinished = finished;
             }
         }
-
     } catch (CompanionError::errorCode errorCode) {
         errorCallback(errorCode);
     }

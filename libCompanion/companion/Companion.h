@@ -70,8 +70,9 @@ public:
     /**
      * Add searching model type. For example an object (feature) which should be detected.
      * @param model Model to search.
+     * @return True if model is added false if not.
      */
-    void addModel(ImageRecognitionModel *model);
+    bool addModel(ImageRecognitionModel *model);
 
     /**
      * Remove searched model.
@@ -117,6 +118,10 @@ public:
 
     /**
      * Sets an given result handler.
+     *
+     * Result handler return an set from all detected objects as an vector and frame. If video processing is finished
+     * the boolean will be returned true in last image processing.
+     *
      * @param callback Function pointer which contains result event handler.
      */
     void setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
