@@ -82,10 +82,16 @@ void Companion::setErrorHandler(std::function<void(CompanionError::errorCode)> c
 }
 
 void Companion::run(StreamWorker &worker) {
+    this->worker = &worker;
+    // Run new worker class.
     this->consumer = std::thread(&StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
     this->producer = std::thread(&StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
     consumer.join();
     producer.join();
+}
+
+void Companion::stop() {
+    worker->stop();
 }
 
 const std::function<void(std::vector<Drawable *>, cv::Mat)> &Companion::getCallback() const {

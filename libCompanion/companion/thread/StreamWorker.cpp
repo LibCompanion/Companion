@@ -1,6 +1,6 @@
 #include "StreamWorker.h"
 
-void StreamWorker::produce(Video *video, int skipFrame, std::function<void(CompanionError::errorCode)> errorCallback) {
+void StreamWorker::produce(Video *video, int skipFrame, std::function<ERROR_CALLBACK> errorCallback) {
 
     bool storedFrame;
     int skipFrameNr = 0;
@@ -9,7 +9,7 @@ void StreamWorker::produce(Video *video, int skipFrame, std::function<void(Compa
 
         cv::Mat frame = video->obtainImage();
 
-        while (!frame.empty()) {
+        while (!frame.empty() && !finished) {
 
             // If skip frame is not used...
             if(skipFrame > 0) {
@@ -43,8 +43,8 @@ void StreamWorker::produce(Video *video, int skipFrame, std::function<void(Compa
 }
 
 void StreamWorker::consume(ImageProcessing *processing,
-                           std::function<void(CompanionError::errorCode)> errorCallback,
-                           std::function<void(std::vector<Drawable*>, cv::Mat)> callback) {
+                           std::function<ERROR_CALLBACK> errorCallback,
+                           std::function<SUCCESS_CALLBACK> callback) {
 
     cv::Mat frame;
     bool isFinished = false;
@@ -80,5 +80,15 @@ bool StreamWorker::storeFrame(cv::Mat &frame) {
         queue.push(frame);
         cv.notify_one();
         return true;
+    }
+}
+
+bool StreamWorker::isRunning() {
+    return !finished;
+}
+
+void StreamWorker::stop() {
+    if(isRunning()) {
+        finished = true;
     }
 }

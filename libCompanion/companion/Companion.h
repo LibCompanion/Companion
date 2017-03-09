@@ -27,6 +27,7 @@
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
+#include "companion/util/Definitions.h"
 
 /**
  * Companion class to setup an image processing search.
@@ -53,6 +54,11 @@ public:
      * @throws error Companion error if invalid configuration is set.
      */
     void run(StreamWorker &worker);
+
+    /**
+     * Stops current running stream worker if it's executes.
+     */
+    void stop();
 
     /**
      * Obtain video source pointer if set.
@@ -124,39 +130,39 @@ public:
      *
      * @param callback Function pointer which contains result event handler.
      */
-    void setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
+    void setResultHandler(std::function<SUCCESS_CALLBACK> callback);
 
     /**
      * Gets an callback handler if set.
      * @throws CompanionError::errorCode Companion error code if callback is not set.
      * @return An callback handler if set.
      */
-    const std::function<void(std::vector<Drawable *>, cv::Mat)> &getCallback() const;
+    const std::function<SUCCESS_CALLBACK> &getCallback() const;
 
     /**
      * Sets an error callback handler.
      * @param callback Error handler to set.
      */
-    void setErrorHandler(std::function<void(CompanionError::errorCode)> callback);
+    void setErrorHandler(std::function<ERROR_CALLBACK> callback);
 
     /**
      * Get error callback if exists.
      * @throws CompanionError::errorCode Companion error code if callback is not set.
      * @return Error callback if set.
      */
-    const std::function<void(CompanionError::errorCode)> &getErrorCallback() const;
+    const std::function<ERROR_CALLBACK> &getErrorCallback() const;
 
 private:
 
     /**
      * Callback event handler to send results back to main application.
      */
-    std::function<void(std::vector<Drawable*>, cv::Mat)> callback;
+    std::function<SUCCESS_CALLBACK> callback;
 
     /**
      * Callback for an error.
      */
-    std::function<void(CompanionError::errorCode)> errorCallback;
+    std::function<ERROR_CALLBACK> errorCallback;
 
     /**
      * Video source to obtain images from an device.
@@ -187,6 +193,11 @@ private:
      * Producer thread to image processing given image data.
      */
     std::thread producer;
+
+    /**
+     * Stream worker which runs an single job.
+     */
+    StreamWorker *worker;
 
 };
 

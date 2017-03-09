@@ -92,24 +92,24 @@ int main() {
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
-    //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
-    //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+    cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
+    ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
-    GPU_ORB->setBlurForDescriptor(true);
-    ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
+    //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
+    //GPU_ORB->setBlurForDescriptor(true);
+    //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new ObjectDetection(companion, recognition, 1));
-    companion->setSkipFrame(2);
+    companion->setSkipFrame(3);
     companion->setResultHandler(callback);
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
     Video *video = new Video();
-    //video->playVideo(testVideo); // Load an video
-    video->connectToDevice(0); // Realtime stream
+    video->playVideo(testVideo); // Load an video
+    //video->connectToDevice(0); // Realtime stream
     companion->setSource(video);
 
     // Store all searched data models
@@ -131,6 +131,7 @@ int main() {
     } catch (CompanionError::errorCode errorCode) {
         error(errorCode);
     }
+
 
     return 0;
 }

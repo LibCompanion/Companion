@@ -29,6 +29,7 @@
 #include "companion/stream/Video.h"
 #include "companion/util/CompanionError.h"
 #include "companion/util/Util.h"
+#include "companion/util/Definitions.h"
 
 /**
  * Stream worker class implementation to produce and consume images from an video source.
@@ -59,7 +60,7 @@ public:
      */
     void produce(Video *video,
                  int skipFrame,
-                 std::function<void(CompanionError::errorCode)> errorCallback);
+                 std::function<ERROR_CALLBACK> errorCallback);
 
     /**
      * Method to obtain video stream data from stored queue and process it.
@@ -68,8 +69,19 @@ public:
      * @param callback Callback handler to return results.
      */
     void consume(ImageProcessing *processing,
-                 std::function<void(CompanionError::errorCode)> errorCallback,
-                 std::function<void(std::vector<Drawable*>, cv::Mat)> callback);
+                 std::function<ERROR_CALLBACK> errorCallback,
+                 std::function<SUCCESS_CALLBACK> callback);
+
+    /**
+     * Checks if worker class is running.
+     * @return True if worker is running otherwise false.
+     */
+    bool isRunning();
+
+    /**
+     * Stops worker if its running.
+     */
+    void stop();
 
 private:
 

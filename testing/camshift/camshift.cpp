@@ -86,9 +86,9 @@ int main( int argc, const char** argv )
         return 0;
     }
     int camNum = parser.get<int>(0);
-    cap.open(camNum);
-    //cap.open("D:/Data/Master/Testcase/UNI/UG.mp4");
-
+    //cap.open(camNum);
+    cap.open("/home/asekulsk/Dokumente/Master/Testcase/HBF/Muelheim_HBF.mp4");
+    //cap.open("/home/asekulsk/Dokumente/Master/Testcase/IFIS/info.mp4");
 
     if( !cap.isOpened() )
     {
