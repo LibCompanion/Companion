@@ -17,9 +17,11 @@
  */
 
 #include <companion/Companion.h>
-#include <companion/processing/ObjectDetection.h>
+#include <companion/processing/2D/ObjectDetection.h>
 #include <companion/algo/cuda/CudaFeatureMatching.h>
 #include <companion/algo/cpu/CPUFeatureMatching.h>
+#include <companion/stream/Video.h>
+#include <companion/stream/Image.h>
 
 void callback(std::vector<Drawable*> objects, cv::Mat frame) {
     Drawable *drawable;
@@ -87,13 +89,13 @@ int main() {
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
-    //cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-    //ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
+    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
+    ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
-    cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
-    ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+    //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
+    //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
     //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
@@ -102,15 +104,29 @@ int main() {
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new ObjectDetection(companion, recognition, 1));
-    companion->setSkipFrame(3);
+    companion->setSkipFrame(2);
     companion->setResultHandler(callback);
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    Video *video = new Video();
-    video->playVideo(testVideo); // Load an video
-    //video->connectToDevice(0); // Realtime stream
-    companion->setSource(video);
+    //Stream *stream = new Video(testVideo); // Load an video
+    //Stream *stream = new Video(0); // Realtime stream
+
+    // Setup example for an streaming data from images.
+    Image *stream = new Image();
+    for(int i = 1; i <= 432; i++ ) {
+        std::string fileNr;
+        if(i < 10) {
+            fileNr = "000" + std::to_string(i);
+        } else if(i < 100) {
+            fileNr = "00" + std::to_string(i);
+        } else {
+            fileNr = "0" + std::to_string(i);
+        }
+        stream->addImagePath("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
+    }
+
+    companion->setSource(stream);
 
     // Store all searched data models
     FeatureMatchingModel *object;

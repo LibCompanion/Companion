@@ -16,53 +16,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_VIDEO_CAPTURE_H
-#define COMPANION_VIDEO_CAPTURE_H
-
-#include <opencv2/opencv.hpp>
-
-#include "Stream.h"
-#include "companion/util/CompanionError.h"
+#ifndef COMPANION_STREAM_H
+#define COMPANION_STREAM_H
 
 /**
- * Video streaming OpenCV realization to obtain images from an video or livestream.
+ * Data stream interface class to obtain image processing data for example from an video or an set of images.
  * @author Andreas Sekulski
  */
-class Video : public Stream {
+class Stream {
 
 public:
-
-    /**
-      * Connects to an given physical device.
-      * @param device Device number to connect.
-      * @throws CompanionError::error_code If wrong device number is selected.
-      */
-    Video(int device);
-
-    /**
-     * Plays an video stream from given url.
-     * @param url Video path to stream.
-     * @throws CompanionError::error_code If invalid url is used.
-     */
-    Video(std::string url);
-
-    /**
-     * Default destructor.
-     */
-    virtual ~Video();
 
     /**
      * Obtain next image from open video stream.
      * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
      */
-    cv::Mat obtainImage();
-
-private:
-
-    /**
-     * Stores video device or video streaming.
-     */
-    cv::VideoCapture capture;
+    virtual cv::Mat obtainImage() = 0;
 };
 
-#endif //COMPANION_VIDEO_CAPTURE_H
+#endif //COMPANION_STREAM_H

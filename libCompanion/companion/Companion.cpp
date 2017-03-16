@@ -1,7 +1,7 @@
 #include "Companion.h"
 
 Companion::Companion() {
-    source = new Video();
+    source = nullptr;
     processing = nullptr;
     skipFrame = 0;
 }
@@ -12,16 +12,16 @@ Companion::~Companion() {
     delete processing;
 }
 
-Video *Companion::getSource() const {
+Stream *Companion::getSource() const {
 
-    if(!source->isOpen()) {
+    if(!source) {
         throw CompanionError::errorCode::video_src_not_set;
     }
 
     return source;
 }
 
-void Companion::setSource(Video *source) {
+void Companion::setSource(Stream *source) {
     Companion::source = source;
 }
 

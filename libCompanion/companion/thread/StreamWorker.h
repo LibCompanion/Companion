@@ -26,7 +26,7 @@
 
 #include "companion/processing/ImageProcessing.h"
 #include "companion/draw/Drawable.h"
-#include "companion/stream/Video.h"
+#include "companion/stream/Stream.h"
 #include "companion/util/CompanionError.h"
 #include "companion/util/Util.h"
 #include "companion/util/Definitions.h"
@@ -54,11 +54,11 @@ public:
 
     /**
      * Method to produce video stream data and store to his queue.
-     * @param video Video source to obtain images.
+     * @param stream Stream source to obtain images.
      * @param skipFrame Skiping frame rate if set.
      * @param errorCallback Error callback handler.
      */
-    void produce(Video *video,
+    void produce(Stream *stream,
                  int skipFrame,
                  std::function<ERROR_CALLBACK> errorCallback);
 

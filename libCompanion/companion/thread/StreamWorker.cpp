@@ -1,13 +1,13 @@
 #include "StreamWorker.h"
 
-void StreamWorker::produce(Video *video, int skipFrame, std::function<ERROR_CALLBACK> errorCallback) {
+void StreamWorker::produce(Stream *stream, int skipFrame, std::function<ERROR_CALLBACK> errorCallback) {
 
     bool storedFrame;
     int skipFrameNr = 0;
 
     try {
 
-        cv::Mat frame = video->obtainImage();
+        cv::Mat frame = stream->obtainImage();
 
         while (!frame.empty() && !finished) {
 
@@ -29,7 +29,7 @@ void StreamWorker::produce(Video *video, int skipFrame, std::function<ERROR_CALL
             // If frame was stored or skipped...
             if(storedFrame) {
                 // obtain next frame to store.
-                frame = video->obtainImage();
+                frame = stream->obtainImage();
             }
         }
 

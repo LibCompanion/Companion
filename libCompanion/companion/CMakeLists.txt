@@ -16,8 +16,10 @@ SET(SOURCE
         model/FeatureMatchingModel.cpp model/FeatureMatchingModel.h
         model/ImageRecognitionModel.cpp model/ImageRecognitionModel.h
         processing/ImageProcessing.h
-        processing/ObjectDetection.cpp processing/ObjectDetection.h
+        processing/2D/ObjectDetection.cpp processing/2D/ObjectDetection.h
+        stream/Stream.h
         stream/Video.cpp stream/Video.h
+        stream/Image.cpp stream/Image.h
         thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
         util/Util.cpp util/Util.h

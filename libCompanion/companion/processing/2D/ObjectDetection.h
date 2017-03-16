@@ -22,14 +22,15 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 
-#include "ImageProcessing.h"
+#include "companion/processing/ImageProcessing.h"
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/draw/Drawable.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/Companion.h"
 
 /**
- * Object detection implementation which includes feature matching algo.
+ * 2D Object detection implementation.
+ *
  * @author Andreas Sekulski
  */
 class ObjectDetection : public ImageProcessing {

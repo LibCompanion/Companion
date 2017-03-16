@@ -23,7 +23,7 @@
 #include <thread>
 
 #include "companion/thread/StreamWorker.h"
-#include "companion/stream/Video.h"
+#include "companion/stream/Stream.h"
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
@@ -61,17 +61,17 @@ public:
     void stop();
 
     /**
-     * Obtain video source pointer if set.
+     * Obtain streaming source pointer if set.
      * @throws CompanionError::errorCode Companion error code if video source is not set.
-     * @return Video source to obtain images.
+     * @return Streaming source to obtain images.
      */
-    Video *getSource() const;
+    Stream *getSource() const;
 
     /**
-     * Set video soutce to companion.
+     * Set streaming source to companion.
      * @param source Video source to set like an camera or video.
      */
-    void setSource(Video *source);
+    void setSource(Stream *source);
 
     /**
      * Add searching model type. For example an object (feature) which should be detected.
@@ -165,9 +165,9 @@ private:
     std::function<ERROR_CALLBACK> errorCallback;
 
     /**
-     * Video source to obtain images from an device.
+     * Data stream source to obtain images.
      */
-    Video *source;
+    Stream *source;
 
     /**
      * Search models to detect objects from source.

@@ -16,40 +16,38 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_VIDEO_CAPTURE_H
-#define COMPANION_VIDEO_CAPTURE_H
+#ifndef COMPANION_IMAGE_H
+#define COMPANION_IMAGE_H
 
+#include <string>
+#include <vector>
 #include <opencv2/opencv.hpp>
 
 #include "Stream.h"
-#include "companion/util/CompanionError.h"
 
 /**
- * Video streaming OpenCV realization to obtain images from an video or livestream.
+ * Streaming class implementation for an subset from images.
  * @author Andreas Sekulski
  */
-class Video : public Stream {
+class Image : public Stream {
 
 public:
 
     /**
-      * Connects to an given physical device.
-      * @param device Device number to connect.
-      * @throws CompanionError::error_code If wrong device number is selected.
-      */
-    Video(int device);
+     * Default constructor to create an empty image list.
+     */
+    Image();
 
     /**
-     * Plays an video stream from given url.
-     * @param url Video path to stream.
-     * @throws CompanionError::error_code If invalid url is used.
+     * Default destructor;
      */
-    Video(std::string url);
+    ~Image();
 
     /**
-     * Default destructor.
+     * Adds an given image path to images list.
+     * @param path Image path to obtain image.
      */
-    virtual ~Video();
+    void addImagePath(std::string path);
 
     /**
      * Obtain next image from open video stream.
@@ -60,9 +58,15 @@ public:
 private:
 
     /**
-     * Stores video device or video streaming.
+     * List from all image paths;
      */
-    cv::VideoCapture capture;
+    std::vector<std::string> images;
+
+    /**
+     * Current index position from images.
+     */
+    int index;
 };
 
-#endif //COMPANION_VIDEO_CAPTURE_H
+
+#endif //COMPANION_IMAGE_H
