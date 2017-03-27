@@ -13,6 +13,7 @@ const cv::Mat &FeatureMatchingModel::getDescriptors() const {
 }
 
 void FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors) {
+    FeatureMatchingModel::descriptors.empty();
     FeatureMatchingModel::descriptors = descriptors;
 }
 
@@ -23,4 +24,13 @@ const std::vector<cv::KeyPoint> &FeatureMatchingModel::getKeypoints() const {
 void FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints) {
 	FeatureMatchingModel::keypoints.clear();
     FeatureMatchingModel::keypoints = keypoints;
+}
+
+void FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
+                                                            cv::Ptr<cv::DescriptorExtractor> extractor) {
+
+    keypoints.clear();
+    descriptors.empty();
+    detector->detect(image, keypoints);
+    extractor->compute(image, keypoints, descriptors);
 }

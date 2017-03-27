@@ -66,11 +66,11 @@ public:
 
     /**
      * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
-     * @param searchModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
-     * @param compareModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @param scene Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+     * @param object Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
      * @throws CompanionError::error_code If an error occurred in search operation.
      */
-    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
+    virtual Drawable* algo(ImageRecognitionModel *scene, ImageRecognitionModel *object);
 
     /**
      * Indicator if this algorithm use cuda.

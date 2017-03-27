@@ -20,6 +20,7 @@
 #define COMPANION_COMPARISON_H
 
 #include <opencv2/core/core.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 
 #include "ImageRecognitionModel.h"
 
@@ -64,6 +65,9 @@ public:
      * @param keypoints Keypoints to set.
      */
     void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
+
+    void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
+                                          cv::Ptr<cv::DescriptorExtractor> extractor);
 
 private:
 

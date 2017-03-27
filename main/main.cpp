@@ -103,16 +103,17 @@ int main() {
     //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
 
     // -------------- Image Processing Setup --------------
-    companion->setProcessing(new ObjectDetection(companion, recognition, 1));
-    companion->setSkipFrame(2);
+    companion->setProcessing(new ObjectDetection(companion, recognition, 0.50));
+    companion->setSkipFrame(0);
     companion->setResultHandler(callback);
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    //Stream *stream = new Video(testVideo); // Load an video
+    Stream *stream = new Video(testVideo); // Load an video
     //Stream *stream = new Video(0); // Realtime stream
 
     // Setup example for an streaming data from images.
+    /*
     Image *stream = new Image();
     for(int i = 1; i <= 432; i++ ) {
         std::string fileNr;
@@ -125,6 +126,7 @@ int main() {
         }
         stream->addImagePath("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
     }
+    */
 
     companion->setSource(stream);
 
@@ -133,6 +135,7 @@ int main() {
     for (auto &image : images) {
         object = new FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+        object->calculateKeyPointsAndDescriptors(brisk, brisk);
         if(!companion->addModel(object)) {
             std::cout << "Model not added";
         }

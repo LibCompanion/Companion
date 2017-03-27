@@ -28,7 +28,7 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
         // Check if image recognition implementation is an cuda implementation.
         if(imageRecognition->isCuda()) {
             // Cuda usage -> Don't use multithreading
-            for(int x = 0; x < models.size(); x++) {
+            for(unsigned long x = 0; x < models.size(); x++) {
                 object = imageRecognition->algo(scene, models.at(x));
                 if(object != nullptr) {
                     // Create old image size
@@ -39,8 +39,9 @@ std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
             }
         } else {
             // Multithreading will be used for CPU usage
-            #pragma omp parallel for
-            for(int x = 0; x < models.size(); x++) {
+            // ToDo Currently disabled because of an racing condition to use models...
+            //#pragma omp parallel for
+            for(unsigned long x = 0; x < models.size(); x++) {
                 object = imageRecognition->algo(scene, models.at(x));
                 if(object != nullptr) {
                     // Create old image size
