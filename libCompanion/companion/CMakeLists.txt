@@ -10,6 +10,7 @@ SET(SOURCE
         algo/abstract/ImageRecognition.h
         algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
         algo/cpu/CPUFeatureMatching.cpp algo/cpu/CPUFeatureMatching.h
+        algo/util/IRA.cpp algo/util/IRA.h
         draw/Drawable.h
         draw/Lines.cpp draw/Lines.h
         draw/Line.cpp draw/Line.h

@@ -123,6 +123,10 @@ protected:
      */
     int countMatches = 40;
 
+    /**
+     * Indicator to use IRA algorithm.
+     */
+    bool useIRA = false;
 };
 
 

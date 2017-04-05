@@ -6,16 +6,20 @@ CPUFeatureMatching::CPUFeatureMatching() {
     this->extractor = cv::BRISK::create();
     this->type = cv::DescriptorMatcher::FLANNBASED;
     this->matcher = cv::DescriptorMatcher::create(type);
-    this->countMatches = 40;
 }
 
-CPUFeatureMatching::CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                                 cv::Ptr<cv::DescriptorMatcher> matcher, int type, int countMatches) {
+CPUFeatureMatching::CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
+                                       cv::Ptr<cv::DescriptorExtractor> extractor,
+                                       cv::Ptr<cv::DescriptorMatcher> matcher,
+                                       int type,
+                                       int countMatches,
+                                       bool useIRA) {
     this->detector = detector;
     this->extractor = extractor;
     this->type = type;
     this->matcher = matcher;
     this->countMatches = countMatches;
+    this->useIRA = useIRA;
 }
 
 CPUFeatureMatching::~CPUFeatureMatching() {}
@@ -29,6 +33,8 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
     std::vector<cv::KeyPoint> keypointsObject, keypointScene;
     cv::Mat descriptorsObject, descriptorsScene;
     Drawable *lines = nullptr;
+    IRA* ira;
+    bool isIRAUsed = false;
 
     FeatureMatchingModel *sceneModel = dynamic_cast<FeatureMatchingModel*>(scene);
     FeatureMatchingModel *objectModel = dynamic_cast<FeatureMatchingModel*>(object);
@@ -38,6 +44,7 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
         throw CompanionError::errorCode::wrong_model_type;
     }
 
+    ira = objectModel->getIra();
     sceneImage = sceneModel->getImage();
     objectImage = objectModel->getImage();
 
@@ -49,12 +56,9 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
         throw CompanionError::errorCode::image_not_found;
     }
 
-    bool isIRAUsed = false;
-
-    // ToDO : IRA implementation class.
-    if (objectModel->isLastPositionSet()) {
-        // IRA := Object from last scene detected take this last position as scene.
-        sceneImage = cv::Mat(sceneImage, objectModel->getLastPosition());
+    if (useIRA && ira->isObjectDetected()) {
+        // IRA := Cut out scene from last detected object and set this as new scene to check.
+        sceneImage = cv::Mat(sceneImage, ira->getLastObjectPosition());
 
         // Step 1 : Detect the keypoints from scene
         detector->detect(sceneImage, keypointScene);
@@ -64,20 +68,18 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
         isIRAUsed = true;
     }
 
-    // Check if scene has calculated keypoints and descriptors...
-    if(!isIRAUsed && sceneModel->getKeypoints().empty()) {
+    // Check if complete scene has calculated keypoints and descriptors and IRA was not used...
+    if(!isIRAUsed && !sceneModel->keypointsCalculated()) {
         sceneModel->calculateKeyPointsAndDescriptors(detector, extractor);
+    } else if(!isIRAUsed) {
+        // Get Keypoints and descriptors from scene if IRA was not used.
+        keypointScene = sceneModel->getKeypoints();
+        descriptorsScene = sceneModel->getDescriptors();
     }
 
     // Check if object has calculated keypoints and descriptors...
-    if(objectModel->getKeypoints().empty()) {
+    if(!objectModel->keypointsCalculated()) {
         objectModel->calculateKeyPointsAndDescriptors(detector, extractor);
-    }
-
-    // Get Keypoints and descriptors from scene if IRA was not used.
-    if(!isIRAUsed) {
-        keypointScene = sceneModel->getKeypoints();
-        descriptorsScene = sceneModel->getDescriptors();
     }
 
     // Get Keypoints and descriptors from object
@@ -106,21 +108,28 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
         //symmetry_test(good_matches, good_matches_two, symMatches);
         //good_matches = symMatches;
 
-        lines = obtainMatchingResult(sceneImage, objectImage, goodMatches, keypointsObject, keypointScene, sceneModel, objectModel);
+        lines = obtainMatchingResult(sceneImage,
+                                     objectImage,
+                                     goodMatches,
+                                     keypointsObject,
+                                     keypointScene,
+                                     sceneModel,
+                                     objectModel);
+
         if(lines == nullptr) {
             // If result is not good enough and IRA was used.
-            if(object->isLastPositionSet()) {
-                object->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
+            if(isIRAUsed) {
+                ira->clear(); // Clear last detected object position.
                 return algo(scene, object);
             }
+
         }
 
     } else {
-        // ToDo Method
-        // If result is not good enough and IRA was used.
-        if(object->isLastPositionSet()) {
-            // Reset method
-            object->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
+        // Results from descriptors and keypoints are not good enough and IRA was used.
+        if(isIRAUsed) {
+            // Reset method and search for object in scene without IRA.
+            ira->clear(); // Clear last detected object position.
             return algo(scene, object);
         }
     }

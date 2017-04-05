@@ -61,11 +61,23 @@ public:
     const std::vector<cv::KeyPoint> &getKeypoints() const;
 
     /**
+     * Checks if keypoints are already calculated.
+     * @return <b>True</b> if keypoints are calculated otherwise <b>False</b>
+     */
+    bool keypointsCalculated();
+
+    /**
      * Sets given keypoints from matching.
      * @param keypoints Keypoints to set.
      */
     void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
+    /**
+     * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores this. This operation
+     * not working for Cuda feature detectors because they need cv::gpu::Mat.
+     * @param detector FeatureDetector to use.
+     * @param extractor Extractor to use.
+     */
     void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
                                           cv::Ptr<cv::DescriptorExtractor> extractor);
 

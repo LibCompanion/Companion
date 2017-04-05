@@ -89,18 +89,18 @@ int main() {
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
-    cv::Ptr<cv::BRISK> brisk = cv::BRISK::create(60);
-    ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
+    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    //ImageRecognition *recognition = new CPUFeatureMatching(feature, feature, matcher, type, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
-    //cv::Ptr<cv::ORB> CPU_ORB = cv::ORB::create(2000);
-    //ImageRecognition *recognition = new CPUFeatureMatching(CPU_ORB, CPU_ORB, matcher, type);
+    //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
+    //ImageRecognition *recognition = new CPUFeatureMatching(feature, feature, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    //cv::Ptr<cv::cuda::ORB> GPU_ORB = cv::cuda::ORB::create(6000);
-    //GPU_ORB->setBlurForDescriptor(true);
-    //ImageRecognition *recognition = new CudaFeatureMatching(GPU_ORB);
+    cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
+    feature->setBlurForDescriptor(true);
+    ImageRecognition *recognition = new CudaFeatureMatching(feature);
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new ObjectDetection(companion, recognition, 0.50));
@@ -135,7 +135,10 @@ int main() {
     for (auto &image : images) {
         object = new FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
-        object->calculateKeyPointsAndDescriptors(brisk, brisk);
+
+        // Only works on CPU -- ToDo Exception Handling if wrong type?
+        //object->calculateKeyPointsAndDescriptors(feature, feature);
+
         if(!companion->addModel(object)) {
             std::cout << "Model not added";
         }

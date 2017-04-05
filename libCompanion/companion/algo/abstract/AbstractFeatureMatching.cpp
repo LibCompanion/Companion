@@ -98,12 +98,19 @@ Drawable* AbstractFeatureMatching::calculateArea(cv::Mat &homography,
 
     //-- Draw lines between the corners (the mapped object in the scene - image_2 )
     int thickness = 4;
+    cv::Rect lastRect;
     cv::Scalar color = cv::Scalar(0, 255, 0);
+    IRA *ira = cModel->getIra();
 
     // IRA
-    cv::Rect lastRect = cModel->getLastPosition();
-    cv::Point2f offset = cv::Point2f(lastRect.x,
-                                     lastRect.y); // Offset is recalculate position from last recognition
+    if(useIRA) {
+        lastRect = ira->getLastObjectPosition();
+    } else {
+        lastRect = cv::Rect();
+    }
+
+    // Offset is recalculate position from last recognition if exists.
+    cv::Point2f offset = cv::Point2f(lastRect.x, lastRect.y);
 
     // Focus area - Scene Corners
     //   0               1
@@ -133,30 +140,35 @@ Drawable* AbstractFeatureMatching::calculateArea(cv::Mat &homography,
     lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
     lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
 
-    // IRA algo stores position from detected object with an scaling factor.
-    cModel->setLastPosition(start.x, start.y, end.x - start.x, end.y - start.y);
+    // If IRA is used...
+    if(useIRA) {
 
-    // Check if start point is set correctly
-    if (cModel->getLastPosition().x < 0) {
-        cModel->setLastPositionX(0);
-    }
+        // IRA algo stores position from detected object.
+        ira->setLastObjectPosition(start.x, start.y, end.x - start.x, end.y - start.y);
+        cv::Rect lastObjectPosition = ira->getLastObjectPosition();
 
-    // Check if width is not oversized
-    if (cModel->getLastPosition().width + cModel->getLastPosition().x > sceneImage.cols) {
-        cModel->setLastPositionWidth(sceneImage.cols - cModel->getLastPosition().x);
-    }
+        // Check if start point is set correctly
+        if (lastObjectPosition.x < 0) {
+            ira->setX(0);
+        }
 
-    if (cModel->getLastPosition().y < 0) {
-        cModel->setLastPositionY(0);
-    }
+        // Check if width is not oversized
+        if (lastObjectPosition.width + lastObjectPosition.x > sceneImage.cols) {
+            ira->setWidth(sceneImage.cols - lastObjectPosition.x);
+        }
 
-    if (cModel->getLastPosition().height + cModel->getLastPosition().y > sceneImage.rows) {
-        cModel->setLastPositionHeight(sceneImage.rows - cModel->getLastPosition().y);
-    }
+        if (lastObjectPosition.y < 0) {
+            ira->setY(0);
+        }
 
-    if(cModel->getLastPosition().area() <= 0) {
-        // Something goes wrong in area
-        cModel->setLastPosition(-1, -1, 0, 0);
+        if (lastObjectPosition.height + lastObjectPosition.y > sceneImage.rows) {
+            ira->setHeight(sceneImage.rows - lastObjectPosition.y);
+        }
+
+        if(lastObjectPosition.area() <= 0) {
+            // Something goes wrong in area clear IRA.
+            ira->clear();
+        }
     }
 
     return lines;

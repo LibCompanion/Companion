@@ -55,9 +55,14 @@ public:
      * @param matcher FeatureMatcher to set.
      * @param type FeatureMatcher type which is used like FlannBased or Bruteforce.
      * @param countMatches How much matches need to get an good matching result. Default is by 40.
+     * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
      */
-    CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector, cv::Ptr<cv::DescriptorExtractor> extractor,
-                    cv::Ptr<cv::DescriptorMatcher> matcher, int type, int countMatches = 40);
+    CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
+                       cv::Ptr<cv::DescriptorExtractor> extractor,
+                       cv::Ptr<cv::DescriptorMatcher> matcher,
+                       int type,
+                       int countMatches = 40,
+                       bool useIRA = false);
 
     /**
      * Default destructor.
@@ -99,7 +104,6 @@ private:
      * FeatureDescriptor which is used by default FlannBased is used.
      */
     cv::Ptr<cv::DescriptorMatcher> matcher;
-
 };
 
 #endif //COMPANION_CPUFEATUREMATCHING_H

@@ -26,9 +26,6 @@ Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRec
     FeatureMatchingModel *sModel = dynamic_cast<FeatureMatchingModel *>(searchModel);
     FeatureMatchingModel *cModel = dynamic_cast<FeatureMatchingModel *>(compareModel);
 
-    // ToDo := Code cleanup for IRA in Abstract feature matching and FeatureMatching
-    cModel->setLastPosition(-1, -1, 0, 0);
-
     if(ngpus > 0) {
 
         // ---- Cuda start
@@ -52,14 +49,6 @@ Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRec
         ratio_test(matches, good_matches, 0.80);
 
         lines = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, cModel);
-        if(lines == nullptr) {
-            // If result is not good enough and IRA was used.
-            if(compareModel->isLastPositionSet()) {
-                compareModel->setLastPosition(-1, -1, 0, 0); // Reset position because object is no more detected...
-                return algo(searchModel, compareModel);
-            }
-        }
-
     }
 
     return lines;

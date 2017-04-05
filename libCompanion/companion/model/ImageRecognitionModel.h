@@ -20,6 +20,7 @@
 #define COMPANION_IMAGERECOGNITIONMODEL_H
 
 #include <opencv2/core/core.hpp>
+#include "companion/algo/util/IRA.h"
 
 /**
  * Default model type for an image recognition implementation class for an scene or object.
@@ -58,49 +59,10 @@ public:
     void setImage(const cv::Mat &image);
 
     /**
-     * Gets last object detection position if exists.
-     * @return Gets last object detection position if exists, otherwise position is zero.
+     * Gets IRA class to store last object detection.
+     * @return IRA class to obtain informations about last object detection.
      */
-    const cv::Rect &getLastPosition() const;
-
-    /**
-     * Sets last position from object detection.
-     * @param x X-Axis position from object.
-     * @param y Y-Axis position from object.
-     * @param width Width from object.
-     * @param height Height from object.
-     */
-    void setLastPosition(int x, int y, int width, int height);
-
-    /**
-     * Sets width from detected object.
-     * @param width Width from homography object.
-     */
-    void setLastPositionWidth(int width);
-
-    /**
-     * Sets height from detected object.
-     * @param height Height from homography object.
-     */
-    void setLastPositionHeight(int height);
-
-    /**
-     * Sets x position from object.
-     * @param x X position from homography object.
-     */
-    void setLastPositionX(int x);
-
-    /**
-     * Sets y position from object.
-     * @param y Y position from homography object.
-     */
-    void setLastPositionY(int y);
-
-    /**
-     * Checks if last position from object exists.
-     * @return <b>true<br> if last position is set otherwise <b>false</b>
-     */
-    bool isLastPositionSet();
+    IRA *getIra() const;
 
 protected:
 
@@ -110,9 +72,10 @@ protected:
     cv::Mat image;
 
     /**
-     * Last position from detected object.
+     * Image reduction algorithm to store last object detection position.
      */
-    cv::Rect lastPosition;
+    IRA *ira;
+
 };
 
 #endif //COMPANION_IMAGERECOGNITIONMODEL_H

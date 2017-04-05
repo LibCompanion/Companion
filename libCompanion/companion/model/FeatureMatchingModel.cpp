@@ -34,3 +34,7 @@ void FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureD
     detector->detect(image, keypoints);
     extractor->compute(image, keypoints, descriptors);
 }
+
+bool FeatureMatchingModel::keypointsCalculated() {
+    return !keypoints.empty();
+}
