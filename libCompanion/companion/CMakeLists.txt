@@ -4,6 +4,8 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 option(USE_CUDA "Use cuda implementation from libCompanion" OFF)
+option(BUILD_SHARED_LIBRARY "Build shared library" OFF)
+
 
 SET(SOURCE
         Companion.cpp Companion.h
@@ -31,5 +33,11 @@ if(USE_CUDA)
             algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h)
 endif()
 
-add_library(Companion ${SOURCE})
+if(BUILD_SHARED_LIBRARY)
+	add_library(Companion SHARED ${SOURCE})
+else()
+	add_library(Companion ${SOURCE})
+endif()
+
+
 target_link_libraries(Companion ${OpenCV_LIBS})
