@@ -1,6 +1,6 @@
-![Companion](https://nepitwin.github.io/companion.github.io/images/logo.png "Companion")
+![Companion](https://nepitwin.github.io/libCompanion/images/logo.png "Companion")
 
-[Companion](https://nepitwin.github.io/companion.github.io) is an computer vision library written with OpenCV 3.
+[Companion](https://nepitwin.github.io/libCompanion) is an computer vision library written with OpenCV 3.
 
 # Dependencies
 
@@ -27,7 +27,7 @@ make
 
 # Getting started
 
-An usage example for an 2D Object detection setup is implemented under Main folder. For more Information go to this [Getting started](https://nepitwin.github.io/companion.github.io/gettingstarted/) Guide.
+An usage example for an 2D Object detection setup is implemented under Main folder. For more Information go to this [getting started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
 
 ### License
 
