@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Companion</title>
+    <link>https://nepitwin.github.io/libCompanion/index.xml</link>
+    <description>Recent content on Companion</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-en</language>
+    <copyright>2016-2017 Andreas Sekulski.</copyright>
+    <atom:link href="https://nepitwin.github.io/libCompanion/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Companion</title>
+      <link>https://nepitwin.github.io/libCompanion/companion/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nepitwin.github.io/libCompanion/companion/</guid>
+      <description>
+
+&lt;p&gt;&lt;img src=&#34;https://nepitwin.github.io/libCompanion/images/logo.png&#34;&gt;&lt;/p&gt;
+
+&lt;p&gt;Companion is an image recognition library written with OpenCV. It&amp;rsquo;s supports an
+set of computer vision algorithms for CPU, OpenCL and Cuda usage. The source
+code is published on GitHub and is under GPLv3 license. Feel free if you want
+to implement additional algorithms from OpenCV to this library.&lt;/p&gt;
+
+&lt;h3 id=&#34;supported-features&#34;&gt;Supported Features&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Feature&lt;/th&gt;
+&lt;th&gt;CPU&lt;/th&gt;
+&lt;th&gt;OpenCL&lt;/th&gt;
+&lt;th&gt;Cuda&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;2D Object Detection&lt;/td&gt;
+&lt;td&gt;Supported&lt;/td&gt;
+&lt;td&gt;Supported&lt;/td&gt;
+&lt;td&gt;Supported&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;planned-features&#34;&gt;Planned Features&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Features
+
+&lt;ul&gt;
+&lt;li&gt;3D Object Detection&lt;/li&gt;
+&lt;li&gt;Object Classification&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Plattform support
+
+&lt;ul&gt;
+&lt;li&gt;Android&lt;/li&gt;
+&lt;li&gt;C# (UWP)&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Getting Started</title>
+      <link>https://nepitwin.github.io/libCompanion/gettingstarted/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nepitwin.github.io/libCompanion/gettingstarted/</guid>
+      <description>
+
+&lt;h3 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h3&gt;
+
+&lt;h4 id=&#34;lib-dependencies&#34;&gt;Lib dependencies&lt;/h4&gt;
+
+&lt;p&gt;Following libs must be build to use Companion.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://opencv.org/&#34;&gt;OpenCV&lt;/a&gt; - 3.X&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.nvidia.com/cuda-downloads&#34;&gt;Cuda&lt;/a&gt; (Optional)&lt;/li&gt;
+&lt;li&gt;OpenMP&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;build-from-sources&#34;&gt;Build from sources&lt;/h4&gt;
+
+&lt;p&gt;Simply use cmake or cmake-gui to build Companion for an specific platform. Enable the Cuda flag to build Companion with Cuda support by default Cuda implementations will not be build.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cmake -DUSE_CUDA=ON
+make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;companion-usage&#34;&gt;Companion usage&lt;/h4&gt;
+
+&lt;p&gt;To use companion features they must be only configuerd by his Companion configuration class.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Creates an empty companion configuration class
+Companion *companion = new Companion();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This configuration class must be only configured to use all image processing features. Following components must be setup.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Error and result handler&lt;/li&gt;
+&lt;li&gt;Used image processing feature&lt;/li&gt;
+&lt;li&gt;Search model&lt;/li&gt;
+&lt;li&gt;StreamWorker&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The following example shows an feature matching setup which obtains an video source from an file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Result handler method implementation
+void callback(std::vector&amp;lt;Drawable*&amp;gt; objects, cv::Mat frame) {
+    Drawable *drawable;
+
+    for(int x = 0; x &amp;lt; objects.size(); x++) {
+        drawable = objects.at(x);
+        drawable-&amp;gt;draw(frame);
+    }
+
+    cv::imshow(&amp;quot;Object detection&amp;quot;, frame);
+    cv::waitKey(1);
+    frame.release();
+}
+
+// Error handler method implementation
+void error(CompanionError::errorCode code) {
+    // Obtain detailed error message from code
+    std::cout &amp;lt;&amp;lt; CompanionError::getError(code) &amp;lt;&amp;lt; &amp;quot;\n&amp;quot;;
+}
+
+int main() {
+  Companion *companion = new Companion();
+
+  // Setup for an feature matching model.
+  FeatureMatchingModel *object = new FeatureMatchingModel();
+  object-&amp;gt;setImage(cv::imread(imagePath, cv::IMREAD_GRAYSCALE));
+  if(!companion-&amp;gt;addModel(object)) {
+      std::cout &amp;lt;&amp;lt; &amp;quot;Model not added&amp;quot;;
+  }
+
+  // Setup feature matching implementation from OpenCV
+  int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
+  cv::Ptr&amp;lt;cv::DescriptorMatcher&amp;gt; matcher = cv::DescriptorMatcher::create(type);
+  cv::Ptr&amp;lt;cv::BRISK&amp;gt; brisk = cv::BRISK::create(60);
+
+  // Setup image recognition from cpu feature matching implementation.
+  ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
+  // Set image processing algorithm to your companion instance.
+  companion-&amp;gt;setProcessing(new ObjectDetection(companion, recognition, 1));
+
+  // Set video as input source to obtain images.
+  Stream *stream = new Video(videoPath);
+  companion-&amp;gt;setSource(stream);
+
+  // Set result callback handler
+  companion-&amp;gt;setResultHandler(callback);
+  // Set an error callback handler
+  companion-&amp;gt;setErrorHandler(error);
+
+  // Create an stream worker class to execute companion configuration
+  StreamWorker ps(queue);
+  try {
+      // Execute companion
+      companion-&amp;gt;run(ps);
+  } catch (CompanionError::errorCode errorCode) {
+      error(errorCode);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
