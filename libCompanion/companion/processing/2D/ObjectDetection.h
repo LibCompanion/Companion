@@ -20,7 +20,6 @@
 #define COMPANION_OBJECTDETECTION_H
 
 #include <opencv2/core/core.hpp>
-#include <opencv2/calib3d/calib3d.hpp>
 
 #include "companion/processing/ImageProcessing.h"
 #include "companion/model/ImageRecognitionModel.h"

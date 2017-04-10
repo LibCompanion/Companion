@@ -3,10 +3,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-option(USE_CUDA "Use cuda implementation from libCompanion" OFF)
-option(BUILD_SHARED_LIBRARY "Build shared library" OFF)
-
-
 SET(SOURCE
         Companion.cpp Companion.h
         algo/abstract/ImageRecognition.h

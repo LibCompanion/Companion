@@ -19,7 +19,7 @@
 #ifndef COMPANION_VIDEO_CAPTURE_H
 #define COMPANION_VIDEO_CAPTURE_H
 
-#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "Stream.h"
 #include "companion/util/CompanionError.h"

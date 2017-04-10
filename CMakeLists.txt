@@ -3,14 +3,15 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 
-option(BUILD_UWP "Build lib for UWP" OFF)
+option(USE_CUDA "Use cuda implementation from libCompanion" OFF)
+option(BUILD_SHARED_LIBRARY "Build shared library" OFF)
 
-if(BUILD_UWP)
-    set(CMAKE_SYSTEM_NAME "WindowsStore" CACHE FILEPATH "Windows Environment Build like Windows Store")
-	set(CMAKE_SYSTEM_VERSION "10" CACHE FILEPATH "Prefered Windows Version Build")
+set(OpenCVComponents "core" "imgproc" "features2d")
+if(USE_CUDA)
+    set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
 endif()
 
-find_package(OpenCV REQUIRED)
+find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
 
 add_subdirectory(libCompanion)

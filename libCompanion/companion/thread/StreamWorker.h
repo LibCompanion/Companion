@@ -22,7 +22,7 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include <opencv2/core.hpp>
+#include <opencv2/core/core.hpp>
 
 #include "companion/processing/ImageProcessing.h"
 #include "companion/draw/Drawable.h"
