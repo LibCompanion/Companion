@@ -25,6 +25,14 @@ cmake -DUSE_CUDA=ON
 make
 ```
 
+### UWP Support
+
+If you desire to build Companion for *Universal Windows Platform* you can simply use the provided toolchain file to do so.
+```
+cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
+```
+Make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure* if you prefer the cmake-gui instead. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
+
 # Getting started
 
 An usage example for an 2D Object detection setup is implemented under Main folder. For more Information go to this [getting started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
