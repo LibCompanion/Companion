@@ -22,7 +22,9 @@ SET(SOURCE
         thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
         util/Util.cpp util/Util.h
-        util/Definitions.h)
+        util/Definitions.h
+        util/exportapi/ExportAPI.h
+        util/exportapi/ExportAPIDefinitions.h)
 
 if(USE_CUDA)
     SET(SOURCE ${SOURCE}
@@ -31,6 +33,7 @@ endif()
 
 if(BUILD_SHARED_LIBRARY)
 	add_library(Companion SHARED ${SOURCE})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D _WINRT_DLL") # Build Windows Runtime DLL
 else()
 	add_library(Companion ${SOURCE})
 endif()
