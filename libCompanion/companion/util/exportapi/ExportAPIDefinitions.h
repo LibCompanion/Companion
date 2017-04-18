@@ -33,8 +33,12 @@
 /**
  * Enables function exporting when building a shared library.
  */
-#if (defined WIN32 || defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined Companion_EXPORTS
-    #define COMP_EXPORTS __declspec(dllexport) // ToDO: is __declspec(dllimport) necessary ???
+#if (defined WIN32 || defined _WIN32 || defined WINCE || defined __CYGWIN__)
+    #ifdef Companion_EXPORTS
+        #define COMP_EXPORTS __declspec(dllexport)
+    #elif Companion_Include
+        #define COMP_EXPORTS __declspec(dllimport) // You have to manually define "Companion_Include" for DLL imports
+    #endif
 #elif defined __GNUC__ && __GNUC__ >= 4
     #define COMP_EXPORTS __attribute__ ((visibility ("default")))
 #else

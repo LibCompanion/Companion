@@ -23,7 +23,7 @@ SET(SOURCE
         util/CompanionError.h
         util/Util.cpp util/Util.h
         util/Definitions.h
-        util/exportapi/ExportAPI.h
+        util/exportapi/ExportAPI.cpp util/exportapi/ExportAPI.h
         util/exportapi/ExportAPIDefinitions.h)
 
 if(USE_CUDA)
@@ -33,7 +33,10 @@ endif()
 
 if(BUILD_SHARED_LIBRARY)
 	add_library(Companion SHARED ${SOURCE})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D _WINRT_DLL") # Build Windows Runtime DLL
+    if(${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D _WINRT_DLL") # Build Windows Runtime DLL
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WINMD") # Generate Windows Metadata
+    endif()
 else()
 	add_library(Companion ${SOURCE})
 endif()
