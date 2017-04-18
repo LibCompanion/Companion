@@ -19,19 +19,28 @@
 #ifndef COMPANION_STREAM_H
 #define COMPANION_STREAM_H
 
-/**
- * Data stream interface class to obtain image processing data for example from an video or an set of images.
- * @author Andreas Sekulski
- */
-class Stream {
+namespace Companion {
 
-public:
+    namespace Input {
 
-    /**
-     * Obtain next image from open video stream.
-     * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
-     */
-    virtual cv::Mat obtainImage() = 0;
-};
+        /**
+         * Data stream interface class to obtain image processing data for example from an video or an set of images.
+         * @author Andreas Sekulski
+         */
+        class Stream {
+
+        public:
+
+            /**
+             * Obtain next image from open video stream.
+             * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
+             */
+            virtual cv::Mat obtainImage() = 0;
+        };
+
+    }
+}
+
+
 
 #endif //COMPANION_STREAM_H

@@ -1,8 +1,8 @@
 #include "AbstractFeatureMatching.h"
 
-void AbstractFeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
-        std::vector<cv::DMatch> &good_matches,
-        float ratio) {
+void Companion::Algorithm::AbstractFeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
+                                                               std::vector<cv::DMatch> &good_matches,
+                                                               float ratio) {
 
     for (int i = 0; i < matches.size(); ++i) {
         if (matches[i][0].distance < ratio * matches[i][1].distance) {
@@ -12,9 +12,9 @@ void AbstractFeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatc
 
 }
 
-void AbstractFeatureMatching::symmetry_test(const std::vector<cv::DMatch> &matches1,
-                                            const std::vector<cv::DMatch> &matches2,
-                                            std::vector<cv::DMatch> &symMatches) {
+void Companion::Algorithm::AbstractFeatureMatching::symmetry_test(const std::vector<cv::DMatch> &matches1,
+                                                                  const std::vector<cv::DMatch> &matches2,
+                                                                  std::vector<cv::DMatch> &symMatches) {
 
     symMatches.clear();
 
@@ -36,27 +36,31 @@ void AbstractFeatureMatching::symmetry_test(const std::vector<cv::DMatch> &match
     }
 }
 
-void AbstractFeatureMatching::obtainKeypointsFromGoodMatches(std::vector<cv::DMatch> &good_matches,
-                                                             std::vector<cv::KeyPoint> &keypoints_object,
-                                                             std::vector<cv::KeyPoint> &keypoints_scene,
-                                                             std::vector<cv::Point2f> &feature_points_object,
-                                                             std::vector<cv::Point2f> &feature_points_scene) {
+void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatches(
+        std::vector<cv::DMatch> &good_matches,
+        std::vector<cv::KeyPoint> &keypoints_object,
+        std::vector<cv::KeyPoint> &keypoints_scene,
+        std::vector<cv::Point2f> &feature_points_object,
+        std::vector<cv::Point2f> &feature_points_scene) {
+
     // Get the keypoints from the good matches
     for (int i = 0; i < good_matches.size(); i++) {
         feature_points_scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
         feature_points_object.push_back(keypoints_object[good_matches[i].queryIdx].pt);
     }
+
 }
 
-Drawable* AbstractFeatureMatching::obtainMatchingResult(cv::Mat &sceneImage,
-                                                        cv::Mat &objectImage,
-                                                        std::vector<cv::DMatch> &good_matches,
-                                                        std::vector<cv::KeyPoint> &keypoints_object,
-                                                        std::vector<cv::KeyPoint> &keypoints_scene,
-                                                        FeatureMatchingModel *sModel,
-                                                        FeatureMatchingModel *cModel) {
+Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtainMatchingResult(
+        cv::Mat &sceneImage,
+        cv::Mat &objectImage,
+        std::vector<cv::DMatch> &good_matches,
+        std::vector<cv::KeyPoint> &keypoints_object,
+        std::vector<cv::KeyPoint> &keypoints_scene,
+        Model::FeatureMatchingModel *sModel,
+        Model::FeatureMatchingModel *cModel) {
 
-    Drawable *lines = nullptr;
+    Companion::Draw::Drawable *lines = nullptr;
     cv::Mat homography;
     std::vector<cv::Point2f> feature_points_object, feature_points_scene;
 
@@ -80,11 +84,12 @@ Drawable* AbstractFeatureMatching::obtainMatchingResult(cv::Mat &sceneImage,
     return lines;
 }
 
-Drawable* AbstractFeatureMatching::calculateArea(cv::Mat &homography,
-                                                 cv::Mat &sceneImage,
-                                                 cv::Mat &objectImage,
-                                                 FeatureMatchingModel *sModel,
-                                                 FeatureMatchingModel *cModel) {
+Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calculateArea(
+        cv::Mat &homography,
+        cv::Mat &sceneImage,
+        cv::Mat &objectImage,
+        Model::FeatureMatchingModel *sModel,
+        Model::FeatureMatchingModel *cModel) {
 
     //-- Get the corners from the image_1 (the object to be "detected")
     std::vector<cv::Point2f> obj_corners(4);
@@ -134,11 +139,11 @@ Drawable* AbstractFeatureMatching::calculateArea(cv::Mat &homography,
     }
 
     // Object area.
-    Lines *lines = new Lines();
-    lines->addLine(new Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
-    lines->addLine(new Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
-    lines->addLine(new Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
-    lines->addLine(new Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
+    Companion::Draw::Lines *lines = new Companion::Draw::Lines();
+    lines->addLine(new Companion::Draw::Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
+    lines->addLine(new Companion::Draw::Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
+    lines->addLine(new Companion::Draw::Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
+    lines->addLine(new Companion::Draw::Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
 
     // If IRA is used...
     if(useIRA) {

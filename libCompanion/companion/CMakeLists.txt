@@ -16,9 +16,9 @@ SET(SOURCE
         model/ImageRecognitionModel.cpp model/ImageRecognitionModel.h
         processing/ImageProcessing.h
         processing/2D/ObjectDetection.cpp processing/2D/ObjectDetection.h
-        stream/Stream.h
-        stream/Video.cpp stream/Video.h
-        stream/Image.cpp stream/Image.h
+        input/Stream.h
+        input/Video.cpp input/Video.h
+        input/Image.cpp input/Image.h
         thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
         util/Util.cpp util/Util.h

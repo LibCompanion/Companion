@@ -20,11 +20,11 @@
 #include <companion/processing/2D/ObjectDetection.h>
 #include <companion/algo/cuda/CudaFeatureMatching.h>
 #include <companion/algo/cpu/CPUFeatureMatching.h>
-#include <companion/stream/Video.h>
-#include <companion/stream/Image.h>
+#include <companion/input/Video.h>
+#include <companion/input/Image.h>
 
-void callback(std::vector<Drawable*> objects, cv::Mat frame) {
-    Drawable *drawable;
+void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
+    Companion::Draw::Drawable *drawable;
 
     for(int x = 0; x < objects.size(); x++) {
         drawable = objects.at(x);
@@ -36,9 +36,9 @@ void callback(std::vector<Drawable*> objects, cv::Mat frame) {
     frame.release();
 }
 
-void error(CompanionError::errorCode code) {
+void error(Companion::Error::Code code) {
     // Obtain detailed error message from code
-    std::cout << CompanionError::getError(code) << "\n";
+    std::cout << Companion::Error::getError(code) << "\n";
 }
 
 int main() {
@@ -84,37 +84,37 @@ int main() {
     */
 
     // -------------- Setup used processing algo. --------------
-    Companion *companion = new Companion();
+    Companion::Configuration *companion = new Companion::Configuration();
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
     //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    //ImageRecognition *recognition = new CPUFeatureMatching(feature, feature, matcher, type, 40, true);
+    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
-    //ImageRecognition *recognition = new CPUFeatureMatching(feature, feature, matcher, type);
+    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
-    ImageRecognition *recognition = new CudaFeatureMatching(feature);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
 
     // -------------- Image Processing Setup --------------
-    companion->setProcessing(new ObjectDetection(companion, recognition, 0.50));
+    companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));
     companion->setSkipFrame(0);
     companion->setResultHandler(callback);
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    Stream *stream = new Video(testVideo); // Load an video
-    //Stream *stream = new Video(0); // Realtime stream
+    Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
+    //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
-    // Setup example for an streaming data from images.
     /*
-    Image *stream = new Image();
+    // Setup example for an streaming data from images.
+    Companion::Input::Image *stream = new Companion::Input::Image();
     for(int i = 1; i <= 432; i++ ) {
         std::string fileNr;
         if(i < 10) {
@@ -128,12 +128,13 @@ int main() {
     }
     */
 
+    // Set input source
     companion->setSource(stream);
 
     // Store all searched data models
-    FeatureMatchingModel *object;
+    Companion::Model::FeatureMatchingModel *object;
     for (auto &image : images) {
-        object = new FeatureMatchingModel();
+        object = new Companion::Model::FeatureMatchingModel();
         object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
 
         // Only works on CPU -- ToDo Exception Handling if wrong type?
@@ -146,14 +147,13 @@ int main() {
 
     // Companion class to execute algorithm
     std::queue<cv::Mat> queue;
-    StreamWorker ps(queue);
+    Companion::Thread::StreamWorker ps(queue);
 
     try {
         companion->run(ps);
-    } catch (CompanionError::errorCode errorCode) {
+    } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }
-
 
     return 0;
 }

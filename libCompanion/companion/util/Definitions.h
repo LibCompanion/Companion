@@ -19,14 +19,18 @@
 #ifndef COMPANION_DEFINITIONS_H
 #define COMPANION_DEFINITIONS_H
 
-/**
- * Default success callback function declaration to obtain results from algorithms.
- */
-#define SUCCESS_CALLBACK void(std::vector<Drawable *>, cv::Mat)
+namespace Companion {
 
-/**
- * Default error callback function declaration to obtain error results from companion.
- */
-#define ERROR_CALLBACK void(CompanionError::errorCode)
+    /**
+     * Default success callback function declaration to obtain results from algorithms.
+     */
+    #define SUCCESS_CALLBACK void(std::vector<Companion::Draw::Drawable *>, cv::Mat)
+
+    /**
+     * Default error callback function declaration to obtain error results from companion.
+     */
+    #define ERROR_CALLBACK void(Companion::Error::Code)
+
+}
 
 #endif //COMPANION_DEFINITIONS_H
