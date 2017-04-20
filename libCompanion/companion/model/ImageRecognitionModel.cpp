@@ -1,26 +1,26 @@
 #include "ImageRecognitionModel.h"
 
-ImageRecognitionModel::ImageRecognitionModel() {
-    ira = new IRA();
+Companion::Model::ImageRecognitionModel::ImageRecognitionModel() {
+    ira = new Companion::Algorithm::IRA();
 }
 
-ImageRecognitionModel::ImageRecognitionModel(cv::Mat image) {
+Companion::Model::ImageRecognitionModel::ImageRecognitionModel(cv::Mat image) {
     ImageRecognitionModel::image = image;
 }
 
-ImageRecognitionModel::~ImageRecognitionModel() {
+Companion::Model::ImageRecognitionModel::~ImageRecognitionModel() {
     image.release();
     delete ira;
 }
 
-const cv::Mat &ImageRecognitionModel::getImage() const {
+const cv::Mat &Companion::Model::ImageRecognitionModel::getImage() const {
     return image;
 }
 
-void ImageRecognitionModel::setImage(const cv::Mat &image) {
+void Companion::Model::ImageRecognitionModel::setImage(const cv::Mat &image) {
     ImageRecognitionModel::image = image;
 }
 
-IRA *ImageRecognitionModel::getIra() const {
+Companion::Algorithm::IRA *Companion::Model::ImageRecognitionModel::getIra() const {
     return ira;
 }

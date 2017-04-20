@@ -1,17 +1,19 @@
 #include "CudaFeatureMatching.h"
 
-CudaFeatureMatching::CudaFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
+Companion::Algorithm::Cuda::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
     this->cudaFeatureMatching = cudaFeatureMatching;
 
 }
 
-CudaFeatureMatching::~CudaFeatureMatching() {
+Companion::Algorithm::Cuda::FeatureMatching::~FeatureMatching() {
 
 }
 
-Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) {
+Companion::Draw::Drawable* Companion::Algorithm::Cuda::FeatureMatching::algo(
+        Model::ImageRecognitionModel *searchModel,
+        Model::ImageRecognitionModel *compareModel) {
 
-    Drawable *lines = nullptr;
+    Companion::Draw::Drawable *lines = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
 
     cv::Mat img_matches;
@@ -23,8 +25,8 @@ Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRec
     // ToDo := Check if Image is in correct format
     cvtColor(scene_rgb, scene, CV_RGB2GRAY);
 
-    FeatureMatchingModel *sModel = dynamic_cast<FeatureMatchingModel *>(searchModel);
-    FeatureMatchingModel *cModel = dynamic_cast<FeatureMatchingModel *>(compareModel);
+    Companion::Model::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(searchModel);
+    Companion::Model::FeatureMatchingModel *cModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(compareModel);
 
     if(ngpus > 0) {
 
@@ -54,6 +56,6 @@ Drawable* CudaFeatureMatching::algo(ImageRecognitionModel *searchModel, ImageRec
     return lines;
 }
 
-bool CudaFeatureMatching::isCuda() {
+bool Companion::Algorithm::Cuda::FeatureMatching::isCuda() {
     return true;
 }

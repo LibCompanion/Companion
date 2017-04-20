@@ -29,27 +29,36 @@
 #include "companion/model/FeatureMatchingModel.h"
 #include "companion/util/Util.h"
 
-/**
- * Image recognition abstract class to implement specific image recognition algorithms.
- * @author Andreas Sekulski
- */
-class ImageRecognition {
+namespace Companion {
 
-public:
+    namespace Algorithm {
 
-    /**
-     * Specific algorithm implementation like simple compare or template matching.
-     * @param searchModel Search model to compare.
-     * @param compareModel Compare model to check if contains in search model.
-     * @throws CompanionError::error_code If an error occured in search operation.
-     */
-    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel) = 0;
+        /**
+         * Image recognition abstract class to implement specific image recognition algorithms.
+         * @author Andreas Sekulski
+         */
+        class ImageRecognition {
 
-    /**
-     * Indicator if this algorithm use cuda.
-     * @return True if cuda will be used otherwise false.
-     */
-    virtual bool isCuda() = 0;
-};
+        public:
+
+            /**
+             * Specific algorithm implementation like simple compare or template matching.
+             * @param searchModel Search model to compare.
+             * @param compareModel Compare model to check if contains in search model.
+             * @throws Companion::Error::Code If an error occured in search operation.
+             */
+            virtual Companion::Draw::Drawable* algo(Companion::Model::ImageRecognitionModel *searchModel,
+                                                    Companion::Model::ImageRecognitionModel *compareModel) = 0;
+
+            /**
+             * Indicator if this algorithm use cuda.
+             * @return True if cuda will be used otherwise false.
+             */
+            virtual bool isCuda() = 0;
+        };
+    }
+}
+
+
 
 #endif //COMPANION_IMAGERECOGNITION_H

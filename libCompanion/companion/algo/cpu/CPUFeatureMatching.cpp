@@ -1,6 +1,6 @@
 #include "CPUFeatureMatching.h"
 
-CPUFeatureMatching::CPUFeatureMatching() {
+Companion::Algorithm::CPU::FeatureMatching::FeatureMatching() {
 
     this->detector = cv::ORB::create();
     this->extractor = cv::BRISK::create();
@@ -8,23 +8,28 @@ CPUFeatureMatching::CPUFeatureMatching() {
     this->matcher = cv::DescriptorMatcher::create(type);
 }
 
-CPUFeatureMatching::CPUFeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
-                                       cv::Ptr<cv::DescriptorExtractor> extractor,
-                                       cv::Ptr<cv::DescriptorMatcher> matcher,
-                                       int type,
-                                       int countMatches,
-                                       bool useIRA) {
+Companion::Algorithm::CPU::FeatureMatching::FeatureMatching(
+        cv::Ptr<cv::FeatureDetector> detector,
+        cv::Ptr<cv::DescriptorExtractor> extractor,
+        cv::Ptr<cv::DescriptorMatcher> matcher,
+        int type,
+        int countMatches,
+        bool useIRA) {
+
     this->detector = detector;
     this->extractor = extractor;
     this->type = type;
     this->matcher = matcher;
     this->countMatches = countMatches;
     this->useIRA = useIRA;
+
 }
 
-CPUFeatureMatching::~CPUFeatureMatching() {}
+Companion::Algorithm::CPU::FeatureMatching::~FeatureMatching() {}
 
-Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitionModel *object) {
+Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
+        Model::ImageRecognitionModel *scene,
+        Model::ImageRecognitionModel *object) {
 
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
@@ -32,16 +37,16 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
     std::vector<cv::DMatch> goodMatches;
     std::vector<cv::KeyPoint> keypointsObject, keypointScene;
     cv::Mat descriptorsObject, descriptorsScene;
-    Drawable *lines = nullptr;
+    Companion::Draw::Drawable *lines = nullptr;
     IRA* ira;
     bool isIRAUsed = false;
 
-    FeatureMatchingModel *sceneModel = dynamic_cast<FeatureMatchingModel*>(scene);
-    FeatureMatchingModel *objectModel = dynamic_cast<FeatureMatchingModel*>(object);
+    Companion::Model::FeatureMatchingModel *sceneModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(scene);
+    Companion::Model::FeatureMatchingModel *objectModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(object);
 
     // If wrong model types are used...
     if(!sceneModel || !objectModel) {
-        throw CompanionError::errorCode::wrong_model_type;
+        throw Companion::Error::Code::wrong_model_type;
     }
 
     ira = objectModel->getIra();
@@ -53,7 +58,7 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
 
     // Check if images are loaded...
     if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage)) {
-        throw CompanionError::errorCode::image_not_found;
+        throw Companion::Error::Code::image_not_found;
     }
 
     if (useIRA && ira->isObjectDetected()) {
@@ -137,6 +142,6 @@ Drawable *CPUFeatureMatching::algo(ImageRecognitionModel *scene, ImageRecognitio
     return lines;
 }
 
-bool CPUFeatureMatching::isCuda() {
+bool Companion::Algorithm::CPU::FeatureMatching::isCuda() {
     return false;
 }

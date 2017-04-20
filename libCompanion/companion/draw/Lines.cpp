@@ -1,24 +1,24 @@
 #include "Lines.h"
 
-Lines::Lines() {
+Companion::Draw::Lines::Lines() {
 
 }
 
-Lines::~Lines() {
+Companion::Draw::Lines::~Lines() {
 
 }
 
-void Lines::addLine(Line *line) {
+void Companion::Draw::Lines::addLine(Line *line) {
     this->lines.push_back(line);
 }
 
-void Lines::draw(cv::Mat image) {
+void Companion::Draw::Lines::draw(cv::Mat image) {
     for (auto &line : lines) {
         line->draw(image);
     }
 }
 
-void Lines::ratio(int cWidth, int cHeight, int nWidth, int nHeight) {
+void Companion::Draw::Lines::ratio(int cWidth, int cHeight, int nWidth, int nHeight) {
     for (auto &line : lines) {
         line->ratio(cWidth, cHeight, nWidth, nHeight);
     }
