@@ -19,35 +19,61 @@
 #ifndef COMPANION_EXPORT_API_H
 #define COMPANION_EXPORT_API_H
 
+//#include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
+
 #include "companion/Companion.h"
+#include "companion/processing/2D/ObjectDetection.h"
+#include "companion/algo/cpu/CPUFeatureMatching.h"
+#include "companion/stream/Video.h"
+#include "companion/stream/Image.h"
 #include "companion/util/exportapi/ExportAPIDefinitions.h"
 
-COMPAPI(Companion*) CreateCompanion();
-COMPAPI(void) DisposeCompanion(Companion* pObject);
-COMPAPI(void) CallRun(Companion* pObject, StreamWorker &worker);
-COMPAPI(void) CallStop(Companion* pObject);
-
-
-
-
-
-
 /*
-Stream *getSource() const;
-param source Video source to set like an camera or video.
-void setSource(Stream *source);
-bool addModel(ImageRecognitionModel *model);
-void removeModel(ImageRecognitionModel *model);
-void clearModels();
-const std::vector<ImageRecognitionModel *> &getModels() const;
-ImageProcessing *getProcessing() const;
-void setProcessing(ImageProcessing *processing);
-int getSkipFrame() const;
-void setSkipFrame(int skipFrame);
-void setResultHandler(std::function<SUCCESS_CALLBACK> callback);
-const std::function<SUCCESS_CALLBACK> &getCallback() const;
-void setErrorHandler(std::function<ERROR_CALLBACK> callback);
-const std::function<ERROR_CALLBACK> &getErrorCallback() const;
-*/
+ * Wrapper functions for the export API (Windows DLL).
+ */
+
+/*********************/
+/* Companion Wrapper */
+/*********************/
+COMPAPI(Companion*) createCompanion();
+COMPAPI(void) disposeCompanion(Companion* companion);
+COMPAPI(void) callRun(Companion* companion, StreamWorker &worker);
+COMPAPI(void) callStop(Companion* companion);
+COMPAPI(Stream*) callGetSource(Companion* companion); // const;
+COMPAPI(void) callSetSource(Companion* companion, Stream* source);
+COMPAPI(void) callAddModel(Companion* companion, ImageRecognitionModel* model);
+COMPAPI(void) callRemoveModel(Companion* companion, ImageRecognitionModel* model);
+COMPAPI(void) callClearModels(Companion* companion);
+//const std::vector<ImageRecognitionModel *> &getModels(); // const;
+COMPAPI(ImageProcessing*) callGetProcessing(Companion* companion); // const;
+COMPAPI(void) callSetProcessing(Companion* companion, ImageProcessing* processing);
+COMPAPI(int) callGetSkipFrame(Companion* companion); // const;
+COMPAPI(void) callSetSkipFrame(Companion* companion, int skipFrame);
+COMPAPI(void) callSetResultHandler(Companion* companion, std::function<SUCCESS_CALLBACK> callback);
+//const std::function<SUCCESS_CALLBACK> &getCallback(); // const;
+COMPAPI(void) callSetErrorHandler(Companion* companion, std::function<ERROR_CALLBACK> callback);
+//const std::function<ERROR_CALLBACK> &getErrorCallback(); // const;
+
+COMPAPI(Companion*) createCompanionFake();
+void callback(std::vector<Drawable*> objects, cv::Mat frame);
+void error(CompanionError::errorCode code);
+
+
+
+/************************/
+/* StreamWorker Wrapper */
+/************************/
+COMPAPI(StreamWorker*) createStreamWorker(std::queue<cv::Mat> &queue, int buffer = 1);
+COMPAPI(void) disposeStreamWorker(StreamWorker* worker);
+
+COMPAPI(StreamWorker*) createStreamWorkerFake(std::queue<cv::Mat>* queue, int buffer = 1);
+
+
+/********************/
+/* Helper Functions */
+/********************/
+COMPAPI(std::queue<cv::Mat>*) createQueue();
+COMPAPI(void) disposeQueue(std::queue<cv::Mat>* queue);
 
 #endif //COMPANION_EXPORT_API_H
