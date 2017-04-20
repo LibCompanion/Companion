@@ -1,6 +1,8 @@
 #include "StreamWorker.h"
 
-void StreamWorker::produce(Stream *stream, int skipFrame, std::function<ERROR_CALLBACK> errorCallback) {
+void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
+                                              int skipFrame,
+                                              std::function<ERROR_CALLBACK> errorCallback) {
 
     bool storedFrame;
     int skipFrameNr = 0;
@@ -37,14 +39,15 @@ void StreamWorker::produce(Stream *stream, int skipFrame, std::function<ERROR_CA
         finished = true;
         cv.notify_all();
 
-    } catch (CompanionError::errorCode error) {
+    } catch (Companion::Error::Code error) {
         errorCallback(error);
     }
 }
 
-void StreamWorker::consume(ImageProcessing *processing,
-                           std::function<ERROR_CALLBACK> errorCallback,
-                           std::function<SUCCESS_CALLBACK> callback) {
+void Companion::Thread::StreamWorker::consume(
+        Companion::Processing::ImageProcessing *processing,
+        std::function<ERROR_CALLBACK> errorCallback,
+        std::function<SUCCESS_CALLBACK> callback) {
 
     cv::Mat frame;
     bool isFinished = false;
@@ -65,12 +68,12 @@ void StreamWorker::consume(ImageProcessing *processing,
                 isFinished = finished;
             }
         }
-    } catch (CompanionError::errorCode errorCode) {
+    } catch (Companion::Error::Code errorCode) {
         errorCallback(errorCode);
     }
 }
 
-bool StreamWorker::storeFrame(cv::Mat &frame) {
+bool Companion::Thread::StreamWorker::storeFrame(cv::Mat &frame) {
     std::lock_guard<std::mutex> lk(mx);
     if(queue.size() >= buffer) {
         // If buffer full try to notify producer and wait current frame and do nothing.
@@ -83,11 +86,11 @@ bool StreamWorker::storeFrame(cv::Mat &frame) {
     }
 }
 
-bool StreamWorker::isRunning() {
+bool Companion::Thread::StreamWorker::isRunning() {
     return !finished;
 }
 
-void StreamWorker::stop() {
+void Companion::Thread::StreamWorker::stop() {
     if(isRunning()) {
         finished = true;
     }

@@ -1,33 +1,33 @@
 #include "Video.h"
 
-Video::Video(int device) {
+Companion::Input::Video::Video(int device) {
 
     cv::VideoCapture cap(device);
 
     if (!cap.isOpened()) {
-        throw CompanionError::errorCode::invalid_video_src;
+        throw Companion::Error::Code::invalid_video_src;
     }
 
     capture = cap;
 }
 
 
-Video::Video(std::string url) {
+Companion::Input::Video::Video(std::string url) {
 
     cv::VideoCapture cap(url);
 
     if (!cap.isOpened()) {
-        throw CompanionError::errorCode::invalid_video_src;
+        throw Companion::Error::Code::invalid_video_src;
     }
 
     capture = cap;
 }
 
-Video::~Video() {
+Companion::Input::Video::~Video() {
     // No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
-cv::Mat Video::obtainImage() {
+cv::Mat Companion::Input::Video::obtainImage() {
 
     cv::Mat frame;
 
