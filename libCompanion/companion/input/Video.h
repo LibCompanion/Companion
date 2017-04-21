@@ -24,6 +24,7 @@
 
 #include "Stream.h"
 #include "companion/util/CompanionError.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -33,7 +34,7 @@ namespace Companion {
          * Video streaming OpenCV realization to obtain images from an video or livestream.
          * @author Andreas Sekulski
          */
-        class Video : public Stream {
+        class COMP_EXPORTS Video : public Stream {
 
         public:
 

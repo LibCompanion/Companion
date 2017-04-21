@@ -33,8 +33,6 @@ endif()
 
 if(BUILD_SHARED_LIBRARY)
 	add_library(Companion SHARED ${SOURCE})
-    if(${CMAKE_SYSTEM_NAME} MATCHES "WindowsStore")
-    endif()
 else()
 	add_library(Companion ${SOURCE})
 endif()

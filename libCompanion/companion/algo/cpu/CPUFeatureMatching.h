@@ -21,6 +21,7 @@
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
 #include "companion/draw/Lines.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -32,7 +33,7 @@ namespace Companion {
              * Feature matching algo implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
              * @author Andreas Sekulski
              */
-            class FeatureMatching : public AbstractFeatureMatching {
+            class COMP_EXPORTS FeatureMatching : public AbstractFeatureMatching {
 
             public:
 

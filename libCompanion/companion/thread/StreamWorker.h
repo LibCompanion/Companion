@@ -30,6 +30,7 @@
 #include "companion/util/CompanionError.h"
 #include "companion/util/Util.h"
 #include "companion/util/Definitions.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -39,7 +40,7 @@ namespace Companion {
          * Stream worker class implementation to produce and consume images from an video source.
          * @author Andreas Sekulski
          */
-        class StreamWorker {
+        class COMP_EXPORTS StreamWorker {
 
         public:
 

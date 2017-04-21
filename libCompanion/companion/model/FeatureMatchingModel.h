@@ -23,6 +23,7 @@
 #include <opencv2/features2d.hpp>
 
 #include "ImageRecognitionModel.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -32,7 +33,7 @@ namespace Companion {
          * Comparison data model to store search results from an feature matching algo.
          * @author Andreas Sekulski
          */
-        class FeatureMatchingModel : public ImageRecognitionModel {
+        class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel {
 
         public:
 

@@ -28,6 +28,7 @@
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
 #include "companion/util/Definitions.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -36,7 +37,7 @@ namespace Companion {
      *
      * @author Andreas Sekulski
      */
-    class Configuration {
+    class COMP_EXPORTS Configuration {
 
     public:
 

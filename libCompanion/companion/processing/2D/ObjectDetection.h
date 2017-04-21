@@ -26,6 +26,7 @@
 #include "companion/draw/Drawable.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/Companion.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -36,7 +37,7 @@ namespace Companion {
          *
          * @author Andreas Sekulski
          */
-        class ObjectDetection : public ImageProcessing {
+        class COMP_EXPORTS ObjectDetection : public ImageProcessing {
 
         public:
 

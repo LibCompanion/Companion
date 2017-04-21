@@ -21,6 +21,7 @@
 
 #include "ImageRecognition.h"
 #include "companion/draw/Lines.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -30,7 +31,7 @@ namespace Companion {
          * Abstract feature matching class implementation for default feature matching methods.
          * @author Andreas Sekulski
          */
-        class AbstractFeatureMatching : public ImageRecognition {
+        class COMP_EXPORTS AbstractFeatureMatching : public ImageRecognition {
 
         public:
 

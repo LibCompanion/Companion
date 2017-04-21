@@ -28,6 +28,7 @@
 #include "companion/util/CompanionError.h"
 #include "companion/model/FeatureMatchingModel.h"
 #include "companion/util/Util.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -37,7 +38,7 @@ namespace Companion {
          * Image recognition abstract class to implement specific image recognition algorithms.
          * @author Andreas Sekulski
          */
-        class ImageRecognition {
+        class COMP_EXPORTS ImageRecognition {
 
         public:
 

@@ -22,6 +22,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "companion/draw/Drawable.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -32,7 +33,7 @@ namespace Companion {
          *
          * @author Andreas Sekulski
          */
-        class ImageProcessing {
+        class COMP_EXPORTS ImageProcessing {
 
         public:
 

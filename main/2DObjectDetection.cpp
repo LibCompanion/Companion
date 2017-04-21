@@ -16,9 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define Companion_IMPORTS
+
 #include <companion/Companion.h>
 #include <companion/processing/2D/ObjectDetection.h>
-#include <companion/algo/cuda/CudaFeatureMatching.h>
+//#include <companion/algo/cuda/CudaFeatureMatching.h>
 #include <companion/algo/cpu/CPUFeatureMatching.h>
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
@@ -55,7 +57,7 @@ int main() {
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost), Frame skipping and Cuda
 
     //std::string path = "D:/Data/Master/Testcase/HBF/";
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    std::string path = "D:\\Downloads\\";
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
     images.push_back(path + std::string("Sample_Right.jpg"));
@@ -89,8 +91,8 @@ int main() {
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
-    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
+    cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
@@ -98,9 +100,9 @@ int main() {
     //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
-    feature->setBlurForDescriptor(true);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
+    //cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
+    //feature->setBlurForDescriptor(true);
+    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));

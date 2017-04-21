@@ -25,6 +25,7 @@
 #include <opencv2/imgcodecs.hpp>
 
 #include "Stream.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -34,7 +35,7 @@ namespace Companion {
          * Streaming class implementation for an subset from images.
          * @author Andreas Sekulski
          */
-        class Image : public Stream {
+        class COMP_EXPORTS Image : public Stream {
 
         public:
 

@@ -25,55 +25,62 @@
 #include "companion/Companion.h"
 #include "companion/processing/2D/ObjectDetection.h"
 #include "companion/algo/cpu/CPUFeatureMatching.h"
-#include "companion/stream/Video.h"
-#include "companion/stream/Image.h"
+#include "companion/input/Video.h"
+#include "companion/input/Image.h"
 #include "companion/util/exportapi/ExportAPIDefinitions.h"
 
-/*
- * Wrapper functions for the export API (Windows DLL).
- */
+namespace Companion {
 
-/*********************/
-/* Companion Wrapper */
-/*********************/
-COMPAPI(Companion*) createCompanion();
-COMPAPI(void) disposeCompanion(Companion* companion);
-COMPAPI(void) callRun(Companion* companion, StreamWorker &worker);
-COMPAPI(void) callStop(Companion* companion);
-COMPAPI(Stream*) callGetSource(Companion* companion); // const;
-COMPAPI(void) callSetSource(Companion* companion, Stream* source);
-COMPAPI(void) callAddModel(Companion* companion, ImageRecognitionModel* model);
-COMPAPI(void) callRemoveModel(Companion* companion, ImageRecognitionModel* model);
-COMPAPI(void) callClearModels(Companion* companion);
-//const std::vector<ImageRecognitionModel *> &getModels(); // const;
-COMPAPI(ImageProcessing*) callGetProcessing(Companion* companion); // const;
-COMPAPI(void) callSetProcessing(Companion* companion, ImageProcessing* processing);
-COMPAPI(int) callGetSkipFrame(Companion* companion); // const;
-COMPAPI(void) callSetSkipFrame(Companion* companion, int skipFrame);
-COMPAPI(void) callSetResultHandler(Companion* companion, std::function<SUCCESS_CALLBACK> callback);
-//const std::function<SUCCESS_CALLBACK> &getCallback(); // const;
-COMPAPI(void) callSetErrorHandler(Companion* companion, std::function<ERROR_CALLBACK> callback);
-//const std::function<ERROR_CALLBACK> &getErrorCallback(); // const;
+    namespace ExportAPI {
 
-COMPAPI(Companion*) createCompanionFake();
-void callback(std::vector<Drawable*> objects, cv::Mat frame);
-void error(CompanionError::errorCode code);
+        /*
+         * Wrapper functions for the export API (Windows DLL).
+         */
 
+        /*************************/
+        /* Configuration Wrapper */
+        /*************************/
+        COMPAPI(Companion::Configuration*) createConfiguration();
+        COMPAPI(void) disposeConfiguration(Companion::Configuration* config);
+        COMPAPI(void) callRun(Companion::Configuration* config, Companion::Thread::StreamWorker &worker);
+        COMPAPI(void) callStop(Companion::Configuration* config);
+        COMPAPI(Companion::Input::Stream*) callGetSource(Companion::Configuration* config); // const;
+        COMPAPI(void) callSetSource(Companion::Configuration* config, Companion::Input::Stream* source);
+        COMPAPI(void) callAddModel(Companion::Configuration* config, Companion::Model::ImageRecognitionModel* model);
+        COMPAPI(void) callRemoveModel(Companion::Configuration* config, Companion::Model::ImageRecognitionModel* model);
+        COMPAPI(void) callClearModels(Companion::Configuration* config);
+        //const std::vector<ImageRecognitionModel *> &getModels(); // const;
+        COMPAPI(Companion::Processing::ImageProcessing*) callGetProcessing(Companion::Configuration* config); // const;
+        COMPAPI(void) callSetProcessing(Companion::Configuration* config, Companion::Processing::ImageProcessing* processing);
+        COMPAPI(int) callGetSkipFrame(Companion::Configuration* config); // const;
+        COMPAPI(void) callSetSkipFrame(Companion::Configuration* config, int skipFrame);
+        COMPAPI(void) callSetResultHandler(Companion::Configuration* config, std::function<SUCCESS_CALLBACK> callback);
+        //const std::function<SUCCESS_CALLBACK> &getCallback(); // const;
+        COMPAPI(void) callSetErrorHandler(Companion::Configuration* config, std::function<ERROR_CALLBACK> callback);
+        //const std::function<ERROR_CALLBACK> &getErrorCallback(); // const;
 
-
-/************************/
-/* StreamWorker Wrapper */
-/************************/
-COMPAPI(StreamWorker*) createStreamWorker(std::queue<cv::Mat> &queue, int buffer = 1);
-COMPAPI(void) disposeStreamWorker(StreamWorker* worker);
-
-COMPAPI(StreamWorker*) createStreamWorkerFake(std::queue<cv::Mat>* queue, int buffer = 1);
+        COMPAPI(Companion::Configuration*) createCompanionFake();
+        void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame);
+        void error(Companion::Error::Code code);
 
 
-/********************/
-/* Helper Functions */
-/********************/
-COMPAPI(std::queue<cv::Mat>*) createQueue();
-COMPAPI(void) disposeQueue(std::queue<cv::Mat>* queue);
+
+        /************************/
+        /* StreamWorker Wrapper */
+        /************************/
+        COMPAPI(Companion::Thread::StreamWorker*) createStreamWorker(std::queue<cv::Mat> &queue, int buffer = 1);
+        COMPAPI(void) disposeStreamWorker(Companion::Thread::StreamWorker* worker);
+
+        COMPAPI(Companion::Thread::StreamWorker*) createStreamWorkerFake(std::queue<cv::Mat>* queue, int buffer = 1);
+
+
+        /********************/
+        /* Helper Functions */
+        /********************/
+        COMPAPI(std::queue<cv::Mat>*) createQueue();
+        COMPAPI(void) disposeQueue(std::queue<cv::Mat>* queue);
+
+    }
+}
 
 #endif //COMPANION_EXPORT_API_H

@@ -23,6 +23,7 @@
 
 #include "Drawable.h"
 #include "Line.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
@@ -32,7 +33,7 @@ namespace Companion {
          * Implementation class to draw multiple lines.
          * @author Andreas Sekulski
          */
-        class Lines : public Drawable {
+        class COMP_EXPORTS Lines : public Drawable {
 
         public:
 
