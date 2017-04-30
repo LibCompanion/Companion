@@ -9,73 +9,73 @@ Companion::Configuration* Companion::ExportAPI::createConfiguration() {
 }
 
 void Companion::ExportAPI::disposeConfiguration(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         delete config;
-        config = NULL;
+        config = nullptr;
     }
 }
 
 void Companion::ExportAPI::callRun(Companion::Configuration* config, Companion::Thread::StreamWorker &worker) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->run(worker);
     }
 }
 
 void Companion::ExportAPI::callStop(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->stop();
     }
 }
 
 Companion::Input::Stream* Companion::ExportAPI::callGetSource(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         return config->getSource();
     } else {
-        return NULL;
+        return nullptr;
     }
 }
 
 void Companion::ExportAPI::callSetSource(Companion::Configuration* config, Companion::Input::Stream* source) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->setSource(source);
     }
 }
 
 void Companion::ExportAPI::callAddModel(Companion::Configuration* config, Companion::Model::ImageRecognitionModel* model) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->addModel(model);
     }
 }
 
 void Companion::ExportAPI::callRemoveModel(Companion::Configuration* config, Companion::Model::ImageRecognitionModel* model) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->removeModel(model);
     }
 }
 
 void Companion::ExportAPI::callClearModels(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->clearModels();
     }
 }
 
 Companion::Processing::ImageProcessing* Companion::ExportAPI::callGetProcessing(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         return config->getProcessing();
     }
     else {
-        return NULL;
+        return nullptr;
     }
 }
 
 void Companion::ExportAPI::callSetProcessing(Companion::Configuration* config, Companion::Processing::ImageProcessing* processing) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->setProcessing(processing);
     }
 }
 
 int Companion::ExportAPI::callGetSkipFrame(Companion::Configuration* config) {
-    if (config != NULL) {
+    if (config != nullptr) {
         return config->getSkipFrame();
     } else {
         return 0;
@@ -83,7 +83,7 @@ int Companion::ExportAPI::callGetSkipFrame(Companion::Configuration* config) {
 }
 
 void Companion::ExportAPI::callSetSkipFrame(Companion::Configuration* config, int skipFrame) {
-    if (config != NULL) {
+    if (config != nullptr) {
         config->setSkipFrame(skipFrame);
     }
 }

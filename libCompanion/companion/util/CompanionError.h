@@ -46,7 +46,7 @@ namespace Companion {
          * @param code The error code to get corresponding error message.
          * @return String message from given error.
          */
-        COMPAPI(inline std::string) getError(Code code) {
+        inline std::string COMP_EXPORTS getError(Code code) {
 
             std::string error = "Unknown Error";
 

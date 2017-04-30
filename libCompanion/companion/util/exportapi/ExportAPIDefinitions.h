@@ -19,46 +19,52 @@
 #ifndef COMPANION_EXPORT_API_DEFINITIONS_H
 #define COMPANION_EXPORT_API_DEFINITIONS_H
 
-/**
- * Calling convention types.
- */
-#if defined WIN32 || defined _WIN32
-#    define COMP_CDECL __cdecl
-#    define COMP_STDCALL __stdcall
-#else
-#    define COMP_CDECL
-#    define COMP_STDCALL
-#endif
+namespace Companion
+{
 
-/**
- * Enables function exporting when building a shared library.
- */
-#if (defined WIN32 || defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined Companion_EXPORTS
-#    define COMP_EXPORTS __declspec(dllexport)
-#elif defined __GNUC__ && __GNUC__ >= 4
-#    define COMP_EXPORTS __attribute__ ((visibility ("default")))
-#elif defined Companion_IMPORTS
-#    define COMP_EXPORTS __declspec(dllimport) // You have to manually define "Companion_IMPORTS" for DLL imports
-#else
-#    define COMP_EXPORTS
-#endif
+    //typedef void(*P_SUCCESS_CALLBACK)(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame);
 
-/**
- * Disables name mangling for exported functions.
- */
-#ifndef COMP_EXTERN_C
-#    ifdef __cplusplus
-#        define COMP_EXTERN_C extern "C"
-#    else
-#        define COMP_EXTERN_C
-#    endif
-#endif
+    /**
+     * Calling convention types.
+     */
+    #if defined WIN32 || defined _WIN32
+    #    define COMP_CDECL __cdecl
+    #    define COMP_STDCALL __stdcall
+    #else
+    #    define COMP_CDECL
+    #    define COMP_STDCALL
+    #endif
 
-/**
- * Final export API declaration to export functions when building a shared library.
- */
-#ifndef COMPAPI
-#    define COMPAPI(rettype) COMP_EXTERN_C COMP_EXPORTS rettype COMP_CDECL
-#endif
+    /**
+     * Enables function exporting when building a shared library.
+     */
+    #if (defined WIN32 || defined _WIN32 || defined WINCE || defined __CYGWIN__) && defined Companion_EXPORTS
+    #    define COMP_EXPORTS __declspec(dllexport)
+    #elif defined __GNUC__ && __GNUC__ >= 4
+    #    define COMP_EXPORTS __attribute__ ((visibility ("default")))
+    #elif defined Companion_IMPORTS
+    #    define COMP_EXPORTS __declspec(dllimport) // You have to manually define "Companion_IMPORTS" for DLL imports
+    #else
+    #    define COMP_EXPORTS
+    #endif
+
+    /**
+     * Disables name mangling for exported functions.
+     */
+    #ifndef COMP_EXTERN_C
+    #    ifdef __cplusplus
+    #        define COMP_EXTERN_C extern "C"
+    #    else
+    #        define COMP_EXTERN_C
+    #    endif
+    #endif
+
+    /**
+     * Final export API declaration to export functions when building a shared library.
+     */
+    #ifndef COMPAPI
+    #    define COMPAPI(rettype) COMP_EXTERN_C COMP_EXPORTS rettype COMP_CDECL
+    #endif
+}
 
 #endif //COMPANION_EXPORT_API_DEFINITIONS_H
