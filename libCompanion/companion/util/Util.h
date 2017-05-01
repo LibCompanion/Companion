@@ -23,38 +23,42 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-/**
- * Utility class for opencv.
- * @author Andreas Sekulksi
- */
-class Util {
-
-public:
+namespace Companion {
 
     /**
-     * Checks if given image is loaded.
-     * @param img Image to check if it's not null.
-     * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
+     * Utility class for opencv.
+     * @author Andreas Sekulksi
      */
-    static bool isImageLoaded(cv::Mat &img);
+    class Util {
 
-    /**
-     * Resize given image.
-     * @param img Image to resize.
-     * @param size_x Resize image to given height in pixel.
-     * @param size_y Resize image to given width in pixel.
-     */
-    static void resizeImage(cv::Mat &img, int size_x, int size_y);
+    public:
 
-    /**
-     * Ratio to set new point from scaled frame.
-     * @param point Point to calculate new positions.
-     * @param cWidth Current width.
-     * @param cHeight Current height.
-     * @param nWidth New width.
-     * @param nHeight New height.
-     */
-    static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
-};
+        /**
+         * Checks if given image is loaded.
+         * @param img Image to check if it's not null.
+         * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
+         */
+        static bool isImageLoaded(cv::Mat &img);
+
+        /**
+         * Resize given image.
+         * @param img Image to resize.
+         * @param size_x Resize image to given height in pixel.
+         * @param size_y Resize image to given width in pixel.
+         */
+        static void resizeImage(cv::Mat &img, int size_x, int size_y);
+
+        /**
+         * Ratio to set new point from scaled frame.
+         * @param point Point to calculate new positions.
+         * @param cWidth Current width.
+         * @param cHeight Current height.
+         * @param nWidth New width.
+         * @param nHeight New height.
+         */
+        static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
+    };
+
+}
 
 #endif //COMPANION_UTIL_H

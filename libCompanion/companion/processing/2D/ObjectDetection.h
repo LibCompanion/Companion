@@ -27,52 +27,60 @@
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/Companion.h"
 
-/**
- * 2D Object detection implementation.
- *
- * @author Andreas Sekulski
- */
-class ObjectDetection : public ImageProcessing {
+namespace Companion {
 
-public:
+    namespace Processing {
 
-    /**
-     * Constructor to create an object detection algorithm implementation.
-     * @param companion Configuration class to obtain model entities to verify.
-     * @param imageRecognition Image recognition algorithm to use, for example feature matching.
-     * @param scale Scaling factor from frame. Default by one.
-     */
-    ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale = 1);
+        /**
+         * 2D Object detection implementation.
+         *
+         * @author Andreas Sekulski
+         */
+        class ObjectDetection : public ImageProcessing {
 
-    /**
-     * Destructor
-     */
-    virtual ~ObjectDetection();
+        public:
 
-    /**
-     * Try to detect all objects from give frame.
-     * @param frame Frame to check for an object location.
-     * @return An empty vector if no objects are detected.
-     */
-    virtual std::vector<Drawable*> execute(cv::Mat frame);
+            /**
+             * Constructor to create an object detection algorithm implementation.
+             * @param companion Configuration class to obtain model entities to verify.
+             * @param imageRecognition Image recognition algorithm to use, for example feature matching.
+             * @param scale Scaling factor from frame. Default by one.
+             */
+            ObjectDetection(Companion::Configuration *companion, Algorithm::ImageRecognition *imageRecognition, float scale = 1);
 
-private:
+            /**
+             * Destructor
+             */
+            virtual ~ObjectDetection();
 
-    /**
-     * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size
-     */
-    float scale;
+            /**
+             * Try to detect all objects from give frame.
+             * @param frame Frame to check for an object location.
+             * @return An empty vector if no objects are detected.
+             */
+            virtual std::vector<Companion::Draw::Drawable*> execute(cv::Mat frame);
 
-    /**
-     * Companion configuration which contains model data to search.
-     */
-    Companion *companion;
+        private:
 
-    /**
-     * FeatureMatching algorithm setup.
-     */
-    ImageRecognition *imageRecognition;
+            /**
+             * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size
+             */
+            float scale;
 
-};
+            /**
+             * Companion configuration which contains model data to search.
+             */
+            Companion::Configuration *companion;
+
+            /**
+             * FeatureMatching algorithm setup.
+             */
+            Algorithm::ImageRecognition *imageRecognition;
+
+        };
+
+    }
+
+}
 
 #endif //COMPANION_OBJECTDETECTION_H

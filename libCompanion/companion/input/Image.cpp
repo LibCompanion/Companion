@@ -1,18 +1,18 @@
 #include "Image.h"
 
-Image::Image() {
+Companion::Input::Image::Image() {
     index = 0;
 }
 
-Image::~Image() {
+Companion::Input::Image::~Image() {
 
 }
 
-void Image::addImagePath(std::string path) {
+void Companion::Input::Image::addImagePath(std::string path) {
     images.push_back(path);
 }
 
-cv::Mat Image::obtainImage() {
+cv::Mat Companion::Input::Image::obtainImage() {
 
     cv::Mat image;
 
