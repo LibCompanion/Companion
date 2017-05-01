@@ -36,7 +36,7 @@ namespace Companion {
          *
          * @author Andreas Sekulski
          */
-        class ObjectDetection : public ImageProcessing {
+        class COMP_EXPORTS ObjectDetection : public ImageProcessing {
 
         public:
 

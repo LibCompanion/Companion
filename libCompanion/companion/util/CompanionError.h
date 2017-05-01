@@ -19,12 +19,14 @@
 #ifndef COMPANION_ERROR_H
 #define COMPANION_ERROR_H
 
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
+
 namespace Companion {
 
     namespace Error {
 
         /// Enumeration class for error codes
-        enum class Code {
+        enum class COMP_EXPORTS Code {
             image_not_found, ///< If image not found error.
             dimension_error, ///< If dimensions from given images inequal.
             template_dimension_error, ///< If dimensions from template is wrong.
@@ -44,7 +46,7 @@ namespace Companion {
          * @param code The error code to get corresponding error message.
          * @return String message from given error.
          */
-        inline std::string getError(Code code) {
+        inline std::string COMP_EXPORTS getError(Code code) {
 
             std::string error = "Unknown Error";
 

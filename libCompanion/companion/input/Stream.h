@@ -19,6 +19,8 @@
 #ifndef COMPANION_STREAM_H
 #define COMPANION_STREAM_H
 
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
+
 namespace Companion {
 
     namespace Input {
@@ -27,7 +29,7 @@ namespace Companion {
          * Data stream interface class to obtain image processing data for example from an video or an set of images.
          * @author Andreas Sekulski
          */
-        class Stream {
+        class COMP_EXPORTS Stream {
 
         public:
 

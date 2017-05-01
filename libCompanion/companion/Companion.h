@@ -36,7 +36,7 @@ namespace Companion {
      *
      * @author Andreas Sekulski
      */
-    class Configuration {
+    class COMP_EXPORTS Configuration {
 
     public:
 

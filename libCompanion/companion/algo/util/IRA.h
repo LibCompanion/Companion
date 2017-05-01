@@ -21,6 +21,8 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
+
 namespace Companion {
 
     namespace Algorithm {
@@ -29,7 +31,7 @@ namespace Companion {
          * Image reduction algorithm (IRA) implementation to improve performance for an supported image recognition.
          * @author Andreas Sekulski
          */
-        class IRA {
+        class COMP_EXPORTS IRA {
 
         public:
 

@@ -30,7 +30,7 @@ namespace Companion {
          * Abstract feature matching class implementation for default feature matching methods.
          * @author Andreas Sekulski
          */
-        class AbstractFeatureMatching : public ImageRecognition {
+        class COMP_EXPORTS AbstractFeatureMatching : public ImageRecognition {
 
         public:
 

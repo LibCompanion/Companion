@@ -37,7 +37,7 @@ namespace Companion {
          * Image recognition abstract class to implement specific image recognition algorithms.
          * @author Andreas Sekulski
          */
-        class ImageRecognition {
+        class COMP_EXPORTS ImageRecognition {
 
         public:
 

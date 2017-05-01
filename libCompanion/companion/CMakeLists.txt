@@ -22,7 +22,8 @@ SET(SOURCE
         thread/StreamWorker.cpp thread/StreamWorker.h
         util/CompanionError.h
         util/Util.cpp util/Util.h
-        util/Definitions.h)
+        util/Definitions.h
+        util/exportapi/ExportAPIDefinitions.h)
 
 if(USE_CUDA)
     SET(SOURCE ${SOURCE}

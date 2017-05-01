@@ -33,7 +33,7 @@ namespace Companion {
          * Class implementation to draw an single line.
          * @author Andreas Sekulski
          */
-        class Line : public Drawable {
+        class COMP_EXPORTS Line : public Drawable {
 
         public:
 

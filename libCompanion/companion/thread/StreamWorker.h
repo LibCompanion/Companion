@@ -39,7 +39,7 @@ namespace Companion {
          * Stream worker class implementation to produce and consume images from an video source.
          * @author Andreas Sekulski
          */
-        class StreamWorker {
+        class COMP_EXPORTS StreamWorker {
 
         public:
 
