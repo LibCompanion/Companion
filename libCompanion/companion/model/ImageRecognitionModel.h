@@ -21,7 +21,6 @@
 
 #include <opencv2/core/core.hpp>
 #include "companion/algo/util/IRA.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

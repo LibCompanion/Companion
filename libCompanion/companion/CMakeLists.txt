@@ -23,7 +23,6 @@ SET(SOURCE
         util/CompanionError.h
         util/Util.cpp util/Util.h
         util/Definitions.h
-        util/exportapi/ExportAPI.cpp util/exportapi/ExportAPI.h
         util/exportapi/ExportAPIDefinitions.h)
 
 if(USE_CUDA)

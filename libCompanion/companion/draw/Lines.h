@@ -23,7 +23,6 @@
 
 #include "Drawable.h"
 #include "Line.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

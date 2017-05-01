@@ -28,7 +28,6 @@
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
 #include "companion/util/Definitions.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

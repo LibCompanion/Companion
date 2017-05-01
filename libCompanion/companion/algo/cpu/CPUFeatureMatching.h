@@ -21,7 +21,6 @@
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
 #include "companion/draw/Lines.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

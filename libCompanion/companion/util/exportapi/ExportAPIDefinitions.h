@@ -21,9 +21,6 @@
 
 namespace Companion
 {
-
-    //typedef void(*P_SUCCESS_CALLBACK)(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame);
-
     /**
      * Calling convention types.
      */

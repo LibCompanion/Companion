@@ -24,7 +24,6 @@
 
 #include "Stream.h"
 #include "companion/util/CompanionError.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

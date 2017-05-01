@@ -23,7 +23,6 @@
 #include <opencv2/features2d.hpp>
 
 #include "ImageRecognitionModel.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 

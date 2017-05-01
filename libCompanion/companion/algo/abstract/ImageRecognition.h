@@ -28,7 +28,6 @@
 #include "companion/util/CompanionError.h"
 #include "companion/model/FeatureMatchingModel.h"
 #include "companion/util/Util.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
