@@ -24,7 +24,6 @@
 
 #include "Drawable.h"
 #include "companion/util/Util.h"
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
 namespace Companion {
 
