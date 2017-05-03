@@ -33,7 +33,7 @@ namespace Companion {
          * Video streaming OpenCV realization to obtain images from an video or livestream.
          * @author Andreas Sekulski
          */
-        class Video : public Stream {
+        class COMP_EXPORTS Video : public Stream {
 
         public:
 

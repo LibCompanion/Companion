@@ -23,13 +23,15 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
+
 namespace Companion {
 
     /**
      * Utility class for opencv.
      * @author Andreas Sekulksi
      */
-    class Util {
+    class COMP_EXPORTS Util {
 
     public:
 

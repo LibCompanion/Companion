@@ -34,7 +34,7 @@ namespace Companion {
          * Streaming class implementation for an subset from images.
          * @author Andreas Sekulski
          */
-        class Image : public Stream {
+        class COMP_EXPORTS Image : public Stream {
 
         public:
 

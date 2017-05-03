@@ -32,7 +32,7 @@ namespace Companion {
          * Comparison data model to store search results from an feature matching algo.
          * @author Andreas Sekulski
          */
-        class FeatureMatchingModel : public ImageRecognitionModel {
+        class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel {
 
         public:
 

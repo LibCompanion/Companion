@@ -29,7 +29,7 @@ namespace Companion {
          * Default model type for an image recognition implementation class for an scene or object.
          * @author Andreas Sekulski
          */
-        class ImageRecognitionModel {
+        class COMP_EXPORTS ImageRecognitionModel {
 
         public:
 

@@ -32,7 +32,7 @@ namespace Companion {
          *
          * @author Andreas Sekulski
          */
-        class ImageProcessing {
+        class COMP_EXPORTS ImageProcessing {
 
         public:
 

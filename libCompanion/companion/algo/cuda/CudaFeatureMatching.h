@@ -23,6 +23,7 @@
 #include <opencv2/cudafeatures2d.hpp>
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h" 
 
 namespace Companion {
 
@@ -35,7 +36,7 @@ namespace Companion {
              *
              * @author Andreas Sekulski
              */
-            class FeatureMatching : public AbstractFeatureMatching {
+            class COMP_EXPORTS FeatureMatching : public AbstractFeatureMatching {
 
             public:
 

@@ -21,6 +21,8 @@
 
 #include <opencv2/core/core.hpp>
 
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
+
 namespace Companion {
 
     namespace Draw {
@@ -29,7 +31,7 @@ namespace Companion {
          * Abstract class implementation for an area.
          * @author Andreas Sekulski.
          */
-        class Drawable {
+        class COMP_EXPORTS Drawable {
 
         public:
             /**
