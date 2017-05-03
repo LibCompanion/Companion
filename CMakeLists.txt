@@ -10,7 +10,7 @@ project(Companion)
 
 # Define CMake minimum version
 if(CMAKE_SYSTEM_NAME MATCHES WindowsStore)
-    cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
+    cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
 else()
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 endif()
