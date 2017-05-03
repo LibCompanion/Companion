@@ -5,3 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 add_executable(2DObjectDetection 2DObjectDetection.cpp)
 target_link_libraries(2DObjectDetection Companion)
+
+# add install instructions (also add debug postfix for differentiation)
+set_property(TARGET 2DObjectDetection PROPERTY DEBUG_POSTFIX "D")
+install(TARGETS 2DObjectDetection DESTINATION "${PROJECT_BINARY_DIR}/install/bin" OPTIONAL)

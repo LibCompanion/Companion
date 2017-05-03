@@ -30,11 +30,14 @@ if(USE_CUDA)
             algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h)
 endif()
 
-if(BUILD_SHARED_LIBRARY)
-	add_library(Companion SHARED ${SOURCE})
-else()
-	add_library(Companion ${SOURCE})
-endif()
-
-
+add_library(Companion ${SOURCE})
 target_link_libraries(Companion ${OpenCV_LIBS})
+
+
+# add install instructions
+install(TARGETS Companion EXPORT CompanionConfig
+        RUNTIME DESTINATION "bin"
+        LIBRARY DESTINATION "lib"
+        ARCHIVE DESTINATION "lib")
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(EXPORT CompanionConfig DESTINATION "lib")
