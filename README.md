@@ -1,6 +1,6 @@
-![Companion](https://nepitwin.github.io/libCompanion/images/logo.png "Companion")
+![Companion](https://libcompanion.github.io/libCompanion/images/logo.png "Companion")
 
-[Companion](https://nepitwin.github.io/libCompanion) is an computer vision library written with OpenCV 3.
+[Companion](https://libcompanion.github.io/libCompanion/) is an computer vision library written with OpenCV 3.
 
 # Dependencies
 
