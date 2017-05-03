@@ -31,7 +31,7 @@ If you desire to build Companion for *Universal Windows Platform* you can simply
 ```
 cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
 ```
-Make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure* if you prefer the cmake-gui instead. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
+If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure*. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
 
 # Getting started
 
