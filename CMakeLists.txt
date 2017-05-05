@@ -9,7 +9,7 @@ project(Companion)
 
 
 # Define CMake minimum version
-if(CMAKE_SYSTEM_NAME MATCHES WindowsStore)
+if(WINDOWS_STORE)
     cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
 else()
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
@@ -24,11 +24,15 @@ set(CMAKE_DEBUG_POSTFIX "D")
 
 # Define interactive CMake Flags
 option(USE_CUDA "Use cuda implementation from libCompanion" OFF)
-if(CMAKE_SYSTEM_NAME MATCHES WindowsStore)
+if(WINDOWS_STORE)
     set(BUILD_SHARED_LIBS ON)
 else()
     set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared library")
 endif()
+
+
+# Define global properties
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 
 # Configure dependencies
@@ -45,7 +49,7 @@ add_subdirectory(libCompanion)
 
 
 # Configure additional modules
-if(NOT (CMAKE_SYSTEM_NAME MATCHES WindowsStore))
+if(NOT WINDOWS_STORE)
     add_subdirectory(main)
     add_subdirectory(testing)
 endif()

@@ -47,6 +47,10 @@ add_library(Companion ${SOURCE})
 target_link_libraries(Companion ${OpenCV_LIBS})
 
 
+# Add target properties
+set_property(TARGET Companion PROPERTY FOLDER "libCompanion")
+
+
 # add install instructions
 install(TARGETS Companion EXPORT CompanionConfig
         RUNTIME DESTINATION "bin"
