@@ -23,12 +23,8 @@ set(CMAKE_DEBUG_POSTFIX "D")
 
 
 # Define interactive CMake Flags
-option(USE_CUDA "Use cuda implementation from libCompanion" OFF)
-if(WINDOWS_STORE)
-    set(BUILD_SHARED_LIBS ON)
-else()
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared library")
-endif()
+option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
+set(Companion_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build libCompanion as shared library")
 
 
 # Define global properties
@@ -37,7 +33,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Configure dependencies
 set(OpenCVComponents "core" "imgproc" "imgcodecs" "features2d" "videoio" "calib3d")
-if(USE_CUDA)
+if(Companion_USE_CUDA)
     set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
 endif()
 find_package(OpenCV REQUIRED ${OpenCVComponents})

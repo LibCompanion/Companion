@@ -26,14 +26,14 @@ SET(SOURCE
         util/Util.cpp util/Util.h
         util/Definitions.h
         util/exportapi/ExportAPIDefinitions.h)
-if(USE_CUDA)
+if(Companion_USE_CUDA)
     SET(SOURCE ${SOURCE}
             algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h)
 endif()
 
 
 # Create MSVC filter
-if (MSVC)
+if(MSVC)
     foreach(source IN LISTS SOURCE)
         get_filename_component(source_path "${source}" PATH)
         string(REPLACE "/" "\\" source_path_msvc "${source_path}")
@@ -43,7 +43,11 @@ endif()
 
 
 # Create library and set linked libraries
-add_library(Companion ${SOURCE})
+if(Companion_BUILD_SHARED_LIBRARY)
+    add_library(Companion SHARED ${SOURCE})
+else()
+    add_library(Companion ${SOURCE})
+endif()
 target_link_libraries(Companion ${OpenCV_LIBS})
 
 
