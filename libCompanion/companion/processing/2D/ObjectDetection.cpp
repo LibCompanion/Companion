@@ -1,22 +1,24 @@
 #include "ObjectDetection.h"
 
-ObjectDetection::ObjectDetection(Companion *companion, ImageRecognition *imageRecognition, float scale) {
+Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
+                                                        Algorithm::ImageRecognition *imageRecognition,
+                                                        float scale) {
     this->companion = companion;
     this->imageRecognition = imageRecognition;
     this->scale = scale;
 }
 
-ObjectDetection::~ObjectDetection() {}
+Companion::Processing::ObjectDetection::~ObjectDetection() {}
 
-std::vector<Drawable*> ObjectDetection::execute(cv::Mat frame) {
+std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
-    FeatureMatchingModel *scene;
-    Drawable *object;
-    std::vector<Drawable*> objects;
-    std::vector<ImageRecognitionModel *> models = companion->getModels();
+    Model::FeatureMatchingModel *scene;
+    Draw::Drawable *object;
+    std::vector<Draw::Drawable*> objects;
+    std::vector<Model::ImageRecognitionModel *> models = companion->getModels();
 
     if (!frame.empty()) {
-        scene = new FeatureMatchingModel();
+        scene = new Model::FeatureMatchingModel();
 
         int oldX = frame.cols;
         int oldY = frame.rows;

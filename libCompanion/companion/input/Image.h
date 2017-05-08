@@ -16,66 +16,64 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_LINES_H
-#define COMPANION_LINES_H
+#ifndef COMPANION_IMAGE_H
+#define COMPANION_IMAGE_H
 
+#include <string>
+#include <vector>
 #include <opencv2/core/core.hpp>
+#include <opencv2/imgcodecs.hpp>
 
-#include "Drawable.h"
-#include "Line.h"
+#include "Stream.h"
 
 namespace Companion {
 
-    namespace Draw {
+    namespace Input {
 
         /**
-         * Implementation class to draw multiple lines.
+         * Streaming class implementation for an subset from images.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Lines : public Drawable {
+        class COMP_EXPORTS Image : public Stream {
 
         public:
 
             /**
-             * Constructor to create an lines class to store single lines.
+             * Default constructor to create an empty image list.
              */
-            Lines();
+            Image();
 
             /**
-             * Destructor.
+             * Default destructor;
              */
-            virtual ~Lines();
+            ~Image();
 
             /**
-             * Adds an new line.
-             * @param line Line to add.
+             * Adds an given image path to images list.
+             * @param path Image path to obtain image.
              */
-            void addLine(Line *line);
+            void addImagePath(std::string path);
 
             /**
-             * Draw lines to image.
-             * @param image Image to draw lines.
+             * Obtain next image from open video stream.
+             * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
              */
-            virtual void draw(cv::Mat image);
-
-            /**
-             * Ratio to scale position from drawable to new location.
-             * @param cWidth Current width.
-             * @param cHeight Current height.
-             * @param nWidth New width.
-             * @param nHeight New height.
-             */
-            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+            cv::Mat obtainImage();
 
         private:
 
             /**
-             * Set from all lines which should be drawn.
+             * List from all image paths;
              */
-            std::vector<Line*> lines;
+            std::vector<std::string> images;
+
+            /**
+             * Current index position from images.
+             */
+            int index;
         };
 
     }
 }
 
-#endif //COMPANION_LINES_H
+#endif //COMPANION_IMAGE_H

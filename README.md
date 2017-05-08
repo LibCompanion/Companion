@@ -1,6 +1,6 @@
 ![Companion](https://libcompanion.github.io/libCompanion/images/logo.png "Companion")
 
-[Companion](https://libcompanion.github.io/libCompanion/) is an computer vision library written with OpenCV 3.
+[Companion](https://libcompanion.github.io/libCompanion/) is a computer vision library written with OpenCV 3.
 
 # Dependencies
 
@@ -18,12 +18,20 @@ unstable algorithms which are planned features to implement in Companion.
 
 ## Build Companion
 
-Simply use cmake or cmake-gui to build Companion for you platform. Enable the Cuda flag to build Companion with Cuda support.
+Simply use cmake or cmake-gui to build Companion for your platform. Enable the Cuda flag to build Companion with Cuda support.
 
 ```
 cmake -DUSE_CUDA=ON
 make
 ```
+
+### UWP Support
+
+If you desire to build Companion for *Universal Windows Platform* you can simply use the provided toolchain file to do so.
+```
+cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
+```
+If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure*. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
 
 # Getting started
 

@@ -23,43 +23,59 @@
 #include <opencv2/cudafeatures2d.hpp>
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
+#include "companion/util/exportapi/ExportAPIDefinitions.h" 
 
-class CudaFeatureMatching : public AbstractFeatureMatching {
+namespace Companion {
 
-public:
+    namespace Algorithm {
 
-    /**
-     * Constructor to create an cuda based feature matching.
-     * @param cudaFeatureMatching Cuda based feature matching algorithm like cv::cuda::ORB.
-     */
-    CudaFeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
+        namespace Cuda {
 
-    /**
-     * Destructor
-     */
-    virtual ~CudaFeatureMatching();
+            /**
+             * Feature matching cuda implementation class.
+             *
+             * @author Andreas Sekulski
+             */
+            class COMP_EXPORTS FeatureMatching : public AbstractFeatureMatching {
 
-    /**
-     * Cuda implementation from feature matching.
-     * @param searchModel Search model to compare.
-     * @param compareModel Compare model to check if contains in search model.
-     * @throws CompanionError::error_code If an error occurred in search operation.
-     */
-    virtual Drawable* algo(ImageRecognitionModel *searchModel, ImageRecognitionModel *compareModel);
+            public:
 
-    /**
-     * Indicator if this algorithm use cuda.
-     * @return True if cuda will be used otherwise false.
-     */
-    virtual bool isCuda();
+                /**
+                 * Constructor to create an cuda based feature matching.
+                 * @param cudaFeatureMatching Cuda based feature matching algorithm like cv::cuda::ORB.
+                 */
+                FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
 
-private:
+                /**
+                 * Destructor
+                 */
+                virtual ~FeatureMatching();
 
-    /**
-     * Cuda feature matching algorithm.
-     */
-    cv::Ptr<cv::Feature2D> cudaFeatureMatching;
+                /**
+                 * Cuda implementation from feature matching.
+                 * @param searchModel Search model to compare.
+                 * @param compareModel Compare model to check if contains in search model.
+                 * @throws Companion::Error::Code If an error occurred in search operation.
+                 */
+                virtual Draw::Drawable* algo(Model::ImageRecognitionModel *searchModel,
+                                             Model::ImageRecognitionModel *compareModel);
 
-};
+                /**
+                 * Indicator if this algorithm use cuda.
+                 * @return True if cuda will be used otherwise false.
+                 */
+                virtual bool isCuda();
+
+            private:
+
+                /**
+                 * Cuda feature matching algorithm.
+                 */
+                cv::Ptr<cv::Feature2D> cudaFeatureMatching;
+
+            };
+        }
+    }
+}
 
 #endif //COMPANION_CUDAFEATUREMATCHING_H

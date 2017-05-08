@@ -1,31 +1,44 @@
 #include "Companion.h"
 
-Companion::Companion() {
+Companion::Configuration::Configuration() {
     source = nullptr;
     processing = nullptr;
     skipFrame = 0;
 }
 
-Companion::~Companion() {
+Companion::Configuration::~Configuration() {
     models.clear();
     delete source;
     delete processing;
 }
 
-Stream *Companion::getSource() const {
+void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
+    this->worker = &worker;
+    // Run new worker class.
+    this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
+    this->producer = std::thread(&Thread::StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
+    consumer.join();
+    producer.join();
+}
+
+void Companion::Configuration::stop() {
+    worker->stop();
+}
+
+Companion::Input::Stream *Companion::Configuration::getSource() const {
 
     if(!source) {
-        throw CompanionError::errorCode::video_src_not_set;
+        throw Error::Code::video_src_not_set;
     }
 
     return source;
 }
 
-void Companion::setSource(Stream *source) {
-    Companion::source = source;
+void Companion::Configuration::setSource(Companion::Input::Stream *source) {
+    Configuration::source = source;
 }
 
-bool Companion::addModel(ImageRecognitionModel *model) {
+bool Companion::Configuration::addModel(Companion::Model::ImageRecognitionModel *model) {
 
     if(!model->getImage().empty()) {
         models.push_back(model);
@@ -35,78 +48,67 @@ bool Companion::addModel(ImageRecognitionModel *model) {
     return false;
 }
 
-void Companion::removeModel(ImageRecognitionModel *model) {
+void Companion::Configuration::removeModel(Companion::Model::ImageRecognitionModel *model) {
     // ToDo Remove
 }
 
-void Companion::clearModels() {
+void Companion::Configuration::clearModels() {
     models.clear();
 }
 
-const std::vector<ImageRecognitionModel *> &Companion::getModels() const {
+const std::vector<Companion::Model::ImageRecognitionModel *> &Companion::Configuration::getModels() const {
     return models;
 }
 
-ImageProcessing *Companion::getProcessing() const {
+Companion::Processing::ImageProcessing *Companion::Configuration::getProcessing() const {
 
     if(processing == nullptr) {
-        throw CompanionError::errorCode::no_image_processing_algo_set;
+        throw Error::Code::no_image_processing_algo_set;
     }
 
     return processing;
 }
 
-void Companion::setProcessing(ImageProcessing *processing) {
-    Companion::processing = processing;
+void Companion::Configuration::setProcessing(Companion::Processing::ImageProcessing *processing) {
+    Configuration::processing = processing;
 }
 
-int Companion::getSkipFrame() const {
+int Companion::Configuration::getSkipFrame() const {
     return skipFrame;
 }
 
-void Companion::setSkipFrame(int skipFrame) {
+void Companion::Configuration::setSkipFrame(int skipFrame) {
 
     if(skipFrame <= 0) {
         skipFrame = 0;
     }
 
-    Companion::skipFrame = skipFrame;
+    Configuration::skipFrame = skipFrame;
 }
 
-void Companion::setResultHandler(std::function<void(std::vector<Drawable*>, cv::Mat)> callback) {
-    Companion::callback = callback;
+void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback) {
+    Configuration::callback = callback;
 }
 
-void Companion::setErrorHandler(std::function<void(CompanionError::errorCode)> callback) {
-    Companion::errorCallback = callback;
+void Companion::Configuration::setErrorHandler(std::function<ERROR_CALLBACK> callback) {
+    Configuration::errorCallback = callback;
 }
 
-void Companion::run(StreamWorker &worker) {
-    this->worker = &worker;
-    // Run new worker class.
-    this->consumer = std::thread(&StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
-    this->producer = std::thread(&StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
-    consumer.join();
-    producer.join();
-}
 
-void Companion::stop() {
-    worker->stop();
-}
-
-const std::function<void(std::vector<Drawable *>, cv::Mat)> &Companion::getCallback() const {
+const std::function<SUCCESS_CALLBACK> &Companion::Configuration::getCallback() const {
 
     if(!callback) {
-        throw CompanionError::errorCode::no_handler_set;
+        throw Error::Code::no_handler_set;
     }
 
     return callback;
 }
 
-const std::function<void(CompanionError::errorCode)> &Companion::getErrorCallback() const {
+
+const std::function<ERROR_CALLBACK> &Companion::Configuration::getErrorCallback() const {
 
     if(!errorCallback) {
-        throw CompanionError::errorCode::no_handler_set;
+        throw Error::Code::no_handler_set;
     }
 
     return errorCallback;

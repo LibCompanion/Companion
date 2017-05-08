@@ -1,3 +1,10 @@
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+
+# Create executable and set linked libraries
 add_executable(HOG hog.cpp)
 target_link_libraries(HOG ${OpenCV_LIBS})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+
+# Add target properties
+set_property(TARGET HOG PROPERTY FOLDER "libCompanion/testing")

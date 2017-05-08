@@ -21,87 +21,94 @@
 
 #include <opencv2/core/core.hpp>
 
-/**
- * Image reduction algorithm (IRA) implementation to improve performance for an supported image recognition.
- * @author Andreas Sekulski
- */
-class IRA {
+#include "companion/util/exportapi/ExportAPIDefinitions.h"
 
-public:
+namespace Companion {
 
-    /**
-     * Default constructor to create an empty IRA object.
-     */
-    IRA();
+    namespace Algorithm {
 
-    /**
-     * Default destructor.
-     */
-    virtual ~IRA();
+        /**
+         * Image reduction algorithm (IRA) implementation to improve performance for an supported image recognition.
+         * @author Andreas Sekulski
+         */
+        class COMP_EXPORTS IRA {
 
-    /**
-     * Gets last object detection position if exists.
-     * @return Gets last object detection position if exists, otherwise position is -1.
-     */
-    const cv::Rect &getLastObjectPosition() const;
+        public:
 
-    /**
-     * Sets last object position from detection.
-     * @param x X-Axis position from object.
-     * @param y Y-Axis position from object.
-     * @param width Width from object.
-     * @param height Height from object.
-     */
-    void setLastObjectPosition(int x, int y, int width, int height);
+            /**
+             * Default constructor to create an empty IRA object.
+             */
+            IRA();
 
-    /**
-     * Sets width from detected object.
-     * @param width Width from homography object.
-     */
-    void setWidth(int width);
+            /**
+             * Default destructor.
+             */
+            virtual ~IRA();
 
-    /**
-     * Sets height from detected object.
-     * @param height Height from homography object.
-     */
-    void setHeight(int height);
+            /**
+             * Gets last object detection position if exists.
+             * @return Gets last object detection position if exists, otherwise position is -1.
+             */
+            const cv::Rect &getLastObjectPosition() const;
 
-    /**
-     * Sets x position from object.
-     * @param x X position from homography object.
-     */
-    void setX(int x);
+            /**
+             * Sets last object position from detection.
+             * @param x X-Axis position from object.
+             * @param y Y-Axis position from object.
+             * @param width Width from object.
+             * @param height Height from object.
+             */
+            void setLastObjectPosition(int x, int y, int width, int height);
 
-    /**
-     * Sets y position from object.
-     * @param y Y position from homography object.
-     */
-    void setY(int y);
+            /**
+             * Sets width from detected object.
+             * @param width Width from homography object.
+             */
+            void setWidth(int width);
 
-    /**
-     * Clears last object detection position.
-     */
-    void clear();
+            /**
+             * Sets height from detected object.
+             * @param height Height from homography object.
+             */
+            void setHeight(int height);
 
-    /**
-     * Checks if last position from object exists.
-     * @return <b>true<br> if last position is set otherwise <b>false</b>
-     */
-    bool isObjectDetected();
+            /**
+             * Sets x position from object.
+             * @param x X position from homography object.
+             */
+            void setX(int x);
 
-private:
+            /**
+             * Sets y position from object.
+             * @param y Y position from homography object.
+             */
+            void setY(int y);
 
-    /**
-    * Last object position (lop) from detected object from last scene image.
-    */
-    cv::Rect lop;
+            /**
+             * Clears last object detection position.
+             */
+            void clear();
 
-    /**
-     * Default initial position if no object was detected in last frame.
-     */
-    const int NO_OBJECT_DETECTED = 0;
+            /**
+             * Checks if last position from object exists.
+             * @return <b>true<br> if last position is set otherwise <b>false</b>
+             */
+            bool isObjectDetected();
 
-};
+        private:
 
+            /**
+            * Last object position (lop) from detected object from last scene image.
+            */
+            cv::Rect lop;
+
+            /**
+             * Default initial position if no object was detected in last frame.
+             */
+            const int NO_OBJECT_DETECTED = 0;
+
+        };
+    }
+}
 
 #endif //COMPANION_IRA_H

@@ -22,60 +22,66 @@
 #include <opencv2/core/core.hpp>
 #include "companion/algo/util/IRA.h"
 
-/**
- * Default model type for an image recognition implementation class for an scene or object.
- * @author Andreas Sekulski
- */
-class ImageRecognitionModel {
+namespace Companion {
 
-public:
+    namespace Model {
+        /**
+         * Default model type for an image recognition implementation class for an scene or object.
+         * @author Andreas Sekulski
+         */
+        class COMP_EXPORTS ImageRecognitionModel {
 
-    /**
-     * Creates an default image recognition model class.
-     */
-    ImageRecognitionModel();
+        public:
 
-    /**
-     * Create an default image recognition model with an given image.
-     * @param image Image to set.
-     */
-    ImageRecognitionModel(cv::Mat image);
+            /**
+             * Creates an default image recognition model class.
+             */
+            ImageRecognitionModel();
 
-    /**
-     * Destructor.
-     */
-    virtual ~ImageRecognitionModel();
+            /**
+             * Create an default image recognition model with an given image.
+             * @param image Image to set.
+             */
+            ImageRecognitionModel(cv::Mat image);
 
-    /**
-     * Gets image which is stored, if no image is stored image is empty.
-     * @return An image if is set otherwise image is empty.
-     */
-    const cv::Mat &getImage() const;
+            /**
+             * Destructor.
+             */
+            virtual ~ImageRecognitionModel();
 
-    /**
-     * Sets given image.
-     * @param image Image to set.
-     */
-    void setImage(const cv::Mat &image);
+            /**
+             * Gets image which is stored, if no image is stored image is empty.
+             * @return An image if is set otherwise image is empty.
+             */
+            const cv::Mat &getImage() const;
 
-    /**
-     * Gets IRA class to store last object detection.
-     * @return IRA class to obtain informations about last object detection.
-     */
-    IRA *getIra() const;
+            /**
+             * Sets given image.
+             * @param image Image to set.
+             */
+            void setImage(const cv::Mat &image);
 
-protected:
+            /**
+             * Gets IRA class to store last object detection.
+             * @return IRA class to obtain informations about last object detection.
+             */
+            Companion::Algorithm::IRA *getIra() const;
 
-    /**
-     * Image to store.
-     */
-    cv::Mat image;
+        protected:
 
-    /**
-     * Image reduction algorithm to store last object detection position.
-     */
-    IRA *ira;
+            /**
+             * Image to store.
+             */
+            cv::Mat image;
 
-};
+            /**
+             * Image reduction algorithm to store last object detection position.
+             */
+            Companion::Algorithm::IRA *ira;
+
+        };
+    }
+
+}
 
 #endif //COMPANION_IMAGERECOGNITIONMODEL_H
