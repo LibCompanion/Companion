@@ -25,7 +25,7 @@
 #include "companion/model/ImageRecognitionModel.h"
 #include "companion/draw/Drawable.h"
 #include "companion/algo/abstract/ImageRecognition.h"
-#include "companion/Companion.h"
+#include "companion/Configuration.h"
 
 namespace Companion {
 

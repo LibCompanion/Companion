@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <companion/Companion.h>
+#include <companion/Configuration.h>
 #include <companion/processing/2D/ObjectDetection.h>
 #include <companion/algo/cuda/CudaFeatureMatching.h>
 #include <companion/algo/cpu/CPUFeatureMatching.h>
@@ -42,6 +42,8 @@ void error(Companion::Error::Code code) {
 }
 
 int main() {
+
+    // ToDo := Add sample directory files and build sample with expecting cmake setup if cuda on or not.
 
     std::vector<std::string> images;
 
