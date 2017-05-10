@@ -11,26 +11,32 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 
         cv::Mat frame = stream->obtainImage();
 
-        while (!frame.empty() && !finished) {
+        while (!finished) {
 
-            // If skip frame is not used...
-            if(skipFrame > 0) {
-                storedFrame = storeFrame(frame);
-            } else {
-                // ... check if skip frame nr is reached
-                if(skipFrameNr == skipFrame) {
+            if(!frame.empty()) {
+                // If skip frame is not used...
+                if(skipFrame <= 0) {
                     storedFrame = storeFrame(frame);
-                    skipFrameNr = 0;
                 } else {
-                    // Indicator to obtain next frame.
-                    storedFrame = true;
-                    skipFrameNr++;
+                    // ... check if skip frame nr is reached
+                    if(skipFrameNr == skipFrame) {
+                        storedFrame = storeFrame(frame);
+                        skipFrameNr = 0;
+                    } else {
+                        // Indicator to obtain next frame.
+                        storedFrame = true;
+                        skipFrameNr++;
+                    }
                 }
-            }
 
-            // If frame was stored or skipped...
-            if(storedFrame) {
-                // obtain next frame to store.
+                // If frame was stored or skipped...
+                if(storedFrame) {
+                    // obtain next frame to store.
+                    frame = stream->obtainImage();
+                }
+
+            } else {
+                // If frames are empty loop.
                 frame = stream->obtainImage();
             }
         }
