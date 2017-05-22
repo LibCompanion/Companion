@@ -53,6 +53,12 @@ namespace Companion {
             void addLine(Line *line);
 
             /**
+             * Returns the lines.
+             * @return Lines.
+             */
+            const std::vector<Line*> &getLines() const;
+
+            /**
              * Draw lines to image.
              * @param image Image to draw lines.
              */

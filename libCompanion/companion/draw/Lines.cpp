@@ -41,3 +41,8 @@ void Companion::Draw::Lines::ratio(int cWidth, int cHeight, int nWidth, int nHei
         line->ratio(cWidth, cHeight, nWidth, nHeight);
     }
 };
+
+const std::vector<Companion::Draw::Line*> &Companion::Draw::Lines::getLines() const
+{
+    return this->lines;
+}
