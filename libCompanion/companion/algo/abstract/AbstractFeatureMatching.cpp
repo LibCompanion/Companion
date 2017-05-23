@@ -21,9 +21,8 @@
 void Companion::Algorithm::AbstractFeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
                                                                std::vector<cv::DMatch> &good_matches,
                                                                float ratio) {
-
     for (int i = 0; i < matches.size(); ++i) {
-        if (matches[i][0].distance < ratio * matches[i][1].distance) {
+        if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance)) {
             good_matches.push_back(matches[i][0]);
         }
     }
@@ -69,7 +68,7 @@ void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatch
         trainIdx = good_matches[i].trainIdx;
         queryIdx = good_matches[i].queryIdx;
 
-        if(trainIdx > 0 && queryIdx > 0) {
+        if ((trainIdx > 0 && keypoints_scene.size() > trainIdx) && (queryIdx > 0 && keypoints_object.size() > queryIdx)) {
             feature_points_scene.push_back(keypoints_scene[trainIdx].pt);
             feature_points_object.push_back(keypoints_object[queryIdx].pt);
         }
