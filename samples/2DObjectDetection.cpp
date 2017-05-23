@@ -41,9 +41,13 @@ void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
 
 void sampleImageThread(Companion::Input::Image *stream) {
 
-    int z = 0;
+    bool finished = false;
     // Setup example for stream images.
-    while (z != 1) {
+    while (!finished) {
+
+        // Use this control to adjust the streaming rate
+        //cvWaitKey(300);
+
         for(int i = 1; i <= 432; i++ ) {
             std::string fileNr;
             if(i < 10) {
@@ -56,7 +60,7 @@ void sampleImageThread(Companion::Input::Image *stream) {
             stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
         }
 
-        z++;
+        finished = true;
     }
 }
 
