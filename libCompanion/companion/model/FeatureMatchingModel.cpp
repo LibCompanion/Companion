@@ -24,6 +24,7 @@ Companion::Model::FeatureMatchingModel::FeatureMatchingModel() {
 Companion::Model::FeatureMatchingModel::~FeatureMatchingModel() {
 	keypoints.clear();
     descriptors.release();
+
 }
 
 const cv::Mat &Companion::Model::FeatureMatchingModel::getDescriptors() const {

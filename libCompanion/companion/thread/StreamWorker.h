@@ -118,7 +118,7 @@ namespace Companion {
              * Stores frame to queue.
              * @param frame Frame to store to queue.
              */
-            bool storeFrame(cv::Mat &frame);
+            bool storeFrame(cv::Mat frame);
         };
 
     }

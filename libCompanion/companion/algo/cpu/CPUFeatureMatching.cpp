@@ -59,6 +59,12 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
     IRA* ira;
     bool isIRAUsed = false;
 
+    // Clear all lists from last run.
+    matches.clear();
+    goodMatches.clear();
+    keypointScene.clear();
+    keypointsObject.clear();
+
     Companion::Model::FeatureMatchingModel *sceneModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(scene);
     Companion::Model::FeatureMatchingModel *objectModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(object);
 
@@ -156,6 +162,9 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
             return algo(scene, object);
         }
     }
+
+    sceneImage.release();
+    objectImage.release();
 
     return lines;
 }

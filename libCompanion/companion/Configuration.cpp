@@ -35,8 +35,8 @@ void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
     // Run new worker class.
     this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
     this->producer = std::thread(&Thread::StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
-    consumer.join();
-    producer.join();
+    consumer.join(); // Wait if thread finished
+    producer.join(); // Waif if thread finished
 }
 
 void Companion::Configuration::stop() {

@@ -23,10 +23,12 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
+#include <thread>
+
 void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
     Companion::Draw::Drawable *drawable;
 
-    for(int x = 0; x < objects.size(); x++) {
+    for(unsigned long x = 0; x < objects.size(); x++) {
         drawable = objects.at(x);
         drawable->draw(frame);
     }
@@ -34,6 +36,28 @@ void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
     cv::imshow("Object detection", frame);
     cv::waitKey(1);
     frame.release();
+    objects.clear();
+}
+
+void sampleImageThread(Companion::Input::Image *stream) {
+
+    int z = 0;
+    // Setup example for stream images.
+    while (z != 1) {
+        for(int i = 1; i <= 432; i++ ) {
+            std::string fileNr;
+            if(i < 10) {
+                fileNr = "000" + std::to_string(i);
+            } else if(i < 100) {
+                fileNr = "00" + std::to_string(i);
+            } else {
+                fileNr = "0" + std::to_string(i);
+            }
+            stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
+        }
+
+        z++;
+    }
 }
 
 void error(Companion::Error::Code code) {
@@ -91,8 +115,8 @@ int main() {
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
-    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
+    cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
@@ -100,9 +124,9 @@ int main() {
     //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
-    feature->setBlurForDescriptor(true);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
+    //cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
+    //feature->setBlurForDescriptor(true);
+    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));
@@ -111,24 +135,12 @@ int main() {
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
+    //Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
     //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
-    /*
-    // Setup example for an streaming data from images.
+    // Setup example for an streaming data from a set of images.
     Companion::Input::Image *stream = new Companion::Input::Image();
-    for(int i = 1; i <= 432; i++ ) {
-        std::string fileNr;
-        if(i < 10) {
-            fileNr = "000" + std::to_string(i);
-        } else if(i < 100) {
-            fileNr = "00" + std::to_string(i);
-        } else {
-            fileNr = "0" + std::to_string(i);
-        }
-        stream->addImagePath("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
-    }
-    */
+    std::thread imgThread = std::thread(&sampleImageThread, stream);
 
     // Set input source
     companion->setSource(stream);
@@ -153,6 +165,7 @@ int main() {
 
     try {
         companion->run(ps);
+        //imgThread.join(); // External img thread to add images by processing.
     } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }

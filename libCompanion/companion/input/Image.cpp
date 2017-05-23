@@ -19,27 +19,35 @@
 #include "Image.h"
 
 Companion::Input::Image::Image() {
-    index = 0;
 }
 
 Companion::Input::Image::~Image() {
-
 }
 
-void Companion::Input::Image::addImagePath(std::string path) {
-    images.push_back(path);
+void Companion::Input::Image::addImage(std::string imgPath) {
+    addImage(cv::imread(imgPath));
+}
+
+void Companion::Input::Image::addImage(cv::Mat img) {
+    if(!img.empty()) {
+        mtx.lock();
+        // Stores only img which exists.
+        images.push(img);
+        mtx.unlock();
+    }
 }
 
 cv::Mat Companion::Input::Image::obtainImage() {
 
     cv::Mat image;
 
-    if(index < images.size()) {
-        // Open image to read
-        image = cv::imread(images.at(index));
-        // Set next index position to load image.
-        index++;
+    mtx.lock();
+    if(!images.empty()) {
+        // Get first image from fifo
+        image = images.front();
+        images.pop();
     }
+    mtx.unlock();
 
     return image;
 }

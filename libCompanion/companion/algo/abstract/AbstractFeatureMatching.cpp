@@ -61,10 +61,18 @@ void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatch
         std::vector<cv::Point2f> &feature_points_object,
         std::vector<cv::Point2f> &feature_points_scene) {
 
+    int trainIdx;
+    int queryIdx;
+
     // Get the keypoints from the good matches
     for (int i = 0; i < good_matches.size(); i++) {
-        feature_points_scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
-        feature_points_object.push_back(keypoints_object[good_matches[i].queryIdx].pt);
+        trainIdx = good_matches[i].trainIdx;
+        queryIdx = good_matches[i].queryIdx;
+
+        if(trainIdx > 0 && queryIdx > 0) {
+            feature_points_scene.push_back(keypoints_scene[trainIdx].pt);
+            feature_points_object.push_back(keypoints_object[queryIdx].pt);
+        }
     }
 
 }
@@ -82,6 +90,9 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
     cv::Mat homography;
     std::vector<cv::Point2f> feature_points_object, feature_points_scene;
 
+    feature_points_object.clear();
+    feature_points_scene.clear();
+
     // Count of good matches if results are good enough.
     if (good_matches.size() > countMatches) {
 
@@ -91,12 +102,14 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
                                        feature_points_object,
                                        feature_points_scene);
 
-        // Find Homography
-        homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
-
-        if (!homography.empty()) {
-            lines = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+        // Find Homography if only features points are filled.
+        if(!feature_points_object.empty() && !feature_points_scene.empty()) {
+            homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
+            if (!homography.empty()) {
+                lines = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+            }
         }
+
     }
 
     return lines;

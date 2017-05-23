@@ -20,9 +20,10 @@
 #define COMPANION_IMAGE_H
 
 #include <string>
-#include <vector>
+#include <queue>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgcodecs.hpp>
+#include <mutex>
 
 #include "Stream.h"
 
@@ -49,10 +50,16 @@ namespace Companion {
             ~Image();
 
             /**
-             * Adds an given image path to images list.
-             * @param path Image path to obtain image.
+             * Store an image to fifa.
+             * @param imgPath Image path to store.
              */
-            void addImagePath(std::string path);
+            void addImage(std::string imgPath);
+
+            /**
+             * Image to store to fifo.
+             * @param img Image to store.
+             */
+            void addImage(cv::Mat img);
 
             /**
              * Obtain next image from open video stream.
@@ -63,14 +70,14 @@ namespace Companion {
         private:
 
             /**
-             * List from all image paths;
+             * List from all stored images as an fifo;
              */
-            std::vector<std::string> images;
+            std::queue<cv::Mat> images;
 
             /**
-             * Current index position from images.
+             * Mutex to control critical get and set from images.
              */
-            int index;
+            std::mutex mtx;
         };
 
     }

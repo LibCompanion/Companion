@@ -26,7 +26,9 @@ Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration
     this->scale = scale;
 }
 
-Companion::Processing::ObjectDetection::~ObjectDetection() {}
+Companion::Processing::ObjectDetection::~ObjectDetection() {
+    
+}
 
 std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
@@ -72,6 +74,7 @@ std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::
             }
         }
 
+        frame.release();
         delete scene;
     }
 
