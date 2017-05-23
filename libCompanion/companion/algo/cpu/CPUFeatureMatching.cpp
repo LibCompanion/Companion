@@ -100,8 +100,10 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
     // Check if complete scene has calculated keypoints and descriptors and IRA was not used...
     if(!isIRAUsed && !sceneModel->keypointsCalculated()) {
         sceneModel->calculateKeyPointsAndDescriptors(detector, extractor);
-    } else if(!isIRAUsed) {
-        // Get Keypoints and descriptors from scene if IRA was not used.
+    }
+    
+    // Get Keypoints and descriptors from scene if IRA was not used.
+    if(!isIRAUsed) {
         keypointScene = sceneModel->getKeypoints();
         descriptorsScene = sceneModel->getDescriptors();
     }
@@ -151,7 +153,6 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
                 ira->clear(); // Clear last detected object position.
                 return algo(scene, object);
             }
-
         }
 
     } else {
