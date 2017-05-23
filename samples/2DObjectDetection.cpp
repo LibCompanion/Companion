@@ -139,7 +139,7 @@ int main() {
     //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
     // Setup example for an streaming data from a set of images.
-    Companion::Input::Image *stream = new Companion::Input::Image();
+    Companion::Input::Image *stream = new Companion::Input::Image(50);
     std::thread imgThread = std::thread(&sampleImageThread, stream);
 
     // Set input source

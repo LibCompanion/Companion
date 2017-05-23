@@ -18,7 +18,7 @@
 
 #include "Image.h"
 
-Companion::Input::Image::Image() {
+Companion::Input::Image::Image(int maxImages) : maxImages(maxImages) {
 }
 
 Companion::Input::Image::~Image() {
@@ -30,6 +30,11 @@ void Companion::Input::Image::addImage(std::string imgPath) {
 
 void Companion::Input::Image::addImage(cv::Mat img) {
     if(!img.empty()) {
+
+        // Limit queue size to keep memory low
+        std::unique_lock<std::mutex> lk(mx);
+        cv.wait(lk, [this]{return images.size() < maxImages;});
+
         mtx.lock();
         // Stores only img which exists.
         images.push(img);
@@ -46,6 +51,11 @@ cv::Mat Companion::Input::Image::obtainImage() {
         // Get first image from fifo
         image = images.front();
         images.pop();
+
+        // Notify image input stream
+        if (images.size() < maxImages) {
+            cv.notify_one();
+        }
     }
     mtx.unlock();
 

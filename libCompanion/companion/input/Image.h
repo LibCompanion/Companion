@@ -41,8 +41,9 @@ namespace Companion {
 
             /**
              * Default constructor to create an empty image list.
+             * @param maxImages Maximum amount of images that can be loaded at the same time.
              */
-            Image();
+            Image(int maxImages);
 
             /**
              * Default destructor;
@@ -78,6 +79,21 @@ namespace Companion {
              * Mutex to control critical get and set from images.
              */
             std::mutex mtx;
+
+            /**
+             * Mutex to control the image stream to keep memory low.
+             */
+            std::mutex mx;
+            
+            /**
+             * Waiting condition for image input stream;
+             */
+            std::condition_variable cv;
+
+            /**
+             * Maximum amount of images that can be loaded at the same time.
+             */
+            int maxImages;
         };
 
     }
