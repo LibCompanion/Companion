@@ -56,9 +56,10 @@ namespace Companion {
             /**
              * Try to detect all objects from give frame.
              * @param frame Frame to check for an object location.
-             * @return An empty vector if no objects are detected.
+             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+             *          every detected object.
              */
-            virtual std::vector<Companion::Draw::Drawable*> execute(cv::Mat frame);
+            virtual std::vector<std::pair<Companion::Draw::Drawable*, int>> execute(cv::Mat frame);
 
         private:
 

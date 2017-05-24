@@ -39,10 +39,11 @@ namespace Companion {
             ImageRecognitionModel();
 
             /**
-             * Create an default image recognition model with an given image.
+             * Create an default image recognition model with a given ID and image.
+             * @param id ID to set.
              * @param image Image to set.
              */
-            ImageRecognitionModel(cv::Mat image);
+            ImageRecognitionModel(int id, cv::Mat image);
 
             /**
              * Destructor.
@@ -67,7 +68,24 @@ namespace Companion {
              */
             Companion::Algorithm::IRA *getIra() const;
 
+            /**
+             * Sets the ID for this model.
+             * @param id ID to set.
+             */
+            void setID(int id);
+
+            /**
+             * Gets the ID of this model.
+             * @return  The ID of this model.
+             */
+            const int getID() const;
+
         protected:
+
+            /**
+             * The ID of this model.
+             */
+            int id;
 
             /**
              * Image to store.

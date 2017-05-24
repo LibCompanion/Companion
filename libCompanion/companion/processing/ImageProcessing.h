@@ -39,9 +39,10 @@ namespace Companion {
             /**
              * Execution from given image processing algo implementation like face recognition or object detection.
              * @param frame Obtained image frame from producer thread.
-             * @return An empty vector if no objects are detected.
+             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+             *          every detected object.
              */
-            virtual std::vector<Companion::Draw::Drawable*> execute(cv::Mat frame) = 0;
+            virtual std::vector<std::pair<Companion::Draw::Drawable*, int>> execute(cv::Mat frame) = 0;
         };
 
     }

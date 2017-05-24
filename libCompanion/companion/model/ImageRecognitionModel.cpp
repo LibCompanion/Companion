@@ -22,8 +22,8 @@ Companion::Model::ImageRecognitionModel::ImageRecognitionModel() {
     ira = new Companion::Algorithm::IRA();
 }
 
-Companion::Model::ImageRecognitionModel::ImageRecognitionModel(cv::Mat image) {
-    ImageRecognitionModel::image = image;
+Companion::Model::ImageRecognitionModel::ImageRecognitionModel(int id, cv::Mat image) : id(id), image(image) {
+    
 }
 
 Companion::Model::ImageRecognitionModel::~ImageRecognitionModel() {
@@ -41,4 +41,12 @@ void Companion::Model::ImageRecognitionModel::setImage(const cv::Mat &image) {
 
 Companion::Algorithm::IRA *Companion::Model::ImageRecognitionModel::getIra() const {
     return ira;
+}
+
+void Companion::Model::ImageRecognitionModel::setID(int id) {
+    ImageRecognitionModel::id = id;
+}
+
+const int Companion::Model::ImageRecognitionModel::getID() const {
+    return id;
 }

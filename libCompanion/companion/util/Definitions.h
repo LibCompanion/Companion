@@ -24,7 +24,7 @@ namespace Companion {
     /**
      * Default success callback function declaration to obtain results from algorithms.
      */
-    #define SUCCESS_CALLBACK void(std::vector<Companion::Draw::Drawable *>, cv::Mat)
+    #define SUCCESS_CALLBACK void(std::vector<std::pair<Companion::Draw::Drawable*, int>>, cv::Mat)
 
     /**
      * Default error callback function declaration to obtain error results from companion.

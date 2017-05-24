@@ -25,12 +25,20 @@
 
 #include <thread>
 
-void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
+void callback(std::vector<std::pair<Companion::Draw::Drawable*, int>> objects, cv::Mat frame) {
     Companion::Draw::Drawable *drawable;
 
     for(unsigned long x = 0; x < objects.size(); x++) {
-        drawable = objects.at(x);
+        
+        // Mark the detected object
+        drawable = objects.at(x).first;
         drawable->draw(frame);
+
+        // Draw the id of the detected object
+        Companion::Draw::Lines *lines = dynamic_cast<Companion::Draw::Lines*>(drawable);
+        if (lines != nullptr) {
+            cv::putText(frame, std::to_string(objects.at(x).second), lines->getLines()[0]->getEnd(), cv::FONT_HERSHEY_DUPLEX, 2, cv::Scalar(0, 255, 0), 4);
+        }
     }
 
     cv::imshow("Object detection", frame);
@@ -151,9 +159,10 @@ int main() {
 
     // Store all searched data models
     Companion::Model::FeatureMatchingModel *object;
-    for (auto &image : images) {
+    for (int i = 0; i < images.size(); i++) {
         object = new Companion::Model::FeatureMatchingModel();
-        object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+        object->setID(i);
+        object->setImage(cv::imread(images[i], cv::IMREAD_GRAYSCALE));
 
         // Only works on CPU -- ToDo Exception Handling if wrong type?
         //object->calculateKeyPointsAndDescriptors(feature, feature);
