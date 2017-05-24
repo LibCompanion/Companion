@@ -28,7 +28,7 @@
 void callback(std::vector<std::pair<Companion::Draw::Drawable*, int>> objects, cv::Mat frame) {
     Companion::Draw::Drawable *drawable;
 
-    for(unsigned long x = 0; x < objects.size(); x++) {
+    for(size_t x = 0; x < objects.size(); x++) {
         
         // Mark the detected object
         drawable = objects.at(x).first;
@@ -37,7 +37,7 @@ void callback(std::vector<std::pair<Companion::Draw::Drawable*, int>> objects, c
         // Draw the id of the detected object
         Companion::Draw::Lines *lines = dynamic_cast<Companion::Draw::Lines*>(drawable);
         if (lines != nullptr) {
-            cv::putText(frame, std::to_string(objects.at(x).second), lines->getLines()[0]->getEnd(), cv::FONT_HERSHEY_DUPLEX, 2, cv::Scalar(0, 255, 0), 4);
+            cv::putText(frame, std::to_string(objects.at(x).second), lines->getLines().at(0)->getEnd(), cv::FONT_HERSHEY_DUPLEX, 2, cv::Scalar(0, 255, 0), 4);
         }
     }
 
