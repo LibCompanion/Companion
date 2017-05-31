@@ -49,26 +49,20 @@ void callback(std::vector<std::pair<Companion::Draw::Drawable*, int>> objects, c
 
 void sampleImageThread(Companion::Input::Image *stream) {
 
-    bool finished = false;
-    // Setup example for stream images.
-    while (!finished) {
+    // Setup example for an image stream.
+    for(int i = 1; i <= 432; i++ ) {
+        std::string fileNr;
+        if(i < 10) {
+            fileNr = "000" + std::to_string(i);
+        } else if(i < 100) {
+            fileNr = "00" + std::to_string(i);
+        } else {
+            fileNr = "0" + std::to_string(i);
+        }
+        stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
 
         // Use this control to adjust the streaming rate
         //cvWaitKey(300);
-
-        for(int i = 1; i <= 432; i++ ) {
-            std::string fileNr;
-            if(i < 10) {
-                fileNr = "000" + std::to_string(i);
-            } else if(i < 100) {
-                fileNr = "00" + std::to_string(i);
-            } else {
-                fileNr = "0" + std::to_string(i);
-            }
-            stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
-        }
-
-        finished = true;
     }
 }
 
