@@ -25,26 +25,30 @@
 
 #include <thread>
 
-void callback(std::vector<std::pair<Companion::Draw::Drawable*, int>> objects, cv::Mat frame) {
-    Companion::Draw::Drawable *drawable;
+void callback(CALLBACK_RESULT results, cv::Mat source) {
+    Companion::Model::Result *result;
 
-    for(size_t x = 0; x < objects.size(); x++) {
+    for(size_t x = 0; x < results.size(); x++) {
         
         // Mark the detected object
-        drawable = objects.at(x).first;
-        drawable->draw(frame);
+        result = results.at(x);
+        result->getModel()->draw(source);
 
         // Draw the id of the detected object
-        Companion::Draw::Lines *lines = dynamic_cast<Companion::Draw::Lines*>(drawable);
-        if (lines != nullptr) {
-            cv::putText(frame, std::to_string(objects.at(x).second), lines->getLines().at(0)->getEnd(), cv::FONT_HERSHEY_DUPLEX, 2, cv::Scalar(0, 255, 0), 4);
-        }
+        Companion::Draw::Frame *frame = dynamic_cast<Companion::Draw::Frame*>(result->getModel());
+        cv::putText(source,
+                    std::to_string(result->getId()),
+                    frame->getTopRight(),
+                    cv::FONT_HERSHEY_DUPLEX,
+                    2,
+                    frame->getColor(),
+                    frame->getThickness());
     }
 
-    cv::imshow("Object detection", frame);
+    cv::imshow("Object detection", source);
     cv::waitKey(1);
-    frame.release();
-    objects.clear();
+    source.release();
+    results.clear();
 }
 
 void sampleImageThread(Companion::Input::Image *stream) {
@@ -121,8 +125,8 @@ int main() {
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
     // -------------- BRISK CPU FM --------------
-    cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
+    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
@@ -130,9 +134,9 @@ int main() {
     //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
 
     // -------------- ORB GPU FM - Needs CUDA --------------
-    //cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
-    //feature->setBlurForDescriptor(true);
-    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
+    cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
+    feature->setBlurForDescriptor(true);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));
@@ -152,9 +156,9 @@ int main() {
     companion->setSource(stream);
 
     // Store all searched data models
-    Companion::Model::FeatureMatchingModel *object;
+    Companion::Model::Processing::FeatureMatchingModel *object;
     for (int i = 0; i < images.size(); i++) {
-        object = new Companion::Model::FeatureMatchingModel();
+        object = new Companion::Model::Processing::FeatureMatchingModel();
         object->setID(i);
         object->setImage(cv::imread(images[i], cv::IMREAD_GRAYSCALE));
 

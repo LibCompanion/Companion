@@ -16,38 +16,54 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_IMAGEPROCESSING_H
-#define COMPANION_IMAGEPROCESSING_H
+#ifndef COMPANION_RESULT_H
+#define COMPANION_RESULT_H
 
-#include <opencv2/core/core.hpp>
-
-#include "companion/util/Definitions.h"
+#include <string>
 #include "companion/draw/Drawable.h"
 
 namespace Companion {
 
-    namespace Processing {
+    namespace Model {
 
         /**
-         * Image processing interface class to create specific image processing jobs to detect objects or regions of interests.
+         * Result model class to store object detection scoring.
          *
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS ImageProcessing {
+        class Result {
 
         public:
 
+            Result(int scoring, int id, Draw::Drawable *model);
+
+            virtual ~Result();
+
+            int getScoring() const;
+
+            int getId() const;
+
+            Draw::Drawable *getModel() const;
+
+        private:
+
             /**
-             * Execution from given image processing algo implementation like face recognition or object detection.
-             * @param frame Obtained image frame from producer thread.
-             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
-             *          every detected object.
+             * Score matching in percentage 0 - 100 %.
              */
-            virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
+            int scoring;
+
+            /**
+             * ID from object.
+             */
+            int id;
+
+            /**
+             * Object detection result.
+             */
+            Companion::Draw::Drawable *model;
         };
 
     }
-
 }
 
-#endif //COMPANION_IMAGEPROCESSING_H
+#endif //COMPANION_RESULT_H

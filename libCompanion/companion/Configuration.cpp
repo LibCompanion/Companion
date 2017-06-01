@@ -56,7 +56,7 @@ void Companion::Configuration::setSource(Companion::Input::Stream *source) {
     Configuration::source = source;
 }
 
-bool Companion::Configuration::addModel(Companion::Model::ImageRecognitionModel *model) {
+bool Companion::Configuration::addModel(Companion::Model::Processing::ImageRecognitionModel *model) {
 
     if(!model->getImage().empty()) {
         models.push_back(model);
@@ -66,7 +66,7 @@ bool Companion::Configuration::addModel(Companion::Model::ImageRecognitionModel 
     return false;
 }
 
-void Companion::Configuration::removeModel(Companion::Model::ImageRecognitionModel *model) {
+void Companion::Configuration::removeModel(Companion::Model::Processing::ImageRecognitionModel *model) {
     // ToDo Remove
 }
 
@@ -74,7 +74,7 @@ void Companion::Configuration::clearModels() {
     models.clear();
 }
 
-const std::vector<Companion::Model::ImageRecognitionModel *> &Companion::Configuration::getModels() const {
+const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &Companion::Configuration::getModels() const {
     return models;
 }
 

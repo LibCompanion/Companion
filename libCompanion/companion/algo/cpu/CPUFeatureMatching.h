@@ -20,7 +20,8 @@
 #define COMPANION_CPUFEATUREMATCHING_H
 
 #include "companion/algo/abstract/AbstractFeatureMatching.h"
-#include "companion/draw/Lines.h"
+#include "companion/draw/Frame.h"
+#include "companion/model/result/Result.h"
 
 namespace Companion {
 
@@ -75,12 +76,12 @@ namespace Companion {
 
                 /**
                  * Feature matching algorithm implementation by <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">OpenCV</a>.
-                 * @param scene Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
-                 * @param object Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+                 * @param sceneModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+                 * @param objectModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
                  * @throws Companion::Error::Code If an error occurred in search operation.
                  */
-                virtual Draw::Drawable *algo(Model::ImageRecognitionModel *scene,
-                                             Model::ImageRecognitionModel *object);
+                virtual Companion::Model::Result* algo(Model::Processing::ImageRecognitionModel *sceneModel,
+                                                       Model::Processing::ImageRecognitionModel *objectModel);
 
                 /**
                  * Indicator if this algorithm use cuda.

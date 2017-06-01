@@ -19,12 +19,19 @@
 #ifndef COMPANION_DEFINITIONS_H
 #define COMPANION_DEFINITIONS_H
 
+#include "companion/model/result/Result.h"
+
 namespace Companion {
+
+    /**
+     * Callback result definition.
+     */
+    #define CALLBACK_RESULT std::vector<Companion::Model::Result*>
 
     /**
      * Default success callback function declaration to obtain results from algorithms.
      */
-    #define SUCCESS_CALLBACK void(std::vector<std::pair<Companion::Draw::Drawable*, int>>, cv::Mat)
+    #define SUCCESS_CALLBACK void(CALLBACK_RESULT, cv::Mat)
 
     /**
      * Default error callback function declaration to obtain error results from companion.

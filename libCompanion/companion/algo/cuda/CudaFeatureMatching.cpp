@@ -27,16 +27,17 @@ Companion::Algorithm::Cuda::FeatureMatching::~FeatureMatching() {
 
 }
 
-Companion::Draw::Drawable* Companion::Algorithm::Cuda::FeatureMatching::algo(
-        Model::ImageRecognitionModel *searchModel,
-        Model::ImageRecognitionModel *compareModel) {
+Companion::Model::Result* Companion::Algorithm::Cuda::FeatureMatching::algo(
+        Model::Processing::ImageRecognitionModel *sceneModel,
+        Model::Processing::ImageRecognitionModel *objectModel) {
 
-    Companion::Draw::Drawable *lines = nullptr;
+    Companion::Model::Result *result = nullptr;
+    Companion::Draw::Drawable *drawable = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
 
     cv::Mat img_matches;
-    cv::Mat scene_rgb = searchModel->getImage();
-    cv::Mat object = compareModel->getImage();
+    cv::Mat scene_rgb = sceneModel->getImage();
+    cv::Mat object = objectModel->getImage();
     cv::Mat scene;
     std::vector<std::vector<cv::DMatch>> matches;
     std::vector<cv::DMatch> good_matches;
@@ -51,8 +52,8 @@ Companion::Draw::Drawable* Companion::Algorithm::Cuda::FeatureMatching::algo(
     // ToDo := Check if Image is in correct format
     cvtColor(scene_rgb, scene, CV_RGB2GRAY);
 
-    Companion::Model::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(searchModel);
-    Companion::Model::FeatureMatchingModel *cModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(compareModel);
+    Companion::Model::Processing::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel *>(sceneModel);
+    Companion::Model::Processing::FeatureMatchingModel *oModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel *>(objectModel);
 
     if(ngpus > 0) {
 
@@ -73,10 +74,16 @@ Companion::Draw::Drawable* Companion::Algorithm::Cuda::FeatureMatching::algo(
         // ---- Cuda end
 
         ratio_test(matches, good_matches, 0.80);
-        lines = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, cModel);
+        drawable = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, oModel);
+
+        if(drawable != nullptr) {
+            // Object found...
+            result = new Companion::Model::Result(100, oModel->getID(), drawable);
+        }
+
     }
 
-    return lines;
+    return result;
 }
 
 bool Companion::Algorithm::Cuda::FeatureMatching::isCuda() {

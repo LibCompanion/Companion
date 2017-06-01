@@ -26,8 +26,9 @@
 
 #include "companion/draw/Drawable.h"
 #include "companion/util/CompanionError.h"
-#include "companion/model/FeatureMatchingModel.h"
+#include "companion/model/processing/FeatureMatchingModel.h"
 #include "companion/util/Util.h"
+#include "companion/model/result/Result.h"
 
 namespace Companion {
 
@@ -47,8 +48,8 @@ namespace Companion {
              * @param compareModel Compare model to check if contains in search model.
              * @throws Companion::Error::Code If an error occured in search operation.
              */
-            virtual Companion::Draw::Drawable* algo(Companion::Model::ImageRecognitionModel *searchModel,
-                                                    Companion::Model::ImageRecognitionModel *compareModel) = 0;
+            virtual Companion::Model::Result* algo(Companion::Model::Processing::ImageRecognitionModel *searchModel,
+                                                   Companion::Model::Processing::ImageRecognitionModel *compareModel) = 0;
 
             /**
              * Indicator if this algorithm use cuda.

@@ -53,12 +53,12 @@ namespace Companion {
 
                 /**
                  * Cuda implementation from feature matching.
-                 * @param searchModel Search model to compare.
-                 * @param compareModel Compare model to check if contains in search model.
+                 * @param sceneModel Scene model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
+                 * @param objectModel Object model from image recognition search, must be from model class <b>FeatureMatchingModel</b>.
                  * @throws Companion::Error::Code If an error occurred in search operation.
                  */
-                virtual Draw::Drawable* algo(Model::ImageRecognitionModel *searchModel,
-                                             Model::ImageRecognitionModel *compareModel);
+                virtual Companion::Model::Result* algo(Model::Processing::ImageRecognitionModel *sceneModel,
+                                                       Model::Processing::ImageRecognitionModel *objectModel);
 
                 /**
                  * Indicator if this algorithm use cuda.
