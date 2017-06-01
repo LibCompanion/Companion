@@ -172,7 +172,7 @@ int main() {
 
     try {
         companion->run(ps);
-        //imgThread.join(); // External img thread to add images by processing.
+        imgThread.join(); // External img thread to add images by processing.
     } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }

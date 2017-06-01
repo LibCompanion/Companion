@@ -21,9 +21,10 @@
 
 #include <string>
 #include <queue>
+#include <mutex>
+#include <condition_variable>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgcodecs.hpp>
-#include <mutex>
 
 #include "Stream.h"
 
