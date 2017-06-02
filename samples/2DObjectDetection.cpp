@@ -23,17 +23,51 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-void callback(std::vector<Companion::Draw::Drawable*> objects, cv::Mat frame) {
-    Companion::Draw::Drawable *drawable;
+#include <thread>
 
-    for(int x = 0; x < objects.size(); x++) {
-        drawable = objects.at(x);
-        drawable->draw(frame);
+void callback(CALLBACK_RESULT results, cv::Mat source) {
+    Companion::Model::Result *result;
+
+    for(size_t x = 0; x < results.size(); x++) {
+        
+        // Mark the detected object
+        result = results.at(x);
+        result->getModel()->draw(source);
+
+        // Draw the id of the detected object
+        Companion::Draw::Frame *frame = dynamic_cast<Companion::Draw::Frame*>(result->getModel());
+        cv::putText(source,
+                    std::to_string(result->getId()),
+                    frame->getTopRight(),
+                    cv::FONT_HERSHEY_DUPLEX,
+                    2,
+                    frame->getColor(),
+                    frame->getThickness());
     }
 
-    cv::imshow("Object detection", frame);
+    cv::imshow("Object detection", source);
     cv::waitKey(1);
-    frame.release();
+    source.release();
+    results.clear();
+}
+
+void sampleImageThread(Companion::Input::Image *stream) {
+
+    // Setup example for an image stream.
+    for(int i = 1; i <= 432; i++ ) {
+        std::string fileNr;
+        if(i < 10) {
+            fileNr = "000" + std::to_string(i);
+        } else if(i < 100) {
+            fileNr = "00" + std::to_string(i);
+        } else {
+            fileNr = "0" + std::to_string(i);
+        }
+        stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
+
+        // Use this control to adjust the streaming rate
+        //cvWaitKey(300);
+    }
 }
 
 void error(Companion::Error::Code code) {
@@ -111,33 +145,22 @@ int main() {
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
+    //Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
     //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
-    /*
-    // Setup example for an streaming data from images.
-    Companion::Input::Image *stream = new Companion::Input::Image();
-    for(int i = 1; i <= 432; i++ ) {
-        std::string fileNr;
-        if(i < 10) {
-            fileNr = "000" + std::to_string(i);
-        } else if(i < 100) {
-            fileNr = "00" + std::to_string(i);
-        } else {
-            fileNr = "0" + std::to_string(i);
-        }
-        stream->addImagePath("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
-    }
-    */
+    // Setup example for an streaming data from a set of images.
+    Companion::Input::Image *stream = new Companion::Input::Image(50);
+    std::thread imgThread = std::thread(&sampleImageThread, stream);
 
     // Set input source
     companion->setSource(stream);
 
     // Store all searched data models
-    Companion::Model::FeatureMatchingModel *object;
-    for (auto &image : images) {
-        object = new Companion::Model::FeatureMatchingModel();
-        object->setImage(cv::imread(image, cv::IMREAD_GRAYSCALE));
+    Companion::Model::Processing::FeatureMatchingModel *object;
+    for (int i = 0; i < images.size(); i++) {
+        object = new Companion::Model::Processing::FeatureMatchingModel();
+        object->setID(i);
+        object->setImage(cv::imread(images[i], cv::IMREAD_GRAYSCALE));
 
         // Only works on CPU -- ToDo Exception Handling if wrong type?
         //object->calculateKeyPointsAndDescriptors(feature, feature);
@@ -153,6 +176,7 @@ int main() {
 
     try {
         companion->run(ps);
+        imgThread.join(); // External img thread to add images by processing.
     } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }

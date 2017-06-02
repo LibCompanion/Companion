@@ -21,9 +21,8 @@
 void Companion::Algorithm::AbstractFeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
                                                                std::vector<cv::DMatch> &good_matches,
                                                                float ratio) {
-
     for (int i = 0; i < matches.size(); ++i) {
-        if (matches[i][0].distance < ratio * matches[i][1].distance) {
+        if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance)) {
             good_matches.push_back(matches[i][0]);
         }
     }
@@ -61,10 +60,18 @@ void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatch
         std::vector<cv::Point2f> &feature_points_object,
         std::vector<cv::Point2f> &feature_points_scene) {
 
+    int trainIdx;
+    int queryIdx;
+
     // Get the keypoints from the good matches
     for (int i = 0; i < good_matches.size(); i++) {
-        feature_points_scene.push_back(keypoints_scene[good_matches[i].trainIdx].pt);
-        feature_points_object.push_back(keypoints_object[good_matches[i].queryIdx].pt);
+        trainIdx = good_matches[i].trainIdx;
+        queryIdx = good_matches[i].queryIdx;
+
+        if ((trainIdx > 0 && keypoints_scene.size() > trainIdx) && (queryIdx > 0 && keypoints_object.size() > queryIdx)) {
+            feature_points_scene.push_back(keypoints_scene[trainIdx].pt);
+            feature_points_object.push_back(keypoints_object[queryIdx].pt);
+        }
     }
 
 }
@@ -75,12 +82,15 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
         std::vector<cv::DMatch> &good_matches,
         std::vector<cv::KeyPoint> &keypoints_object,
         std::vector<cv::KeyPoint> &keypoints_scene,
-        Model::FeatureMatchingModel *sModel,
-        Model::FeatureMatchingModel *cModel) {
+        Model::Processing::FeatureMatchingModel *sModel,
+        Model::Processing::FeatureMatchingModel *cModel) {
 
     Companion::Draw::Drawable *lines = nullptr;
     cv::Mat homography;
     std::vector<cv::Point2f> feature_points_object, feature_points_scene;
+
+    feature_points_object.clear();
+    feature_points_scene.clear();
 
     // Count of good matches if results are good enough.
     if (good_matches.size() > countMatches) {
@@ -91,12 +101,14 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
                                        feature_points_object,
                                        feature_points_scene);
 
-        // Find Homography
-        homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
-
-        if (!homography.empty()) {
-            lines = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+        // Find Homography if only features points are filled.
+        if(!feature_points_object.empty() && !feature_points_scene.empty()) {
+            homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
+            if (!homography.empty()) {
+                lines = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+            }
         }
+
     }
 
     return lines;
@@ -106,8 +118,8 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
         cv::Mat &homography,
         cv::Mat &sceneImage,
         cv::Mat &objectImage,
-        Model::FeatureMatchingModel *sModel,
-        Model::FeatureMatchingModel *cModel) {
+        Model::Processing::FeatureMatchingModel *sModel,
+        Model::Processing::FeatureMatchingModel *cModel) {
 
     //-- Get the corners from the image_1 (the object to be "detected")
     std::vector<cv::Point2f> obj_corners(4);
@@ -120,9 +132,7 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     cv::perspectiveTransform(obj_corners, scene_corners, homography);
 
     //-- Draw lines between the corners (the mapped object in the scene - image_2 )
-    int thickness = 4;
     cv::Rect lastRect;
-    cv::Scalar color = cv::Scalar(0, 255, 0);
     IRA *ira = cModel->getIra();
 
     // IRA
@@ -157,11 +167,12 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     }
 
     // Object area.
-    Companion::Draw::Lines *lines = new Companion::Draw::Lines();
-    lines->addLine(new Companion::Draw::Line(scene_corners[0] + offset, scene_corners[1] + offset, color, thickness));
-    lines->addLine(new Companion::Draw::Line(scene_corners[3] + offset, scene_corners[0] + offset, color, thickness));
-    lines->addLine(new Companion::Draw::Line(scene_corners[1] + offset, scene_corners[2] + offset, color, thickness));
-    lines->addLine(new Companion::Draw::Line(scene_corners[2] + offset, scene_corners[3] + offset, color, thickness));
+
+    cv::Point2f topLeft = scene_corners[0] + offset;
+    cv::Point2f topRight = scene_corners[1] + offset;
+    cv::Point2f bottomLeft = scene_corners[3] + offset;
+    cv::Point2f bottomRight = scene_corners[2] + offset;
+    Companion::Draw::Frame *frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
 
     // If IRA is used...
     if(useIRA) {
@@ -194,5 +205,5 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
         }
     }
 
-    return lines;
+    return frame;
 }

@@ -24,7 +24,7 @@
 
 #include "companion/thread/StreamWorker.h"
 #include "companion/input/Stream.h"
-#include "companion/model/ImageRecognitionModel.h"
+#include "companion/model/processing/ImageRecognitionModel.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/processing/ImageProcessing.h"
 #include "companion/util/Definitions.h"
@@ -80,13 +80,13 @@ namespace Companion {
          * @param model Model to search.
          * @return True if model is added false if not.
          */
-        bool addModel(Companion::Model::ImageRecognitionModel *model);
+        bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
         /**
          * Remove searched model.
          * @param model Model to remove.
          */
-        void removeModel(Companion::Model::ImageRecognitionModel *model);
+        void removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
         /**
          * Clear all models which are searched.
@@ -97,7 +97,7 @@ namespace Companion {
          * Get model vector which contains all searched models.
          * @return Vector from all searched models, if no models are set this vector is empty.
          */
-        const std::vector<Companion::Model::ImageRecognitionModel *> &getModels() const;
+        const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &getModels() const;
 
         /**
          * Gets current processing algorithm which should be used.
@@ -174,7 +174,7 @@ namespace Companion {
         /**
          * Search models to detect objects from source.
          */
-        std::vector<Companion::Model::ImageRecognitionModel *> models;
+        std::vector<Companion::Model::Processing::ImageRecognitionModel *> models;
 
         /**
          * Image processing implementation for example an object detection.

@@ -26,17 +26,19 @@ Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration
     this->scale = scale;
 }
 
-Companion::Processing::ObjectDetection::~ObjectDetection() {}
+Companion::Processing::ObjectDetection::~ObjectDetection() {
+    
+}
 
-std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
+CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
-    Model::FeatureMatchingModel *scene;
-    Draw::Drawable *object;
-    std::vector<Draw::Drawable*> objects;
-    std::vector<Model::ImageRecognitionModel *> models = companion->getModels();
+    Model::Processing::FeatureMatchingModel *scene;
+    Companion::Model::Result *result;
+    CALLBACK_RESULT objects;
+    std::vector<Model::Processing::ImageRecognitionModel *> models = companion->getModels();
 
     if (!frame.empty()) {
-        scene = new Model::FeatureMatchingModel();
+        scene = new Model::Processing::FeatureMatchingModel();
 
         int oldX = frame.cols;
         int oldY = frame.rows;
@@ -49,12 +51,13 @@ std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::
         if(imageRecognition->isCuda()) {
             // Cuda usage -> Don't use multithreading
             for(unsigned long x = 0; x < models.size(); x++) {
-                object = imageRecognition->algo(scene, models.at(x));
-                if(object != nullptr) {
+                Companion::Model::Processing::ImageRecognitionModel *model = models.at(x);
+                result = imageRecognition->algo(scene, model);
+                if(result != nullptr) {
                     // Create old image size
-                    object->ratio(frame.cols, frame.rows, oldX, oldY);
-                    // Store detected object to vector.
-                    objects.push_back(object);
+                    result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+                    // Store detected object and its ID to vector.
+                    objects.push_back(result);
                 }
             }
         } else {
@@ -62,16 +65,18 @@ std::vector<Companion::Draw::Drawable*> Companion::Processing::ObjectDetection::
             // ToDo Currently disabled because of an racing condition to use models...
             //#pragma omp parallel for
             for(unsigned long x = 0; x < models.size(); x++) {
-                object = imageRecognition->algo(scene, models.at(x));
-                if(object != nullptr) {
+                Companion::Model::Processing::ImageRecognitionModel *model = models.at(x);
+                result = imageRecognition->algo(scene, model);
+                if(result != nullptr) {
                     // Create old image size
-                    object->ratio(frame.cols, frame.rows, oldX, oldY);
-                    // Store detected object to vector.
-                    objects.push_back(object);
+                    result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+                    // Store detected object and its ID to vector.
+                    objects.push_back(result);
                 }
             }
         }
 
+        frame.release();
         delete scene;
     }
 

@@ -29,10 +29,11 @@ SET(SOURCE
         algo/cpu/CPUFeatureMatching.cpp algo/cpu/CPUFeatureMatching.h
         algo/util/IRA.cpp algo/util/IRA.h
         draw/Drawable.h
-        draw/Lines.cpp draw/Lines.h
+        draw/Frame.cpp draw/Frame.h
         draw/Line.cpp draw/Line.h
-        model/FeatureMatchingModel.cpp model/FeatureMatchingModel.h
-        model/ImageRecognitionModel.cpp model/ImageRecognitionModel.h
+        model/processing/FeatureMatchingModel.cpp model/processing/FeatureMatchingModel.h
+        model/processing/ImageRecognitionModel.cpp model/processing/ImageRecognitionModel.h
+        model/result/Result.cpp model/result/Result.h
         processing/ImageProcessing.h
         processing/2D/ObjectDetection.cpp processing/2D/ObjectDetection.h
         input/Stream.h
@@ -43,6 +44,7 @@ SET(SOURCE
         util/Util.cpp util/Util.h
         util/Definitions.h
         util/exportapi/ExportAPIDefinitions.h)
+
 if(Companion_USE_CUDA)
     SET(SOURCE ${SOURCE}
             algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h)

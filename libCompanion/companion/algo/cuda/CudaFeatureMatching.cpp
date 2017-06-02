@@ -27,51 +27,63 @@ Companion::Algorithm::Cuda::FeatureMatching::~FeatureMatching() {
 
 }
 
-Companion::Draw::Drawable* Companion::Algorithm::Cuda::FeatureMatching::algo(
-        Model::ImageRecognitionModel *searchModel,
-        Model::ImageRecognitionModel *compareModel) {
+Companion::Model::Result* Companion::Algorithm::Cuda::FeatureMatching::algo(
+        Model::Processing::ImageRecognitionModel *sceneModel,
+        Model::Processing::ImageRecognitionModel *objectModel) {
 
-    Companion::Draw::Drawable *lines = nullptr;
+    Companion::Model::Result *result = nullptr;
+    Companion::Draw::Drawable *drawable = nullptr;
     int ngpus = cv::cuda::getCudaEnabledDeviceCount();
 
     cv::Mat img_matches;
-    cv::Mat scene_rgb = searchModel->getImage();
-    cv::Mat object = compareModel->getImage();
+    cv::Mat scene_rgb = sceneModel->getImage();
+    cv::Mat object = objectModel->getImage();
     cv::Mat scene;
+    std::vector<std::vector<cv::DMatch>> matches;
+    std::vector<cv::DMatch> good_matches;
     std::vector<cv::KeyPoint> keypoints_scene, keypoints_object;
+
+    // Clear all lists from last run.
+    keypoints_scene.clear();
+    keypoints_object.clear();
+    good_matches.clear();
+    matches.clear();
 
     // ToDo := Check if Image is in correct format
     cvtColor(scene_rgb, scene, CV_RGB2GRAY);
 
-    Companion::Model::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(searchModel);
-    Companion::Model::FeatureMatchingModel *cModel = dynamic_cast<Companion::Model::FeatureMatchingModel *>(compareModel);
+    Companion::Model::Processing::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel *>(sceneModel);
+    Companion::Model::Processing::FeatureMatchingModel *oModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel *>(objectModel);
 
     if(ngpus > 0) {
 
         // ---- Cuda start
         cv::cuda::GpuMat gpu_scene(scene);
         cv::cuda::GpuMat gpu_object(object);
-
         cv::cuda::GpuMat gpu_descriptors_scene, gpu_descriptors_object;
 
         cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypoints_scene, gpu_descriptors_scene);
         cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypoints_object, gpu_descriptors_object);
 
         cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(cudaFeatureMatching->defaultNorm());
-        std::vector<std::vector<cv::DMatch>> matches;
+
         gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
 
         gpu_scene.release();
         gpu_object.release();
         // ---- Cuda end
 
-        std::vector<cv::DMatch> good_matches;
         ratio_test(matches, good_matches, 0.80);
+        drawable = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, oModel);
 
-        lines = obtainMatchingResult(scene, object, good_matches, keypoints_object, keypoints_scene, sModel, cModel);
+        if(drawable != nullptr) {
+            // Object found...
+            result = new Companion::Model::Result(100, oModel->getID(), drawable);
+        }
+
     }
 
-    return lines;
+    return result;
 }
 
 bool Companion::Algorithm::Cuda::FeatureMatching::isCuda() {

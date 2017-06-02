@@ -32,31 +32,30 @@ namespace Companion {
          * Implementation class to draw multiple lines.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Lines : public Drawable {
+        class COMP_EXPORTS Frame : public Drawable {
 
         public:
 
             /**
-             * Constructor to create an lines class to store single lines.
-             */
-            Lines();
+              * Constructor to create an frame.
+              * @param topLeft Top left position.
+              * @param topRight Top right position.
+              * @param bottomLeft Bottom left position.
+              * @param bottomRight Bottom right position.
+              * @param color Color from frame.
+              * @param thickness Thickness from frame.
+              */
+            Frame(cv::Point topLeft,
+                  cv::Point topRight,
+                  cv::Point bottomLeft,
+                  cv::Point bottomRight,
+                  cv::Scalar color = cv::Scalar(0, 255, 0),
+                  int thickness = 4);
 
             /**
              * Destructor.
              */
-            virtual ~Lines();
-
-            /**
-             * Adds an new line.
-             * @param line Line to add.
-             */
-            void addLine(Line *line);
-
-            /**
-             * Returns the lines.
-             * @return Lines.
-             */
-            const std::vector<Line*> &getLines() const;
+            virtual ~Frame();
 
             /**
              * Draw lines to image.
@@ -73,12 +72,43 @@ namespace Companion {
              */
             virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
+            const cv::Point &getTopLeft() const;
+
+            const cv::Point &getTopRight() const;
+
+            const cv::Point &getBottomLeft() const;
+
+            const cv::Point &getBottomRight() const;
+
+            const cv::Scalar &getColor() const;
+
+            int getThickness() const;
+
+            void setTopLeft(const cv::Point &topLeft);
+
+            void setTopRight(const cv::Point &topRight);
+
+            void setBottomLeft(const cv::Point &bottomLeft);
+
+            void setBottomRight(const cv::Point &bottomRight);
+
+            void setColor(const cv::Scalar &color);
+
+            void setThickness(int thickness);
+
         private:
 
-            /**
-             * Set from all lines which should be drawn.
-             */
-            std::vector<Line*> lines;
+            cv::Point topLeft;
+
+            cv::Point topRight;
+
+            cv::Point bottomLeft;
+
+            cv::Point bottomRight;
+
+            cv::Scalar color;
+
+            int thickness;
         };
 
     }

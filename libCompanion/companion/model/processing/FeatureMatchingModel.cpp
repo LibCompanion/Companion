@@ -18,33 +18,34 @@
 
 #include "FeatureMatchingModel.h"
 
-Companion::Model::FeatureMatchingModel::FeatureMatchingModel() {
+Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
 }
 
-Companion::Model::FeatureMatchingModel::~FeatureMatchingModel() {
+Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel() {
 	keypoints.clear();
     descriptors.release();
+
 }
 
-const cv::Mat &Companion::Model::FeatureMatchingModel::getDescriptors() const {
+const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const {
     return descriptors;
 }
 
-void Companion::Model::FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors) {
+void Companion::Model::Processing::FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors) {
     FeatureMatchingModel::descriptors.empty();
     FeatureMatchingModel::descriptors = descriptors;
 }
 
-const std::vector<cv::KeyPoint> &Companion::Model::FeatureMatchingModel::getKeypoints() const {
+const std::vector<cv::KeyPoint> &Companion::Model::Processing::FeatureMatchingModel::getKeypoints() const {
     return keypoints;
 }
 
-void Companion::Model::FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints) {
+void Companion::Model::Processing::FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints) {
 	FeatureMatchingModel::keypoints.clear();
     FeatureMatchingModel::keypoints = keypoints;
 }
 
-void Companion::Model::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
+void Companion::Model::Processing::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
                                                             cv::Ptr<cv::DescriptorExtractor> extractor) {
 
     keypoints.clear();
@@ -53,6 +54,6 @@ void Companion::Model::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv
     extractor->compute(image, keypoints, descriptors);
 }
 
-bool Companion::Model::FeatureMatchingModel::keypointsCalculated() {
+bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated() {
     return !keypoints.empty();
 }

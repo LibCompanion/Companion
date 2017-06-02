@@ -45,9 +45,9 @@ Companion::Algorithm::CPU::FeatureMatching::FeatureMatching(
 
 Companion::Algorithm::CPU::FeatureMatching::~FeatureMatching() {}
 
-Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
-        Model::ImageRecognitionModel *scene,
-        Model::ImageRecognitionModel *object) {
+Companion::Model::Result* Companion::Algorithm::CPU::FeatureMatching::algo(
+        Model::Processing::ImageRecognitionModel *sceneModel,
+        Model::Processing::ImageRecognitionModel *objectModel) {
 
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
@@ -55,21 +55,28 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
     std::vector<cv::DMatch> goodMatches;
     std::vector<cv::KeyPoint> keypointsObject, keypointScene;
     cv::Mat descriptorsObject, descriptorsScene;
-    Companion::Draw::Drawable *lines = nullptr;
+    Companion::Model::Result *result = nullptr;
+    Companion::Draw::Drawable *drawable = nullptr;
     IRA* ira;
     bool isIRAUsed = false;
 
-    Companion::Model::FeatureMatchingModel *sceneModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(scene);
-    Companion::Model::FeatureMatchingModel *objectModel = dynamic_cast<Companion::Model::FeatureMatchingModel*>(object);
+    // Clear all lists from last run.
+    matches.clear();
+    goodMatches.clear();
+    keypointScene.clear();
+    keypointsObject.clear();
+
+    Companion::Model::Processing::FeatureMatchingModel *sModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(sceneModel);
+    Companion::Model::Processing::FeatureMatchingModel *oModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(objectModel);
 
     // If wrong model types are used...
-    if(!sceneModel || !objectModel) {
+    if(!sModel || !oModel) {
         throw Companion::Error::Code::wrong_model_type;
     }
 
-    ira = objectModel->getIra();
-    sceneImage = sceneModel->getImage();
-    objectImage = objectModel->getImage();
+    ira = oModel->getIra();
+    sceneImage = sModel->getImage();
+    objectImage = oModel->getImage();
 
     // TODO := Graysacle image
     cvtColor(sceneImage, sceneImage, CV_RGB2GRAY);
@@ -92,22 +99,24 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
     }
 
     // Check if complete scene has calculated keypoints and descriptors and IRA was not used...
-    if(!isIRAUsed && !sceneModel->keypointsCalculated()) {
-        sceneModel->calculateKeyPointsAndDescriptors(detector, extractor);
-    } else if(!isIRAUsed) {
-        // Get Keypoints and descriptors from scene if IRA was not used.
-        keypointScene = sceneModel->getKeypoints();
-        descriptorsScene = sceneModel->getDescriptors();
+    if(!isIRAUsed && !sModel->keypointsCalculated()) {
+        sModel->calculateKeyPointsAndDescriptors(detector, extractor);
+    }
+    
+    // Get Keypoints and descriptors from scene if IRA was not used.
+    if(!isIRAUsed) {
+        keypointScene = sModel->getKeypoints();
+        descriptorsScene = sModel->getDescriptors();
     }
 
     // Check if object has calculated keypoints and descriptors...
-    if(!objectModel->keypointsCalculated()) {
-        objectModel->calculateKeyPointsAndDescriptors(detector, extractor);
+    if(!oModel->keypointsCalculated()) {
+        oModel->calculateKeyPointsAndDescriptors(detector, extractor);
     }
 
     // Get Keypoints and descriptors from object
-    keypointsObject = objectModel->getKeypoints();
-    descriptorsObject = objectModel->getDescriptors();
+    keypointsObject = oModel->getKeypoints();
+    descriptorsObject = oModel->getDescriptors();
 
     if (!descriptorsObject.empty() && !descriptorsScene.empty()
         && keypointsObject.size() > 0 && keypointScene.size() > 0) {
@@ -131,21 +140,23 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
         //symmetry_test(good_matches, good_matches_two, symMatches);
         //good_matches = symMatches;
 
-        lines = obtainMatchingResult(sceneImage,
-                                     objectImage,
-                                     goodMatches,
-                                     keypointsObject,
-                                     keypointScene,
-                                     sceneModel,
-                                     objectModel);
+        drawable = obtainMatchingResult(sceneImage,
+                                        objectImage,
+                                        goodMatches,
+                                        keypointsObject,
+                                        keypointScene,
+                                        sModel,
+                                        oModel);
 
-        if(lines == nullptr) {
+        if(drawable == nullptr) {
             // If result is not good enough and IRA was used.
             if(isIRAUsed) {
                 ira->clear(); // Clear last detected object position.
-                return algo(scene, object);
+                return algo(sceneModel, objectModel);
             }
-
+        } else {
+            // Object found...
+            result = new Companion::Model::Result(100, objectModel->getID(), drawable);
         }
 
     } else {
@@ -153,11 +164,14 @@ Companion::Draw::Drawable *Companion::Algorithm::CPU::FeatureMatching::algo(
         if(isIRAUsed) {
             // Reset method and search for object in scene without IRA.
             ira->clear(); // Clear last detected object position.
-            return algo(scene, object);
+            return algo(sceneModel, objectModel);
         }
     }
 
-    return lines;
+    sceneImage.release();
+    objectImage.release();
+
+    return result;
 }
 
 bool Companion::Algorithm::CPU::FeatureMatching::isCuda() {

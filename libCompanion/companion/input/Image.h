@@ -20,7 +20,9 @@
 #define COMPANION_IMAGE_H
 
 #include <string>
-#include <vector>
+#include <queue>
+#include <mutex>
+#include <condition_variable>
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 
@@ -40,8 +42,9 @@ namespace Companion {
 
             /**
              * Default constructor to create an empty image list.
+             * @param maxImages Maximum amount of images that can be loaded at the same time.
              */
-            Image();
+            Image(int maxImages);
 
             /**
              * Default destructor;
@@ -49,10 +52,16 @@ namespace Companion {
             ~Image();
 
             /**
-             * Adds an given image path to images list.
-             * @param path Image path to obtain image.
+             * Store an image to fifa.
+             * @param imgPath Image path to store.
              */
-            void addImagePath(std::string path);
+            void addImage(std::string imgPath);
+
+            /**
+             * Image to store to fifo.
+             * @param img Image to store.
+             */
+            void addImage(cv::Mat img);
 
             /**
              * Obtain next image from open video stream.
@@ -63,14 +72,29 @@ namespace Companion {
         private:
 
             /**
-             * List from all image paths;
+             * List from all stored images as an fifo;
              */
-            std::vector<std::string> images;
+            std::queue<cv::Mat> images;
 
             /**
-             * Current index position from images.
+             * Mutex to control critical get and set from images.
              */
-            int index;
+            std::mutex mtx;
+
+            /**
+             * Mutex to control the image stream to keep memory low.
+             */
+            std::mutex mx;
+            
+            /**
+             * Waiting condition for image input stream;
+             */
+            std::condition_variable cv;
+
+            /**
+             * Maximum amount of images that can be loaded at the same time.
+             */
+            int maxImages;
         };
 
     }

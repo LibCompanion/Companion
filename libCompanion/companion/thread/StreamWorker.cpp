@@ -22,7 +22,6 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
                                               int skipFrame,
                                               std::function<ERROR_CALLBACK> errorCallback) {
 
-    bool storedFrame;
     int skipFrameNr = 0;
 
     try {
@@ -33,26 +32,21 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 
             if(!frame.empty()) {
                 // If skip frame is not used...
-                if(skipFrame <= 0) {
-                    storedFrame = storeFrame(frame);
-                } else {
-                    // ... check if skip frame nr is reached
-                    if(skipFrameNr == skipFrame) {
-                        storedFrame = storeFrame(frame);
+                if(skipFrame <= 0 && storeFrame(frame)) {
+                    // obtain next frame to store.
+                    frame = stream->obtainImage();
+                } else if(skipFrame > 0) {
+                    // ... check if skip frame nr is reached and If frame was stored
+                    if(skipFrameNr == skipFrame && storeFrame(frame)) {
+                        // obtain next frame to store.
+                        frame = stream->obtainImage();
                         skipFrameNr = 0;
-                    } else {
-                        // Indicator to obtain next frame.
-                        storedFrame = true;
+                    } else if(skipFrameNr != skipFrame) {
+                        frame.release();
+                        frame = stream->obtainImage();
                         skipFrameNr++;
                     }
                 }
-
-                // If frame was stored or skipped...
-                if(storedFrame) {
-                    // obtain next frame to store.
-                    frame = stream->obtainImage();
-                }
-
             } else {
                 // If frames are empty loop.
                 frame = stream->obtainImage();
@@ -86,6 +80,7 @@ void Companion::Thread::StreamWorker::consume(
                 frame = queue.front();
                 queue.pop();
                 callback(processing->execute(frame), frame);
+                frame.release();
             }
 
             if(finished) {
@@ -97,7 +92,7 @@ void Companion::Thread::StreamWorker::consume(
     }
 }
 
-bool Companion::Thread::StreamWorker::storeFrame(cv::Mat &frame) {
+bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
     std::lock_guard<std::mutex> lk(mx);
     if(queue.size() >= buffer) {
         // If buffer full try to notify producer and wait current frame and do nothing.

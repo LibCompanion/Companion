@@ -16,33 +16,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Lines.h"
+#include "Result.h"
 
-Companion::Draw::Lines::Lines() {
+Companion::Model::Result::Result(int scoring, int id, Companion::Draw::Drawable *model) : scoring(
+        scoring), id(id), model(model) {}
+
+Companion::Model::Result::~Result() {
 
 }
 
-Companion::Draw::Lines::~Lines() {
-
+int Companion::Model::Result::getScoring() const {
+    return scoring;
 }
 
-void Companion::Draw::Lines::addLine(Line *line) {
-    this->lines.push_back(line);
+Companion::Draw::Drawable *Companion::Model::Result::getModel() const {
+    return model;
 }
 
-void Companion::Draw::Lines::draw(cv::Mat image) {
-    for (auto &line : lines) {
-        line->draw(image);
-    }
+int Companion::Model::Result::getId() const {
+    return id;
 }
 
-void Companion::Draw::Lines::ratio(int cWidth, int cHeight, int nWidth, int nHeight) {
-    for (auto &line : lines) {
-        line->ratio(cWidth, cHeight, nWidth, nHeight);
-    }
-};
 
-const std::vector<Companion::Draw::Line*> &Companion::Draw::Lines::getLines() const
-{
-    return this->lines;
-}
+
+

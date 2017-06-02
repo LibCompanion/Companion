@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "companion/processing/ImageProcessing.h"
-#include "companion/model/ImageRecognitionModel.h"
+#include "companion/model/processing/ImageRecognitionModel.h"
 #include "companion/draw/Drawable.h"
 #include "companion/algo/abstract/ImageRecognition.h"
 #include "companion/Configuration.h"
@@ -56,9 +56,10 @@ namespace Companion {
             /**
              * Try to detect all objects from give frame.
              * @param frame Frame to check for an object location.
-             * @return An empty vector if no objects are detected.
+             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+             *          every detected object.
              */
-            virtual std::vector<Companion::Draw::Drawable*> execute(cv::Mat frame);
+            virtual CALLBACK_RESULT execute(cv::Mat frame);
 
         private:
 

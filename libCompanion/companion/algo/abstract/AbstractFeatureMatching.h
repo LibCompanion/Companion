@@ -20,7 +20,7 @@
 #define COMPANION_ABSTRACTFEATUREMATCHING_H
 
 #include "ImageRecognition.h"
-#include "companion/draw/Lines.h"
+#include "companion/draw/Frame.h"
 
 namespace Companion {
 
@@ -81,8 +81,8 @@ namespace Companion {
             Draw::Drawable* calculateArea(cv::Mat &homography,
                                     cv::Mat &sceneImage,
                                     cv::Mat &objectImage,
-                                    Model::FeatureMatchingModel *sModel,
-                                    Model::FeatureMatchingModel *cModel);
+                                    Model::Processing::FeatureMatchingModel *sModel,
+                                    Model::Processing::FeatureMatchingModel *cModel);
 
             /**
              * Obtain from given feature matching an result if object was detecet in image or not.
@@ -101,8 +101,8 @@ namespace Companion {
                                            std::vector<cv::DMatch> &good_matches,
                                            std::vector<cv::KeyPoint> &keypoints_object,
                                            std::vector<cv::KeyPoint> &keypoints_scene,
-                                           Model::FeatureMatchingModel *sModel,
-                                           Model::FeatureMatchingModel *cModel);
+                                           Model::Processing::FeatureMatchingModel *sModel,
+                                           Model::Processing::FeatureMatchingModel *cModel);
 
             /**
              * Specific algorithm implementation like simple compare or template matching.
@@ -110,8 +110,8 @@ namespace Companion {
              * @param compareModel Compare model to check if contains in search model.
              * @throws Companion::Error::Code If an error occured in search operation.
              */
-            virtual Draw::Drawable* algo(Model::ImageRecognitionModel *searchModel,
-                                         Model::ImageRecognitionModel *compareModel) = 0;
+            virtual Companion::Model::Result* algo(Model::Processing::ImageRecognitionModel *searchModel,
+                                                   Model::Processing::ImageRecognitionModel *compareModel) = 0;
 
             /**
              * Indicator if this algorithm use cuda.
