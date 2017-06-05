@@ -63,6 +63,6 @@ find_package(OpenMP REQUIRED)
 add_subdirectory(libCompanion)
 
 # Configure to build additional modules
-if(Companion_BUILD_SAMPLES)
+if(Companion_BUILD_SAMPLES && NOT WINDOWS_STORE) 
     add_subdirectory(samples)
 endif()
