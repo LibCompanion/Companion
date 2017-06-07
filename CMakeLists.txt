@@ -41,6 +41,7 @@ set(CMAKE_DEBUG_POSTFIX "D")
 
 
 # Define interactive CMake Flags
+option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
 option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
 set(Companion_BUILD_SHARED_LIBRARY OFF CACHE BOOL "Build libCompanion as shared library")
 
@@ -61,7 +62,7 @@ find_package(OpenMP REQUIRED)
 # Configure libCompanion
 add_subdirectory(libCompanion)
 
-# Configure additional modules
-if(NOT WINDOWS_STORE)
+# Configure to build additional modules
+if(Companion_BUILD_SAMPLES AND NOT WINDOWS_STORE) 
     add_subdirectory(samples)
 endif()
