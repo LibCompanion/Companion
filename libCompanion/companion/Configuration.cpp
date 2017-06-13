@@ -31,10 +31,18 @@ Companion::Configuration::~Configuration() {
 }
 
 void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
-    this->worker = &worker;
+    // Get all configuration data
+    // Throws Error if invalid settings are set.
+    Companion::Input::Stream* stream = this->getSource();
+    Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
+    int skipFrame = this->getSkipFrame();
+    std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
+    std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
+
     // Run new worker class.
-    this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, this->getProcessing(), this->getErrorCallback(), this->getCallback());
-    this->producer = std::thread(&Thread::StreamWorker::produce, &worker, this->getSource(), this->getSkipFrame(), this->getErrorCallback());
+    this->worker = &worker;
+    this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, imageProcessing, errorCallback, successCallback);
+    this->producer = std::thread(&Thread::StreamWorker::produce, &worker, stream, skipFrame, errorCallback);
     consumer.join(); // Wait if thread finished
     producer.join(); // Waif if thread finished
 }
