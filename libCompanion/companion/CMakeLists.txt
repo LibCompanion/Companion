@@ -67,8 +67,11 @@ if(Companion_BUILD_SHARED_LIBRARY)
 else()
     add_library(Companion ${SOURCE})
 endif()
-target_link_libraries(Companion ${OpenCV_LIBS})
 
+target_link_libraries(Companion ${OpenCV_LIBS})
+if (UNIX)
+    TARGET_LINK_LIBRARIES(Companion -lpthread)
+endif (UNIX)
 
 # Add target properties
 set_property(TARGET Companion PROPERTY FOLDER "libCompanion")
