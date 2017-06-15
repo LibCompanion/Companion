@@ -67,7 +67,7 @@ void Companion::Thread::StreamWorker::consume(
         std::function<ERROR_CALLBACK> errorCallback,
         std::function<SUCCESS_CALLBACK> callback) {
 
-    cv::Mat frame;
+    cv::Mat frame, result;
     bool isFinished = false;
 
     try {
@@ -79,8 +79,10 @@ void Companion::Thread::StreamWorker::consume(
             if(!queue.empty()) {
                 frame = queue.front();
                 queue.pop();
-                callback(processing->execute(frame), frame);
+                cvtColor(frame, result, CV_BGR2RGB);
+                callback(processing->execute(frame), result);
                 frame.release();
+				result.release();
             }
 
             if(finished) {
