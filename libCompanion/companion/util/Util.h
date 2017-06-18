@@ -38,7 +38,7 @@ namespace Companion {
         /**
          * Checks if given image is loaded.
          * @param img Image to check if it's not null.
-         * @return <b>TRUE</b> if image is loaded otherwise <b>False<b>
+         * @return <code>true</code> if image is loaded otherwise <code>false</code>
          */
         static bool isImageLoaded(cv::Mat &img);
 
@@ -59,6 +59,15 @@ namespace Companion {
          * @param nHeight New height.
          */
         static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
+
+        /**
+         * Checks if a point is distant enough from a given origin.
+         * @param origin Origin point.
+         * @param point Point whose distance should be checked.
+         * @param distance Minimum distance.
+         * @return <code>true</code> if point is distant enough otherwise <code>false</code>
+         */
+        static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
     };
 
 }

@@ -31,10 +31,10 @@
 void callback(CALLBACK_RESULT results, cv::Mat source) {
     Companion::Model::Result *result;
 
-    for(size_t x = 0; x < results.size(); x++) {
+    for(size_t i = 0; i < results.size(); i++) {
         
         // Mark the detected object
-        result = results.at(x);
+        result = results.at(i);
         result->getModel()->draw(source);
 
         // Draw the id of the detected object
@@ -131,16 +131,16 @@ int main() {
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature, 10);
 #else
     // -------------- BRISK CPU FM --------------
     cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
-    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
+    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10);
 #endif
 
     // -------------- Image Processing Setup --------------
