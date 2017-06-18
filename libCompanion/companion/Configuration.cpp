@@ -48,12 +48,13 @@ void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
 }
 
 void Companion::Configuration::stop() {
-    worker->stop();
+    if (this->worker != nullptr) {
+        this->worker->stop();
+    }
 }
 
 Companion::Input::Stream *Companion::Configuration::getSource() const {
-
-    if(!source) {
+    if(this->source == nullptr) {
         throw Error::Code::video_src_not_set;
     }
 
