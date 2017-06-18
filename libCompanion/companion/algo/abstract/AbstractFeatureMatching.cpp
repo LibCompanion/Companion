@@ -179,7 +179,7 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
 
         // IRA algo stores position from detected object.
         ira->setLastObjectPosition(start.x, start.y, end.x - start.x, end.y - start.y);
-        cv::Rect lastObjectPosition = ira->getLastObjectPosition();
+        const cv::Rect &lastObjectPosition = ira->getLastObjectPosition();
 
         // Check if start point is set correctly
         if (lastObjectPosition.x < 0) {
