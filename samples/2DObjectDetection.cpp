@@ -22,7 +22,7 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-#if defined HAVE_OPENCV_CUDAFEATURES2D
+#if defined Companion_USE_CUDA
     #include <companion/algo/cuda/CudaFeatureMatching.h>
 #endif
 
@@ -127,7 +127,7 @@ int main() {
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
-#if defined HAVE_OPENCV_CUDAFEATURES2D
+#if defined Companion_USE_CUDA
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
@@ -150,12 +150,12 @@ int main() {
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    //Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
+    Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
     //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
     // Setup example for an streaming data from a set of images.
-    Companion::Input::Image *stream = new Companion::Input::Image(50);
-    std::thread imgThread = std::thread(&sampleImageThread, stream);
+    //Companion::Input::Image *stream = new Companion::Input::Image(50);
+    //std::thread imgThread = std::thread(&sampleImageThread, stream);
 
     // Set input source
     companion->setSource(stream);
@@ -181,7 +181,7 @@ int main() {
 
     try {
         companion->run(ps);
-        imgThread.join(); // External img thread to add images by processing.
+        //imgThread.join(); // External img thread to add images by processing.
     } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }
