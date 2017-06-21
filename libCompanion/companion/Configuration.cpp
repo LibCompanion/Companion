@@ -48,10 +48,12 @@ void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
 }
 
 void Companion::Configuration::stop() {
-    if (this->worker != nullptr) {
+
+    if (this->worker != nullptr && this->worker->isRunning()) {
         this->worker->stop();
-        this->worker = nullptr;
     }
+
+    this->worker = nullptr;
 }
 
 Companion::Input::Stream *Companion::Configuration::getSource() const {
