@@ -128,7 +128,7 @@ namespace Companion {
          * Sets an given result handler.
          *
          * Result handler return an set from all detected objects as an vector and frame. If video processing is finished
-         * the boolean will be returned true in last image processing.
+         * the boolean will be returned true in last image processing. Image source will be converted to RGB format.
          *
          * @param callback Function pointer which contains result event handler.
          */
