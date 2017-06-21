@@ -42,6 +42,8 @@ set(CMAKE_DEBUG_POSTFIX "D")
 
 # Define interactive CMake Flags
 option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF)
+
+# Cuda and current samples are not supported when building for Windows Store
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
@@ -56,6 +58,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(OpenCVComponents "core" "imgproc" "imgcodecs" "features2d" "videoio" "calib3d")
 if(Companion_USE_CUDA)
     set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D Companion_USE_CUDA")
 endif()
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
