@@ -81,10 +81,8 @@ void Companion::Thread::StreamWorker::consume(
             if(!queue.empty()) {
                 frame = queue.front();
                 queue.pop();
-                cvtColor(frame, result, CV_BGR2RGB);
-                callback(processing->execute(frame), result);
+                callback(processing->execute(frame), frame);
                 frame.release();
-				result.release();
             }
 
         }
