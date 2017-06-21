@@ -71,6 +71,7 @@ void Companion::Thread::StreamWorker::consume(
         std::function<SUCCESS_CALLBACK> callback) {
 
     cv::Mat frame;
+    cv::Mat resultBGR;
 
     try {
         while (!finished) {
@@ -81,7 +82,8 @@ void Companion::Thread::StreamWorker::consume(
             if(!queue.empty()) {
                 frame = queue.front();
                 queue.pop();
-                callback(processing->execute(frame), frame);
+                cvtColor(frame, resultBGR, CV_BGR2RGB);
+                callback(processing->execute(frame), resultBGR);
                 frame.release();
             }
 
