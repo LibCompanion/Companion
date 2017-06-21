@@ -27,6 +27,7 @@ Companion::Input::Video::Video(int device) {
     }
 
     capture = cap;
+    finished = false;
 }
 
 
@@ -39,6 +40,7 @@ Companion::Input::Video::Video(std::string url) {
     }
 
     capture = cap;
+    finished = false;
 }
 
 Companion::Input::Video::~Video() {
@@ -49,12 +51,26 @@ cv::Mat Companion::Input::Video::obtainImage() {
 
     cv::Mat frame;
 
-    if (!capture.isOpened()) {
+    if (!capture.isOpened() || finished) {
+        finished = true;
         return frame;
     }
 
     // Obtain image frame.
     capture >> frame;
 
+    if (frame.empty()) {
+        // If frame empty video is finished.
+        finished = true;
+    }
+
     return frame;
+}
+
+bool Companion::Input::Video::isFinished() {
+    return finished;
+}
+
+void Companion::Input::Video::finish() {
+    finished = true;
 }

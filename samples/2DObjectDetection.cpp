@@ -67,10 +67,10 @@ void sampleImageThread(Companion::Input::Image *stream) {
             fileNr = "0" + std::to_string(i);
         }
         stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
-
-        // Use this control to adjust the streaming rate
-        //cvWaitKey(300);
     }
+
+    // Stop this stream after all images are processed.
+    stream->finish();
 }
 
 void error(Companion::Error::Code code) {

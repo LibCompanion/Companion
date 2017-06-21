@@ -28,7 +28,7 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 
         cv::Mat frame = stream->obtainImage();
 
-        while (!finished) {
+        while (!stream->isFinished() || !isRunning()) {
 
             if(!frame.empty()) {
                 // If skip frame is not used...
@@ -54,7 +54,10 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
         }
 
         std::lock_guard<std::mutex> lk(mx);
-        finished = true;
+        if(!stream->isFinished()) {
+
+        }
+        finished = stream->isFinished();
         cv.notify_all();
 
     } catch (Companion::Error::Code error) {
@@ -68,10 +71,9 @@ void Companion::Thread::StreamWorker::consume(
         std::function<SUCCESS_CALLBACK> callback) {
 
     cv::Mat frame;
-    bool isFinished = false;
 
     try {
-        while (!isFinished) {
+        while (!finished) {
 
             std::unique_lock<std::mutex> lk(mx);
             cv.wait(lk, [this]{return finished || !queue.empty();});
@@ -83,9 +85,6 @@ void Companion::Thread::StreamWorker::consume(
                 frame.release();
             }
 
-            if(finished) {
-                isFinished = finished;
-            }
         }
     } catch (Companion::Error::Code errorCode) {
         errorCallback(errorCode);

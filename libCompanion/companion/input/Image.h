@@ -69,17 +69,28 @@ namespace Companion {
              */
             cv::Mat obtainImage();
 
+            /**
+             * Indicator if stream is finished.
+             * @return True if video is finished otherwise false.
+             */
+            bool isFinished();
+
+            /**
+             * Method to signal to stop image stream.
+             */
+            void finish();
+
         private:
+
+            /**
+             * Indicator to stop this stream.
+             */
+            bool exitStream;
 
             /**
              * List from all stored images as an fifo;
              */
             std::queue<cv::Mat> images;
-
-            /**
-             * Mutex to control critical get and set from images.
-             */
-            std::mutex mtx;
 
             /**
              * Mutex to control the image stream to keep memory low.
