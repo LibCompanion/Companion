@@ -48,7 +48,7 @@ void callback(CALLBACK_RESULT results, cv::Mat source) {
                     frame->getThickness());
     }
 
-    cvtColor(source, source, CV_RGB2BGR);
+    cv::cvtColor(source, source, CV_RGB2BGR);
     cv::imshow("Object detection", source);
     cv::waitKey(1);
     source.release();
@@ -68,6 +68,9 @@ void sampleImageThread(Companion::Input::Image *stream) {
             fileNr = "0" + std::to_string(i);
         }
         stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
+
+        // Use this control to adjust the streaming rate
+        //cvWaitKey(300);
     }
 
     // Stop this stream after all images are processed.
