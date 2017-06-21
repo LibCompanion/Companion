@@ -121,6 +121,8 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
         Model::Processing::FeatureMatchingModel *sModel,
         Model::Processing::FeatureMatchingModel *cModel) {
 
+    Companion::Draw::Frame *frame = nullptr;
+
     //-- Get the corners from the image_1 (the object to be "detected")
     std::vector<cv::Point2f> obj_corners(4);
     obj_corners[0] = cvPoint(0, 0);
@@ -172,14 +174,25 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     cv::Point2f topRight = scene_corners[1] + offset;
     cv::Point2f bottomLeft = scene_corners[3] + offset;
     cv::Point2f bottomRight = scene_corners[2] + offset;
-    Companion::Draw::Frame *frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
+
+    // Check for minimum corner distance
+    if (Companion::Util::hasDistantPosition(topLeft, topRight, cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomLeft, cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomRight, cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomLeft, cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomRight, cornerDistance) &&
+        Companion::Util::hasDistantPosition(bottomLeft, bottomRight, cornerDistance)) {
+        
+        // Create a drawable frame to represent the calculated area
+        frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
+    }
 
     // If IRA is used...
     if(useIRA) {
 
         // IRA algo stores position from detected object.
         ira->setLastObjectPosition(start.x, start.y, end.x - start.x, end.y - start.y);
-        cv::Rect lastObjectPosition = ira->getLastObjectPosition();
+        const cv::Rect &lastObjectPosition = ira->getLastObjectPosition();
 
         // Check if start point is set correctly
         if (lastObjectPosition.x < 0) {

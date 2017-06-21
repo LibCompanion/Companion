@@ -62,12 +62,28 @@ namespace Companion {
              */
             cv::Mat obtainImage();
 
+            /**
+             * Indicator if stream is finished.
+             * @return True if video is finished otherwise false.
+             */
+            bool isFinished();
+
+            /**
+             * Stop this stream.
+             */
+            void finish();
+
         private:
 
             /**
              * Stores video device or video streaming.
              */
             cv::VideoCapture capture;
+
+            /**
+             * Indicator if video is finished.
+             */
+            bool finished;
         };
 
     }

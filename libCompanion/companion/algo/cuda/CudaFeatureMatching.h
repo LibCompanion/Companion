@@ -43,8 +43,9 @@ namespace Companion {
                 /**
                  * Constructor to create an cuda based feature matching.
                  * @param cudaFeatureMatching Cuda based feature matching algorithm like cv::cuda::ORB.
+                 * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
                  */
-                FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching);
+                FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching, int cornerDistance = 10);
 
                 /**
                  * Destructor

@@ -38,6 +38,17 @@ namespace Companion {
              * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
              */
             virtual cv::Mat obtainImage() = 0;
+
+            /**
+             * Indicator if stream is finished.
+             * @return True if video is finished otherwise false.
+             */
+            virtual bool isFinished() = 0;
+
+            /**
+             * Stop this stream.
+             */
+            virtual void finish() = 0;
         };
 
     }

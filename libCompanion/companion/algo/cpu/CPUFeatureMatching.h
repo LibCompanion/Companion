@@ -59,6 +59,7 @@ namespace Companion {
                  * @param extractor FeatureExtractor to set.
                  * @param matcher FeatureMatcher to set.
                  * @param type FeatureMatcher type which is used like FlannBased or Bruteforce.
+                 * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
                  * @param countMatches How much matches need to get an good matching result. Default is by 40.
                  * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
                  */
@@ -66,6 +67,7 @@ namespace Companion {
                                 cv::Ptr<cv::DescriptorExtractor> extractor,
                                 cv::Ptr<cv::DescriptorMatcher> matcher,
                                 int type,
+                                int cornerDistance = 10,
                                 int countMatches = 40,
                                 bool useIRA = false);
 

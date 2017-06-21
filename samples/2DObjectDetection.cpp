@@ -22,7 +22,7 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-#if defined HAVE_OPENCV_CUDAFEATURES2D
+#if defined Companion_USE_CUDA
     #include <companion/algo/cuda/CudaFeatureMatching.h>
 #endif
 
@@ -31,10 +31,10 @@
 void callback(CALLBACK_RESULT results, cv::Mat source) {
     Companion::Model::Result *result;
 
-    for(size_t x = 0; x < results.size(); x++) {
+    for(size_t i = 0; i < results.size(); i++) {
         
         // Mark the detected object
-        result = results.at(x);
+        result = results.at(i);
         result->getModel()->draw(source);
 
         // Draw the id of the detected object
@@ -67,10 +67,10 @@ void sampleImageThread(Companion::Input::Image *stream) {
             fileNr = "0" + std::to_string(i);
         }
         stream->addImage("/home/asekulsk/Dokumente/Master/Testcase/HBF/Img/hbf" + fileNr + ".jpg");
-
-        // Use this control to adjust the streaming rate
-        //cvWaitKey(300);
     }
+
+    // Stop this stream after all images are processed.
+    stream->finish();
 }
 
 void error(Companion::Error::Code code) {
@@ -127,20 +127,20 @@ int main() {
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
-#if defined HAVE_OPENCV_CUDAFEATURES2D
+#if defined Companion_USE_CUDA
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature, 10);
 #else
     // -------------- BRISK CPU FM --------------
     cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 40, true);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
-    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type);
+    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10);
 #endif
 
     // -------------- Image Processing Setup --------------
@@ -150,12 +150,12 @@ int main() {
     companion->setErrorHandler(error);
 
     // Setup video source to obtain images.
-    //Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
+    Companion::Input::Stream *stream = new Companion::Input::Video(testVideo); // Load an video
     //Companion::Input::Stream *stream = new Companion::Input::Video(0); // Realtime input
 
     // Setup example for an streaming data from a set of images.
-    Companion::Input::Image *stream = new Companion::Input::Image(50);
-    std::thread imgThread = std::thread(&sampleImageThread, stream);
+    //Companion::Input::Image *stream = new Companion::Input::Image(50);
+    //std::thread imgThread = std::thread(&sampleImageThread, stream);
 
     // Set input source
     companion->setSource(stream);
@@ -181,7 +181,7 @@ int main() {
 
     try {
         companion->run(ps);
-        imgThread.join(); // External img thread to add images by processing.
+        //imgThread.join(); // External img thread to add images by processing.
     } catch (Companion::Error::Code errorCode) {
         error(errorCode);
     }

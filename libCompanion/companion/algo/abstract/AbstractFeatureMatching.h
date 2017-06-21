@@ -122,9 +122,14 @@ namespace Companion {
         protected:
 
             /**
-             * Indicator how much matches need to get an good matching result. Default value is 40,
+             * Indicator how much matches need to get an good matching result. Default value is 40.
              */
             int countMatches = 40;
+
+            /**
+             * Indicator how many pixels the corners of a found area should be distant from each other. Default value is 10.
+             */
+            int cornerDistance = 10;
 
             /**
              * Indicator to use IRA algorithm.

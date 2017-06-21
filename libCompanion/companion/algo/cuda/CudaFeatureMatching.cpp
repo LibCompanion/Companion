@@ -18,9 +18,9 @@
 
 #include "CudaFeatureMatching.h"
 
-Companion::Algorithm::Cuda::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching) {
+Companion::Algorithm::Cuda::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching, int cornerDistance) {
     this->cudaFeatureMatching = cudaFeatureMatching;
-
+    this->cornerDistance = cornerDistance;
 }
 
 Companion::Algorithm::Cuda::FeatureMatching::~FeatureMatching() {

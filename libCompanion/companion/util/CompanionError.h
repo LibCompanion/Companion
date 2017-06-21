@@ -35,7 +35,7 @@ namespace Companion {
             descriptor_matcher_not_found, ///< If given descriptor matcher not supported.
             wrong_model_type, ///< If given model class type is not supported for an image recognition search.
             invalid_companion_config, ///< If given configuration is invalid.
-            video_src_not_set, ///< If given video source is not set.
+            stream_src_not_set, ///< If given stream source is not set.
             invalid_video_src, ///< If given video source is invalid like an error path.
             no_image_processing_algo_set, ///< If no image processing algo is used.
             no_handler_set ///< If no callback handler is set.
@@ -75,8 +75,8 @@ namespace Companion {
                 case Code::invalid_companion_config:
                     error = "Invalid companion configuration.";
                     break;
-                case Code::video_src_not_set:
-                    error = "Video source is not set.";
+                case Code::stream_src_not_set:
+                    error = "Stream source not set.";
                     break;
                 case Code::invalid_video_src:
                     error = "Video src is not obtainable.";

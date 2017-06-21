@@ -31,6 +31,7 @@ Companion::Algorithm::CPU::FeatureMatching::FeatureMatching(
         cv::Ptr<cv::DescriptorExtractor> extractor,
         cv::Ptr<cv::DescriptorMatcher> matcher,
         int type,
+        int cornerDistance,
         int countMatches,
         bool useIRA) {
 
@@ -38,6 +39,7 @@ Companion::Algorithm::CPU::FeatureMatching::FeatureMatching(
     this->extractor = extractor;
     this->type = type;
     this->matcher = matcher;
+    this->cornerDistance = cornerDistance;
     this->countMatches = countMatches;
     this->useIRA = useIRA;
 

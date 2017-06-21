@@ -30,3 +30,7 @@ void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, i
     point.x = (int)(((float)point.x / (float)cWidth) * nWidth);
     point.y = (int)(((float)point.y / (float)cHeight) * nHeight);
 }
+
+bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance) {
+    return (std::abs(origin.x - point.x) >= distance) || (std::abs(origin.y - point.y) >= distance);
+}
