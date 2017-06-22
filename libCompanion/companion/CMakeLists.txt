@@ -60,7 +60,6 @@ if(MSVC)
     endforeach()
 endif()
 
-
 # Create library and set linked libraries
 if(Companion_BUILD_SHARED_LIBRARY)
     add_library(Companion SHARED ${SOURCE})

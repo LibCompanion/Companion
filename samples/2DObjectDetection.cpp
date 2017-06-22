@@ -22,7 +22,7 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-#if defined Companion_USE_CUDA
+#if defined Companion_USE_CUDA  == ON
     #include <companion/algo/cuda/CudaFeatureMatching.h>
 #endif
 
@@ -131,7 +131,7 @@ int main() {
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
-#if defined Companion_USE_CUDA
+#if defined Companion_USE_CUDA == ON
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
