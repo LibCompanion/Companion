@@ -20,7 +20,9 @@
 #define COMPANION_ABSTRACTFEATUREMATCHING_H
 
 #include "ImageRecognition.h"
-#include "companion/draw/Frame.h"
+
+#include <companion/draw/Frame.h>
+#include <companion/model/processing/FeatureMatchingModel.h>
 
 namespace Companion {
 
@@ -138,8 +140,5 @@ namespace Companion {
         };
     }
 }
-
-
-
 
 #endif //COMPANION_ABSTRACTFEATUREMATCHING_H

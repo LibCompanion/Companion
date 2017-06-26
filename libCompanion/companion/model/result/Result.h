@@ -20,7 +20,7 @@
 #define COMPANION_RESULT_H
 
 #include <string>
-#include "companion/draw/Drawable.h"
+#include <companion/draw/Drawable.h>
 
 namespace Companion {
 

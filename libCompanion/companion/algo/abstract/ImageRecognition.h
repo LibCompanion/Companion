@@ -19,16 +19,8 @@
 #ifndef COMPANION_IMAGERECOGNITION_H
 #define COMPANION_IMAGERECOGNITION_H
 
-#include <iostream>
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/features2d.hpp>
-
-#include "companion/draw/Drawable.h"
-#include "companion/util/CompanionError.h"
-#include "companion/model/processing/FeatureMatchingModel.h"
-#include "companion/util/Util.h"
-#include "companion/model/result/Result.h"
+#include <companion/model/processing/ImageRecognitionModel.h>
+#include <companion/model/result/Result.h>
 
 namespace Companion {
 
@@ -53,7 +45,7 @@ namespace Companion {
 
             /**
              * Indicator if this algorithm use cuda.
-             * @return True if cuda will be used otherwise false.
+             * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
              */
             virtual bool isCuda() = 0;
         };

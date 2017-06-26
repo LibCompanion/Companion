@@ -50,7 +50,6 @@ if(NOT WINDOWS_STORE)
     add_definitions(-DCompanion_USE_CUDA=${Companion_USE_CUDA})
 endif()
 
-
 # Define global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -66,6 +65,7 @@ find_package(OpenMP REQUIRED)
 
 
 # Configure libCompanion
+
 add_subdirectory(libCompanion)
 
 # Configure to build additional modules

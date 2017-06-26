@@ -26,7 +26,7 @@ SET(SOURCE
         Configuration.cpp Configuration.h
         algo/abstract/ImageRecognition.h
         algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
-        algo/cpu/CPUFeatureMatching.cpp algo/cpu/CPUFeatureMatching.h
+        algo/2D/FeatureMatching.cpp algo/2D/FeatureMatching.h
         algo/util/IRA.cpp algo/util/IRA.h
         draw/Drawable.h
         draw/Frame.cpp draw/Frame.h
@@ -44,12 +44,6 @@ SET(SOURCE
         util/Util.cpp util/Util.h
         util/Definitions.h
         util/exportapi/ExportAPIDefinitions.h)
-
-if(Companion_USE_CUDA)
-    SET(SOURCE ${SOURCE}
-            algo/cuda/CudaFeatureMatching.cpp algo/cuda/CudaFeatureMatching.h)
-endif()
-
 
 # Create MSVC filter
 if(MSVC)

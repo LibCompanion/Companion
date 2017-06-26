@@ -18,15 +18,11 @@
 
 #include <companion/Configuration.h>
 #include <companion/processing/2D/ObjectDetection.h>
-#include <companion/algo/cpu/CPUFeatureMatching.h>
+#include <companion/algo/2D/FeatureMatching.h>
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-#if defined Companion_USE_CUDA  == ON
-    #include <companion/algo/cuda/CudaFeatureMatching.h>
-#endif
-
-#include <thread>
+// TODO := SAMPLE REFACTORING
 
 void callback(CALLBACK_RESULT results, cv::Mat source) {
     Companion::Model::Result *result;
@@ -131,21 +127,19 @@ int main() {
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
-#if defined Companion_USE_CUDA == ON
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::Cuda::FeatureMatching(feature, 10);
-#else
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::FeatureMatching(feature, 10, 40);
+
     // -------------- BRISK CPU FM --------------
-    cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
+    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
 
     // -------------- ORB CPU FM --------------
     //CPU feature matching implementation.
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
     //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10);
-#endif
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));

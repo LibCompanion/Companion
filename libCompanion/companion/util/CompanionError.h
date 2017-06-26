@@ -19,7 +19,7 @@
 #ifndef COMPANION_ERROR_H
 #define COMPANION_ERROR_H
 
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
 namespace Companion {
 
