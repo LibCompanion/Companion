@@ -63,6 +63,8 @@ namespace Companion {
                             int countMatches = 40,
                             bool useIRA = false);
 
+            // Only build if cuda should be used.
+            #if Companion_USE_CUDA
             /**
              * Constructor to create an cuda based feature matching.
              *
@@ -75,6 +77,7 @@ namespace Companion {
             FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
                             int cornerDistance = 10,
                             int countMatches = 40);
+            #endif
 
             /**
              * Default destructor.

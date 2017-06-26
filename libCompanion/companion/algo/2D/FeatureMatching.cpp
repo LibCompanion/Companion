@@ -37,6 +37,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
     this->cudaUsed = false;
 }
 
+#if Companion_USE_CUDA
 Companion::Algorithm::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
                                                        int cornerDistance,
                                                        int countMatches) {
@@ -46,6 +47,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cu
     this->useIRA = false;
     this->cudaUsed = true;
 }
+#endif
 
 Companion::Algorithm::FeatureMatching::~FeatureMatching() {}
 

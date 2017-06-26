@@ -47,7 +47,9 @@ option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
-    add_definitions(-DCompanion_USE_CUDA=${Companion_USE_CUDA})
+	if(Companion_USE_CUDA)
+		add_definitions(-DCompanion_USE_CUDA)
+	endif()
 endif()
 
 # Define global properties

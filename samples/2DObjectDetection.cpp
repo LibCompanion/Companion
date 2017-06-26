@@ -22,8 +22,11 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-// TODO := SAMPLE REFACTORING
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
+// TODO := SAMPLE REFACTORING
 void callback(CALLBACK_RESULT results, cv::Mat source) {
     Companion::Model::Result *result;
 
@@ -93,8 +96,8 @@ int main() {
 
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost), Frame skipping and Cuda
 
-    //std::string path = "D:/Data/Master/Testcase/HBF/";
-    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    std::string path = "D:/Data/Master/Testcase/HBF/";
+    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Right.jpg"));
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
@@ -127,19 +130,23 @@ int main() {
     int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
     cv::Ptr<cv::DescriptorMatcher> matcher = cv::DescriptorMatcher::create(type);
 
+    #if Companion_USE_CUDA
+    // Sample works only with cuda build
     // -------------- ORB GPU FM - Needs CUDA --------------
     cv::Ptr<cv::cuda::ORB> feature = cv::cuda::ORB::create(6000);
     feature->setBlurForDescriptor(true);
     Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::FeatureMatching(feature, 10, 40);
-
+    #else
     // -------------- BRISK CPU FM --------------
-    //cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
-    //Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
+    cv::Ptr<cv::BRISK> feature = cv::BRISK::create(60);
+    Companion::Algorithm::ImageRecognition *recognition = new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
 
     // -------------- ORB CPU FM --------------
-    //CPU feature matching implementation.
+    // CPU feature matching implementation.
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
-    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::CPU::FeatureMatching(feature, feature, matcher, type, 10);
+    //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10);
+    #endif
+
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));
