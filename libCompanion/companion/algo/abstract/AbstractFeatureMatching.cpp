@@ -29,30 +29,6 @@ void Companion::Algorithm::AbstractFeatureMatching::ratio_test(const std::vector
 
 }
 
-void Companion::Algorithm::AbstractFeatureMatching::symmetry_test(const std::vector<cv::DMatch> &matches1,
-                                                                  const std::vector<cv::DMatch> &matches2,
-                                                                  std::vector<cv::DMatch> &symMatches) {
-
-    symMatches.clear();
-
-    for (std::vector<cv::DMatch>::const_iterator matchIterator1 = matches1.begin();
-         matchIterator1 != matches1.end(); ++matchIterator1) {
-
-        for (std::vector<cv::DMatch>::const_iterator matchIterator2 = matches2.begin();
-             matchIterator2 != matches2.end(); ++matchIterator2) {
-
-            if ((*matchIterator1).queryIdx == (*matchIterator2).trainIdx &&
-                (*matchIterator2).queryIdx == (*matchIterator1).trainIdx) {
-                symMatches.push_back(
-                        cv::DMatch((*matchIterator1).queryIdx, (*matchIterator1).trainIdx, (*matchIterator1).distance));
-                break;
-            }
-
-        }
-
-    }
-}
-
 void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatches(
         std::vector<cv::DMatch> &good_matches,
         std::vector<cv::KeyPoint> &keypoints_object,

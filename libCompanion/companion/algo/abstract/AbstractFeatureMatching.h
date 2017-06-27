@@ -48,16 +48,6 @@ namespace Companion {
                             float ratio);
 
             /**
-             * Symmetry test to improve results. Currently not using because i do not understand this algo...
-             * @param matches1
-             * @param matches2
-             * @param symMatches
-             */
-            void symmetry_test(const std::vector<cv::DMatch> &matches1,
-                               const std::vector<cv::DMatch> &matches2,
-                               std::vector<cv::DMatch> &symMatches);
-
-            /**
              * Filter to obtain only good feature point which matches.
              * @param good_matches Good matches to store.
              * @param keypoints_object Keypoints from object.

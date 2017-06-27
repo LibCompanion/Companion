@@ -154,12 +154,6 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
         // Neighbourhoods comparison
         ratio_test(matches, goodMatches, 0.80);
 
-        // Symmetric matches
-        // ToDo := How does it works?
-        //vector<DMatch> symMatches;
-        //symmetry_test(good_matches, good_matches_two, symMatches);
-        //good_matches = symMatches;
-
         drawable = obtainMatchingResult(sceneImage,
                                         objectImage,
                                         goodMatches,
@@ -204,6 +198,8 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
 
             gpu_scene.release();
             gpu_object.release();
+        } else {
+            throw Companion::Error::Code::no_cuda_device;
         }
 
         // Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20

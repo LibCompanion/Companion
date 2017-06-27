@@ -22,10 +22,6 @@
 #include <companion/input/Video.h>
 #include <companion/input/Image.h>
 
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-
 // TODO := SAMPLE REFACTORING
 void callback(CALLBACK_RESULT results, cv::Mat source) {
     Companion::Model::Result *result;
@@ -96,8 +92,8 @@ int main() {
 
     // Perfomance increase are ProducerConsumer Design Pattern (Libbost), Frame skipping and Cuda
 
-    std::string path = "D:/Data/Master/Testcase/HBF/";
-    //std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
+    //std::string path = "D:/Data/Master/Testcase/HBF/";
+    std::string path = "/home/asekulsk/Dokumente/Master/Testcase/HBF/";
     images.push_back(path + std::string("Sample_Right.jpg"));
     images.push_back(path + std::string("Sample_Middle.jpg"));
     images.push_back(path + std::string("Sample_Left.jpg"));
@@ -146,7 +142,6 @@ int main() {
     //cv::Ptr<cv::ORB> feature = cv::ORB::create(2000);
     //Companion::Algorithm::ImageRecognition *recognition =  new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10);
     #endif
-
 
     // -------------- Image Processing Setup --------------
     companion->setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.50));

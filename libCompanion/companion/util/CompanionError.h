@@ -38,7 +38,8 @@ namespace Companion {
             stream_src_not_set, ///< If given stream source is not set.
             invalid_video_src, ///< If given video source is invalid like an error path.
             no_image_processing_algo_set, ///< If no image processing algo is used.
-            no_handler_set ///< If no callback handler is set.
+            no_handler_set, ///< If no callback handler is set.
+            no_cuda_device ///< If no CUDA device is ready to use.
         };
 
         /**
@@ -85,7 +86,10 @@ namespace Companion {
                     error = "No image processing algorithm is used.";
                     break;
                 case Code::no_handler_set:
-                    error = "No callback handler set";
+                    error = "No callback handler set.";
+                    break;
+                case Code::no_cuda_device:
+                    error = "No CUDA device can be used.";
                     break;
             }
 
