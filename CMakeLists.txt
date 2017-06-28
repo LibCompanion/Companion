@@ -71,6 +71,10 @@ find_package(OpenMP REQUIRED)
 add_subdirectory(libCompanion)
 
 # Configure to build additional modules
-if(Companion_BUILD_SAMPLES) 
-    add_subdirectory(samples)
+if(Companion_BUILD_SAMPLES)
+    if(IS_DIRECTORY "${PROJECT_SOURCE_DIR}/libCompanionSamples")
+        add_subdirectory(libCompanionSamples)
+    else()
+        add_subdirectory(${SAMPLE_MODULE} samples/)
+    endif()
 endif()
