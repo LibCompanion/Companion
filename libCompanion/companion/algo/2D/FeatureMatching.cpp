@@ -107,11 +107,11 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
         // Calculate descriptors from cut scene (feature vectors)
         extractor->compute(sceneImage, keypointsScene, descriptorsScene);
         isIRAUsed = true;
-    } else if(!sModel->keypointsCalculated() && !cudaUsed) { // If IRA not used and keypoints from scene not calculated.
-        sModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
+    } else if(useIRA && sModel->keypointsCalculated()) { // If IRA is used and keypoints from scene already calculated.
         keypointsScene = sModel->getKeypoints();
         descriptorsScene = sModel->getDescriptors();
-    } else if(sModel->keypointsCalculated() && !cudaUsed) { // If IRA not used and keypoints from scene already calculated.
+    } else if(!cudaUsed) { // If IRA is not used or keypoints from scene are not calculated yet.
+        sModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
         keypointsScene = sModel->getKeypoints();
         descriptorsScene = sModel->getDescriptors();
     }
@@ -183,24 +183,24 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
 
         #if Companion_USE_CUDA
 
-        // ------ Cuda USAGE ------
-        if(cv::cuda::getCudaEnabledDeviceCount() > 0) {
-            cv::cuda::GpuMat gpu_scene(sceneImage); // Load scene as an gpu mat
-            cv::cuda::GpuMat gpu_object(objectImage); // Load object as an gpu mat
-            cv::cuda::GpuMat gpu_descriptors_scene, gpu_descriptors_object;
-
-            cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypointsScene, gpu_descriptors_scene);
-            cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypointsObject, gpu_descriptors_object);
-
-            cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(cudaFeatureMatching->defaultNorm());
-
-            gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
-
-            gpu_scene.release();
-            gpu_object.release();
-        } else {
+        if(cv::cuda::getCudaEnabledDeviceCount() == 0) {
             throw Companion::Error::Code::no_cuda_device;
         }
+
+        // ------ Cuda USAGE ------
+        cv::cuda::GpuMat gpu_scene(sceneImage); // Load scene as an gpu mat
+        cv::cuda::GpuMat gpu_object(objectImage); // Load object as an gpu mat
+        cv::cuda::GpuMat gpu_descriptors_scene, gpu_descriptors_object;
+
+        cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypointsScene, gpu_descriptors_scene);
+        cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypointsObject, gpu_descriptors_object);
+
+        cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(cudaFeatureMatching->defaultNorm());
+
+        gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
+
+        gpu_scene.release();
+        gpu_object.release();
 
         // Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
         // Neighbourhoods comparison
