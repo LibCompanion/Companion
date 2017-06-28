@@ -46,7 +46,7 @@ make
 
 ```
 git clone https://github.com/LibCompanion/libCompanionSamples.git
-cmake -DCompanion_BUILD_SAMPLES=ON -DSAMPLE_MODULE=/path/to/libCompanionSamples/
+cmake -DCompanion_BUILD_SAMPLES=ON -DCompanion_SAMPLE_MODULE=/path/to/libCompanionSamples/
 make
 ```
 
