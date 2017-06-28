@@ -25,7 +25,6 @@ endif()
 # Configure CMake project
 project(Companion)
 
-
 # Define CMake minimum version
 if(WINDOWS_STORE)
     cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
@@ -47,9 +46,6 @@ option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
-	if(Companion_USE_CUDA)
-		add_definitions(-DCompanion_USE_CUDA)
-	endif()
 endif()
 
 # Define global properties
@@ -60,7 +56,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(OpenCVComponents "core" "imgproc" "imgcodecs" "features2d" "videoio" "calib3d")
 if(Companion_USE_CUDA)
     set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    add_definitions(-DCompanion_USE_CUDA)
 endif()
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
@@ -75,6 +71,7 @@ if(Companion_BUILD_SAMPLES)
     if(IS_DIRECTORY "${PROJECT_SOURCE_DIR}/libCompanionSamples")
         add_subdirectory(libCompanionSamples)
     else()
-        add_subdirectory(${SAMPLE_MODULE} samples/)
+		set(Companion_SAMPLE_MODULE "Path_to_Samples_Module" CACHE PATH "Sample module path")
+        add_subdirectory(${Companion_SAMPLE_MODULE} samples)
     endif()
 endif()
