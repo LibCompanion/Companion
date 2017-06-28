@@ -2,30 +2,55 @@
 
 [Companion](https://libcompanion.github.io/libCompanion/) is a computer vision library written with OpenCV 3.
 
+# Supported Plattforms
+
+* Windows
+* UWP
+* Linux
+
 # Dependencies
+
+Following dependencies are needed to build libCompanion.
 
 * OpenCV Version 3.X
 * OpenMP
-* Cuda*
+* Cuda Support*
 
 \* Optional
 
-# CMake Project
+# Build LibCompanion
 
-Stable build from Companion is under libCompanion folder. Main folder contains
-example configuration setups how to use Companion and testing folder contains
-unstable algorithms which are planned features to implement in Companion.
-
-## Build Companion
-
-Simply use cmake or cmake-gui to build Companion for your platform. Enable the Cuda flag to build Companion with Cuda support.
+Simply use cmake or cmake-gui to build Companion for your platform.
+Enable the Cuda flag to build LibCompanion with implemented Cuda features.
 
 ```
-cmake -DUSE_CUDA=ON
+cmake -DCompanion_USE_CUDA=ON/OFF
+make
+make install
+```
+
+# Build Companion Samples
+
+[Samples](https://github.com/LibCompanion/libCompanionSamples) are included as submodule or can be set in an cmake path. 
+To build samples you must enable Companion_BUILD_SAMPLES flag.
+
+## Build Samples from Submodule
+
+```
+git submodule update --init --recursive
+cmake -DCompanion_BUILD_SAMPLES=ON
 make
 ```
 
-### UWP Support
+## Build Samples from Project
+
+```
+git clone https://github.com/LibCompanion/libCompanionSamples.git
+cmake -DCompanion_BUILD_SAMPLES=ON -DSAMPLE_MODULE=/path/to/libCompanionSamples/
+make
+```
+
+## UWP Support
 
 If you desire to build Companion for *Universal Windows Platform* you can simply use the provided toolchain file to do so.
 ```
@@ -33,11 +58,12 @@ cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
 ```
 If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure*. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
 
-# Getting started
+# Getting Started
 
-An usage example for an 2D Object detection setup is implemented under Main folder. For more Information go to this [getting started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
+An usage example for an 2D Object detection setup is implemented under Main folder. 
+For more Information go to this [Getting Started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
 
-### License
+## License
 
 This program is an image recognition library written with OpenCV.
 Copyright (C) 2016-2017 Andreas Sekulski

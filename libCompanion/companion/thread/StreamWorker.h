@@ -23,13 +23,12 @@
 #include <mutex>
 #include <condition_variable>
 #include <opencv2/core/core.hpp>
-
-#include "companion/processing/ImageProcessing.h"
-#include "companion/draw/Drawable.h"
-#include "companion/input/Stream.h"
-#include "companion/util/CompanionError.h"
-#include "companion/util/Util.h"
-#include "companion/util/Definitions.h"
+#include <companion/processing/ImageProcessing.h>
+#include <companion/draw/Drawable.h>
+#include <companion/input/Stream.h>
+#include <companion/util/CompanionError.h>
+#include <companion/util/Util.h>
+#include <companion/util/Definitions.h>
 
 namespace Companion {
 

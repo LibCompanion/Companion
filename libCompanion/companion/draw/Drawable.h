@@ -20,8 +20,7 @@
 #define COMPANION_DRAWABLE_H
 
 #include <opencv2/core/core.hpp>
-
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
 namespace Companion {
 

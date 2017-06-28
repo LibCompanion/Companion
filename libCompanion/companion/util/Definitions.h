@@ -19,7 +19,7 @@
 #ifndef COMPANION_DEFINITIONS_H
 #define COMPANION_DEFINITIONS_H
 
-#include "companion/model/result/Result.h"
+#include <companion/model/result/Result.h>
 
 namespace Companion {
 

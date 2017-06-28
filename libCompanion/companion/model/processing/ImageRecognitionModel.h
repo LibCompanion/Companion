@@ -20,7 +20,7 @@
 #define COMPANION_IMAGERECOGNITIONMODEL_H
 
 #include <opencv2/core/core.hpp>
-#include "companion/algo/util/IRA.h"
+#include <companion/algo/util/IRA.h>
 
 namespace Companion {
 

@@ -20,9 +20,7 @@
 #define COMPANION_IMAGEPROCESSING_H
 
 #include <opencv2/core/core.hpp>
-
-#include "companion/util/Definitions.h"
-#include "companion/draw/Drawable.h"
+#include <companion/util/Definitions.h>
 
 namespace Companion {
 

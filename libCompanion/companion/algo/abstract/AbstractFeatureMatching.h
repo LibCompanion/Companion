@@ -20,7 +20,9 @@
 #define COMPANION_ABSTRACTFEATUREMATCHING_H
 
 #include "ImageRecognition.h"
-#include "companion/draw/Frame.h"
+
+#include <companion/draw/Frame.h>
+#include <companion/model/processing/FeatureMatchingModel.h>
 
 namespace Companion {
 
@@ -44,16 +46,6 @@ namespace Companion {
             void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
                             std::vector<cv::DMatch> &good_matches,
                             float ratio);
-
-            /**
-             * Symmetry test to improve results. Currently not using because i do not understand this algo...
-             * @param matches1
-             * @param matches2
-             * @param symMatches
-             */
-            void symmetry_test(const std::vector<cv::DMatch> &matches1,
-                               const std::vector<cv::DMatch> &matches2,
-                               std::vector<cv::DMatch> &symMatches);
 
             /**
              * Filter to obtain only good feature point which matches.
@@ -138,8 +130,5 @@ namespace Companion {
         };
     }
 }
-
-
-
 
 #endif //COMPANION_ABSTRACTFEATUREMATCHING_H

@@ -19,10 +19,10 @@
 #ifndef COMPANION_LINES_H
 #define COMPANION_LINES_H
 
-#include <opencv2/core/core.hpp>
-
 #include "Drawable.h"
 #include "Line.h"
+
+#include <opencv2/core/core.hpp>
 
 namespace Companion {
 

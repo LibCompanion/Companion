@@ -35,10 +35,11 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
     Model::Processing::FeatureMatchingModel *scene;
     Companion::Model::Result *result;
     CALLBACK_RESULT objects;
-    std::vector<Model::Processing::ImageRecognitionModel *> models = companion->getModels();
+    std::vector<Model::Processing::ImageRecognitionModel*> models;
 
     if (!frame.empty()) {
         scene = new Model::Processing::FeatureMatchingModel();
+        models = companion->getModels();
 
         int oldX = frame.cols;
         int oldY = frame.rows;

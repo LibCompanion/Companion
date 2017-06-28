@@ -20,12 +20,12 @@
 #define COMPANION_OBJECTDETECTION_H
 
 #include <opencv2/core/core.hpp>
-
-#include "companion/processing/ImageProcessing.h"
-#include "companion/model/processing/ImageRecognitionModel.h"
-#include "companion/draw/Drawable.h"
-#include "companion/algo/abstract/ImageRecognition.h"
-#include "companion/Configuration.h"
+#include <companion/processing/ImageProcessing.h>
+#include <companion/model/processing/ImageRecognitionModel.h>
+#include <companion/model/processing/FeatureMatchingModel.h>
+#include <companion/draw/Drawable.h>
+#include <companion/algo/abstract/ImageRecognition.h>
+#include <companion/Configuration.h>
 
 namespace Companion {
 

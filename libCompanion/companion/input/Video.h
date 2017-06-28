@@ -21,9 +21,9 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/videoio.hpp>
+#include <companion/util/CompanionError.h>
 
 #include "Stream.h"
-#include "companion/util/CompanionError.h"
 
 namespace Companion {
 

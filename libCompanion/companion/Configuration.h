@@ -21,13 +21,12 @@
 
 #include <functional>
 #include <thread>
-
-#include "companion/thread/StreamWorker.h"
-#include "companion/input/Stream.h"
-#include "companion/model/processing/ImageRecognitionModel.h"
-#include "companion/algo/abstract/ImageRecognition.h"
-#include "companion/processing/ImageProcessing.h"
-#include "companion/util/Definitions.h"
+#include <companion/thread/StreamWorker.h>
+#include <companion/input/Stream.h>
+#include <companion/model/processing/ImageRecognitionModel.h>
+#include <companion/algo/abstract/ImageRecognition.h>
+#include <companion/processing/ImageProcessing.h>
+#include <companion/util/Definitions.h>
 
 namespace Companion {
 

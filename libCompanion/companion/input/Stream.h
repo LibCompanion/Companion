@@ -19,7 +19,7 @@
 #ifndef COMPANION_STREAM_H
 #define COMPANION_STREAM_H
 
-#include "companion/util/exportapi/ExportAPIDefinitions.h"
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
 namespace Companion {
 

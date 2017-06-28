@@ -29,30 +29,6 @@ void Companion::Algorithm::AbstractFeatureMatching::ratio_test(const std::vector
 
 }
 
-void Companion::Algorithm::AbstractFeatureMatching::symmetry_test(const std::vector<cv::DMatch> &matches1,
-                                                                  const std::vector<cv::DMatch> &matches2,
-                                                                  std::vector<cv::DMatch> &symMatches) {
-
-    symMatches.clear();
-
-    for (std::vector<cv::DMatch>::const_iterator matchIterator1 = matches1.begin();
-         matchIterator1 != matches1.end(); ++matchIterator1) {
-
-        for (std::vector<cv::DMatch>::const_iterator matchIterator2 = matches2.begin();
-             matchIterator2 != matches2.end(); ++matchIterator2) {
-
-            if ((*matchIterator1).queryIdx == (*matchIterator2).trainIdx &&
-                (*matchIterator2).queryIdx == (*matchIterator1).trainIdx) {
-                symMatches.push_back(
-                        cv::DMatch((*matchIterator1).queryIdx, (*matchIterator1).trainIdx, (*matchIterator1).distance));
-                break;
-            }
-
-        }
-
-    }
-}
-
 void Companion::Algorithm::AbstractFeatureMatching::obtainKeypointsFromGoodMatches(
         std::vector<cv::DMatch> &good_matches,
         std::vector<cv::KeyPoint> &keypoints_object,
@@ -156,11 +132,25 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     //   |               |
     //   -----------------
     //   3               2
-    float width = (scene_corners[1] - scene_corners[0]).x;
-    float height = (scene_corners[3] - scene_corners[0]).y;
+
+    float minX = sceneImage.cols;
+    float maxX = 0;
+    float minY = sceneImage.rows;
+    float maxY = 0;
+
+    for (cv::Point2f point : scene_corners) {
+        if (point.x < minX) { minX = point.x; }
+        if (point.x > maxX) { maxX = point.x; }
+        if (point.y < minY) { minY = point.y; }
+        if (point.y > maxY) { maxY = point.y; }
+    }
+
+    float width = maxX - minX;
+    float height = maxY - minY;
+
     cv::Point2f scale = cv::Point2f(width / 2, height / 2);
-    cv::Point2f start = scene_corners[0] + offset - scale;
-    cv::Point2f end = scene_corners[2] + offset + scale;
+    cv::Point2f start = cv::Point2f(minX, minY) + offset - scale;
+    cv::Point2f end = cv::Point2f(maxX, maxY) + offset + scale;
 
     // If IRA was used...
     if(sceneImage.cols != sModel->getImage().cols || sceneImage.rows != sModel->getImage().rows) {
@@ -172,16 +162,16 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
 
     cv::Point2f topLeft = scene_corners[0] + offset;
     cv::Point2f topRight = scene_corners[1] + offset;
-    cv::Point2f bottomLeft = scene_corners[3] + offset;
     cv::Point2f bottomRight = scene_corners[2] + offset;
+    cv::Point2f bottomLeft = scene_corners[3] + offset;
 
     // Check for minimum corner distance
     if (Companion::Util::hasDistantPosition(topLeft, topRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topLeft, bottomLeft, cornerDistance) &&
         Companion::Util::hasDistantPosition(topLeft, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topRight, bottomLeft, cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomLeft, cornerDistance) &&
         Companion::Util::hasDistantPosition(topRight, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(bottomLeft, bottomRight, cornerDistance)) {
+        Companion::Util::hasDistantPosition(topRight, bottomLeft, cornerDistance) &&
+        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, cornerDistance)) {
         
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
@@ -212,7 +202,7 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
             ira->setHeight(sceneImage.rows - lastObjectPosition.y);
         }
 
-        if(lastObjectPosition.area() <= 0) {
+        if (lastObjectPosition.area() <= 0) {
             // Something goes wrong in area clear IRA.
             ira->clear();
         }

@@ -85,6 +85,7 @@ void Companion::Thread::StreamWorker::consume(
                 cvtColor(frame, resultBGR, CV_BGR2RGB);
                 callback(processing->execute(frame), resultBGR);
                 frame.release();
+                resultBGR.release();
             }
 
         }
