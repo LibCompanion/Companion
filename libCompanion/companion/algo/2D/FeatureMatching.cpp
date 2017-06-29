@@ -166,23 +166,27 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
         if(drawable == nullptr) {
             // If result is not good enough and IRA was used.
             if(isIRAUsed) {
+
+                #if Companion_DEBUG
+                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+                #endif
+
                 sceneImage.release();
                 objectImage.release();
                 ira->clear(); // Clear last detected object position.
                 return algo(sceneModel, objectModel); // Repeat algorithm to check original scene.
+            } else {
+
+                #if Companion_DEBUG
+                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+                #endif
+
             }
+
         } else {
             // TODO := SCORING CALCULATION
             // Object found
             result = new Companion::Model::Result(100, objectModel->getID(), drawable);
-            #if Companion_DEBUG
-            if(isIRAUsed) {
-                cv::Mat iraScene = cv::Mat(sceneImage, ira->getLastObjectPosition());
-                showFeatureMatches(objectImage, keypointsObject, iraScene, keypointsScene, goodMatches);
-            } else {
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches);
-            }
-            #endif
             sceneImage.release();
             objectImage.release();
         }
@@ -227,21 +231,13 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
             // TODO := SCORING CALCULATION
             // Object found
             result = new Companion::Model::Result(100, oModel->getID(), drawable);
-            #if Companion_DEBUG
-            if(isIRAUsed) {
-                cv::Mat iraScene = cv::Mat(sceneImage, ira->getLastObjectPosition());
-                showFeatureMatches(objectImage, keypointsObject, iraScene, keypointsScene, goodMatches);
-            } else {
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches);
-            }
-            #endif
             sceneImage.release();
             objectImage.release();
         }
         #endif
 
     } else {
-        // Results from descriptors and keypoints are not good enough and IRA was used.
+        // If results are not good enough and empty for keypoints and descriptors.
         if(isIRAUsed) {
             sceneImage.release();
             objectImage.release();
@@ -261,16 +257,17 @@ bool Companion::Algorithm::FeatureMatching::isCuda() {
 void Companion::Algorithm::FeatureMatching::showFeatureMatches(
                         cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
                         cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
-                        std::vector<cv::DMatch>& goodMatches) {
+                        std::vector<cv::DMatch>& goodMatches, std::string windowName) {
     // Build only in debug mode for development
     cv::Mat imgMatches;
 
-    cv::drawMatches(objectImg, objectKeypoints, sceneImg, sceneKeypoints,
-                    goodMatches, imgMatches, cv::Scalar::all(-1), cv::Scalar::all(-1),
-                    std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+    if(!objectImg.empty() && !sceneImg.empty()) {
+        cv::drawMatches(objectImg, objectKeypoints, sceneImg, sceneKeypoints,
+                        goodMatches, imgMatches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+                        std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
 
-    //-- Show detected matches
-    cv::imshow("Feature Matches", imgMatches);
-    cv::waitKey(0);
+        //-- Show detected matches
+        cv::imshow(windowName, imgMatches);
+    }
 }
 #endif
