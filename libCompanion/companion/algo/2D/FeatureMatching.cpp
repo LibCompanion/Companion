@@ -232,6 +232,19 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
         }
     }
 
+    // Build only in debug mode for development
+    #if Companion_DEBUG
+        if(result != nullptr) {
+            cv::Mat img_matches;
+            cv::drawMatches(objectModel->getImage(), keypointsObject, sceneModel->getImage(), keypointsScene,
+                            goodMatches, img_matches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+                            std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+
+            //-- Show detected matches
+            imshow("Feature Matching", img_matches);
+        }
+    #endif
+
     return result;
 }
 

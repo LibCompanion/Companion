@@ -61,9 +61,12 @@ endif()
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
 
+# For developer
+if(Companion_DEBUG)
+    add_definitions(-DCompanion_DEBUG)
+endif()
 
 # Configure libCompanion
-
 add_subdirectory(libCompanion)
 
 # Configure to build additional modules
