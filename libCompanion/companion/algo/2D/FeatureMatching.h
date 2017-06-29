@@ -79,6 +79,12 @@ namespace Companion {
                             int countMatches = 40);
             #endif
 
+            #if Companion_DEBUG
+            void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
+                                    cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
+                                    std::vector<cv::DMatch>& goodMatches);
+            #endif
+
             /**
              * Default destructor.
              */
@@ -130,7 +136,6 @@ namespace Companion {
              * Cuda feature matching algorithm.
              */
             cv::Ptr<cv::Feature2D> cudaFeatureMatching;
-
         };
     }
 }
