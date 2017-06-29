@@ -52,16 +52,18 @@ namespace Companion {
             ~Image();
 
             /**
-             * Store an image to fifa.
+             * Store an image to FIFO.
              * @param imgPath Image path to store.
+             * @return <b>True<b/> if image is stored otherwise <b>false</b> if image not exists.
              */
-            void addImage(std::string imgPath);
+            bool addImage(std::string imgPath);
 
             /**
-             * Image to store to fifo.
+             * Stores an given image FIFO.
              * @param img Image to store.
+             * @return <b>True<b/> if image is stored otherwise <b>false</b> if image not exists.
              */
-            void addImage(cv::Mat img);
+            bool addImage(cv::Mat img);
 
             /**
              * Obtain next image from open video stream.
@@ -71,7 +73,7 @@ namespace Companion {
 
             /**
              * Indicator if stream is finished.
-             * @return True if video is finished otherwise false.
+             * @return <b>True<b/> if video is finished otherwise <b>false</b>.
              */
             bool isFinished();
 

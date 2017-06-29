@@ -25,11 +25,11 @@ Companion::Input::Image::Image(int maxImages) : maxImages(maxImages) {
 Companion::Input::Image::~Image() {
 }
 
-void Companion::Input::Image::addImage(std::string imgPath) {
-    addImage(cv::imread(imgPath));
+bool Companion::Input::Image::addImage(std::string imgPath) {
+    return addImage(cv::imread(imgPath));
 }
 
-void Companion::Input::Image::addImage(cv::Mat img) {
+bool Companion::Input::Image::addImage(cv::Mat img) {
 
     if(!img.empty()) {
         // Limit queue size to keep memory low
@@ -37,8 +37,10 @@ void Companion::Input::Image::addImage(cv::Mat img) {
         cv.wait(lk, [this]{return images.size() < maxImages;});
         // Stores only img which exists.
         images.push(img);
+        return true;
     }
 
+    return false;
 }
 
 cv::Mat Companion::Input::Image::obtainImage() {
