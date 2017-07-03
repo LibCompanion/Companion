@@ -77,7 +77,6 @@ namespace Companion {
              * FeatureMatching algorithm setup.
              */
             Algorithm::ImageRecognition *imageRecognition;
-
         };
 
     }

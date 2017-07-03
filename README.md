@@ -13,7 +13,6 @@
 Following dependencies are needed to build libCompanion.
 
 * OpenCV Version 3.X
-* OpenMP
 * Cuda Support*
 
 \* Optional
@@ -31,7 +30,7 @@ make install
 
 # Build Companion Samples
 
-[Samples](https://github.com/LibCompanion/libCompanionSamples) are included as submodule or can be set in an cmake path. 
+[Samples](https://github.com/LibCompanion/libCompanionSamples) are included as submodule or can be set in an cmake path.
 To build samples you must enable Companion_BUILD_SAMPLES flag.
 
 ## Build Samples from Submodule
@@ -60,7 +59,7 @@ If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOO
 
 # Getting Started
 
-An usage example for an 2D Object detection setup is implemented under Main folder. 
+An usage example for an 2D Object detection setup is implemented under Main folder.
 For more Information go to this [Getting Started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
 
 ## License

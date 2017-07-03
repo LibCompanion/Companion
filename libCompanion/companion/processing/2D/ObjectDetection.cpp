@@ -32,8 +32,8 @@ Companion::Processing::ObjectDetection::~ObjectDetection() {
 
 CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
-    Model::Processing::FeatureMatchingModel *scene;
-    Companion::Model::Result *result;
+    Model::Processing::FeatureMatchingModel* scene;
+	Companion::Model::Result* result;
     CALLBACK_RESULT objects;
     std::vector<Model::Processing::ImageRecognitionModel*> models;
 
@@ -48,35 +48,18 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
         Util::resizeImage(frame, oldX * scale, oldY * scale);
         scene->setImage(frame);
 
-        // Check if image recognition implementation is an cuda implementation.
-        if(imageRecognition->isCuda()) {
-            // Cuda usage -> Don't use multithreading
-            for(unsigned long x = 0; x < models.size(); x++) {
-                Companion::Model::Processing::ImageRecognitionModel *model = models.at(x);
-                result = imageRecognition->algo(scene, model);
-                if(result != nullptr) {
-                    // Create old image size
-                    result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
-                    // Store detected object and its ID to vector.
-                    objects.push_back(result);
-                }
-            }
-        } else {
-            // Multithreading will be used for CPU usage
-            // ToDo Currently disabled because of an racing condition to use models...
-            //#pragma omp parallel for
-            for(unsigned long x = 0; x < models.size(); x++) {
-                Companion::Model::Processing::ImageRecognitionModel *model = models.at(x);
-                result = imageRecognition->algo(scene, model);
-                if(result != nullptr) {
-                    // Create old image size
-                    result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
-                    // Store detected object and its ID to vector.
-                    objects.push_back(result);
-                }
-            }
-        }
+        for(unsigned long x = 0; x < models.size(); x++) {
+			Companion::Model::Result* result = imageRecognition->algo(scene, models.at(x));
 
+			// Put in method
+			if (result != nullptr) {
+				// Create old image size
+				result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+				// Store detected object and its ID to vector.
+				objects.push_back(result);
+			}
+        }
+        
         frame.release();
         delete scene;
     }
