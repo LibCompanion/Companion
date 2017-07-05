@@ -51,10 +51,9 @@ namespace Companion {
 
         /**
          * Executes companion configuration.
-         * @param worker StreamWorker pointer to obtain video images.
          * @throws error Companion::Error::Code error code if an invalid configuration is set.
          */
-        void run(Companion::Thread::StreamWorker &worker);
+        void run();
 
         /**
          * Stops current running stream worker if it's executes.
@@ -168,17 +167,17 @@ namespace Companion {
         /**
          * Data stream source to obtain images.
          */
-        Companion::Input::Stream *source;
+        Companion::Input::Stream* source;
 
         /**
          * Search models to detect objects from source.
          */
-        std::vector<Companion::Model::Processing::ImageRecognitionModel *> models;
+        std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 
         /**
          * Image processing implementation for example an object detection.
          */
-        Companion::Processing::ImageProcessing *processing;
+        Companion::Processing::ImageProcessing* processing;
 
         /**
          * Number of frames to skip to process next image.
@@ -198,7 +197,7 @@ namespace Companion {
         /**
          * Stream worker which runs an single job.
          */
-        Companion::Thread::StreamWorker *worker;
+        Companion::Thread::StreamWorker* worker;
 
     };
 

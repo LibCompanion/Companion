@@ -28,9 +28,17 @@ Companion::Configuration::~Configuration() {
     models.clear();
     delete source;
     delete processing;
+    delete worker;
 }
 
-void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
+void Companion::Configuration::run() {
+
+    // Stop active worker if running
+    stop();
+
+    // Create new worker for execution
+    worker = new Companion::Thread::StreamWorker();
+
     // Get all configuration data
     // Throws Error if invalid settings are set.
     Companion::Input::Stream* stream = this->getSource();
@@ -40,9 +48,8 @@ void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
     std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
 
     // Run new worker class.
-    this->worker = &worker;
-    this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, imageProcessing, errorCallback, successCallback);
-    this->producer = std::thread(&Thread::StreamWorker::produce, &worker, stream, skipFrame, errorCallback);
+    this->consumer = std::thread(&Thread::StreamWorker::consume, worker, imageProcessing, errorCallback, successCallback);
+    this->producer = std::thread(&Thread::StreamWorker::produce, worker, stream, skipFrame, errorCallback);
     consumer.join(); // Wait if thread finished
     producer.join(); // Waif if thread finished
 }

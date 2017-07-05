@@ -18,6 +18,14 @@
 
 #include "StreamWorker.h"
 
+Companion::Thread::StreamWorker::StreamWorker(int buffer) {
+    this->finished = false;
+    this->buffer = buffer;
+    if(this->buffer <= 0) {
+        this->buffer = 1;
+    }
+}
+
 void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
                                               int skipFrame,
                                               std::function<ERROR_CALLBACK> errorCallback) {

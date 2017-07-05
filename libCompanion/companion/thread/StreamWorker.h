@@ -44,16 +44,9 @@ namespace Companion {
 
             /**
              * Constructor to create an producer streaming class to obtain images from an video and store to an queue.
-             * @param queue Queue to store obtained images.
              * @param buffer Buffer size to store images. Default is one image buffer.
              */
-            StreamWorker(std::queue<cv::Mat> &queue, int buffer = 1) : queue(queue) {
-                this->finished = false;
-                this->buffer = buffer;
-                if(this->buffer <= 0) {
-                    this->buffer = 1;
-                }
-            }
+            StreamWorker(int buffer = 1);
 
             /**
              * Method to produce video stream data and store to his queue.
@@ -106,7 +99,7 @@ namespace Companion {
             /**
              * Queue to store images from video stream.
              */
-            std::queue<cv::Mat> &queue;
+            std::queue<cv::Mat> queue;
 
             /**
              * Indicator if video is finished.
