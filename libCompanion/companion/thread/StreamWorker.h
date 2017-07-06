@@ -68,18 +68,12 @@ namespace Companion {
                          std::function<ERROR_CALLBACK> errorCallback,
                          std::function<SUCCESS_CALLBACK> callback);
 
-            /**
-             * Checks if worker class is running.
-             * @return True if worker is running otherwise false.
-             */
-            bool isRunning();
-
-            /**
-             * Stops worker if its running.
-             */
-            void stop();
-
         private:
+
+            /**
+             * @brief finished Indicator to cancel threads.
+             */
+            bool finished;
 
             /**
              * Buffer size to store max. images.
@@ -100,11 +94,6 @@ namespace Companion {
              * Queue to store images from video stream.
              */
             std::queue<cv::Mat> queue;
-
-            /**
-             * Indicator if video is finished.
-             */
-            bool finished;
 
             /**
              * Stores frame to queue.

@@ -185,6 +185,11 @@ namespace Companion {
         int skipFrame;
 
         /**
+         * @brief threadsRunning Indicator if threads currently running.
+         */
+        bool threadsRunning;
+
+        /**
          * Consumer thread to store image data.
          */
         std::thread consumer;

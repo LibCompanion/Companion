@@ -21,7 +21,9 @@
 Companion::Configuration::Configuration() {
     source = nullptr;
     processing = nullptr;
+    worker = nullptr;
     skipFrame = 0;
+    threadsRunning = false;
 }
 
 Companion::Configuration::~Configuration() {
@@ -32,38 +34,43 @@ Companion::Configuration::~Configuration() {
 }
 
 void Companion::Configuration::run() {
+    if(threadsRunning) {
+        // Stop active worker if running
+        stop();
+    } else {
+        // Create new worker for execution only if no threads are active
+        worker = new Companion::Thread::StreamWorker();
 
-    // Stop active worker if running
-    stop();
+        // Get all configuration data
+        // Throws Error if invalid settings are set.
+        Companion::Input::Stream* stream = this->getSource();
+        Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
+        int skipFrame = this->getSkipFrame();
+        std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
+        std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
 
-    // Create new worker for execution
-    worker = new Companion::Thread::StreamWorker();
+        // Run new worker class.
+        this->consumer = std::thread(&Thread::StreamWorker::consume, worker, imageProcessing, errorCallback, successCallback);
+        this->producer = std::thread(&Thread::StreamWorker::produce, worker, stream, skipFrame, errorCallback);
 
-    // Get all configuration data
-    // Throws Error if invalid settings are set.
-    Companion::Input::Stream* stream = this->getSource();
-    Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
-    int skipFrame = this->getSkipFrame();
-    std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
-    std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
-
-    // Run new worker class.
-    this->consumer = std::thread(&Thread::StreamWorker::consume, worker, imageProcessing, errorCallback, successCallback);
-    this->producer = std::thread(&Thread::StreamWorker::produce, worker, stream, skipFrame, errorCallback);
-    consumer.join(); // Wait if thread finished
-    producer.join(); // Waif if thread finished
+        threadsRunning = true;
+        consumer.join();
+        producer.join();
+        threadsRunning = false;
+    }
 }
 
 void Companion::Configuration::stop() {
-
-    if (this->worker != nullptr && this->worker->isRunning()) {
-        this->worker->stop();
+    if(threadsRunning && this->source != nullptr && !this->source->isFinished()) {
+        // To stop running worker threads stop streams.
+        this->source->finish();
+        this->source = nullptr;
+        this->worker = nullptr;
     }
-
-    this->worker = nullptr;
 }
 
 Companion::Input::Stream *Companion::Configuration::getSource() const {
+
     if(this->source == nullptr) {
         throw Error::Code::stream_src_not_set;
     }
