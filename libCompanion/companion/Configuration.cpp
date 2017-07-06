@@ -24,6 +24,7 @@ Companion::Configuration::Configuration() {
     worker = nullptr;
     skipFrame = 0;
     threadsRunning = false;
+	imageBuffer = 5;
 }
 
 Companion::Configuration::~Configuration() {
@@ -39,7 +40,7 @@ void Companion::Configuration::run() {
         stop();
     } else {
         // Create new worker for execution only if no threads are active
-        worker = new Companion::Thread::StreamWorker();
+        worker = new Companion::Thread::StreamWorker(imageBuffer);
 
         // Get all configuration data
         // Throws Error if invalid settings are set.
@@ -50,12 +51,11 @@ void Companion::Configuration::run() {
         std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
 
         // Run new worker class.
-        this->consumer = std::thread(&Thread::StreamWorker::consume, worker, imageProcessing, errorCallback, successCallback);
-        this->producer = std::thread(&Thread::StreamWorker::produce, worker, stream, skipFrame, errorCallback);
-
-        threadsRunning = true;
-        consumer.join();
-        producer.join();
+		threadsRunning = true;
+		this->producer = std::thread(&Thread::StreamWorker::produce, worker, stream, skipFrame, errorCallback);
+		this->consumer = std::thread(&Thread::StreamWorker::consume, worker, imageProcessing, errorCallback, successCallback);
+		producer.join();
+		consumer.join();
         threadsRunning = false;
     }
 }
@@ -92,10 +92,6 @@ bool Companion::Configuration::addModel(Companion::Model::Processing::ImageRecog
     return false;
 }
 
-void Companion::Configuration::removeModel(Companion::Model::Processing::ImageRecognitionModel *model) {
-    // ToDo Remove
-}
-
 void Companion::Configuration::clearModels() {
     models.clear();
 }
@@ -130,6 +126,20 @@ void Companion::Configuration::setSkipFrame(int skipFrame) {
     Configuration::skipFrame = skipFrame;
 }
 
+int Companion::Configuration::getImageBuffer() const {
+	return imageBuffer;
+}
+
+void Companion::Configuration::setImageBuffer(int imageBuffer) {
+
+	if (imageBuffer <= 0) {
+		imageBuffer = 5;
+	}
+
+	Configuration::imageBuffer = imageBuffer;
+}
+
+
 void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback) {
     Configuration::callback = callback;
 }
@@ -137,7 +147,6 @@ void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> 
 void Companion::Configuration::setErrorHandler(std::function<ERROR_CALLBACK> callback) {
     Configuration::errorCallback = callback;
 }
-
 
 const std::function<SUCCESS_CALLBACK> &Companion::Configuration::getCallback() const {
 

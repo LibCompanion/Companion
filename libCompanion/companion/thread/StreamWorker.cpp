@@ -82,7 +82,7 @@ void Companion::Thread::StreamWorker::consume(
         while (!finished) {
 
             std::unique_lock<std::mutex> lk(mx);
-            cv.wait(lk, [this]{return finished || !queue.empty();});
+			cv.wait(lk, [this] {return finished || !queue.empty(); });
 
             if(!queue.empty()) {
                 frame = queue.front();
@@ -107,7 +107,6 @@ bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
         return false;
     } else {
         queue.push(frame);
-        cv.notify_one();
         return true;
     }
 }

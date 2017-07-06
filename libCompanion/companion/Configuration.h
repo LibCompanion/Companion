@@ -81,12 +81,6 @@ namespace Companion {
         bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
         /**
-         * Remove searched model.
-         * @param model Model to remove.
-         */
-        void removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
-
-        /**
          * Clear all models which are searched.
          */
         void clearModels();
@@ -112,7 +106,7 @@ namespace Companion {
 
         /**
          * Get skip frame rate.
-         * @return Skirp frame rate, how many frames should be skipped.
+         * @return Skip frame rate, how many frames should be skipped.
          */
         int getSkipFrame() const;
 
@@ -121,6 +115,18 @@ namespace Companion {
          * @param skipFrame Number of frames which should be skipped after image processing should be used.
          */
         void setSkipFrame(int skipFrame);
+
+		/**
+		* Get image buffer store rate.
+		* @return Image buffer frame rate default 5 images are stored to buffer.
+		*/
+		int getImageBuffer() const;
+
+		/**
+		* Sets image buffer size to store.
+		* @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
+		*/
+		void setImageBuffer(int imageBuffer);
 
         /**
          * Sets an given result handler.
@@ -183,6 +189,11 @@ namespace Companion {
          * Number of frames to skip to process next image.
          */
         int skipFrame;
+
+		/*
+		 * Image buffer size to store image. Default is 5.
+		 */
+		int imageBuffer;
 
         /**
          * @brief threadsRunning Indicator if threads currently running.

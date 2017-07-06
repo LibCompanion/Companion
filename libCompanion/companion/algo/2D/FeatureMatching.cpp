@@ -163,34 +163,30 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
                                         sModel,
                                         oModel);
 
-        if(drawable == nullptr) {
-            // If result is not good enough and IRA was used.
-            if(isIRAUsed) {
+		if (drawable != nullptr) {
+			// TODO := SCORING CALCULATION
+			// Object found
+			result = new Companion::Model::Result(100, objectModel->getID(), drawable);
+			sceneImage.release();
+			objectImage.release();
+		} else {
+			// If result is not good enough and IRA was used.
+			if (isIRAUsed) {
 
-                #if Companion_DEBUG
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
-                #endif
+				#if Companion_DEBUG
+				showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+				#endif
 
-                sceneImage.release();
-                objectImage.release();
-                ira->clear(); // Clear last detected object position.
-                return algo(sceneModel, objectModel); // Repeat algorithm to check original scene.
-            } else {
-
-                #if Companion_DEBUG
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
-                #endif
-
-            }
-
-        } else {
-            // TODO := SCORING CALCULATION
-            // Object found
-            result = new Companion::Model::Result(100, objectModel->getID(), drawable);
-            sceneImage.release();
-            objectImage.release();
-        }
-
+				sceneImage.release();
+				objectImage.release();
+				ira->clear(); // Clear last detected object position.
+				return algo(sceneModel, objectModel); // Repeat algorithm to check original scene.
+			} else {
+				#if Companion_DEBUG
+				showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+				#endif
+			}
+		}
 
     } else if(cudaUsed) {
 
