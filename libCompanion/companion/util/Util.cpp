@@ -22,8 +22,11 @@ bool Companion::Util::isImageLoaded(cv::Mat &img) {
     return !img.empty();
 }
 
-void Companion::Util::resizeImage(cv::Mat &img, int size_x, int size_y) {
-    cv::resize(img, img, cv::Size(size_x, size_y));
+void Companion::Util::resizeImage(cv::Mat &img, int size_x) {
+    double ratio = (double) img.cols / (double) img.rows;
+    // Shrink an image: CV_INTER_AREA
+    // Enlarge an image: CV_INTER_CUBIC (slow) or CV_INTER_LINEAR (faster but still looks OK)
+    cv::resize(img, img, cv::Size(size_x, size_x / ratio), cv::INTER_AREA);
 }
 
 void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight) {

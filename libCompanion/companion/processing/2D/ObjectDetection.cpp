@@ -20,10 +20,12 @@
 
 Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
                                                         Algorithm::ImageRecognition *imageRecognition,
-                                                        float scale) {
+                                                        float scale,
+                                                        int scaledWidth) {
     this->companion = companion;
     this->imageRecognition = imageRecognition;
     this->scale = scale;
+    this->scaledWidth = scaledWidth;
 }
 
 Companion::Processing::ObjectDetection::~ObjectDetection() {
@@ -44,8 +46,14 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
         int oldX = frame.cols;
         int oldY = frame.rows;
 
+        // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-        Util::resizeImage(frame, oldX * scale, oldY * scale);
+        if (this->scaledWidth <= 0) {
+            Util::resizeImage(frame, oldX * this->scale);
+        } else {
+            Util::resizeImage(frame, this->scaledWidth);
+        }
+
         scene->setImage(frame);
 
         for(unsigned long x = 0; x < models.size(); x++) {

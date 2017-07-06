@@ -44,10 +44,9 @@ namespace Companion {
         /**
          * Resize given image.
          * @param img Image to resize.
-         * @param size_x Resize image to given height in pixel.
-         * @param size_y Resize image to given width in pixel.
+         * @param size_x Resize image to given width in pixels.
          */
-        static void resizeImage(cv::Mat &img, int size_x, int size_y);
+        static void resizeImage(cv::Mat &img, int size_x);
 
         /**
          * Ratio to set new point from scaled frame.

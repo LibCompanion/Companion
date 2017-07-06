@@ -44,9 +44,10 @@ namespace Companion {
              * Constructor to create an object detection algorithm implementation.
              * @param companion Configuration class to obtain model entities to verify.
              * @param imageRecognition Image recognition algorithm to use, for example feature matching.
-             * @param scale Scaling factor from frame. Default by one.
+             * @param scale Scaling factor from frame. Default by one. It is not used if 'scaledWidth' is not 0.
+             * @param scaledWidth Desired width (in px) for the scaled frame. Only used instead of 'scale' if 'scaledWidth' is not 0.
              */
-            ObjectDetection(Companion::Configuration *companion, Algorithm::ImageRecognition *imageRecognition, float scale = 1);
+            ObjectDetection(Companion::Configuration *companion, Algorithm::ImageRecognition *imageRecognition, float scale = 1, int scaledWidth = 0);
 
             /**
              * Destructor
@@ -54,7 +55,7 @@ namespace Companion {
             virtual ~ObjectDetection();
 
             /**
-             * Try to detect all objects from give frame.
+             * Try to detect all objects from given frame.
              * @param frame Frame to check for an object location.
              * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
              *          every detected object.
@@ -64,9 +65,14 @@ namespace Companion {
         private:
 
             /**
-             * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size
+             * Scaling factor from image to resize. Decrease frame size < Default (1) > Increase frame size.
              */
             float scale;
+
+            /**
+             * Desired width (in px) of the source image after resize.
+             */
+            int scaledWidth;
 
             /**
              * Companion configuration which contains model data to search.
