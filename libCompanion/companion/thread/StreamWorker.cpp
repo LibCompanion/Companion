@@ -100,13 +100,14 @@ void Companion::Thread::StreamWorker::consume(
 }
 
 bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
-    std::lock_guard<std::mutex> lk(mx);
+	std::lock_guard<std::mutex> lk(mx);
     if(queue.size() >= buffer) {
         // If buffer full try to notify producer and wait current frame and do nothing.
         cv.notify_one();
         return false;
     } else {
         queue.push(frame);
+        cv.notify_one();
         return true;
     }
 }
