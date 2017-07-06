@@ -25,7 +25,10 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
         int matcherType,
         int cornerDistance,
         int countMatches,
-        bool useIRA) {
+        bool useIRA,
+        double reprojThreshold,
+        int ransacMaxIters,
+        int findHomographyMethod) {
 
     this->detector = detector;
     this->extractor = extractor;
@@ -35,17 +38,28 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
     this->countMatches = countMatches;
     this->useIRA = useIRA;
     this->cudaUsed = false;
+    this->reprojThreshold = reprojThreshold;
+    this->ransacMaxIters = ransacMaxIters;
+    this->findHomographyMethod = findHomographyMethod;
 }
 
 #if Companion_USE_CUDA
-Companion::Algorithm::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
-                                                       int cornerDistance,
-                                                       int countMatches) {
+Companion::Algorithm::FeatureMatching::FeatureMatching(
+        cv::Ptr<cv::Feature2D> cudaFeatureMatching,
+        int cornerDistance,
+        int countMatches,
+        double reprojThreshold,
+        int ransacMaxIters,
+        int findHomographyMethod) {
+
     this->cudaFeatureMatching = cudaFeatureMatching;
     this->cornerDistance = cornerDistance;
     this->countMatches = countMatches;
     this->useIRA = false;
     this->cudaUsed = true;
+    this->reprojThreshold = reprojThreshold;
+    this->ransacMaxIters = ransacMaxIters;
+    this->findHomographyMethod = findHomographyMethod;
 }
 #endif
 

@@ -114,19 +114,41 @@ namespace Companion {
         protected:
 
             /**
-             * Indicator how much matches need to get an good matching result. Default value is 40.
-             */
-            int countMatches = 40;
-
-            /**
              * Indicator how many pixels the corners of a found area should be distant from each other. Default value is 10.
              */
             int cornerDistance = 10;
 
             /**
+             * Indicator how much matches need to get an good matching result. Default value is 40.
+             */
+            int countMatches = 40;
+
+            /**
              * Indicator to use IRA algorithm.
              */
             bool useIRA = false;
+
+            /**
+             * Homography parameter: Method used to computed a homography matrix. The following methods are possible:
+             *      - 0      (a regular method using all the points)
+             *      - RANSAC (RANSAC-based robust method)
+             *      - LMEDS  (Least-Median robust method)
+             *      - RHO    (PROSAC-based robust method)
+             * Default value is RANSAC.
+             */
+            int findHomographyMethod = cv::RANSAC;
+
+            /**
+             * Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier (used in the RANSAC and RHO methods only).
+             * Default value is 3.0.
+             */
+            double reprojThreshold = 3.0;
+
+            /**
+             * Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default value is 500.
+             * ToDo: Performance optimization: http://code.opencv.org/issues/1544
+             */
+            int ransacMaxIters = 500;
         };
     }
 }

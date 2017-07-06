@@ -79,7 +79,8 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
 
         // Find Homography if only features points are filled.
         if(!feature_points_object.empty() && !feature_points_scene.empty()) {
-            homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC, 3);
+            homography = cv::findHomography(feature_points_object, feature_points_scene, this->findHomographyMethod,
+                                            this->reprojThreshold, cv::noArray(), this->ransacMaxIters);
             if (!homography.empty()) {
                 drawable = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
             }
@@ -161,12 +162,12 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     cv::Point2f bottomLeft = scene_corners[3] + offset;
 
     // Check for minimum corner distance
-    if (Companion::Util::hasDistantPosition(topLeft, topRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topLeft, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topLeft, bottomLeft, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topRight, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topRight, bottomLeft, cornerDistance) &&
-        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, cornerDistance)) {
+    if (Companion::Util::hasDistantPosition(topLeft, topRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomLeft, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomLeft, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, this->cornerDistance)) {
         
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
