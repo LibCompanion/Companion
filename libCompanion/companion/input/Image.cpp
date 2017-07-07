@@ -34,13 +34,17 @@ bool Companion::Input::Image::addImage(cv::Mat img) {
     if(!img.empty()) {
         // Limit queue size to keep memory low
         std::unique_lock<std::mutex> lk(mx);
-        cv.wait(lk, [this]{return images.size() < maxImages;});
+        cv.wait(lk, [this] { return images.size() < maxImages; });
         // Stores only img which exists.
         images.push(img);
         return true;
     }
 
     return false;
+}
+
+bool Companion::Input::Image::addImage(int width, int height, int type, uchar* data) {
+    return addImage(cv::Mat(cv::Size(width, height), type, data));
 }
 
 cv::Mat Companion::Input::Image::obtainImage() {
@@ -61,12 +65,15 @@ cv::Mat Companion::Input::Image::obtainImage() {
     return image;
 }
 
-bool Companion::Input::Image::isFinished()
-{
-    std::unique_lock<std::mutex> lk(mx);
-    return exitStream && images.empty();
+bool Companion::Input::Image::isFinished() {
+    return exitStream;
 }
 
 void Companion::Input::Image::finish() {
     exitStream = true;
+}
+
+bool Companion::Input::Image::isEmpty() {
+    std::unique_lock<std::mutex> lk(mx);
+    return images.empty();
 }
