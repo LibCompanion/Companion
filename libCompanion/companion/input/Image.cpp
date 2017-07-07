@@ -66,14 +66,14 @@ cv::Mat Companion::Input::Image::obtainImage() {
 }
 
 bool Companion::Input::Image::isFinished() {
-    return exitStream;
+    std::unique_lock<std::mutex> lk(mx);
+    return exitStream || (exitAfterProcessing && images.empty());
 }
 
 void Companion::Input::Image::finish() {
     exitStream = true;
 }
 
-bool Companion::Input::Image::isEmpty() {
-    std::unique_lock<std::mutex> lk(mx);
-    return images.empty();
+void Companion::Input::Image::finishAfterProcessing() {
+    exitAfterProcessing = true;
 }

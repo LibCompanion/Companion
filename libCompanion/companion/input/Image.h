@@ -93,10 +93,9 @@ namespace Companion {
             void finish();
 
             /**
-             * Determine whether the image queue is empty or not.
-             * @return <code>true</code> if the image queue is empty, <code>false</code> otherwise
+             * Method to signal to stop image stream after all images were processed.
              */
-            bool isEmpty();
+            void finishAfterProcessing();
 
         private:
 
@@ -104,6 +103,11 @@ namespace Companion {
              * Indicator to stop this stream.
              */
             bool exitStream;
+
+            /**
+             * Indicator to stop this stream after all images were processed.
+             */
+            bool exitAfterProcessing;
 
             /**
              * List from all stored images as an fifo;
