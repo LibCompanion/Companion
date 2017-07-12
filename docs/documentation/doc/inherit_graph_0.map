@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_companion_1_1_algorithm_1_1_image_recognition.html" title="Companion::Algorithm\l::ImageRecognition" alt="" coords="5,39,156,80"/>
+<area shape="rect" id="node2" href="$class_companion_1_1_algorithm_1_1_abstract_feature_matching.html" title="Companion::Algorithm\l::AbstractFeatureMatching" alt="" coords="204,39,380,80"/>
+<area shape="rect" id="node3" href="$class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html" title="Companion::Algorithm\l::CPU::FeatureMatching" alt="" coords="429,5,593,47"/>
+<area shape="rect" id="node4" href="$class_companion_1_1_algorithm_1_1_cuda_1_1_feature_matching.html" title="Companion::Algorithm\l::Cuda::FeatureMatching" alt="" coords="428,71,595,112"/>
+</map>

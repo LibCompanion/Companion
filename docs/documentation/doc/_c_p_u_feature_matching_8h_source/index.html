@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
+<title>companion/algo/cpu/CPUFeatureMatching.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top">
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.png"/></td>
+ </tr>
+ </tbody>
+</table>
+</div>
+
+
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Search');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>File&#160;List</span></a></li>
+    </ul>
+  </div>
+
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_10c50cd33ab894f43b4385849025e4a4.html">companion</a></li><li class="navelem"><a class="el" href="dir_e4342a496bf44b1755587b949462e940.html">algo</a></li><li class="navelem"><a class="el" href="dir_61e39485ce3d9088c80be93e8a0d0461.html">cpu</a></li>  </ul>
+</div>
+</div>
+<div class="header">
+  <div class="headertitle">
+<div class="title">CPUFeatureMatching.h</div>  </div>
+</div>
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">/*</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"> * This program is an image recognition library written with OpenCV.</span></div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"> * Copyright (C) 2016-2017 Andreas Sekulski</span></div><div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"> *</span></div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"> * This program is free software: you can redistribute it and/or modify</span></div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"> * it under the terms of the GNU General Public License as published by</span></div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span></div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"> * (at your option) any later version.</span></div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"> *</span></div><div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"> * This program is distributed in the hope that it will be useful,</span></div><div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div><div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></div><div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> * GNU General Public License for more details.</span></div><div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"> *</span></div><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"> * You should have received a copy of the GNU General Public License</span></div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"> * along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span></div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment"> */</span></div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#ifndef COMPANION_CPUFEATUREMATCHING_H</span></div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define COMPANION_CPUFEATUREMATCHING_H</span></div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;companion/algo/abstract/AbstractFeatureMatching.h&quot;</span></div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;companion/draw/Lines.h&quot;</span></div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div><div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_companion.html">Companion</a> {</div><div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div><div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">namespace </span>Algorithm {</div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">namespace </span>CPU {</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div><div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html">   35</a></span>&#160;            <span class="keyword">class </span><a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html">FeatureMatching</a> : <span class="keyword">public</span> <a class="code" href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html">AbstractFeatureMatching</a> {</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            <span class="keyword">public</span>:</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                <a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a23949e310b8600e61453a7d84a0bea55">FeatureMatching</a>();</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div><div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                <a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a23949e310b8600e61453a7d84a0bea55">FeatureMatching</a>(cv::Ptr&lt;cv::FeatureDetector&gt; detector,</div><div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                cv::Ptr&lt;cv::DescriptorExtractor&gt; extractor,</div><div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                cv::Ptr&lt;cv::DescriptorMatcher&gt; matcher,</div><div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                <span class="keywordtype">int</span> type,</div><div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                <span class="keywordtype">int</span> <a class="code" href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html#abadb7b67477e5b1da3be771e632246ad">countMatches</a> = 40,</div><div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                <span class="keywordtype">bool</span> <a class="code" href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html#a14c19173b942e65613aa1db89f6db6f7">useIRA</a> = <span class="keyword">false</span>);</div><div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div><div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                <span class="keyword">virtual</span> <a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a42f2d8c00a9f0cee97ee56bb1068276e">~FeatureMatching</a>();</div><div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div><div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                <span class="keyword">virtual</span> <a class="code" href="class_companion_1_1_draw_1_1_drawable.html">Draw::Drawable</a> *<a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a32207240fac906d7432b9f5838734cfa">algo</a>(<a class="code" href="class_companion_1_1_model_1_1_image_recognition_model.html">Model::ImageRecognitionModel</a> *scene,</div><div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                             <a class="code" href="class_companion_1_1_model_1_1_image_recognition_model.html">Model::ImageRecognitionModel</a> *<span class="keywordtype">object</span>);</div><div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;</div><div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#ad2d24fc7e935429900f5c2e9bc2f5780">isCuda</a>();</div><div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div><div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keyword">private</span>:</div><div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;</div><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                <span class="keywordtype">int</span> type;</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div><div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                cv::Ptr&lt;cv::FeatureDetector&gt; detector;</div><div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                cv::Ptr&lt;cv::DescriptorExtractor&gt; extractor;</div><div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;</div><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;                cv::Ptr&lt;cv::DescriptorMatcher&gt; matcher;</div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            };</div><div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;</div><div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        }</div><div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div><div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div><div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;</div><div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="preprocessor">#endif //COMPANION_CPUFEATUREMATCHING_H</span></div><div class="ttc" id="class_companion_1_1_algorithm_1_1_abstract_feature_matching_html_a14c19173b942e65613aa1db89f6db6f7"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html#a14c19173b942e65613aa1db89f6db6f7">Companion::Algorithm::AbstractFeatureMatching::useIRA</a></div><div class="ttdeci">bool useIRA</div><div class="ttdef"><b>Definition:</b> AbstractFeatureMatching.h:132</div></div>
+<div class="ttc" id="namespace_companion_html"><div class="ttname"><a href="namespace_companion.html">Companion</a></div><div class="ttdef"><b>Definition:</b> AbstractFeatureMatching.h:25</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_abstract_feature_matching_html_abadb7b67477e5b1da3be771e632246ad"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html#abadb7b67477e5b1da3be771e632246ad">Companion::Algorithm::AbstractFeatureMatching::countMatches</a></div><div class="ttdeci">int countMatches</div><div class="ttdef"><b>Definition:</b> AbstractFeatureMatching.h:127</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching_html_a32207240fac906d7432b9f5838734cfa"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a32207240fac906d7432b9f5838734cfa">Companion::Algorithm::CPU::FeatureMatching::algo</a></div><div class="ttdeci">virtual Draw::Drawable * algo(Model::ImageRecognitionModel *scene, Model::ImageRecognitionModel *object)</div><div class="ttdef"><b>Definition:</b> CPUFeatureMatching.cpp:30</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching_html"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html">Companion::Algorithm::CPU::FeatureMatching</a></div><div class="ttdef"><b>Definition:</b> CPUFeatureMatching.h:35</div></div>
+<div class="ttc" id="class_companion_1_1_model_1_1_image_recognition_model_html"><div class="ttname"><a href="class_companion_1_1_model_1_1_image_recognition_model.html">Companion::Model::ImageRecognitionModel</a></div><div class="ttdef"><b>Definition:</b> ImageRecognitionModel.h:32</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching_html_a42f2d8c00a9f0cee97ee56bb1068276e"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a42f2d8c00a9f0cee97ee56bb1068276e">Companion::Algorithm::CPU::FeatureMatching::~FeatureMatching</a></div><div class="ttdeci">virtual ~FeatureMatching()</div><div class="ttdef"><b>Definition:</b> CPUFeatureMatching.cpp:28</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching_html_ad2d24fc7e935429900f5c2e9bc2f5780"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#ad2d24fc7e935429900f5c2e9bc2f5780">Companion::Algorithm::CPU::FeatureMatching::isCuda</a></div><div class="ttdeci">virtual bool isCuda()</div><div class="ttdef"><b>Definition:</b> CPUFeatureMatching.cpp:145</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching_html_a23949e310b8600e61453a7d84a0bea55"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_c_p_u_1_1_feature_matching.html#a23949e310b8600e61453a7d84a0bea55">Companion::Algorithm::CPU::FeatureMatching::FeatureMatching</a></div><div class="ttdeci">FeatureMatching()</div><div class="ttdef"><b>Definition:</b> CPUFeatureMatching.cpp:3</div></div>
+<div class="ttc" id="class_companion_1_1_draw_1_1_drawable_html"><div class="ttname"><a href="class_companion_1_1_draw_1_1_drawable.html">Companion::Draw::Drawable</a></div><div class="ttdef"><b>Definition:</b> Drawable.h:32</div></div>
+<div class="ttc" id="class_companion_1_1_algorithm_1_1_abstract_feature_matching_html"><div class="ttname"><a href="class_companion_1_1_algorithm_1_1_abstract_feature_matching.html">Companion::Algorithm::AbstractFeatureMatching</a></div><div class="ttdef"><b>Definition:</b> AbstractFeatureMatching.h:33</div></div>
+</div></div>
+
+<hr class="footer"/><address class="footer"><small>
+Generated by &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.11
+</small></address>
+</body>
+</html>

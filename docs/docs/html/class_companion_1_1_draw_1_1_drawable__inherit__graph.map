@@ -1,0 +1,4 @@
+<map id="Companion::Draw::Drawable" name="Companion::Draw::Drawable">
+<area shape="rect" id="node2" href="$class_companion_1_1_draw_1_1_frame.html" title="Companion::Draw::Frame" alt="" coords="5,80,177,107"/>
+<area shape="rect" id="node3" href="$class_companion_1_1_draw_1_1_line.html" title="Companion::Draw::Line" alt="" coords="201,80,360,107"/>
+</map>
