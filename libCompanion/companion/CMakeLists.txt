@@ -19,7 +19,7 @@
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # Add source files
-SET(SOURCE
+set(SOURCE
         Configuration.cpp Configuration.h
         algo/abstract/ImageRecognition.h
         algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
@@ -59,9 +59,9 @@ else()
 endif()
 
 target_link_libraries(Companion ${OpenCV_LIBS})
-if (UNIX)
-    TARGET_LINK_LIBRARIES(Companion -lpthread)
-endif (UNIX)
+if(UNIX)
+    target_link_libraries(Companion -lpthread)
+endif()
 
 # Add target properties
 set_property(TARGET Companion PROPERTY FOLDER "libCompanion")
