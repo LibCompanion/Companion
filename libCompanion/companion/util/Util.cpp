@@ -37,3 +37,23 @@ void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, i
 bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance) {
     return (std::abs(origin.x - point.x) >= distance) || (std::abs(origin.y - point.y) >= distance);
 }
+
+void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat) {
+    switch (colorFormat) {
+        case Companion::ColorFormat::RGB:
+            cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2RGB);
+            break;
+        case Companion::ColorFormat::RGBA:
+            cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2RGBA);
+            break;
+        case Companion::ColorFormat::BGR:
+            dst = src;
+            break;
+        case Companion::ColorFormat::BGRA:
+            cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2BGRA);
+            break;
+        case Companion::ColorFormat::GRAY:
+            cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2GRAY);
+            break;
+    }
+}

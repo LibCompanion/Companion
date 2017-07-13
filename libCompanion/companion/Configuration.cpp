@@ -40,7 +40,7 @@ void Companion::Configuration::run() {
         this->stop();
     } else {
         // Create new worker for execution only if no threads are active
-        worker = new Companion::Thread::StreamWorker(imageBuffer);
+        this->worker = new Companion::Thread::StreamWorker(this->imageBuffer, this->colorFormat);
 
         // Get all configuration data
         // Throws Error if invalid settings are set.
@@ -140,8 +140,9 @@ void Companion::Configuration::setImageBuffer(int imageBuffer) {
 }
 
 
-void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback) {
+void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat) {
     this->callback = callback;
+    this->colorFormat = colorFormat;
 }
 
 void Companion::Configuration::setErrorHandler(std::function<ERROR_CALLBACK> callback) {

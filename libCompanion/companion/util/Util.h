@@ -27,6 +27,17 @@
 namespace Companion {
 
     /**
+     * Enumeration class for color formats.
+     */
+    enum class COMP_EXPORTS ColorFormat {
+        RGB,
+        RGBA,
+        BGR,
+        BGRA,
+        GRAY
+    };
+
+    /**
      * Utility class for opencv.
      * @author Andreas Sekulksi
      */
@@ -66,6 +77,14 @@ namespace Companion {
          * @return <code>true</code> if point is distant enough otherwise <code>false</code>
          */
         static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
+
+        /**
+         * Converts an image to the given color format. BGR is expected as source format.
+         * @param src Source image.
+         * @param dst Destination image.
+         * @param colorFormat Color format for the converted image.
+         */
+        static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
     };
 
 }

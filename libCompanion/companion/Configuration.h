@@ -129,14 +129,13 @@ namespace Companion {
 		void setImageBuffer(int imageBuffer);
 
         /**
-         * Sets an given result handler.
-         *
-         * Result handler return an set from all detected objects as an vector and frame. If video processing is finished
-         * the boolean will be returned true in last image processing. Image source will be converted to RGB format.
+         * Sets a given result handler. The result handler returns a list of all detected objects as result models. 
+         * The source image will be converted to the given format.
          *
          * @param callback Function pointer which contains result event handler.
+         * @param colorFormat Color format of the returned image.
          */
-        void setResultHandler(std::function<SUCCESS_CALLBACK> callback);
+        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
         /**
          * Gets an callback handler if set.
@@ -214,6 +213,11 @@ namespace Companion {
          * Stream worker which runs an single job.
          */
         Companion::Thread::StreamWorker* worker;
+
+        /**
+         * Color format of the image in the result callback.
+         */
+        Companion::ColorFormat colorFormat;
 
     };
 

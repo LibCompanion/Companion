@@ -18,8 +18,9 @@
 
 #include "StreamWorker.h"
 
-Companion::Thread::StreamWorker::StreamWorker(int buffer) {
+Companion::Thread::StreamWorker::StreamWorker(int buffer, Companion::ColorFormat colorFormat) {
     this->finished = false;
+    this->colorFormat = colorFormat;
     this->buffer = buffer;
     if(this->buffer <= 0) {
         this->buffer = 1;
@@ -87,7 +88,7 @@ void Companion::Thread::StreamWorker::consume(
             if(!queue.empty()) {
                 frame = queue.front();
                 queue.pop();
-                cvtColor(frame, resultBGR, CV_BGR2RGB);
+                Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
                 callback(processing->execute(frame), resultBGR);
                 frame.release();
                 resultBGR.release();
