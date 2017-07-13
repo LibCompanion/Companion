@@ -20,6 +20,7 @@
 
 Companion::Input::Image::Image(int maxImages) : maxImages(maxImages) {
     this->exitStream = false;
+    this->exitAfterProcessing = false;
 }
 
 Companion::Input::Image::~Image() {
