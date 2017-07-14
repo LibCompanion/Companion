@@ -72,42 +72,108 @@ namespace Companion {
              */
             virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
+            /**
+             * Get top left point position from frame.
+             * @return Top left point position.
+             */
             const cv::Point &getTopLeft() const;
 
+            /**
+             * Get top right point position from frame.
+             * @return Top right point position.
+             */
             const cv::Point &getTopRight() const;
 
+            /**
+             * Get bottom left point position from frame.
+             * @return Bottom left point position.
+             */
             const cv::Point &getBottomLeft() const;
 
+            /**
+             * Get bottom right point position from frame.
+             * @return Bottom right point position.
+             */
             const cv::Point &getBottomRight() const;
 
+            /**
+             * Get color frame code.
+             * @return Scalar color from frame.
+             */
             const cv::Scalar &getColor() const;
 
+            /**
+             * Get thickness size from frame, if 0 no frame will be drawn.
+             * @return Get thickness size from frame.
+             */
             int getThickness() const;
 
+            /**
+             * Set top left position from frame.
+             * @param topLeft Top left frame position.
+             */
             void setTopLeft(const cv::Point &topLeft);
 
+            /**
+             * Set top right position from frame.
+             * @param topRight Top right frame position.
+             */
             void setTopRight(const cv::Point &topRight);
 
+            /**
+             * Set bottom left position from frame.
+             * @param bottomLeft Bottom left frame position.
+             */
             void setBottomLeft(const cv::Point &bottomLeft);
 
+            /**
+             * Set bottom right position from frame.
+             * @param bottomRight Bottom right frame position.
+             */
             void setBottomRight(const cv::Point &bottomRight);
 
+            /**
+             * Set color frame.
+             * @param color Color frame to set.
+             */
             void setColor(const cv::Scalar &color);
 
+            /**
+             * Set thickness size from frame.
+             * @param thickness Thickness size.
+             */
             void setThickness(int thickness);
 
         private:
 
+            /**
+             * Top left position from frame.
+             */
             cv::Point topLeft;
 
+            /**
+             * Top right position from frame.
+             */
             cv::Point topRight;
 
+            /**
+             * Bottom left position from frame.
+             */
             cv::Point bottomLeft;
 
+            /**
+             * Bottom right position from frame.
+             */
             cv::Point bottomRight;
 
+            /**
+             * Color from frame.
+             */
             cv::Scalar color;
 
+            /**
+             * Thickness size from frame.
+             */
             int thickness;
         };
 
