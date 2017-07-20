@@ -20,12 +20,10 @@
 
 Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
                                                         Algorithm::ImageRecognition *imageRecognition,
-                                                        float scale,
-                                                        int scaledWidth) {
+                                                        Companion::SCALING scaling) {
     this->companion = companion;
     this->imageRecognition = imageRecognition;
-    this->scale = scale;
-    this->scaledWidth = scaledWidth;
+    this->scaling = scaling;
 }
 
 Companion::Processing::ObjectDetection::~ObjectDetection() {
@@ -35,8 +33,7 @@ Companion::Processing::ObjectDetection::~ObjectDetection() {
 CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
     Model::Processing::FeatureMatchingModel* scene;
-	Companion::Model::Result* result;
-    CALLBACK_RESULT objects;
+	CALLBACK_RESULT objects;
     std::vector<Model::Processing::ImageRecognitionModel*> models;
 
     if (!frame.empty()) {
@@ -48,12 +45,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
         // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-        if (this->scaledWidth <= 0) {
-            Util::resizeImage(frame, oldX * this->scale);
-        } else {
-            Util::resizeImage(frame, this->scaledWidth);
-        }
-
+        Util::resizeImage(frame, this->scaling);
         scene->setImage(frame);
 
         for(unsigned long x = 0; x < models.size(); x++) {

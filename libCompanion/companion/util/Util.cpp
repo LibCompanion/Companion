@@ -22,11 +22,9 @@ bool Companion::Util::isImageLoaded(cv::Mat &img) {
     return !img.empty();
 }
 
-void Companion::Util::resizeImage(cv::Mat &img, int size_x) {
-    double ratio = (double) img.cols / (double) img.rows;
-    // Shrink an image: CV_INTER_AREA
-    // Enlarge an image: CV_INTER_CUBIC (slow) or CV_INTER_LINEAR (faster but still looks OK)
-    cv::resize(img, img, cv::Size(size_x, size_x / ratio), cv::INTER_AREA);
+void Companion::Util::resizeImage(cv::Mat &img, SCALING scaling) {
+    cv::Point size = getScaling(scaling);
+    cv::resize(img, img, cv::Size(size.x, size.y), cv::INTER_AREA);
 }
 
 void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight) {
@@ -56,4 +54,52 @@ void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorF
             cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2GRAY);
             break;
     }
+}
+
+cv::Point Companion::Util::getScaling(SCALING scaling) {
+    cv::Point size;
+    switch (scaling) {
+        case Companion::SCALING::SCALE_1920x1080:
+            size.x = 1920;
+            size.y = 1080;
+            break;
+        case Companion::SCALING::SCALE_1600x900:
+            size.x = 1600;
+            size.y = 900;
+            break;
+        case Companion::SCALING::SCALE_1280x720:
+            size.x = 1280;
+            size.y = 720;
+            break;
+        case Companion::SCALING::SCALE_1152x648:
+            size.x = 1152;
+            size.y = 648;
+            break;
+        case Companion::SCALING::SCALE_1024x576:
+            size.x = 1024;
+            size.y = 576;
+            break;
+        case Companion::SCALING::SCALE_960x540:
+            size.x = 960;
+            size.y = 540;
+            break;
+        case Companion::SCALING::SCALE_896x504:
+            size.x = 896;
+            size.y = 504;
+            break;
+        case Companion::SCALING::SCALE_800x450:
+            size.x = 800;
+            size.y = 450;
+            break;
+        case Companion::SCALING::SCALE_768x432:
+            size.x = 768;
+            size.y = 432;
+            break;
+        case Companion::SCALING::SCALE_640x360:
+            size.x = 640;
+            size.y = 360;
+            break;
+    }
+
+    return size;
 }
