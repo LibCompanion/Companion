@@ -46,6 +46,7 @@ option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
+    option(Companion_USE_XFEATURES_2D "Use non free module" OFF)
 endif()
 
 # Define global properties
@@ -58,6 +59,11 @@ if(Companion_USE_CUDA)
     set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
     add_definitions(-DCompanion_USE_CUDA)
 endif()
+
+if(Companion_USE_XFEATURES_2D)
+    set(OpenCVComponents ${OpenCVComponents} "xfeatures2d")
+endif()
+
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
 
