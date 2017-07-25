@@ -59,6 +59,10 @@ void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorF
 cv::Point Companion::Util::getScaling(SCALING scaling) {
     cv::Point size;
     switch (scaling) {
+        case Companion::SCALING::SCALE_2048x1152:
+            size.x = 2048;
+            size.y = 1152;
+            break;
         case Companion::SCALING::SCALE_1920x1080:
             size.x = 1920;
             size.y = 1080;
@@ -66,6 +70,14 @@ cv::Point Companion::Util::getScaling(SCALING scaling) {
         case Companion::SCALING::SCALE_1600x900:
             size.x = 1600;
             size.y = 900;
+            break;
+        case Companion::SCALING::SCALE_1408x792:
+            size.x = 1408;
+            size.y = 792;
+            break;
+        case Companion::SCALING::SCALE_1344x756:
+            size.x = 1344;
+            size.y = 756;
             break;
         case Companion::SCALING::SCALE_1280x720:
             size.x = 1280;

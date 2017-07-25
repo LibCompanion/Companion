@@ -41,8 +41,11 @@ namespace Companion {
      * Enumeration class for scaling.
      */
     enum class COMP_EXPORTS SCALING {
+        SCALE_2048x1152,
         SCALE_1920x1080,
         SCALE_1600x900,
+        SCALE_1408x792,
+        SCALE_1344x756,
         SCALE_1280x720,
         SCALE_1152x648,
         SCALE_1024x576,
