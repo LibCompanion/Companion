@@ -54,16 +54,26 @@ namespace Companion {
             /**
              * Store an image to FIFO.
              * @param imgPath Image path to store.
-             * @return <b>True<b/> if image is stored otherwise <b>false</b> if image not exists.
+             * @return <code>true</code> if image is stored otherwise <code>false</code> if image not exists.
              */
             bool addImage(std::string imgPath);
 
             /**
              * Stores an given image FIFO.
              * @param img Image to store.
-             * @return <b>True<b/> if image is stored otherwise <b>false</b> if image not exists.
+             * @return <code>true</code> if image is stored otherwise <code>false</code> if image not exists.
              */
             bool addImage(cv::Mat img);
+
+            /**
+             * Stores an given image FIFO.
+             * @param width Width of the image to store.
+             * @param height Height of the image to store.
+             * @param type Type of the image to store.
+             * @param data Raw image data to store.
+             * @return <code>true</code> if image is stored otherwise <code>false</code>.
+             */
+            bool addImage(int width, int height, int type, uchar* data);
 
             /**
              * Obtain next image from open video stream.
@@ -73,7 +83,7 @@ namespace Companion {
 
             /**
              * Indicator if stream is finished.
-             * @return <b>True<b/> if video is finished otherwise <b>false</b>.
+             * @return <code>true</code> if image stream is finished, <code>false</code> otherwise
              */
             bool isFinished();
 
@@ -82,12 +92,22 @@ namespace Companion {
              */
             void finish();
 
+            /**
+             * Method to signal to stop image stream after all images were processed.
+             */
+            void finishAfterProcessing();
+
         private:
 
             /**
              * Indicator to stop this stream.
              */
             bool exitStream;
+
+            /**
+             * Indicator to stop this stream after all images were processed.
+             */
+            bool exitAfterProcessing;
 
             /**
              * List from all stored images as an fifo;

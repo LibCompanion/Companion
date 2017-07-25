@@ -61,7 +61,7 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
         Model::Processing::FeatureMatchingModel *sModel,
         Model::Processing::FeatureMatchingModel *cModel) {
 
-    Companion::Draw::Drawable *lines = nullptr;
+    Companion::Draw::Drawable *drawable = nullptr;
     cv::Mat homography;
     std::vector<cv::Point2f> feature_points_object, feature_points_scene;
 
@@ -79,15 +79,16 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::obtain
 
         // Find Homography if only features points are filled.
         if(!feature_points_object.empty() && !feature_points_scene.empty()) {
-            homography = cv::findHomography(feature_points_object, feature_points_scene, CV_RANSAC);
+            homography = cv::findHomography(feature_points_object, feature_points_scene, this->findHomographyMethod,
+                                            this->reprojThreshold, cv::noArray(), this->ransacMaxIters);
             if (!homography.empty()) {
-                lines = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+                drawable = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
             }
         }
 
     }
 
-    return lines;
+    return drawable;
 }
 
 Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calculateArea(
@@ -98,6 +99,7 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
         Model::Processing::FeatureMatchingModel *cModel) {
 
     Companion::Draw::Frame *frame = nullptr;
+    cv::Mat originalImg = sModel->getImage();
 
     //-- Get the corners from the image_1 (the object to be "detected")
     std::vector<cv::Point2f> obj_corners(4);
@@ -152,12 +154,6 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     cv::Point2f start = cv::Point2f(minX, minY) + offset - scale;
     cv::Point2f end = cv::Point2f(maxX, maxY) + offset + scale;
 
-    // If IRA was used...
-    if(sceneImage.cols != sModel->getImage().cols || sceneImage.rows != sModel->getImage().rows) {
-        // Restore to original image.
-        sceneImage = sModel->getImage();
-    }
-
     // Object area.
 
     cv::Point2f topLeft = scene_corners[0] + offset;
@@ -166,19 +162,19 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
     cv::Point2f bottomLeft = scene_corners[3] + offset;
 
     // Check for minimum corner distance
-    if (Companion::Util::hasDistantPosition(topLeft, topRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topLeft, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topLeft, bottomLeft, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topRight, bottomRight, cornerDistance) &&
-        Companion::Util::hasDistantPosition(topRight, bottomLeft, cornerDistance) &&
-        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, cornerDistance)) {
+    if (Companion::Util::hasDistantPosition(topLeft, topRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topLeft, bottomLeft, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomRight, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(topRight, bottomLeft, this->cornerDistance) &&
+        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, this->cornerDistance)) {
         
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
     }
 
     // If IRA is used...
-    if(useIRA) {
+    if(useIRA && frame != nullptr) {
 
         // IRA algo stores position from detected object.
         ira->setLastObjectPosition(start.x, start.y, end.x - start.x, end.y - start.y);
@@ -190,16 +186,16 @@ Companion::Draw::Drawable* Companion::Algorithm::AbstractFeatureMatching::calcul
         }
 
         // Check if width is not oversized
-        if (lastObjectPosition.width + lastObjectPosition.x > sceneImage.cols) {
-            ira->setWidth(sceneImage.cols - lastObjectPosition.x);
+        if (lastObjectPosition.width + lastObjectPosition.x > originalImg.cols) {
+            ira->setWidth(originalImg.cols - lastObjectPosition.x);
         }
 
         if (lastObjectPosition.y < 0) {
             ira->setY(0);
         }
 
-        if (lastObjectPosition.height + lastObjectPosition.y > sceneImage.rows) {
-            ira->setHeight(sceneImage.rows - lastObjectPosition.y);
+        if (lastObjectPosition.height + lastObjectPosition.y > originalImg.rows) {
+            ira->setHeight(originalImg.rows - lastObjectPosition.y);
         }
 
         if (lastObjectPosition.area() <= 0) {

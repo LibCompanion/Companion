@@ -25,7 +25,10 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
         int matcherType,
         int cornerDistance,
         int countMatches,
-        bool useIRA) {
+        bool useIRA,
+        double reprojThreshold,
+        int ransacMaxIters,
+        int findHomographyMethod) {
 
     this->detector = detector;
     this->extractor = extractor;
@@ -35,17 +38,28 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
     this->countMatches = countMatches;
     this->useIRA = useIRA;
     this->cudaUsed = false;
+    this->reprojThreshold = reprojThreshold;
+    this->ransacMaxIters = ransacMaxIters;
+    this->findHomographyMethod = findHomographyMethod;
 }
 
 #if Companion_USE_CUDA
-Companion::Algorithm::FeatureMatching::FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
-                                                       int cornerDistance,
-                                                       int countMatches) {
+Companion::Algorithm::FeatureMatching::FeatureMatching(
+        cv::Ptr<cv::Feature2D> cudaFeatureMatching,
+        int cornerDistance,
+        int countMatches,
+        double reprojThreshold,
+        int ransacMaxIters,
+        int findHomographyMethod) {
+
     this->cudaFeatureMatching = cudaFeatureMatching;
     this->cornerDistance = cornerDistance;
     this->countMatches = countMatches;
     this->useIRA = false;
     this->cudaUsed = true;
+    this->reprojThreshold = reprojThreshold;
+    this->ransacMaxIters = ransacMaxIters;
+    this->findHomographyMethod = findHomographyMethod;
 }
 #endif
 
@@ -102,6 +116,7 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
     if (useIRA && ira->isObjectDetected()) { // IRA cut out handling if ira should be used and object was detected.
         // Cut out scene from last detected object and set this as new scene to check.
         sceneImage = cv::Mat(sceneImage, ira->getLastObjectPosition());
+
         // Detect keypoints from cut scene
         detector->detect(sceneImage, keypointsScene);
         // Calculate descriptors from cut scene (feature vectors)
@@ -162,22 +177,30 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
                                         sModel,
                                         oModel);
 
-        if(drawable == nullptr) {
-            // If result is not good enough and IRA was used.
-            if(isIRAUsed) {
-                sceneImage.release();
-                objectImage.release();
-                ira->clear(); // Clear last detected object position.
-                return algo(sceneModel, objectModel); // Repeat algorithm to check original scene.
-            }
-        } else {
-            // TODO := SCORING CALCULATION
-            // Object found
-            result = new Companion::Model::Result(100, objectModel->getID(), drawable);
-            sceneImage.release();
-            objectImage.release();
-        }
+		if (drawable != nullptr) {
+			// TODO := SCORING CALCULATION
+			// Object found
+			result = new Companion::Model::Result(100, objectModel->getID(), drawable);
+			sceneImage.release();
+			objectImage.release();
+		} else {
+			// If result is not good enough and IRA was used.
+			if (isIRAUsed) {
 
+				#if Companion_DEBUG
+				showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+				#endif
+
+				sceneImage.release();
+				objectImage.release();
+				ira->clear(); // Clear last detected object position.
+				return algo(sceneModel, objectModel); // Repeat algorithm to check original scene.
+			} else {
+				#if Companion_DEBUG
+				showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
+				#endif
+			}
+		}
 
     } else if(cudaUsed) {
 
@@ -218,12 +241,13 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
             // TODO := SCORING CALCULATION
             // Object found
             result = new Companion::Model::Result(100, oModel->getID(), drawable);
+            sceneImage.release();
+            objectImage.release();
         }
-
         #endif
 
     } else {
-        // Results from descriptors and keypoints are not good enough and IRA was used.
+        // If results are not good enough and empty for keypoints and descriptors.
         if(isIRAUsed) {
             sceneImage.release();
             objectImage.release();
@@ -238,3 +262,22 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::algo(
 bool Companion::Algorithm::FeatureMatching::isCuda() {
     return cudaUsed;
 }
+
+#if Companion_DEBUG
+void Companion::Algorithm::FeatureMatching::showFeatureMatches(
+                        cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
+                        cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
+                        std::vector<cv::DMatch>& goodMatches, std::string windowName) {
+    // Build only in debug mode for development
+    cv::Mat imgMatches;
+
+    if(!objectImg.empty() && !sceneImg.empty()) {
+        cv::drawMatches(objectImg, objectKeypoints, sceneImg, sceneKeypoints,
+                        goodMatches, imgMatches, cv::Scalar::all(-1), cv::Scalar::all(-1),
+                        std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
+
+        //-- Show detected matches
+        cv::imshow(windowName, imgMatches);
+    }
+}
+#endif

@@ -27,6 +27,36 @@
 namespace Companion {
 
     /**
+     * Enumeration class for color formats.
+     */
+    enum class COMP_EXPORTS ColorFormat {
+        RGB,
+        RGBA,
+        BGR,
+        BGRA,
+        GRAY
+    };
+
+    /**
+     * Enumeration class for scaling.
+     */
+    enum class COMP_EXPORTS SCALING {
+        SCALE_2048x1152,
+        SCALE_1920x1080,
+        SCALE_1600x900,
+        SCALE_1408x792,
+        SCALE_1344x756,
+        SCALE_1280x720,
+        SCALE_1152x648,
+        SCALE_1024x576,
+        SCALE_960x540,
+        SCALE_896x504,
+        SCALE_800x450,
+        SCALE_768x432,
+        SCALE_640x360
+    };
+
+    /**
      * Utility class for opencv.
      * @author Andreas Sekulksi
      */
@@ -44,10 +74,9 @@ namespace Companion {
         /**
          * Resize given image.
          * @param img Image to resize.
-         * @param size_x Resize image to given height in pixel.
-         * @param size_y Resize image to given width in pixel.
+         * @param scaling Scaling factor to resize.
          */
-        static void resizeImage(cv::Mat &img, int size_x, int size_y);
+        static void resizeImage(cv::Mat &img, SCALING scaling);
 
         /**
          * Ratio to set new point from scaled frame.
@@ -67,6 +96,18 @@ namespace Companion {
          * @return <code>true</code> if point is distant enough otherwise <code>false</code>
          */
         static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
+
+        /**
+         * Converts an image to the given color format. BGR is expected as source format.
+         * @param src Source image.
+         * @param dst Destination image.
+         * @param colorFormat Color format for the converted image.
+         */
+        static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
+
+    private:
+
+        static cv::Point getScaling(SCALING scaling);
     };
 
 }

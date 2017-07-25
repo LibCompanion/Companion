@@ -44,16 +44,10 @@ namespace Companion {
 
             /**
              * Constructor to create an producer streaming class to obtain images from an video and store to an queue.
-             * @param queue Queue to store obtained images.
              * @param buffer Buffer size to store images. Default is one image buffer.
+             * @param colorFormat Color format of the returned image.
              */
-            StreamWorker(std::queue<cv::Mat> &queue, int buffer = 1) : queue(queue) {
-                this->finished = false;
-                this->buffer = buffer;
-                if(this->buffer <= 0) {
-                    this->buffer = 1;
-                }
-            }
+            StreamWorker(int buffer = 1, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
             /**
              * Method to produce video stream data and store to his queue.
@@ -75,23 +69,22 @@ namespace Companion {
                          std::function<ERROR_CALLBACK> errorCallback,
                          std::function<SUCCESS_CALLBACK> callback);
 
-            /**
-             * Checks if worker class is running.
-             * @return True if worker is running otherwise false.
-             */
-            bool isRunning();
-
-            /**
-             * Stops worker if its running.
-             */
-            void stop();
-
         private:
+
+            /**
+             * @brief finished Indicator to cancel threads.
+             */
+            bool finished;
 
             /**
              * Buffer size to store max. images.
              */
             int buffer;
+
+            /**
+             * Color format of the image in the result callback.
+             */
+            Companion::ColorFormat colorFormat;
 
             /**
              * Mutex to lock or unlock.
@@ -106,12 +99,7 @@ namespace Companion {
             /**
              * Queue to store images from video stream.
              */
-            std::queue<cv::Mat> &queue;
-
-            /**
-             * Indicator if video is finished.
-             */
-            bool finished;
+            std::queue<cv::Mat> queue;
 
             /**
              * Stores frame to queue.

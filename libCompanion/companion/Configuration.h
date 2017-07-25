@@ -51,10 +51,9 @@ namespace Companion {
 
         /**
          * Executes companion configuration.
-         * @param worker StreamWorker pointer to obtain video images.
          * @throws error Companion::Error::Code error code if an invalid configuration is set.
          */
-        void run(Companion::Thread::StreamWorker &worker);
+        void run();
 
         /**
          * Stops current running stream worker if it's executes.
@@ -82,12 +81,6 @@ namespace Companion {
         bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
         /**
-         * Remove searched model.
-         * @param model Model to remove.
-         */
-        void removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
-
-        /**
          * Clear all models which are searched.
          */
         void clearModels();
@@ -113,7 +106,7 @@ namespace Companion {
 
         /**
          * Get skip frame rate.
-         * @return Skirp frame rate, how many frames should be skipped.
+         * @return Skip frame rate, how many frames should be skipped.
          */
         int getSkipFrame() const;
 
@@ -123,15 +116,26 @@ namespace Companion {
          */
         void setSkipFrame(int skipFrame);
 
+		/**
+		* Get image buffer store rate.
+		* @return Image buffer frame rate default 5 images are stored to buffer.
+		*/
+		int getImageBuffer() const;
+
+		/**
+		* Sets image buffer size to store.
+		* @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
+		*/
+		void setImageBuffer(int imageBuffer);
+
         /**
-         * Sets an given result handler.
-         *
-         * Result handler return an set from all detected objects as an vector and frame. If video processing is finished
-         * the boolean will be returned true in last image processing. Image source will be converted to RGB format.
+         * Sets a given result handler. The result handler returns a list of all detected objects as result models. 
+         * The source image will be converted to the given format.
          *
          * @param callback Function pointer which contains result event handler.
+         * @param colorFormat Color format of the returned image.
          */
-        void setResultHandler(std::function<SUCCESS_CALLBACK> callback);
+        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
         /**
          * Gets an callback handler if set.
@@ -168,22 +172,32 @@ namespace Companion {
         /**
          * Data stream source to obtain images.
          */
-        Companion::Input::Stream *source;
+        Companion::Input::Stream* source;
 
         /**
          * Search models to detect objects from source.
          */
-        std::vector<Companion::Model::Processing::ImageRecognitionModel *> models;
+        std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 
         /**
          * Image processing implementation for example an object detection.
          */
-        Companion::Processing::ImageProcessing *processing;
+        Companion::Processing::ImageProcessing* processing;
 
         /**
          * Number of frames to skip to process next image.
          */
         int skipFrame;
+
+		/*
+		 * Image buffer size to store image. Default is 5.
+		 */
+		int imageBuffer;
+
+        /**
+         * @brief threadsRunning Indicator if threads currently running.
+         */
+        bool threadsRunning;
 
         /**
          * Consumer thread to store image data.
@@ -198,7 +212,12 @@ namespace Companion {
         /**
          * Stream worker which runs an single job.
          */
-        Companion::Thread::StreamWorker *worker;
+        Companion::Thread::StreamWorker* worker;
+
+        /**
+         * Color format of the image in the result callback.
+         */
+        Companion::ColorFormat colorFormat;
 
     };
 

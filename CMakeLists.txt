@@ -46,6 +46,7 @@ option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
+    option(Companion_USE_XFEATURES_2D "Use non free module" OFF)
 endif()
 
 # Define global properties
@@ -58,12 +59,20 @@ if(Companion_USE_CUDA)
     set(OpenCVComponents ${OpenCVComponents} "cudafeatures2d")
     add_definitions(-DCompanion_USE_CUDA)
 endif()
+
+if(Companion_USE_XFEATURES_2D)
+    set(OpenCVComponents ${OpenCVComponents} "xfeatures2d")
+endif()
+
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
 
+# For developer
+if(Companion_DEBUG)
+    add_definitions(-DCompanion_DEBUG)
+endif()
 
 # Configure libCompanion
-
 add_subdirectory(libCompanion)
 
 # Configure to build additional modules
@@ -71,7 +80,7 @@ if(Companion_BUILD_SAMPLES)
     if(IS_DIRECTORY "${PROJECT_SOURCE_DIR}/libCompanionSamples")
         add_subdirectory(libCompanionSamples)
     else()
-		set(Companion_SAMPLE_MODULE "Path_to_Samples_Module" CACHE PATH "Sample module path")
+        set(Companion_SAMPLE_MODULE "Path_to_Samples_Module" CACHE PATH "Sample module path")
         add_subdirectory(${Companion_SAMPLE_MODULE} samples)
     endif()
 endif()

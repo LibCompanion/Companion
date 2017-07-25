@@ -32,7 +32,7 @@ namespace Companion {
          * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
          * @author Andreas Sekulski
          */
-        class FeatureMatching : public AbstractFeatureMatching {
+        class COMP_EXPORTS FeatureMatching : public AbstractFeatureMatching {
 
         public:
 
@@ -54,6 +54,9 @@ namespace Companion {
              * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
              * @param countMatches How much matches need to get an good matching result. Default is by 40.
              * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
+             * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
+             * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
+             * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
              */
             FeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
                             cv::Ptr<cv::DescriptorExtractor> extractor,
@@ -61,7 +64,10 @@ namespace Companion {
                             int matcherType,
                             int cornerDistance = 10,
                             int countMatches = 40,
-                            bool useIRA = false);
+                            bool useIRA = false,
+                            double reprojThreshold = 3.0,
+                            int ransacMaxIters = 500,
+                            int findHomographyMethod = cv::RANSAC);
 
             // Only build if cuda should be used.
             #if Companion_USE_CUDA
@@ -73,10 +79,22 @@ namespace Companion {
              * @param cudaFeatureMatching Cuda based feature matching algorithm.
              * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
              * @param countMatches How much matches need to get an good matching result. Default is by 40.
+             * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
+             * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
+             * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
              */
             FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
                             int cornerDistance = 10,
-                            int countMatches = 40);
+                            int countMatches = 40,
+                            double reprojThreshold = 3.0,
+                            int ransacMaxIters = 500,
+                            int findHomographyMethod = cv::RANSAC);
+            #endif
+
+            #if Companion_DEBUG
+            void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
+                                    cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
+                                    std::vector<cv::DMatch>& goodMatches, std::string windowName);
             #endif
 
             /**
@@ -130,7 +148,6 @@ namespace Companion {
              * Cuda feature matching algorithm.
              */
             cv::Ptr<cv::Feature2D> cudaFeatureMatching;
-
         };
     }
 }

@@ -18,6 +18,15 @@
 
 #include "StreamWorker.h"
 
+Companion::Thread::StreamWorker::StreamWorker(int buffer, Companion::ColorFormat colorFormat) {
+    this->finished = false;
+    this->colorFormat = colorFormat;
+    this->buffer = buffer;
+    if(this->buffer <= 0) {
+        this->buffer = 1;
+    }
+}
+
 void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
                                               int skipFrame,
                                               std::function<ERROR_CALLBACK> errorCallback) {
@@ -28,7 +37,7 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 
         cv::Mat frame = stream->obtainImage();
 
-        while (!stream->isFinished() || !isRunning()) {
+        while (!stream->isFinished()) {
 
             if(!frame.empty()) {
                 // If skip frame is not used...
@@ -54,10 +63,7 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
         }
 
         std::lock_guard<std::mutex> lk(mx);
-        if(!stream->isFinished()) {
-
-        }
-        finished = stream->isFinished();
+        finished = true;
         cv.notify_all();
 
     } catch (Companion::Error::Code error) {
@@ -77,12 +83,12 @@ void Companion::Thread::StreamWorker::consume(
         while (!finished) {
 
             std::unique_lock<std::mutex> lk(mx);
-            cv.wait(lk, [this]{return finished || !queue.empty();});
+			cv.wait(lk, [this] {return finished || !queue.empty(); });
 
             if(!queue.empty()) {
                 frame = queue.front();
                 queue.pop();
-                cvtColor(frame, resultBGR, CV_BGR2RGB);
+                Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
                 callback(processing->execute(frame), resultBGR);
                 frame.release();
                 resultBGR.release();
@@ -95,7 +101,7 @@ void Companion::Thread::StreamWorker::consume(
 }
 
 bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
-    std::lock_guard<std::mutex> lk(mx);
+	std::lock_guard<std::mutex> lk(mx);
     if(queue.size() >= buffer) {
         // If buffer full try to notify producer and wait current frame and do nothing.
         cv.notify_one();
@@ -104,15 +110,5 @@ bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
         queue.push(frame);
         cv.notify_one();
         return true;
-    }
-}
-
-bool Companion::Thread::StreamWorker::isRunning() {
-    return !finished;
-}
-
-void Companion::Thread::StreamWorker::stop() {
-    if(isRunning()) {
-        finished = true;
     }
 }

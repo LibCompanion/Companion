@@ -19,92 +19,102 @@
 #include "Configuration.h"
 
 Companion::Configuration::Configuration() {
-    source = nullptr;
-    processing = nullptr;
-    skipFrame = 0;
+    this->source = nullptr;
+    this->processing = nullptr;
+    this->worker = nullptr;
+    this->skipFrame = 0;
+    this->threadsRunning = false;
+    this->imageBuffer = 5;
 }
 
 Companion::Configuration::~Configuration() {
-    models.clear();
-    delete source;
-    delete processing;
+    this->models.clear();
+    delete this->source;
+    delete this->processing;
+    delete this->worker;
 }
 
-void Companion::Configuration::run(Companion::Thread::StreamWorker &worker) {
-    // Get all configuration data
-    // Throws Error if invalid settings are set.
-    Companion::Input::Stream* stream = this->getSource();
-    Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
-    int skipFrame = this->getSkipFrame();
-    std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
-    std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
+void Companion::Configuration::run() {
+    if (this->threadsRunning) {
+        // Stop active worker if running
+        this->stop();
+    } else {
+        // Create new worker for execution only if no threads are active
+        this->worker = new Companion::Thread::StreamWorker(this->imageBuffer, this->colorFormat);
 
-    // Run new worker class.
-    this->worker = &worker;
-    this->consumer = std::thread(&Thread::StreamWorker::consume, &worker, imageProcessing, errorCallback, successCallback);
-    this->producer = std::thread(&Thread::StreamWorker::produce, &worker, stream, skipFrame, errorCallback);
-    consumer.join(); // Wait if thread finished
-    producer.join(); // Waif if thread finished
+        // Get all configuration data
+        // Throws Error if invalid settings are set.
+        Companion::Input::Stream* stream = this->getSource();
+        Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
+        int skipFrame = this->getSkipFrame();
+        std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
+        std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
+
+        // Run new worker class.
+        this->threadsRunning = true;
+        this->producer = std::thread(&Thread::StreamWorker::produce, this->worker, stream, skipFrame, errorCallback);
+        this->consumer = std::thread(&Thread::StreamWorker::consume, this->worker, imageProcessing, errorCallback, successCallback);
+        this->producer.join();
+        this->consumer.join();
+        this->threadsRunning = false;
+    }
 }
 
 void Companion::Configuration::stop() {
-
-    if (this->worker != nullptr && this->worker->isRunning()) {
-        this->worker->stop();
+    if (this->threadsRunning && this->source != nullptr && !this->source->isFinished()) {
+        // To stop running worker threads stop streams.
+        this->source->finish();
+        this->source = nullptr;
+        this->worker = nullptr;
     }
-
-    this->worker = nullptr;
 }
 
 Companion::Input::Stream *Companion::Configuration::getSource() const {
+
     if(this->source == nullptr) {
         throw Error::Code::stream_src_not_set;
     }
 
-    return source;
+    return this->source;
 }
 
 void Companion::Configuration::setSource(Companion::Input::Stream *source) {
-    Configuration::source = source;
+    this->source = source;
 }
 
 bool Companion::Configuration::addModel(Companion::Model::Processing::ImageRecognitionModel *model) {
 
     if(!model->getImage().empty()) {
-        models.push_back(model);
+        this->models.push_back(model);
         return true;
     }
 
     return false;
 }
 
-void Companion::Configuration::removeModel(Companion::Model::Processing::ImageRecognitionModel *model) {
-    // ToDo Remove
-}
-
 void Companion::Configuration::clearModels() {
-    models.clear();
+    this->models.clear();
 }
 
 const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &Companion::Configuration::getModels() const {
-    return models;
+    return this->models;
 }
 
 Companion::Processing::ImageProcessing *Companion::Configuration::getProcessing() const {
 
-    if(processing == nullptr) {
+    if(this->processing == nullptr) {
         throw Error::Code::no_image_processing_algo_set;
     }
 
-    return processing;
+    return this->processing;
 }
 
 void Companion::Configuration::setProcessing(Companion::Processing::ImageProcessing *processing) {
-    Configuration::processing = processing;
+    this->processing = processing;
 }
 
 int Companion::Configuration::getSkipFrame() const {
-    return skipFrame;
+    return this->skipFrame;
 }
 
 void Companion::Configuration::setSkipFrame(int skipFrame) {
@@ -113,33 +123,47 @@ void Companion::Configuration::setSkipFrame(int skipFrame) {
         skipFrame = 0;
     }
 
-    Configuration::skipFrame = skipFrame;
+    this->skipFrame = skipFrame;
 }
 
-void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback) {
-    Configuration::callback = callback;
+int Companion::Configuration::getImageBuffer() const {
+	return this->imageBuffer;
+}
+
+void Companion::Configuration::setImageBuffer(int imageBuffer) {
+
+	if (imageBuffer <= 0) {
+		imageBuffer = 5;
+	}
+
+    this->imageBuffer = imageBuffer;
+}
+
+
+void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat) {
+    this->callback = callback;
+    this->colorFormat = colorFormat;
 }
 
 void Companion::Configuration::setErrorHandler(std::function<ERROR_CALLBACK> callback) {
-    Configuration::errorCallback = callback;
+    this->errorCallback = callback;
 }
-
 
 const std::function<SUCCESS_CALLBACK> &Companion::Configuration::getCallback() const {
 
-    if(!callback) {
+    if(!this->callback) {
         throw Error::Code::no_handler_set;
     }
 
-    return callback;
+    return this->callback;
 }
 
 
 const std::function<ERROR_CALLBACK> &Companion::Configuration::getErrorCallback() const {
 
-    if(!errorCallback) {
+    if(!this->errorCallback) {
         throw Error::Code::no_handler_set;
     }
 
-    return errorCallback;
+    return this->errorCallback;
 }
