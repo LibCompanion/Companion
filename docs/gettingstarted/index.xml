@@ -17,102 +17,163 @@
       <guid>https://libcompanion.github.io/libCompanion/gettingstarted/</guid>
       <description>
 
-&lt;h3 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h3&gt;
+&lt;h1 id=&#34;getting-started&#34;&gt;Getting Started&lt;/h1&gt;
 
-&lt;h4 id=&#34;lib-dependencies&#34;&gt;Lib dependencies&lt;/h4&gt;
+&lt;h2 id=&#34;usage-example&#34;&gt;Usage example&lt;/h2&gt;
 
-&lt;p&gt;Following libs must be build to use Companion.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://opencv.org/&#34;&gt;OpenCV&lt;/a&gt; - 3.X&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.nvidia.com/cuda-downloads&#34;&gt;Cuda&lt;/a&gt; (Optional)&lt;/li&gt;
-&lt;li&gt;OpenMP&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;build-from-sources&#34;&gt;Build from sources&lt;/h4&gt;
-
-&lt;p&gt;Simply use cmake or cmake-gui to build Companion for an specific platform. Enable the Cuda flag to build Companion with Cuda support by default Cuda implementations will not be build.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cmake -DUSE_CUDA=ON
-make
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;companion-usage&#34;&gt;Companion usage&lt;/h4&gt;
-
-&lt;p&gt;To use companion features they must be only configuerd by his Companion configuration class.&lt;/p&gt;
+&lt;p&gt;Companion must be only configured by his Companion Configuration class.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;// Creates an empty companion configuration class
 Companion *companion = new Companion();
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This configuration class must be only configured to use all image processing features. Following components must be setup.&lt;/p&gt;
+&lt;p&gt;This configuration class specified which image processing implementation should
+used. Following components must be initialized.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Error and result handler&lt;/li&gt;
-&lt;li&gt;Used image processing feature&lt;/li&gt;
+&lt;li&gt;Callback handling&lt;/li&gt;
 &lt;li&gt;Search model&lt;/li&gt;
-&lt;li&gt;StreamWorker&lt;/li&gt;
+&lt;li&gt;Image processing&lt;/li&gt;
+&lt;li&gt;Companion configuration&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The following example shows an feature matching setup which obtains an video source from an file.&lt;/p&gt;
+&lt;h3 id=&#34;scenario&#34;&gt;Scenario&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;// Result handler method implementation
-void callback(std::vector&amp;lt;Drawable*&amp;gt; objects, cv::Mat frame) {
-    Drawable *drawable;
+&lt;p&gt;Following object detection scenario describes all configuration steps how to
+use Companion. Detection from two posters from a movie file.&lt;/p&gt;
 
-    for(int x = 0; x &amp;lt; objects.size(); x++) {
-        drawable = objects.at(x);
-        drawable-&amp;gt;draw(frame);
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Poster A&lt;/th&gt;
+&lt;th&gt;Poster B&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&#34;https://libcompanion.github.io/libCompanion/images/example/poster_left.jpg&#34; alt=&#34;Left poster&#34; title=&#34;Left Poster&#34; /&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&#34;https://libcompanion.github.io/libCompanion/images/example/poster_right.jpg&#34; alt=&#34;Right poster&#34; title=&#34;Right poster&#34; /&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;callbacks&#34;&gt;Callbacks&lt;/h3&gt;
+
+&lt;p&gt;Simple set an result and error handler to an companion configuration class to
+obtain results and errors by an running companion execution.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;companion-&amp;gt;setResultHandler(resultHandler);
+companion-&amp;gt;setErrorHandler(errorHandler);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;result-handling&#34;&gt;Result Handling&lt;/h4&gt;
+
+&lt;p&gt;To obtain results from Companion an Result or Error Handler is needed to
+implement. An result handler must be specified as type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void resultHandler(CALLBACK_RESULT results, cv::Mat source)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Type definition from CALLBACK_RESULT is an vector from Result:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#define CALLBACK_RESULT std::vector&amp;lt;Companion::Model::Result*&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For example results are all detected object from an 2D Feature Matching in an
+image frame.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://libcompanion.github.io/libCompanion/images/example/result_example.jpg?width=20%&#34; alt=&#34;Detected object&#34; title=&#34;Detected Poster B&#34; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void resultHandler(CALLBACK_RESULT results, cv::Mat source) {
+    Companion::Model::Result *result;
+
+    for(size_t i = 0; i &amp;lt; results.size(); i++) {
+
+        // Mark the detected object
+        result = results.at(i);
+        result-&amp;gt;getModel()-&amp;gt;draw(source)
+        ;
+
+        // Draw the id of the detected object
+        Companion::Draw::Frame *frame = dynamic_cast&amp;lt;Companion::Draw::Frame*&amp;gt;(result-&amp;gt;getModel());
+        cv::putText(source,
+                    std::to_string(result-&amp;gt;getId()),
+                    frame-&amp;gt;getTopRight(),
+                    cv::FONT_HERSHEY_DUPLEX,
+                    2,
+                    frame-&amp;gt;getColor(),
+                    frame-&amp;gt;getThickness());
     }
 
-    cv::imshow(&amp;quot;Object detection&amp;quot;, frame);
+    cv::cvtColor(source, source, CV_RGB2BGR);
+    cv::imshow(&amp;quot;Object detection&amp;quot;, source);
     cv::waitKey(1);
-    frame.release();
+    source.release();
+    results.clear();
 }
+&lt;/code&gt;&lt;/pre&gt;
 
-// Error handler method implementation
-void error(CompanionError::errorCode code) {
+&lt;h4 id=&#34;error-handling&#34;&gt;Error Handling&lt;/h4&gt;
+
+&lt;p&gt;If an error occurred by an running image processing. Comapnion will thrown an
+specific Companion::Error::Code. An specialized error message can be obtain
+from his Utility method.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void errorHandler(Companion::Error::Code code) {
     // Obtain detailed error message from code
-    std::cout &amp;lt;&amp;lt; CompanionError::getError(code) &amp;lt;&amp;lt; &amp;quot;\n&amp;quot;;
+    std::cout &amp;lt;&amp;lt; Companion::Error::getError(code) &amp;lt;&amp;lt; &amp;quot;\n&amp;quot;;
 }
+&lt;/code&gt;&lt;/pre&gt;
 
-int main() {
-  Companion *companion = new Companion();
+&lt;h3 id=&#34;search-model&#34;&gt;Search Model&lt;/h3&gt;
 
-  // Setup for an feature matching model.
-  FeatureMatchingModel *object = new FeatureMatchingModel();
-  object-&amp;gt;setImage(cv::imread(imagePath, cv::IMREAD_GRAYSCALE));
-  if(!companion-&amp;gt;addModel(object)) {
-      std::cout &amp;lt;&amp;lt; &amp;quot;Model not added&amp;quot;;
-  }
+&lt;p&gt;&lt;img src=&#34;https://libcompanion.github.io/libCompanion/images/example/uml_model.jpg&#34; alt=&#34;Image recognition model&#34; title=&#34;Image Recognition Class&#34; /&gt;&lt;/p&gt;
 
-  // Setup feature matching implementation from OpenCV
-  int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
-  cv::Ptr&amp;lt;cv::DescriptorMatcher&amp;gt; matcher = cv::DescriptorMatcher::create(type);
-  cv::Ptr&amp;lt;cv::BRISK&amp;gt; brisk = cv::BRISK::create(60);
+&lt;p&gt;All search models are implemented from abstract ImageRecognitionModel class
+for each image processing. For this 2D object detection operation an
+FeatureMatchingModel must be created for all searched models.&lt;/p&gt;
 
-  // Setup image recognition from cpu feature matching implementation.
-  ImageRecognition *recognition = new CPUFeatureMatching(brisk, brisk, matcher, type);
-  // Set image processing algorithm to your companion instance.
-  companion-&amp;gt;setProcessing(new ObjectDetection(companion, recognition, 1));
+&lt;pre&gt;&lt;code&gt;Companion::Model::Processing::FeatureMatchingModel* model;
+for (int i = 0; i &amp;lt; images.size(); i++) {
 
-  // Set video as input source to obtain images.
-  Stream *stream = new Video(videoPath);
-  companion-&amp;gt;setSource(stream);
+    model = new Companion::Model::Processing::FeatureMatchingModel();
+    model-&amp;gt;setID(i);
+    model-&amp;gt;setImage(cv::imread(images[i], cv::IMREAD_GRAYSCALE));
 
-  // Set result callback handler
-  companion-&amp;gt;setResultHandler(callback);
-  // Set an error callback handler
-  companion-&amp;gt;setErrorHandler(error);
+    if(!companion-&amp;gt;addModel(model)) {
+        std::cout &amp;lt;&amp;lt; &amp;quot;Model not added&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-  // Create an stream worker class to execute companion configuration
-  StreamWorker ps(queue);
-  try {
-      // Execute companion
-      companion-&amp;gt;run(ps);
-  } catch (CompanionError::errorCode errorCode) {
-      error(errorCode);
-  }
+&lt;h3 id=&#34;image-processing&#34;&gt;Image Processing&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://libcompanion.github.io/libCompanion/images/example/uml_imageprocessing.jpg&#34; alt=&#34;Image processing model&#34; title=&#34;Image Processing Class&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;All supported image processing operations are implemented from ImageProcessing.
+For example a 2D Object Detection with usage from OpenCV 3 feature matching
+algorithms.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int type = cv::DescriptorMatcher::BRUTEFORCE_HAMMING;
+cv::Ptr&amp;lt;cv::DescriptorMatcher&amp;gt; matcher = cv::DescriptorMatcher::create(type);
+// -------------- BRISK CPU FM --------------
+cv::Ptr&amp;lt;cv::BRISK&amp;gt; feature = cv::BRISK::create(60);
+Companion::Algorithm::ImageRecognition* recognition = new Companion::Algorithm::FeatureMatching(feature, feature, matcher, type, 10, 40, true);
+companion-&amp;gt;setProcessing(new Companion::Processing::ObjectDetection(companion, recognition, 0.5));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;execution&#34;&gt;Execution&lt;/h3&gt;
+
+&lt;p&gt;After all configuration steps from Companion are done execute this configuration
+class in a try/catch block. If Companion is missed configured a Companion
+Error Code will be thrown.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;try {
+    // Execute companion
+    companion-&amp;gt;run(ps);
+} catch (Companion::Error::Code errorCode) {
+    errorHandler(errorCode);
 }
 &lt;/code&gt;&lt;/pre&gt;
 </description>

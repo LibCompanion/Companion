@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://libcompanion.github.io/libCompanion/basics/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/basics/</loc>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/build/</loc>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/build/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://libcompanion.github.io/libCompanion/</loc>
     <priority>0</priority>
   </url>
@@ -13,6 +31,15 @@
   <url>
     <loc>https://libcompanion.github.io/libCompanion/companion/</loc>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/docs/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/docs/</loc>
   </url>
   
   <url>

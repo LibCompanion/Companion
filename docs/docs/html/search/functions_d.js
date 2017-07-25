@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['setcolor',['setColor',['../class_companion_1_1_draw_1_1_line.html#a5f422f915bad9ec5114875b05cc25ff5',1,'Companion::Draw::Line']]],
+  ['setdescriptors',['setDescriptors',['../class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a35f9f146c10a53762e3084e10f5c8414',1,'Companion::Model::Processing::FeatureMatchingModel']]],
+  ['setend',['setEnd',['../class_companion_1_1_draw_1_1_line.html#aed659cd1287e3f510cc4d2bb512bcf3e',1,'Companion::Draw::Line']]],
+  ['seterrorhandler',['setErrorHandler',['../class_companion_1_1_configuration.html#a533e78db16557ce6946809bb8c2665e3',1,'Companion::Configuration']]],
+  ['setheight',['setHeight',['../class_companion_1_1_algorithm_1_1_i_r_a.html#a5b00d4be70203af4f3ac2eff634cd70b',1,'Companion::Algorithm::IRA']]],
+  ['setid',['setID',['../class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a19ac910de792f5c728774da812629c6f',1,'Companion::Model::Processing::ImageRecognitionModel']]],
+  ['setimage',['setImage',['../class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a61c988a129c8d2c4bb9ac16c9aaa39a6',1,'Companion::Model::Processing::ImageRecognitionModel']]],
+  ['setkeypoints',['setKeypoints',['../class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a031976a8ced3481cfe1161d5a9599102',1,'Companion::Model::Processing::FeatureMatchingModel']]],
+  ['setlastobjectposition',['setLastObjectPosition',['../class_companion_1_1_algorithm_1_1_i_r_a.html#af5e6fc591c0e6fb46050f96fa1048350',1,'Companion::Algorithm::IRA']]],
+  ['setprocessing',['setProcessing',['../class_companion_1_1_configuration.html#a76fc089a15477a535922c9f05b61980b',1,'Companion::Configuration']]],
+  ['setresulthandler',['setResultHandler',['../class_companion_1_1_configuration.html#aa9b4622b27f362a263d4e765c6cdabf8',1,'Companion::Configuration']]],
+  ['setskipframe',['setSkipFrame',['../class_companion_1_1_configuration.html#a006bad6fe35d5a53e8f644ebd7ace932',1,'Companion::Configuration']]],
+  ['setsource',['setSource',['../class_companion_1_1_configuration.html#aded026f24ed23ddbdd17175a213a47d5',1,'Companion::Configuration']]],
+  ['setstart',['setStart',['../class_companion_1_1_draw_1_1_line.html#a287a7ac4032284eb383b23774b83cc41',1,'Companion::Draw::Line']]],
+  ['setthickness',['setThickness',['../class_companion_1_1_draw_1_1_line.html#ab44ff871aaa4dfe155d62bc3aeff9822',1,'Companion::Draw::Line']]],
+  ['setwidth',['setWidth',['../class_companion_1_1_algorithm_1_1_i_r_a.html#a4c3b8666fa7a2f87a165d27ae7f73576',1,'Companion::Algorithm::IRA']]],
+  ['setx',['setX',['../class_companion_1_1_algorithm_1_1_i_r_a.html#a96da0a7eb485b0669a69c524669f356a',1,'Companion::Algorithm::IRA']]],
+  ['sety',['setY',['../class_companion_1_1_algorithm_1_1_i_r_a.html#a0e43ffe7703a5fe3532eb3033065fedb',1,'Companion::Algorithm::IRA']]],
+  ['stop',['stop',['../class_companion_1_1_configuration.html#a25418141eb3f9b2985ad3b6bf9a4f0d6',1,'Companion::Configuration::stop()'],['../class_companion_1_1_thread_1_1_stream_worker.html#ae2e1d0c12587f446a2431e82995378aa',1,'Companion::Thread::StreamWorker::stop()']]],
+  ['streamworker',['StreamWorker',['../class_companion_1_1_thread_1_1_stream_worker.html#ad9258af7ad632f1a1691efc79924072e',1,'Companion::Thread::StreamWorker']]]
+];
