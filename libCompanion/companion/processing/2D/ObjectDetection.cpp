@@ -19,10 +19,10 @@
 #include "ObjectDetection.h"
 
 Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
-                                                        Algorithm::ImageRecognition *imageRecognition,
+                                                        Companion::Algorithm::Matching *matchingAlgo,
                                                         Companion::SCALING scaling) {
     this->companion = companion;
-    this->imageRecognition = imageRecognition;
+    this->matchingAlgo = matchingAlgo;
     this->scaling = scaling;
 }
 
@@ -47,9 +47,12 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
         Util::resizeImage(frame, this->scaling);
         scene->setImage(frame);
+        matchingAlgo->setSceneModel(scene);
 
         for(unsigned long x = 0; x < models.size(); x++) {
-			Companion::Model::Result* result = imageRecognition->algo(scene, models.at(x));
+
+            matchingAlgo->setObjectModel(models.at(x));
+			Companion::Model::Result* result = matchingAlgo->executeAlgorithm();
 
 			// Put in method
 			if (result != nullptr) {

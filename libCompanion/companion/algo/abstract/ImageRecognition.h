@@ -36,12 +36,9 @@ namespace Companion {
 
             /**
              * Specific algorithm implementation like simple compare or template matching.
-             * @param searchModel Search model to compare.
-             * @param compareModel Compare model to check if contains in search model.
              * @throws Companion::Error::Code If an error occured in search operation.
              */
-            virtual Companion::Model::Result* algo(Companion::Model::Processing::ImageRecognitionModel *searchModel,
-                                                   Companion::Model::Processing::ImageRecognitionModel *compareModel) = 0;
+            virtual Companion::Model::Result* executeAlgorithm() = 0;
 
             /**
              * Indicator if this algorithm use cuda.

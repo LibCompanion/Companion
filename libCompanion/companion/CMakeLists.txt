@@ -22,8 +22,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE
         Configuration.cpp Configuration.h
         algo/abstract/ImageRecognition.h
-        algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
+        algo/abstract/Matching.cpp algo/abstract/Matching.h
         algo/2D/FeatureMatching.cpp algo/2D/FeatureMatching.h
+        algo/2D/ShapeDetection.cpp algo/2D/ShapeDetection.h
         algo/util/IRA.cpp algo/util/IRA.h
         draw/Drawable.h
         draw/Frame.cpp draw/Frame.h

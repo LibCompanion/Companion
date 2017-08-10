@@ -24,7 +24,7 @@
 #include <companion/model/processing/ImageRecognitionModel.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/draw/Drawable.h>
-#include <companion/algo/abstract/ImageRecognition.h>
+#include <companion/algo/2D/FeatureMatching.h>
 #include <companion/Configuration.h>
 
 namespace Companion {
@@ -43,11 +43,11 @@ namespace Companion {
             /**
              * Constructor to create an object detection algorithm implementation.
              * @param companion Configuration class to obtain model entities to verify.
-             * @param imageRecognition Image recognition algorithm to use, for example feature matching.
+             * @param matchingAlgo Image recognition algorithm to use, for example feature matching.
              * @param scaling Scaling to resize an image. Default is full hd.
              */
             ObjectDetection(Companion::Configuration *companion,
-                            Algorithm::ImageRecognition *imageRecognition,
+                            Companion::Algorithm::Matching *matchingAlgo,
                             Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080);
 
             /**
@@ -76,9 +76,9 @@ namespace Companion {
             Companion::Configuration *companion;
 
             /**
-             * FeatureMatching algorithm setup.
+             * Matching algorithm.
              */
-            Algorithm::ImageRecognition *imageRecognition;
+            Companion::Algorithm::Matching *matchingAlgo;
         };
 
     }
