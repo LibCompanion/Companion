@@ -162,11 +162,14 @@ namespace Companion {
                                                  Model::Processing::FeatureMatchingModel *sModel,
                                                  Model::Processing::FeatureMatchingModel *cModel);
 
-            /**
-             * Specific algorithm implementation like simple compare or template matching.
-             * @throws Companion::Error::Code If an error occurred in search operation.
-             */
-            Companion::Model::Result* executeAlgorithm();
+			/**
+			* Feature matching algorithm implementation to search in an scene model this given object model.
+			* @param sceneModel Scene model to verify for matching.
+			* @param objectModel Object model to search in scene.
+			* @return An result model if an object is detected otherwise nullptr.
+			*/
+			Companion::Model::Result* executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
+													   Model::Processing::FeatureMatchingModel *objectModel);
 
             /**
              * Indicator if this algorithm use cuda.

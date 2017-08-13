@@ -19,8 +19,7 @@
 #ifndef COMPANION_IMAGERECOGNITION_H
 #define COMPANION_IMAGERECOGNITION_H
 
-#include <companion/model/processing/ImageRecognitionModel.h>
-#include <companion/model/result/Result.h>
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
 namespace Companion {
 
@@ -33,12 +32,6 @@ namespace Companion {
         class COMP_EXPORTS ImageRecognition {
 
         public:
-
-            /**
-             * Specific algorithm implementation like simple compare or template matching.
-             * @throws Companion::Error::Code If an error occured in search operation.
-             */
-            virtual Companion::Model::Result* executeAlgorithm() = 0;
 
             /**
              * Indicator if this algorithm use cuda.

@@ -65,7 +65,10 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 
 Companion::Algorithm::FeatureMatching::~FeatureMatching() {}
 
-Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorithm() {
+Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorithm(
+	Model::Processing::FeatureMatchingModel *sceneModel, 
+	Model::Processing::FeatureMatchingModel *objectModel) {
+
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
     std::vector<std::vector<cv::DMatch>> matches;
@@ -76,8 +79,6 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     Companion::Draw::Drawable *drawable = nullptr;
     bool isIRAUsed = false;
     IRA* ira;
-    Companion::Model::Processing::FeatureMatchingModel* sModel;
-    Companion::Model::Processing::FeatureMatchingModel* oModel;
 
     // Clear all lists from last run.
     matches.clear();
@@ -85,24 +86,16 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     keypointsScene.clear();
     keypointsObject.clear();
 
-    // Type cast feature matching model to specific one and validate it.
-    sModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(sceneModel);
-    oModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(objectModel);
+    sceneImage = sceneModel->getImage(); // Get image scene
+    objectImage = objectModel->getImage(); // Get object scene
+	ira = objectModel->getIra();  // Get IRA from object model
 
-    if(!sModel || !oModel) {
-        // If wrong model types are used
-        throw Companion::Error::Code::wrong_model_type;
-    }
-
-    ira = oModel->getIra();  // Get IRA from object model
-    sceneImage = sModel->getImage(); // Get image scene
-    objectImage = oModel->getImage(); // Get object scene
-    cvtColor(sceneImage, sceneImage, CV_BGR2GRAY); // Convert image to grayscale
-
-    // Check if images are loaded...
+	// Check if images are loaded...
     if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage)) {
         throw Companion::Error::Code::image_not_found;
     }
+
+	cvtColor(sceneImage, sceneImage, CV_BGR2GRAY); // Convert image to grayscale
 
     // --------------------------------------------------
     // Scene and model preparation start
@@ -118,23 +111,23 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
         // Calculate descriptors from cut scene (feature vectors)
         extractor->compute(sceneImage, keypointsScene, descriptorsScene);
         isIRAUsed = true;
-    } else if(useIRA && sModel->keypointsCalculated()) { // If IRA is used and keypoints from scene already calculated.
-        keypointsScene = sModel->getKeypoints();
-        descriptorsScene = sModel->getDescriptors();
+    } else if(useIRA && sceneModel->keypointsCalculated()) { // If IRA is used and keypoints from scene already calculated.
+        keypointsScene = sceneModel->getKeypoints();
+        descriptorsScene = sceneModel->getDescriptors();
     } else if(!cudaUsed) { // If IRA is not used or keypoints from scene are not calculated yet.
-        sModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
-        keypointsScene = sModel->getKeypoints();
-        descriptorsScene = sModel->getDescriptors();
+		sceneModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
+        keypointsScene = sceneModel->getKeypoints();
+        descriptorsScene = sceneModel->getDescriptors();
     }
 
     // Check if object has calculated keypoints and descriptors and CUDA is not used.
-    if(!oModel->keypointsCalculated() && !cudaUsed) {
-        oModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints from model.
+    if(!objectModel->keypointsCalculated() && !cudaUsed) {
+		objectModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints from model.
     }
 
     // Get Keypoints and descriptors from model.
-    keypointsObject = oModel->getKeypoints();
-    descriptorsObject = oModel->getDescriptors();
+    keypointsObject = objectModel->getKeypoints();
+    descriptorsObject = objectModel->getDescriptors();
 
     // --------------------------------------------------
     // Scene and model preparation end
@@ -170,8 +163,8 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
                                         goodMatches,
                                         keypointsObject,
                                         keypointsScene,
-                                        sModel,
-                                        oModel);
+                                        sceneModel,
+                                        objectModel);
 
         if (drawable != nullptr) {
             // TODO := SCORING CALCULATION
@@ -190,7 +183,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
                 sceneImage.release();
                 objectImage.release();
                 ira->clear(); // Clear last detected object position.
-                return executeAlgorithm(); // Repeat algorithm to check original scene.
+                return executeAlgorithm(sceneModel, objectModel); // Repeat algorithm to check original scene.
             } else {
 #if Companion_DEBUG
                 showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
@@ -230,13 +223,13 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
                                         goodMatches,
                                         keypointsObject,
                                         keypointsScene,
-                                        sModel,
-                                        oModel);
+                                        sceneModel,
+                                        objectModel);
 
         if(drawable != nullptr) {
             // TODO := SCORING CALCULATION
             // Object found
-            result = new Companion::Model::Result(100, oModel->getID(), drawable);
+            result = new Companion::Model::Result(100, objectModel->getID(), drawable);
             sceneImage.release();
             objectImage.release();
         }
@@ -248,7 +241,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
             sceneImage.release();
             objectImage.release();
             ira->clear(); // Clear last detected object position.
-            return executeAlgorithm(); // Repeat algorithm to check original scene.
+            return executeAlgorithm(sceneModel, objectModel); // Repeat algorithm to check original scene.
         }
     }
 

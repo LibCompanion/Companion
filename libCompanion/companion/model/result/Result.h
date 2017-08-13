@@ -28,7 +28,6 @@ namespace Companion {
 
         /**
          * Result model class to store object detection scoring.
-         *
          * @author Andreas Sekulski
          */
         class Result {

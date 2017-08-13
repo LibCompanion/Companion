@@ -38,6 +38,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
 
     if (!frame.empty()) {
         scene = new Model::Processing::FeatureMatchingModel();
+		Model::Processing::FeatureMatchingModel* objectModel;
         models = companion->getModels();
 
         int oldX = frame.cols;
@@ -47,12 +48,16 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
         Util::resizeImage(frame, this->scaling);
         scene->setImage(frame);
-        matchingAlgo->setSceneModel(scene);
 
         for(unsigned long x = 0; x < models.size(); x++) {
 
-            matchingAlgo->setObjectModel(models.at(x));
-			Companion::Model::Result* result = matchingAlgo->executeAlgorithm();
+			objectModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x));
+			if (!objectModel) {
+				// If wrong model types are used
+				throw Companion::Error::Code::wrong_model_type;
+			}
+
+			Companion::Model::Result* result = matchingAlgo->executeAlgorithm(scene, objectModel);
 
 			// Put in method
 			if (result != nullptr) {

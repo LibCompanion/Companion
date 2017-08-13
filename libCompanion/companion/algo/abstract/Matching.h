@@ -21,6 +21,7 @@
 
 #include "ImageRecognition.h"
 
+#include <companion/model/result/Result.h>
 #include <companion/draw/Frame.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 
@@ -36,53 +37,20 @@ namespace Companion {
 
         public:
 
-            /**
-             * Get current scene model.
-             * @return Scene model to process in matching algorithm.
-             */
-            Model::Processing::ImageRecognitionModel *getSceneModel() const;
-
-            /**
-             * Sets given model as scene.
-             * @param sceneModel Scene model to set.
-             */
-            void setSceneModel(Model::Processing::ImageRecognitionModel *sceneModel);
-
-            /**
-             * Get object model.
-             * @return Object model for a matching algorithm.
-             */
-            Model::Processing::ImageRecognitionModel *getObjectModel() const;
-
-            /**
-             * Sets given object model.
-             * @param objectModel Object model to set.
-             */
-            void setObjectModel(Model::Processing::ImageRecognitionModel *objectModel);
-
-            /**
-             * Feature matching algorithm implementation.
-             * @throws Companion::Error::Code If an error occured in search operation.
-             */
-            virtual Companion::Model::Result* executeAlgorithm() = 0;
+			/**
+			 * Feature matching algorithm implementation to search in an scene model this given object model.
+			 * @param sceneModel Scene model to verify for matching.
+			 * @param objectModel Object model to search in scene.
+			 * @return An result model if an object is detected otherwise nullptr.
+			 */
+			virtual Companion::Model::Result* executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
+													   Model::Processing::FeatureMatchingModel *objectModel) = 0;
 
             /**
              * Indicator if this algorithm use cuda.
              * @return True if cuda will be used otherwise false.
              */
             virtual bool isCuda() = 0;
-
-        protected:
-
-            /**
-             * Current scene model to verify for matching.
-             */
-            Model::Processing::ImageRecognitionModel *sceneModel;
-
-            /**
-             * Current object model to verify for matching.
-             */
-            Model::Processing::ImageRecognitionModel *objectModel;
         };
     }
 }
