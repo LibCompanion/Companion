@@ -184,16 +184,22 @@ namespace Companion
              */
             cv::Ptr<cv::Feature2D> cudaFeatureMatching;
 
-
-
+			/**
+			 * Repeat algorithm method if IRA or ROI has no results.
+			 * @param sceneModel Scene model to check.
+			 * @param objectModel Object model to search.
+			 * @param roi Region of interest object to check if nullptr then no roi exists.
+			 * @param isIRAUsed Checks if ira was used in last iteration.
+			 * @param ira IRA model to store last position data.
+			 * @param isROIUsed Check if region of interests is used in last search iteration.
+			 * @return Result model with given object if exists in image otherwise a nullptr.
+			 */
 			Companion::Model::Result* repeatAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
 													  Model::Processing::FeatureMatchingModel *objectModel,
 													  Companion::Draw::Frame *roi,
 													  bool isIRAUsed,
 													  Companion::Algorithm::IRA* ira,
 													  bool isROIUsed);
-
-
 
 			/**
 			* Ratio test implementation to improve results from matching to obtain only good results. <br>
@@ -227,9 +233,9 @@ namespace Companion
 			* @param objectImage Object image to detect in scene.
 			* @param sModel Feature matching model from scene.
 			* @param cModel Feature matching model frome object.
-
-
-
+			* @param isIRAUsed Flag if ira was used.
+			* @param isROIUsed Flag if roi was used.
+			* @param roi Region of interest.
 			* @return An drawable class which contains positionion from object in scene image.
 			*/
 			Draw::Drawable* calculateArea(cv::Mat &homography,
@@ -250,8 +256,9 @@ namespace Companion
 			* @param keypoints_scene Keypoints from scene.
 			* @param sModel Scene feature matching model.
 			* @param cModel Object feature matching model.
-
-
+			* @param isIRAUsed Flag if ira was used.
+			* @param isROIUsed Flag if roi was used.
+			* @param roi Region of interest.
 			* @return <b>nullptr</b> if object is not in scene detected otherwise an Drawable class which contains
 			*         position from detected objekt.
 			*/

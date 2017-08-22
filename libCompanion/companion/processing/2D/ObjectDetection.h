@@ -37,7 +37,6 @@ namespace Companion
 
         /**
          * 2D Object detection implementation.
-         *
          * @author Andreas Sekulski
          */
         class COMP_EXPORTS ObjectDetection : public ImageProcessing 
@@ -91,10 +90,26 @@ namespace Companion
 			 * Shape detection algorithm.
 			 */
 			Companion::Algorithm::ShapeDetection *shapeDetection;
+
+			/**
+			 * Processing method to detect objects.
+			 * @param sceneModel Scene model to check.
+			 * @param objectModel Object model to search in scene.
+			 * @param rois Region of interests list if exists.
+			 * @param frame Scene frame.
+			 * @param originalX Original x size from frame.
+			 * @param originalY Original y size from frame.
+			 * @param objects Objects list from all detected objects.
+			 */
+			void processing(Model::Processing::FeatureMatchingModel* sceneModel,
+							Model::Processing::FeatureMatchingModel* objectModel,
+							std::vector<Companion::Draw::Frame*> rois,
+							cv::Mat frame,
+							int originalX,
+							int originalY,
+							CALLBACK_RESULT &objects);
         };
-
     }
-
 }
 
 #endif //COMPANION_OBJECTDETECTION_H

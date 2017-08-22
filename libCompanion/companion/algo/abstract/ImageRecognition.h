@@ -45,6 +45,4 @@ namespace Companion
     }
 }
 
-
-
 #endif //COMPANION_IMAGERECOGNITION_H

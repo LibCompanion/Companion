@@ -41,6 +41,15 @@ namespace Companion
 
             public:
 
+				/**
+				 * Shape detection construtor to detect different shapes. Shape detection function used in this order
+				 * dilate(erode(morph(image)))
+				 * @param morphKernel Morphology kernel size.
+				 * @param erodeKernel Erode kernel size.
+				 * @param dilateKernel Dilate kernel size.
+				 * @param cannyThreshold Canny threshold to indicate corners.
+				 * @param dilateIteration Count dilate iterations.
+				 */
 				ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)), 
 							   cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
 							   cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),

@@ -38,10 +38,10 @@ namespace Companion
         public:
 
             /**
-             *
-             * @param scoring
-             * @param id
-             * @param model
+             * Constructor to create a result model.
+             * @param scoring Scoring value from matching between 0 and 100 percent.
+             * @param id Identificator from model.
+             * @param model Drawable model to get position from model in image.
              */
             Result(int scoring, int id, Draw::Drawable *model);
 
@@ -71,7 +71,7 @@ namespace Companion
         private:
 
             /**
-             * Score matching in percentage 0 - 100 %.
+             * Score matching in percentage 0 - 100 percent.
              */
             int scoring;
 
