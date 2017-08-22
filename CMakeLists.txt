@@ -31,6 +31,10 @@ else()
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 endif()
 
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE Release)
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
 # Define CMake Flags
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
