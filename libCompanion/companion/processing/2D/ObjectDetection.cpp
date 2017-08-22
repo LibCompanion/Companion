@@ -38,17 +38,16 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 {
 
 	Companion::Model::Result* result = nullptr;
-    Model::Processing::FeatureMatchingModel* scene;
+    Model::Processing::FeatureMatchingModel* sceneModel;
 	CALLBACK_RESULT objects;
     std::vector<Model::Processing::ImageRecognitionModel*> models;
 	std::vector<Companion::Draw::Frame*> rois;
-	int oldX, oldY, index;
+	int oldX, oldY;
 
     if (!frame.empty()) 
 	{
-        scene = new Model::Processing::FeatureMatchingModel();
-		Model::Processing::FeatureMatchingModel* objectModel;
-        models = companion->getModels();
+		sceneModel = new Model::Processing::FeatureMatchingModel();
+		models = companion->getModels();
 
         oldX = frame.cols;
         oldY = frame.rows;
@@ -56,52 +55,96 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
         // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
         Util::resizeImage(frame, this->scaling);
-        scene->setImage(frame);
+		sceneModel->setImage(frame);
 
 		if (shapeDetection != nullptr)
 		{
 			// If shape detection should be used obtain all posible rois from frame.
-			rois = shapeDetection->executeAlgorithm(scene->getImage());
+			rois = shapeDetection->executeAlgorithm(sceneModel->getImage());
 		}
 
-        for(unsigned long x = 0; x < models.size(); x++) 
+		// ToDo : Duplex code only different is openmp usage...
+		// Clean it!
+		if (matchingAlgo->isCuda())
 		{
-
-			objectModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x));
-			if (!objectModel) 
+			for (int x = 0; x < models.size(); x++)
 			{
-				// If wrong model types are used
-				throw Companion::Error::Code::wrong_model_type;
-			}
-
-			if (rois.size() == 0)
-			{
-				// If rois not found or used
-				result = matchingAlgo->executeAlgorithm(scene, objectModel, nullptr);
-			}
-			else
-			{
-				index = 0;
-				// If rois found
-				while (index < rois.size()) // Search only so long if a object was detected or all rois are checked.
+				Model::Processing::FeatureMatchingModel* objectModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x));
+				if (!objectModel)
 				{
-					result = matchingAlgo->executeAlgorithm(scene, objectModel, rois.at(index));
-					index++;
+					// If wrong model types are used
+					throw Companion::Error::Code::wrong_model_type;
+				}
+
+				if (rois.size() == 0)
+				{
+					// If rois not found or used
+					result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+				}
+				else
+				{
+					int index = 0;
+					// If rois found
+					while (index < rois.size()) // Search only so long if a object was detected or all rois are checked.
+					{
+						result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+						index++;
+					}
+				}
+
+				// Put in method
+				if (result != nullptr)
+				{
+					// Create old image size
+					result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+					// Store detected object and its ID to vector.
+					objects.push_back(result);
 				}
 			}
-
-			// Put in method
-			if (result != nullptr) 
+		}
+		else
+		{
+			#pragma omp parallel for
+			for (int x = 0; x < models.size(); x++)
 			{
-				// Create old image size
-				result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
-				// Store detected object and its ID to vector.
-				objects.push_back(result);
+				Model::Processing::FeatureMatchingModel* objectModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x));
+				if (!objectModel)
+				{
+					// If wrong model types are used
+					throw Companion::Error::Code::wrong_model_type;
+				}
+				
+
+				if (rois.size() == 0)
+				{
+					// If rois not found or used
+					result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+				}
+				else
+				{
+				 	int index = 0;
+					// If rois found
+					while (index < rois.size()) // Search only so long if a object was detected or all rois are checked.
+					{
+						result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+						index++;
+					}
+				}
+
+				// Put in method
+				if (result != nullptr)
+				{
+					// Create old image size
+					result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+					// Store detected object and its ID to vector.
+					objects.push_back(result);
+				}
 			}
-        }
-        
+			
+		}
+
         frame.release();
-        delete scene;
+        delete sceneModel;
     }
 
     return objects;

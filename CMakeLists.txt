@@ -66,6 +66,7 @@ endif()
 
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 
 # For developer
 if(Companion_DEBUG)

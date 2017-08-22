@@ -27,6 +27,7 @@
 #include <companion/algo/2D/FeatureMatching.h>
 #include <companion/algo/2D/ShapeDetection.h>
 #include <companion/Configuration.h>
+#include <omp.h>
 
 namespace Companion 
 {

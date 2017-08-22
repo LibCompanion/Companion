@@ -72,7 +72,8 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 	Model::Processing::FeatureMatchingModel *objectModel,
 	Companion::Draw::Frame *roi)
 {
-
+	
+	
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
     std::vector<std::vector<cv::DMatch>> matches;
@@ -84,7 +85,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     bool isIRAUsed = false;
 	bool isROIUsed = false;
     Companion::Algorithm::IRA* ira;
-
+	
     // Clear all lists from last run.
     matches.clear();
     goodMatches.clear();
@@ -142,10 +143,17 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     } 
 	else if(!cudaUsed) // IRA NOT USED & OBJECT NOT DETECTED & SCENE KEYPOINTS NOT CALCULATED & NOT CUDA USAGE
 	{ 
+		// Detect keypoints from cut scene
+		detector->detect(sceneImage, keypointsScene);
+		// Calculate descriptors from cut scene (feature vectors)
+		extractor->compute(sceneImage, keypointsScene, descriptorsScene);
+
+		/* OpenMP crash here in Develop and Release because sceneModel is simultaneously used by alle cores...
 		sceneModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
         keypointsScene = sceneModel->getKeypoints();
         descriptorsScene = sceneModel->getDescriptors();
-    }
+		*/
+    }	
 
     // Check if object has calculated keypoints and descriptors and CUDA is not used.
     if(!objectModel->keypointsCalculated() && !cudaUsed) 
