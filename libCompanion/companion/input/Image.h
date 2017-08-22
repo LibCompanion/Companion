@@ -28,15 +28,18 @@
 
 #include "Stream.h"
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Input {
+    namespace Input 
+	{
 
         /**
          * Streaming class implementation for an subset from images.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Image : public Stream {
+        class COMP_EXPORTS Image : public Stream 
+		{
 
         public:
 

@@ -21,15 +21,18 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Input {
+    namespace Input 
+	{
 
         /**
          * Data stream interface class to obtain image processing data for example from an video or an set of images.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Stream {
+        class COMP_EXPORTS Stream 
+		{
 
         public:
 

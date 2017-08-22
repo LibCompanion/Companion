@@ -25,18 +25,22 @@
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/draw/Drawable.h>
 #include <companion/algo/2D/FeatureMatching.h>
+#include <companion/algo/2D/ShapeDetection.h>
 #include <companion/Configuration.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Processing {
+    namespace Processing 
+	{
 
         /**
          * 2D Object detection implementation.
          *
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS ObjectDetection : public ImageProcessing {
+        class COMP_EXPORTS ObjectDetection : public ImageProcessing 
+		{
 
         public:
 
@@ -45,10 +49,12 @@ namespace Companion {
              * @param companion Configuration class to obtain model entities to verify.
              * @param matchingAlgo Image recognition algorithm to use, for example feature matching.
              * @param scaling Scaling to resize an image. Default is full hd.
+			 * @param shapeDetection Shape detection algorithm to detect roi's in images optional if not set complete image will be searched.
              */
             ObjectDetection(Companion::Configuration *companion,
                             Companion::Algorithm::Matching *matchingAlgo,
-                            Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080);
+                            Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080,
+							Companion::Algorithm::ShapeDetection *shapeDetection = nullptr);
 
             /**
              * Destructor
@@ -79,6 +85,11 @@ namespace Companion {
              * Matching algorithm.
              */
             Companion::Algorithm::Matching *matchingAlgo;
+
+			/**
+			 * Shape detection algorithm.
+			 */
+			Companion::Algorithm::ShapeDetection *shapeDetection;
         };
 
     }

@@ -18,26 +18,32 @@
 
 #include "Util.h"
 
-bool Companion::Util::isImageLoaded(cv::Mat &img) {
+bool Companion::Util::isImageLoaded(cv::Mat &img) 
+{
     return !img.empty();
 }
 
-void Companion::Util::resizeImage(cv::Mat &img, SCALING scaling) {
+void Companion::Util::resizeImage(cv::Mat &img, SCALING scaling) 
+{
     cv::Point size = getScaling(scaling);
     cv::resize(img, img, cv::Size(size.x, size.y), cv::INTER_AREA);
 }
 
-void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight) {
+void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight) 
+{
     point.x = (int)(((float)point.x / (float)cWidth) * nWidth);
     point.y = (int)(((float)point.y / (float)cHeight) * nHeight);
 }
 
-bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance) {
+bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance) 
+{
     return (std::abs(origin.x - point.x) >= distance) || (std::abs(origin.y - point.y) >= distance);
 }
 
-void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat) {
-    switch (colorFormat) {
+void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat) 
+{
+    switch (colorFormat) 
+	{
         case Companion::ColorFormat::RGB:
             cv::cvtColor(src, dst, cv::ColorConversionCodes::COLOR_BGR2RGB);
             break;
@@ -56,9 +62,11 @@ void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorF
     }
 }
 
-cv::Point Companion::Util::getScaling(SCALING scaling) {
+cv::Point Companion::Util::getScaling(SCALING scaling) 
+{
     cv::Point size;
-    switch (scaling) {
+    switch (scaling) 
+	{
         case Companion::SCALING::SCALE_2048x1152:
             size.x = 2048;
             size.y = 1152;

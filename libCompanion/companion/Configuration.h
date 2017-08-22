@@ -28,14 +28,16 @@
 #include <companion/processing/ImageProcessing.h>
 #include <companion/util/Definitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
     /**
      * Companion configuration class to setup an computer vision usage like feature matching.
      *
      * @author Andreas Sekulski
      */
-    class COMP_EXPORTS Configuration {
+    class COMP_EXPORTS Configuration 
+	{
 
     public:
 
@@ -218,9 +220,7 @@ namespace Companion {
          * Color format of the image in the result callback.
          */
         Companion::ColorFormat colorFormat;
-
     };
-
 }
 
 #endif //COMPANION_COMPANION_H

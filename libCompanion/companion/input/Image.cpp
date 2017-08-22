@@ -18,21 +18,24 @@
 
 #include "Image.h"
 
-Companion::Input::Image::Image(int maxImages) : maxImages(maxImages) {
+Companion::Input::Image::Image(int maxImages) : maxImages(maxImages) 
+{
     this->exitStream = false;
     this->exitAfterProcessing = false;
 }
 
-Companion::Input::Image::~Image() {
-}
+Companion::Input::Image::~Image() {}
 
-bool Companion::Input::Image::addImage(std::string imgPath) {
+bool Companion::Input::Image::addImage(std::string imgPath) 
+{
     return addImage(cv::imread(imgPath));
 }
 
-bool Companion::Input::Image::addImage(cv::Mat img) {
+bool Companion::Input::Image::addImage(cv::Mat img) 
+{
 
-    if(!img.empty()) {
+    if(!img.empty()) 
+	{
         // Limit queue size to keep memory low
         std::unique_lock<std::mutex> lk(mx);
         cv.wait(lk, [this] { return images.size() < maxImages; });
@@ -44,21 +47,25 @@ bool Companion::Input::Image::addImage(cv::Mat img) {
     return false;
 }
 
-bool Companion::Input::Image::addImage(int width, int height, int type, uchar* data) {
+bool Companion::Input::Image::addImage(int width, int height, int type, uchar* data) 
+{
     return addImage(cv::Mat(cv::Size(width, height), type, data));
 }
 
-cv::Mat Companion::Input::Image::obtainImage() {
+cv::Mat Companion::Input::Image::obtainImage() 
+{
 
     cv::Mat image;
     std::unique_lock<std::mutex> lk(mx);
-    if(!images.empty()) {
+    if(!images.empty()) 
+	{
         // Get first image from fifo
         image = images.front();
         images.pop();
 
         // Notify image input stream
-        if (images.size() < maxImages) {
+        if (images.size() < maxImages) 
+		{
             cv.notify_one();
         }
     }
@@ -66,15 +73,18 @@ cv::Mat Companion::Input::Image::obtainImage() {
     return image;
 }
 
-bool Companion::Input::Image::isFinished() {
+bool Companion::Input::Image::isFinished() 
+{
     std::unique_lock<std::mutex> lk(mx);
     return exitStream || (exitAfterProcessing && images.empty());
 }
 
-void Companion::Input::Image::finish() {
+void Companion::Input::Image::finish() 
+{
     exitStream = true;
 }
 
-void Companion::Input::Image::finishAfterProcessing() {
+void Companion::Input::Image::finishAfterProcessing() 
+{
     exitAfterProcessing = true;
 }

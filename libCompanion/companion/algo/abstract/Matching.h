@@ -25,15 +25,18 @@
 #include <companion/draw/Frame.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Algorithm {
+    namespace Algorithm 
+	{
 
         /**
          * Abstract matching class implementation for all default matching algorithms like feature matching or template matching.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Matching : public ImageRecognition {
+        class COMP_EXPORTS Matching : public ImageRecognition 
+		{
 
         public:
 
@@ -41,10 +44,12 @@ namespace Companion {
 			 * Feature matching algorithm implementation to search in an scene model this given object model.
 			 * @param sceneModel Scene model to verify for matching.
 			 * @param objectModel Object model to search in scene.
+			 * @param roi A region of interest to detect for searched for object if nullptr not used.
 			 * @return An result model if an object is detected otherwise nullptr.
 			 */
 			virtual Companion::Model::Result* executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
-													   Model::Processing::FeatureMatchingModel *objectModel) = 0;
+															   Model::Processing::FeatureMatchingModel *objectModel,
+															   Companion::Draw::Frame *roi) = 0;
 
             /**
              * Indicator if this algorithm use cuda.

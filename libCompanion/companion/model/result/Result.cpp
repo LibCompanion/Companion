@@ -18,25 +18,26 @@
 
 #include "Result.h"
 
-Companion::Model::Result::Result(int scoring, int id, Companion::Draw::Drawable *model) : scoring(
-        scoring), id(id), model(model) {}
-
-Companion::Model::Result::~Result() {
-
+Companion::Model::Result::Result(int scoring, int id, Companion::Draw::Drawable *model)
+{
+	this->scoring = scoring;
+	this->id = id;
+	this->model = model;
 }
 
-int Companion::Model::Result::getScoring() const {
+Companion::Model::Result::~Result() {}
+
+int Companion::Model::Result::getScoring() const 
+{
     return scoring;
 }
 
-Companion::Draw::Drawable *Companion::Model::Result::getModel() const {
+Companion::Draw::Drawable *Companion::Model::Result::getModel() const 
+{
     return model;
 }
 
-int Companion::Model::Result::getId() const {
+int Companion::Model::Result::getId() const 
+{
     return id;
 }
-
-
-
-

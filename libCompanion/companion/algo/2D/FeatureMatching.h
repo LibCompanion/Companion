@@ -24,20 +24,23 @@
 #include <companion/model/result/Result.h>
 #include <companion/util/CompanionError.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Algorithm {
+    namespace Algorithm 
+	{
 
         /**
          * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS FeatureMatching : public Matching {
+        class COMP_EXPORTS FeatureMatching : public Matching 
+		{
 
         public:
 
             /**
-             * Constructor to create an CPU feature matching algorithm.
+             * Constructor to create an CPU based feature matching algorithm.
              *
              * Following feature matching can be used for example.
              * Detector   : BRISK, ORB, MSER, FastFeatureDetector, AgastFeatureDetector, GFTTDetector, SimpleBlobDetector, KAZE, AKAZE.
@@ -69,7 +72,6 @@ namespace Companion {
                             int ransacMaxIters = 500,
                             int findHomographyMethod = cv::RANSAC);
 
-            // Only build if cuda should be used.
             #if Companion_USE_CUDA
             /**
              * Constructor to create an cuda based feature matching.
@@ -91,85 +93,21 @@ namespace Companion {
                             int findHomographyMethod = cv::RANSAC);
             #endif
 
-            #if Companion_DEBUG
-            void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
-                                    cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
-                                    std::vector<cv::DMatch>& goodMatches, std::string windowName);
-            #endif
-
             /**
              * Default destructor.
              */
             virtual ~FeatureMatching();
 
-            /**
-             * Ratio test implementation to improve results from matching to obtain only good results. <br>
-             * Paper -> Neighbourhoods comparison - <a href="http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20"> Paper </a>
-             * @param matches Matches from feature matching.
-             * @param good_matches Vector to store good matches.
-             * @param ratio Ratio which matches are good enough.
-             */
-            void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
-                            std::vector<cv::DMatch> &good_matches,
-                            float ratio);
-
-            /**
-             * Filter to obtain only good feature point which matches.
-             * @param good_matches Good matches to store.
-             * @param keypoints_object Keypoints from object.
-             * @param keypoints_scene Keypoints from scene.
-             * @param feature_points_object Feature points from object.
-             * @param feature_points_scene Feature points from scene.
-             */
-            void obtainKeypointsFromGoodMatches(std::vector<cv::DMatch> &good_matches,
-                                                std::vector<cv::KeyPoint> &keypoints_object,
-                                                std::vector<cv::KeyPoint> &keypoints_scene,
-                                                std::vector<cv::Point2f> &feature_points_object,
-                                                std::vector<cv::Point2f> &feature_points_scene);
-
-            /**
-             * Calculates area position from detected object in scene.
-             * @param homography Homography to find objects position.
-             * @param sceneImage Scene image to detec object image.
-             * @param objectImage Object image to detect in scene.
-             * @param sModel Feature matching model from scene.
-             * @param cModel Feature matching model frome object.
-             * @return An drawable class which contains positionion from object in scene image.
-             */
-            Draw::Drawable* calculateArea(cv::Mat &homography,
-                                          cv::Mat &sceneImage,
-                                          cv::Mat &objectImage,
-                                          Model::Processing::FeatureMatchingModel *sModel,
-                                          Model::Processing::FeatureMatchingModel *cModel);
-
-            /**
-             * Obtain from given feature matching an result if object was detecet in image or not.
-             * @param sceneImage Scene image to detect object.
-             * @param objectImage Object image to detect in scene.
-             * @param good_matches Vector which contains good matches from object and scene.
-             * @param keypoints_object Keypoints from object.
-             * @param keypoints_scene Keypoints from scene.
-             * @param sModel Scene feature matching model.
-             * @param cModel Object feature matching model.
-             * @return <b>nullptr</b> if object is not in scene detected otherwise an Drawable class which contains
-             *         position from detected objekt.
-             */
-            Draw::Drawable* obtainMatchingResult(cv::Mat &sceneImage,
-                                                 cv::Mat &objectImage,
-                                                 std::vector<cv::DMatch> &good_matches,
-                                                 std::vector<cv::KeyPoint> &keypoints_object,
-                                                 std::vector<cv::KeyPoint> &keypoints_scene,
-                                                 Model::Processing::FeatureMatchingModel *sModel,
-                                                 Model::Processing::FeatureMatchingModel *cModel);
-
 			/**
 			* Feature matching algorithm implementation to search in an scene model this given object model.
 			* @param sceneModel Scene model to verify for matching.
 			* @param objectModel Object model to search in scene.
+			* @param roi A region of interest to detect for searched for object if nullptr not used.
 			* @return An result model if an object is detected otherwise nullptr.
 			*/
 			Companion::Model::Result* executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
-													   Model::Processing::FeatureMatchingModel *objectModel);
+													   Model::Processing::FeatureMatchingModel *objectModel,
+													   Companion::Draw::Frame *roi);
 
             /**
              * Indicator if this algorithm use cuda.
@@ -190,7 +128,7 @@ namespace Companion {
             int countMatches = 40;
 
             /**
-             * Indicator to use IRA algorithm.
+             * Indicator to used IRA algorithm.
              */
             bool useIRA = false;
 
@@ -245,6 +183,94 @@ namespace Companion {
              * Cuda feature matching algorithm.
              */
             cv::Ptr<cv::Feature2D> cudaFeatureMatching;
+
+
+
+			Companion::Model::Result* repeatAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
+													  Model::Processing::FeatureMatchingModel *objectModel,
+													  Companion::Draw::Frame *roi,
+													  bool isIRAUsed,
+													  Companion::Algorithm::IRA* ira,
+													  bool isROIUsed);
+
+
+
+			/**
+			* Ratio test implementation to improve results from matching to obtain only good results. <br>
+			* Paper -> Neighbourhoods comparison - <a href="http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20"> Paper </a>
+			* @param matches Matches from feature matching.
+			* @param good_matches Vector to store good matches.
+			* @param ratio Ratio which matches are good enough.
+			*/
+			void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
+				std::vector<cv::DMatch> &good_matches,
+				float ratio);
+
+			/**
+			* Filter to obtain only good feature point which matches.
+			* @param good_matches Good matches to store.
+			* @param keypoints_object Keypoints from object.
+			* @param keypoints_scene Keypoints from scene.
+			* @param feature_points_object Feature points from object.
+			* @param feature_points_scene Feature points from scene.
+			*/
+			void obtainKeypointsFromGoodMatches(std::vector<cv::DMatch> &good_matches,
+				std::vector<cv::KeyPoint> &keypoints_object,
+				std::vector<cv::KeyPoint> &keypoints_scene,
+				std::vector<cv::Point2f> &feature_points_object,
+				std::vector<cv::Point2f> &feature_points_scene);
+
+			/**
+			* Calculates area position from detected object in scene.
+			* @param homography Homography to find objects position.
+			* @param sceneImage Scene image to detec object image.
+			* @param objectImage Object image to detect in scene.
+			* @param sModel Feature matching model from scene.
+			* @param cModel Feature matching model frome object.
+
+
+
+			* @return An drawable class which contains positionion from object in scene image.
+			*/
+			Draw::Drawable* calculateArea(cv::Mat &homography,
+				cv::Mat &sceneImage,
+				cv::Mat &objectImage,
+				Model::Processing::FeatureMatchingModel *sModel,
+				Model::Processing::FeatureMatchingModel *cModel,
+				bool isIRAUsed,
+				bool isROIUsed,
+				Companion::Draw::Frame *roi);
+
+			/**
+			* Obtain from given feature matching an result if object was detecet in image or not.
+			* @param sceneImage Scene image to detect object.
+			* @param objectImage Object image to detect in scene.
+			* @param good_matches Vector which contains good matches from object and scene.
+			* @param keypoints_object Keypoints from object.
+			* @param keypoints_scene Keypoints from scene.
+			* @param sModel Scene feature matching model.
+			* @param cModel Object feature matching model.
+
+
+			* @return <b>nullptr</b> if object is not in scene detected otherwise an Drawable class which contains
+			*         position from detected objekt.
+			*/
+			Draw::Drawable* obtainMatchingResult(cv::Mat &sceneImage,
+				cv::Mat &objectImage,
+				std::vector<cv::DMatch> &good_matches,
+				std::vector<cv::KeyPoint> &keypoints_object,
+				std::vector<cv::KeyPoint> &keypoints_scene,
+				Model::Processing::FeatureMatchingModel *sModel,
+				Model::Processing::FeatureMatchingModel *cModel,
+				bool isIRAUsed,
+				bool isROIUsed,
+				Companion::Draw::Frame *roi);
+
+			#if Companion_DEBUG
+			void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
+				cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
+				std::vector<cv::DMatch>& goodMatches, std::string windowName);
+			#endif
         };
     }
 }

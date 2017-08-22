@@ -24,17 +24,21 @@
 
 #include "ImageRecognitionModel.h"
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Model {
+    namespace Model 
+	{
 
-        namespace Processing {
+        namespace Processing 
+		{
 
             /**
              * Comparison data model to store search results from an feature matching algo.
              * @author Andreas Sekulski
              */
-            class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel {
+            class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel 
+			{
 
             public:
 

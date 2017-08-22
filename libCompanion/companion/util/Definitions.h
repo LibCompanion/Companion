@@ -21,8 +21,8 @@
 
 #include <companion/model/result/Result.h>
 
-namespace Companion {
-
+namespace Companion 
+{
     /**
      * Callback result definition.
      */
@@ -37,7 +37,6 @@ namespace Companion {
      * Default error callback function declaration to obtain error results from companion.
      */
     #define ERROR_CALLBACK void(Companion::Error::Code)
-
 }
 
 #endif //COMPANION_DEFINITIONS_H

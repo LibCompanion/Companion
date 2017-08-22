@@ -21,15 +21,18 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Algorithm {
+    namespace Algorithm 
+	{
 
         /**
          * Image recognition abstract class to implement specific image recognition algorithms.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS ImageRecognition {
+        class COMP_EXPORTS ImageRecognition 
+		{
 
         public:
 

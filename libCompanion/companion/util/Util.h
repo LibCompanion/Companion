@@ -24,12 +24,14 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
     /**
      * Enumeration class for color formats.
      */
-    enum class COMP_EXPORTS ColorFormat {
+    enum class COMP_EXPORTS ColorFormat 
+	{
         RGB,
         RGBA,
         BGR,
@@ -40,7 +42,8 @@ namespace Companion {
     /**
      * Enumeration class for scaling.
      */
-    enum class COMP_EXPORTS SCALING {
+    enum class COMP_EXPORTS SCALING 
+	{
         SCALE_2048x1152,
         SCALE_1920x1080,
         SCALE_1600x900,
@@ -60,7 +63,8 @@ namespace Companion {
      * Utility class for opencv.
      * @author Andreas Sekulksi
      */
-    class COMP_EXPORTS Util {
+    class COMP_EXPORTS Util 
+	{
 
     public:
 

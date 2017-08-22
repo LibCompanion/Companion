@@ -26,15 +26,18 @@
 #include <companion/util/CompanionError.h>
 #include <opencv2/imgproc.hpp>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Algorithm {
+    namespace Algorithm 
+	{
 
         /**
          * Shape detection implementation to detect region of interest.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS ShapeDetection : public ImageRecognition {
+        class COMP_EXPORTS ShapeDetection : public ImageRecognition 
+		{
 
             public:
 

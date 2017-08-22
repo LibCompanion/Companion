@@ -20,47 +20,79 @@
 
 Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
                                                         Companion::Algorithm::Matching *matchingAlgo,
-                                                        Companion::SCALING scaling) {
+                                                        Companion::SCALING scaling,
+														Companion::Algorithm::ShapeDetection *shapeDetection) 
+{
     this->companion = companion;
     this->matchingAlgo = matchingAlgo;
     this->scaling = scaling;
+	this->shapeDetection = shapeDetection;
 }
 
-Companion::Processing::ObjectDetection::~ObjectDetection() {
+Companion::Processing::ObjectDetection::~ObjectDetection() 
+{
     
 }
 
-CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) {
+CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame) 
+{
 
+	Companion::Model::Result* result = nullptr;
     Model::Processing::FeatureMatchingModel* scene;
 	CALLBACK_RESULT objects;
     std::vector<Model::Processing::ImageRecognitionModel*> models;
+	std::vector<Companion::Draw::Frame*> rois;
+	int oldX, oldY, index;
 
-    if (!frame.empty()) {
+    if (!frame.empty()) 
+	{
         scene = new Model::Processing::FeatureMatchingModel();
 		Model::Processing::FeatureMatchingModel* objectModel;
         models = companion->getModels();
 
-        int oldX = frame.cols;
-        int oldY = frame.rows;
+        oldX = frame.cols;
+        oldY = frame.rows;
 
         // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
         Util::resizeImage(frame, this->scaling);
         scene->setImage(frame);
 
-        for(unsigned long x = 0; x < models.size(); x++) {
+		if (shapeDetection != nullptr)
+		{
+			// If shape detection should be used obtain all posible rois from frame.
+			rois = shapeDetection->executeAlgorithm(scene->getImage());
+		}
+
+        for(unsigned long x = 0; x < models.size(); x++) 
+		{
 
 			objectModel = dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x));
-			if (!objectModel) {
+			if (!objectModel) 
+			{
 				// If wrong model types are used
 				throw Companion::Error::Code::wrong_model_type;
 			}
 
-			Companion::Model::Result* result = matchingAlgo->executeAlgorithm(scene, objectModel);
+			if (rois.size() == 0)
+			{
+				// If rois not found or used
+				result = matchingAlgo->executeAlgorithm(scene, objectModel, nullptr);
+			}
+			else
+			{
+				index = 0;
+				// If rois found
+				while (index < rois.size()) // Search only so long if a object was detected or all rois are checked.
+				{
+					result = matchingAlgo->executeAlgorithm(scene, objectModel, rois.at(index));
+					index++;
+				}
+			}
 
 			// Put in method
-			if (result != nullptr) {
+			if (result != nullptr) 
+			{
 				// Create old image size
 				result->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
 				// Store detected object and its ID to vector.

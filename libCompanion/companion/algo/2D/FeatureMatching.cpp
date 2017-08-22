@@ -28,7 +28,8 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
         bool useIRA,
         double reprojThreshold,
         int ransacMaxIters,
-        int findHomographyMethod) {
+        int findHomographyMethod) 
+{
 
     this->detector = detector;
     this->extractor = extractor;
@@ -50,7 +51,8 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
         int countMatches,
         double reprojThreshold,
         int ransacMaxIters,
-        int findHomographyMethod) {
+        int findHomographyMethod) 
+{
 
     this->cudaFeatureMatching = cudaFeatureMatching;
     this->cornerDistance = cornerDistance;
@@ -67,7 +69,9 @@ Companion::Algorithm::FeatureMatching::~FeatureMatching() {}
 
 Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorithm(
 	Model::Processing::FeatureMatchingModel *sceneModel, 
-	Model::Processing::FeatureMatchingModel *objectModel) {
+	Model::Processing::FeatureMatchingModel *objectModel,
+	Companion::Draw::Frame *roi)
+{
 
     // Set of variables for feature matching.
     cv::Mat sceneImage, objectImage;
@@ -78,7 +82,8 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     Companion::Model::Result *result = nullptr;
     Companion::Draw::Drawable *drawable = nullptr;
     bool isIRAUsed = false;
-    IRA* ira;
+	bool isROIUsed = false;
+    Companion::Algorithm::IRA* ira;
 
     // Clear all lists from last run.
     matches.clear();
@@ -91,7 +96,8 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 	ira = objectModel->getIra();  // Get IRA from object model
 
 	// Check if images are loaded...
-    if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage)) {
+    if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage)) 
+	{
         throw Companion::Error::Code::image_not_found;
     }
 
@@ -102,7 +108,8 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     // --------------------------------------------------
 
     // ------ IRA scene handling. Currently works only for CPU usage ------
-    if (useIRA && ira->isObjectDetected()) { // IRA cut out handling if ira should be used and object was detected.
+    if (useIRA && ira->isObjectDetected()) // IRA USED & OBJECT DETECTED
+	{ 
         // Cut out scene from last detected object and set this as new scene to check.
         sceneImage = cv::Mat(sceneImage, ira->getLastObjectPosition());
 
@@ -110,18 +117,39 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
         detector->detect(sceneImage, keypointsScene);
         // Calculate descriptors from cut scene (feature vectors)
         extractor->compute(sceneImage, keypointsScene, descriptorsScene);
+
         isIRAUsed = true;
-    } else if(useIRA && sceneModel->keypointsCalculated()) { // If IRA is used and keypoints from scene already calculated.
+    } 
+	else if (useIRA && roi != nullptr) // IRA USED & OBJECT NOT DETECTED & ROI EXISTS
+	{
+		// Get ROI position
+		cv::Rect roiObject(roi->getTopLeft(), roi->getBottomRight());
+
+		// Cut out scene from last detected object and set this as new scene to check.
+		sceneImage = cv::Mat(sceneImage, roiObject);
+
+		// Detect keypoints from cut scene
+		detector->detect(sceneImage, keypointsScene);
+		// Calculate descriptors from cut scene (feature vectors)
+		extractor->compute(sceneImage, keypointsScene, descriptorsScene);
+
+		isROIUsed = true;
+	}
+	else if(useIRA && sceneModel->keypointsCalculated()) // IRA USED & OBJECT NOT DETECTED & SCENE KEYPOINTS CALCULATED
+	{ 
         keypointsScene = sceneModel->getKeypoints();
         descriptorsScene = sceneModel->getDescriptors();
-    } else if(!cudaUsed) { // If IRA is not used or keypoints from scene are not calculated yet.
+    } 
+	else if(!cudaUsed) // IRA NOT USED & OBJECT NOT DETECTED & SCENE KEYPOINTS NOT CALCULATED & NOT CUDA USAGE
+	{ 
 		sceneModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints
         keypointsScene = sceneModel->getKeypoints();
         descriptorsScene = sceneModel->getDescriptors();
     }
 
     // Check if object has calculated keypoints and descriptors and CUDA is not used.
-    if(!objectModel->keypointsCalculated() && !cudaUsed) {
+    if(!objectModel->keypointsCalculated() && !cudaUsed) 
+	{
 		objectModel->calculateKeyPointsAndDescriptors(detector, extractor); // Calculate keypoints from model.
     }
 
@@ -137,12 +165,14 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
     // Feature matching algorithm
     // --------------------------------------------------
     // If object and scene descriptor and keypoints exists..
-    if (!cudaUsed && !descriptorsObject.empty() && !descriptorsScene.empty() && keypointsObject.size() > 0 && keypointsScene.size() > 0) {
+    if (!cudaUsed && !descriptorsObject.empty() && !descriptorsScene.empty() && keypointsObject.size() > 0 && keypointsScene.size() > 0) 
+	{
 
         // ------ CPU USAGE ------
 
         // If matching type is flan based, scene and object must be in CV_32F format.
-        if (matcherType == cv::DescriptorMatcher::FLANNBASED) {
+        if (matcherType == cv::DescriptorMatcher::FLANNBASED) 
+		{
             descriptorsScene.convertTo(descriptorsScene, CV_32F);
             descriptorsObject.convertTo(descriptorsObject, CV_32F);
         }
@@ -164,38 +194,33 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
                                         keypointsObject,
                                         keypointsScene,
                                         sceneModel,
-                                        objectModel);
+                                        objectModel,
+										isIRAUsed,
+										isROIUsed,
+										roi);
 
-        if (drawable != nullptr) {
+        if (drawable != nullptr) 
+		{
             // TODO := SCORING CALCULATION
             // Object found
             result = new Companion::Model::Result(100, objectModel->getID(), drawable);
             sceneImage.release();
             objectImage.release();
-        } else {
-            // If result is not good enough and IRA was used.
-            if (isIRAUsed) {
-
-#if Companion_DEBUG
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
-#endif
-
-                sceneImage.release();
-                objectImage.release();
-                ira->clear(); // Clear last detected object position.
-                return executeAlgorithm(sceneModel, objectModel); // Repeat algorithm to check original scene.
-            } else {
-#if Companion_DEBUG
-                showFeatureMatches(objectImage, keypointsObject, sceneImage, keypointsScene, goodMatches, "FM_NO_RESULT");
-#endif
-            }
+        } 
+		else 
+		{
+            // If result is not good enough.
+			sceneImage.release();
+			objectImage.release();
+			repeatAlgorithm(sceneModel, objectModel, roi, isIRAUsed, ira, isROIUsed);
         }
 
-    } else if(cudaUsed) {
-
+    } 
 #if Companion_USE_CUDA
-
-        if(cv::cuda::getCudaEnabledDeviceCount() == 0) {
+	else if(cudaUsed) 
+	{
+        if(cv::cuda::getCudaEnabledDeviceCount() == 0) 
+		{
             throw Companion::Error::Code::no_cuda_device;
         }
 
@@ -224,9 +249,13 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
                                         keypointsObject,
                                         keypointsScene,
                                         sceneModel,
-                                        objectModel);
+                                        objectModel,
+										isIRAUsed,
+										isROIUsed,
+										roi);
 
-        if(drawable != nullptr) {
+        if(drawable != nullptr) 
+		{
             // TODO := SCORING CALCULATION
             // Object found
             result = new Companion::Model::Result(100, objectModel->getID(), drawable);
@@ -235,28 +264,52 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
         }
 #endif
 
-    } else {
+    } 
+	else 
+	{
         // If results are not good enough and empty for keypoints and descriptors.
-        if(isIRAUsed) {
-            sceneImage.release();
-            objectImage.release();
-            ira->clear(); // Clear last detected object position.
-            return executeAlgorithm(sceneModel, objectModel); // Repeat algorithm to check original scene.
-        }
+		sceneImage.release();
+		objectImage.release();
+		repeatAlgorithm(sceneModel, objectModel, roi, isIRAUsed, ira, isROIUsed);
     }
 
     return result;
 }
 
-bool Companion::Algorithm::FeatureMatching::isCuda() {
+bool Companion::Algorithm::FeatureMatching::isCuda() 
+{
     return cudaUsed;
+}
+
+Companion::Model::Result* Companion::Algorithm::FeatureMatching::repeatAlgorithm(
+	Model::Processing::FeatureMatchingModel *sceneModel,
+	Model::Processing::FeatureMatchingModel *objectModel,
+	Companion::Draw::Frame *roi,
+	bool isIRAUsed,
+	Companion::Algorithm::IRA* ira,
+	bool isROIUsed)
+{
+	if (isIRAUsed)
+	{
+		ira->clear(); // Clear last detected object position.
+		return executeAlgorithm(sceneModel, objectModel, roi); // Repeat algorithm and full scene or roi.
+	}
+	else if (isROIUsed)
+	{
+		return executeAlgorithm(sceneModel, objectModel, nullptr); // Repeat algorithm and check full scene.
+	}
+
+	return nullptr;
 }
 
 void Companion::Algorithm::FeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
                                                 std::vector<cv::DMatch> &good_matches,
-                                                float ratio) {
-    for (int i = 0; i < matches.size(); ++i) {
-        if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance)) {
+                                                float ratio) 
+{
+    for (int i = 0; i < matches.size(); ++i) 
+	{
+        if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance)) 
+		{
             good_matches.push_back(matches[i][0]);
         }
     }
@@ -274,11 +327,13 @@ void Companion::Algorithm::FeatureMatching::obtainKeypointsFromGoodMatches(
     int queryIdx;
 
     // Get the keypoints from the good matches
-    for (int i = 0; i < good_matches.size(); i++) {
+    for (int i = 0; i < good_matches.size(); i++) 
+	{
         trainIdx = good_matches[i].trainIdx;
         queryIdx = good_matches[i].queryIdx;
 
-        if ((trainIdx > 0 && keypoints_scene.size() > trainIdx) && (queryIdx > 0 && keypoints_object.size() > queryIdx)) {
+        if ((trainIdx > 0 && keypoints_scene.size() > trainIdx) && (queryIdx > 0 && keypoints_object.size() > queryIdx)) 
+		{
             feature_points_scene.push_back(keypoints_scene[trainIdx].pt);
             feature_points_object.push_back(keypoints_object[queryIdx].pt);
         }
@@ -293,7 +348,11 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::obtainMatching
         std::vector<cv::KeyPoint> &keypoints_object,
         std::vector<cv::KeyPoint> &keypoints_scene,
         Model::Processing::FeatureMatchingModel *sModel,
-        Model::Processing::FeatureMatchingModel *cModel) {
+        Model::Processing::FeatureMatchingModel *cModel,
+		bool isIRAUsed,
+		bool isROIUsed,
+		Companion::Draw::Frame *roi)
+{
 
     Companion::Draw::Drawable *drawable = nullptr;
     cv::Mat homography;
@@ -303,7 +362,8 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::obtainMatching
     feature_points_scene.clear();
 
     // Count of good matches if results are good enough.
-    if (good_matches.size() > countMatches) {
+    if (good_matches.size() > countMatches) 
+	{
 
         obtainKeypointsFromGoodMatches(good_matches,
                                        keypoints_object,
@@ -312,11 +372,18 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::obtainMatching
                                        feature_points_scene);
 
         // Find Homography if only features points are filled.
-        if(!feature_points_object.empty() && !feature_points_scene.empty()) {
-            homography = cv::findHomography(feature_points_object, feature_points_scene, this->findHomographyMethod,
-                                            this->reprojThreshold, cv::noArray(), this->ransacMaxIters);
-            if (!homography.empty()) {
-                drawable = calculateArea(homography, sceneImage, objectImage, sModel, cModel);
+        if(!feature_points_object.empty() && !feature_points_scene.empty()) 
+		{
+            homography = cv::findHomography(feature_points_object, 
+											feature_points_scene, 
+											this->findHomographyMethod,
+                                            this->reprojThreshold, 
+											cv::noArray(), 
+											this->ransacMaxIters);
+
+            if (!homography.empty()) 
+			{
+                drawable = calculateArea(homography, sceneImage, objectImage, sModel, cModel, isIRAUsed, isROIUsed, roi);
             }
         }
 
@@ -330,7 +397,10 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
         cv::Mat &sceneImage,
         cv::Mat &objectImage,
         Model::Processing::FeatureMatchingModel *sModel,
-        Model::Processing::FeatureMatchingModel *cModel) {
+        Model::Processing::FeatureMatchingModel *cModel,
+		bool isIRAUsed,
+		bool isROIUsed,
+		Companion::Draw::Frame *roi) {
 
     Companion::Draw::Frame *frame = nullptr;
     cv::Mat originalImg = sModel->getImage();
@@ -346,15 +416,17 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
     cv::perspectiveTransform(obj_corners, scene_corners, homography);
 
     //-- Draw lines between the corners (the mapped object in the scene - image_2 )
-    cv::Rect lastRect;
+    cv::Rect lastRect = cv::Rect();
     IRA *ira = cModel->getIra();
 
-    // IRA
-    if(useIRA) {
+    if(isIRAUsed) // IRA was used
+	{
         lastRect = ira->getLastObjectPosition();
-    } else {
-        lastRect = cv::Rect();
-    }
+    } 
+	else if(isROIUsed)
+	{
+		lastRect = cv::Rect(roi->getTopLeft(), roi->getBottomRight());
+	}
 
     // Offset is recalculate position from last recognition if exists.
     cv::Point2f offset = cv::Point2f(lastRect.x, lastRect.y);
@@ -374,7 +446,8 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
     float minY = sceneImage.rows;
     float maxY = 0;
 
-    for (cv::Point2f point : scene_corners) {
+    for (cv::Point2f point : scene_corners) 
+	{
         if (point.x < minX) { minX = point.x; }
         if (point.x > maxX) { maxX = point.x; }
         if (point.y < minY) { minY = point.y; }
@@ -389,7 +462,6 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
     cv::Point2f end = cv::Point2f(maxX, maxY) + offset + scale;
 
     // Object area.
-
     cv::Point2f topLeft = scene_corners[0] + offset;
     cv::Point2f topRight = scene_corners[1] + offset;
     cv::Point2f bottomRight = scene_corners[2] + offset;
@@ -401,38 +473,44 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
         Companion::Util::hasDistantPosition(topLeft, bottomLeft, this->cornerDistance) &&
         Companion::Util::hasDistantPosition(topRight, bottomRight, this->cornerDistance) &&
         Companion::Util::hasDistantPosition(topRight, bottomLeft, this->cornerDistance) &&
-        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, this->cornerDistance)) {
-
+        Companion::Util::hasDistantPosition(bottomRight, bottomLeft, this->cornerDistance)) 
+	{
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
     }
 
     // If IRA is used...
-    if(useIRA && frame != nullptr) {
+    if(useIRA && frame != nullptr) 
+	{
 
         // IRA algo stores position from detected object.
         ira->setLastObjectPosition(start.x, start.y, end.x - start.x, end.y - start.y);
         const cv::Rect &lastObjectPosition = ira->getLastObjectPosition();
 
         // Check if start point is set correctly
-        if (lastObjectPosition.x < 0) {
+        if (lastObjectPosition.x < 0) 
+		{
             ira->setX(0);
         }
 
         // Check if width is not oversized
-        if (lastObjectPosition.width + lastObjectPosition.x > originalImg.cols) {
+        if (lastObjectPosition.width + lastObjectPosition.x > originalImg.cols) 
+		{
             ira->setWidth(originalImg.cols - lastObjectPosition.x);
         }
 
-        if (lastObjectPosition.y < 0) {
+        if (lastObjectPosition.y < 0) 
+		{
             ira->setY(0);
         }
 
-        if (lastObjectPosition.height + lastObjectPosition.y > originalImg.rows) {
+        if (lastObjectPosition.height + lastObjectPosition.y > originalImg.rows) 
+		{
             ira->setHeight(originalImg.rows - lastObjectPosition.y);
         }
 
-        if (lastObjectPosition.area() <= 0) {
+        if (lastObjectPosition.area() <= 0) 
+		{
             // Something goes wrong in area clear IRA.
             ira->clear();
         }
@@ -445,11 +523,13 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
 void Companion::Algorithm::FeatureMatching::showFeatureMatches(
                         cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
                         cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
-                        std::vector<cv::DMatch>& goodMatches, std::string windowName) {
+                        std::vector<cv::DMatch>& goodMatches, std::string windowName) 
+{
     // Build only in debug mode for development
     cv::Mat imgMatches;
 
-    if(!objectImg.empty() && !sceneImg.empty()) {
+    if(!objectImg.empty() && !sceneImg.empty()) 
+	{
         cv::drawMatches(objectImg, objectKeypoints, sceneImg, sceneKeypoints,
                         goodMatches, imgMatches, cv::Scalar::all(-1), cv::Scalar::all(-1),
                         std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);

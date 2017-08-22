@@ -22,17 +22,21 @@
 #include <opencv2/core/core.hpp>
 #include <companion/algo/util/IRA.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Model {
+    namespace Model 
+	{
 
-        namespace Processing {
+        namespace Processing 
+		{
 
             /**
              * Default model type for an image recognition implementation class for an scene or object.
              * @author Andreas Sekulski
              */
-            class COMP_EXPORTS ImageRecognitionModel {
+            class COMP_EXPORTS ImageRecognitionModel 
+			{
 
             public:
 

@@ -25,15 +25,18 @@
 #include <opencv2/opencv.hpp>
 #include <companion/util/Util.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Draw {
+    namespace Draw 
+	{
 
         /**
          * Class implementation to draw an single line.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Line : public Drawable {
+        class COMP_EXPORTS Line : public Drawable 
+		{
 
         public:
 

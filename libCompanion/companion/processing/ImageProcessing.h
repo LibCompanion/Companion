@@ -22,16 +22,19 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/Definitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Processing {
+    namespace Processing 
+	{
 
         /**
          * Image processing interface class to create specific image processing jobs to detect objects or regions of interests.
          *
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS ImageProcessing {
+        class COMP_EXPORTS ImageProcessing 
+		{
 
         public:
 

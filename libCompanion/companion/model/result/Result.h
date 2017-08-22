@@ -22,26 +22,50 @@
 #include <string>
 #include <companion/draw/Drawable.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Model {
+    namespace Model 
+	{
 
         /**
          * Result model class to store object detection scoring.
          * @author Andreas Sekulski
          */
-        class Result {
+        class Result 
+		{
 
         public:
 
+            /**
+             *
+             * @param scoring
+             * @param id
+             * @param model
+             */
             Result(int scoring, int id, Draw::Drawable *model);
 
+            /**
+             * Destructor
+             */
             virtual ~Result();
 
+            /**
+             * Return scoring value between 0 to 100 percent. 100 percent total match 0 percent no match.
+             * @return Scoring value which contains with detected object in frame.
+             */
             int getScoring() const;
 
+            /**
+             * Get identificator from object.
+             * @return Identificator from detected object.
+             */
             int getId() const;
 
+            /**
+             * Drawable model to get position from detected object.
+             * @return Drawable model from detected object.
+             */
             Draw::Drawable *getModel() const;
 
         private:

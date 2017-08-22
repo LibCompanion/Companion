@@ -25,15 +25,18 @@
 
 #include "Stream.h"
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Input {
+    namespace Input 
+	{
 
         /**
          * Video streaming OpenCV realization to obtain images from an video or livestream.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Video : public Stream {
+        class COMP_EXPORTS Video : public Stream 
+		{
 
         public:
 

@@ -30,15 +30,18 @@
 #include <companion/util/Util.h>
 #include <companion/util/Definitions.h>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Thread {
+    namespace Thread 
+	{
 
         /**
          * Stream worker class implementation to produce and consume images from an video source.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS StreamWorker {
+        class COMP_EXPORTS StreamWorker 
+		{
 
         public:
 

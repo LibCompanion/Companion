@@ -24,15 +24,18 @@
 
 #include <opencv2/core/core.hpp>
 
-namespace Companion {
+namespace Companion 
+{
 
-    namespace Draw {
+    namespace Draw 
+	{
 
         /**
          * Implementation class to draw multiple lines.
          * @author Andreas Sekulski
          */
-        class COMP_EXPORTS Frame : public Drawable {
+        class COMP_EXPORTS Frame : public Drawable 
+		{
 
         public:
 

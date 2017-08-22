@@ -18,45 +18,59 @@
 
 #include "StreamWorker.h"
 
-Companion::Thread::StreamWorker::StreamWorker(int buffer, Companion::ColorFormat colorFormat) {
+Companion::Thread::StreamWorker::StreamWorker(int buffer, Companion::ColorFormat colorFormat) 
+{
     this->finished = false;
     this->colorFormat = colorFormat;
     this->buffer = buffer;
-    if(this->buffer <= 0) {
+    if(this->buffer <= 0) 
+	{
         this->buffer = 1;
     }
 }
 
 void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
                                               int skipFrame,
-                                              std::function<ERROR_CALLBACK> errorCallback) {
+                                              std::function<ERROR_CALLBACK> errorCallback) 
+{
 
     int skipFrameNr = 0;
+	cv::Mat frame;
 
-    try {
+    try 
+	{
+        frame = stream->obtainImage();
 
-        cv::Mat frame = stream->obtainImage();
+        while (!stream->isFinished()) 
+		{
 
-        while (!stream->isFinished()) {
-
-            if(!frame.empty()) {
+            if(!frame.empty()) 
+			{
                 // If skip frame is not used...
-                if(skipFrame <= 0 && storeFrame(frame)) {
+                if(skipFrame <= 0 && storeFrame(frame)) 
+				{
                     // obtain next frame to store.
                     frame = stream->obtainImage();
-                } else if(skipFrame > 0) {
+                } 
+				else if(skipFrame > 0) 
+				{
                     // ... check if skip frame nr is reached and If frame was stored
-                    if(skipFrameNr == skipFrame && storeFrame(frame)) {
+                    if(skipFrameNr == skipFrame && storeFrame(frame)) 
+					{
                         // obtain next frame to store.
                         frame = stream->obtainImage();
                         skipFrameNr = 0;
-                    } else if(skipFrameNr != skipFrame) {
+                    } 
+					else if(skipFrameNr != skipFrame) 
+					{
                         frame.release();
                         frame = stream->obtainImage();
                         skipFrameNr++;
                     }
                 }
-            } else {
+            } 
+			else 
+			{
                 // If frames are empty loop.
                 frame = stream->obtainImage();
             }
@@ -66,7 +80,9 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
         finished = true;
         cv.notify_all();
 
-    } catch (Companion::Error::Code error) {
+    } 
+	catch (Companion::Error::Code error) 
+	{
         errorCallback(error);
     }
 }
@@ -74,18 +90,22 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 void Companion::Thread::StreamWorker::consume(
         Companion::Processing::ImageProcessing *processing,
         std::function<ERROR_CALLBACK> errorCallback,
-        std::function<SUCCESS_CALLBACK> callback) {
+        std::function<SUCCESS_CALLBACK> callback) 
+{
 
     cv::Mat frame;
     cv::Mat resultBGR;
 
-    try {
-        while (!finished) {
+    try 
+	{
+        while (!finished) 
+		{
 
             std::unique_lock<std::mutex> lk(mx);
 			cv.wait(lk, [this] {return finished || !queue.empty(); });
 
-            if(!queue.empty()) {
+            if(!queue.empty()) 
+			{
                 frame = queue.front();
                 queue.pop();
                 Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
@@ -95,18 +115,24 @@ void Companion::Thread::StreamWorker::consume(
             }
 
         }
-    } catch (Companion::Error::Code errorCode) {
+    } 
+	catch (Companion::Error::Code errorCode) 
+	{
         errorCallback(errorCode);
     }
 }
 
-bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) {
+bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame) 
+{
 	std::lock_guard<std::mutex> lk(mx);
-    if(queue.size() >= buffer) {
+    if(queue.size() >= buffer) 
+	{
         // If buffer full try to notify producer and wait current frame and do nothing.
         cv.notify_one();
         return false;
-    } else {
+    } 
+	else 
+	{
         queue.push(frame);
         cv.notify_one();
         return true;
