@@ -21,7 +21,6 @@ if(WIN32)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
 endif()
 
-
 # Configure CMake project
 project(Companion)
 
@@ -32,12 +31,10 @@ else()
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 endif()
 
-
 # Define CMake Flags
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 set(CMAKE_DEBUG_POSTFIX "D")
-
 
 # Define interactive CMake Flags
 option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF)
@@ -51,7 +48,6 @@ endif()
 
 # Define global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 
 # Configure dependencies
 set(OpenCVComponents "core" "imgproc" "imgcodecs" "features2d" "videoio" "calib3d")
