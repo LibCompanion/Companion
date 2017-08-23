@@ -266,6 +266,14 @@ bool Companion::Algorithm::FeatureMatching::isCuda()
 	return cudaUsed;
 }
 
+void Companion::Algorithm::FeatureMatching::calculateKeyPoints(Model::Processing::FeatureMatchingModel *model)
+{
+	if (!isCuda())
+	{
+		model->calculateKeyPointsAndDescriptors(detector, extractor);
+	}
+}
+
 Companion::Model::Result* Companion::Algorithm::FeatureMatching::repeatAlgorithm(
 	Model::Processing::FeatureMatchingModel *sceneModel,
 	Model::Processing::FeatureMatchingModel *objectModel,

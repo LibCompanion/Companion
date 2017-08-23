@@ -112,6 +112,12 @@ namespace Companion
 				Companion::Draw::Frame *roi);
 
 			/**
+			 * Calculate key points for given model.
+			 * @param model Model to calculate keypoints.
+			 */
+			void calculateKeyPoints(Model::Processing::FeatureMatchingModel *model);
+
+			/**
 			 * Indicator if this algorithm use cuda.
 			 * @return True if cuda will be used otherwise false.
 			 */

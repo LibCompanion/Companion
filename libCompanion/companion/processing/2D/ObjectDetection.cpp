@@ -37,15 +37,16 @@ Companion::Processing::ObjectDetection::~ObjectDetection()
 CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 {
 
-	Model::Processing::FeatureMatchingModel* sceneModel;
+	Companion::Algorithm::FeatureMatching *featureMatching;
+	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
 	CALLBACK_RESULT objects;
-	std::vector<Model::Processing::ImageRecognitionModel*> models;
+	std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 	std::vector<Companion::Draw::Frame*> rois;
 	int oldX, oldY;
 
 	if (!frame.empty())
 	{
-		sceneModel = new Model::Processing::FeatureMatchingModel();
+		sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
 		models = companion->getModels();
 
 		oldX = frame.cols;
@@ -55,6 +56,14 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 		// https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
 		Util::resizeImage(frame, this->scaling);
 		sceneModel->setImage(frame);
+
+		featureMatching = dynamic_cast<Companion::Algorithm::FeatureMatching*>(matchingAlgo);
+		if (featureMatching != nullptr)
+		{
+			// Matching algorithm is feature matching.
+			// Pre calculate full image scene model keypoints
+			featureMatching->calculateKeyPoints(sceneModel);
+		}
 
 		if (shapeDetection != nullptr)
 		{
