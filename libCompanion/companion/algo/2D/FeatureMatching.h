@@ -72,7 +72,7 @@ namespace Companion
 				int ransacMaxIters = 500,
 				int findHomographyMethod = cv::RANSAC);
 
-#if Companion_USE_CUDA
+			#if Companion_USE_CUDA
 
 			/**
 			 * Constructor to create an cuda based feature matching.
@@ -93,7 +93,7 @@ namespace Companion
 				int ransacMaxIters = 500,
 				int findHomographyMethod = cv::RANSAC);
 
-#endif
+			#endif
 
 			/**
 			 * Default destructor.
@@ -275,11 +275,11 @@ namespace Companion
 				bool isROIUsed,
 				Companion::Draw::Frame *roi);
 
-#if Companion_DEBUG
+			#if Companion_DEBUG
 			void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
 				cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
 				std::vector<cv::DMatch>& goodMatches, std::string windowName);
-#endif
+			#endif
 		};
 	}
 }

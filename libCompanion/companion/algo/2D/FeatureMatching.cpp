@@ -195,7 +195,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 			isROIUsed,
 			roi);
 	}
-#if Companion_USE_CUDA
+	#if Companion_USE_CUDA
 	else if (cudaUsed)
 	{
 		// ------ Cuda USAGE ------
@@ -233,7 +233,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 			isROIUsed,
 			roi);
 	}
-#endif
+	#endif
 	else
 	{
 		// If results are not good enough and empty for keypoints and descriptors.

@@ -77,7 +77,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 		}
 		else
 		{
-#pragma omp parallel for
+			#pragma omp parallel for
 			for (int x = 0; x < models.size(); x++)
 			{
 				processing(sceneModel,
