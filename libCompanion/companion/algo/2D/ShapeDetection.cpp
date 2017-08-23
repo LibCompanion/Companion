@@ -18,7 +18,7 @@
 
 #include "ShapeDetection.h"
 
-Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, int cannyThreshold, int dilateIteration) 
+Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, int cannyThreshold, int dilateIteration)
 {
 	ShapeDetection::morphKernel = morphKernel;
 	ShapeDetection::erodeKernel = erodeKernel;
@@ -27,12 +27,12 @@ Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Ma
 	ShapeDetection::dilateIteration = dilateIteration;
 }
 
-Companion::Algorithm::ShapeDetection::~ShapeDetection() 
+Companion::Algorithm::ShapeDetection::~ShapeDetection()
 {
 
 }
 
-std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::executeAlgorithm(cv::Mat frame) 
+std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::executeAlgorithm(cv::Mat frame)
 {
 	cv::Point topLeft; // Top left coordinate from rectangl.e
 	cv::Point bottomRight; // Bottom right coordinate from rectangle
@@ -69,7 +69,7 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 	// CV_RETR_EXTERNAL, CV_RETR_LIST, CV_RETR_CCOMP, CV_RETR_TREE
 	findContours(frame, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
-	for (int i = 0; i< contours.size(); i++)
+	for (int i = 0; i < contours.size(); i++)
 	{
 		cv::approxPolyDP(cv::Mat(contours[i]), approx, cv::arcLength(cv::Mat(contours[i]), true) * 0.01, true);
 
@@ -78,10 +78,10 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 		lowestCoordinate = result.size().height;
 		mostRightCoordinate = 0;
 		heighestCoordinate = 0;
-		
-		if ((approx.size() >= 4) && (approx.size() <= 20)) 
+
+		if ((approx.size() >= 4) && (approx.size() <= 20))
 		{
-			for (int i = 0; i < approx.size(); i++) 
+			for (int i = 0; i < approx.size(); i++)
 			{
 				mostLeftCoordinate = (approx.at(i).x < mostLeftCoordinate) ? approx.at(i).x : mostLeftCoordinate;
 				lowestCoordinate = (approx.at(i).y < lowestCoordinate) ? approx.at(i).y : lowestCoordinate;
@@ -94,7 +94,7 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 			diff = bottomRight - topLeft;
 			minDistance = result.size().width / 4.0f;
 
-			if (sqrt(diff.x * diff.x + diff.y * diff.y) > minDistance) 
+			if (sqrt(diff.x * diff.x + diff.y * diff.y) > minDistance)
 			{
 				width = bottomRight.x - topLeft.x;
 				height = bottomRight.y - topLeft.y;
@@ -107,10 +107,10 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 		}
 	}
 
-    return rois;
+	return rois;
 }
 
-bool Companion::Algorithm::ShapeDetection::isCuda() 
+bool Companion::Algorithm::ShapeDetection::isCuda()
 {
-    return false;
+	return false;
 }

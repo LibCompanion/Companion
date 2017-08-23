@@ -18,69 +18,69 @@
 
 #include "Video.h"
 
-Companion::Input::Video::Video(int device) 
+Companion::Input::Video::Video(int device)
 {
 
-    cv::VideoCapture cap(device);
+	cv::VideoCapture cap(device);
 
-    if (!cap.isOpened()) 
+	if (!cap.isOpened())
 	{
-        throw Companion::Error::Code::invalid_video_src;
-    }
+		throw Companion::Error::Code::invalid_video_src;
+	}
 
-    capture = cap;
-    finished = false;
+	capture = cap;
+	finished = false;
 }
 
 
-Companion::Input::Video::Video(std::string url) 
+Companion::Input::Video::Video(std::string url)
 {
 
-    cv::VideoCapture cap(url);
+	cv::VideoCapture cap(url);
 
-    if (!cap.isOpened()) 
+	if (!cap.isOpened())
 	{
-        throw Companion::Error::Code::invalid_video_src;
-    }
+		throw Companion::Error::Code::invalid_video_src;
+	}
 
-    capture = cap;
-    finished = false;
+	capture = cap;
+	finished = false;
 }
 
-Companion::Input::Video::~Video() 
+Companion::Input::Video::~Video()
 {
-    // No need to close capture device because closing will be done from VideoCapture destructor.
+	// No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
-cv::Mat Companion::Input::Video::obtainImage() 
+cv::Mat Companion::Input::Video::obtainImage()
 {
 
-    cv::Mat frame;
+	cv::Mat frame;
 
-    if (!capture.isOpened() || finished) 
+	if (!capture.isOpened() || finished)
 	{
-        finished = true;
-        return frame;
-    }
+		finished = true;
+		return frame;
+	}
 
-    // Obtain image frame.
-    capture >> frame;
+	// Obtain image frame.
+	capture >> frame;
 
-    if (frame.empty()) 
+	if (frame.empty())
 	{
-        // If frame empty video is finished.
-        finished = true;
-    }
+		// If frame empty video is finished.
+		finished = true;
+	}
 
-    return frame;
+	return frame;
 }
 
-bool Companion::Input::Video::isFinished() 
+bool Companion::Input::Video::isFinished()
 {
-    return finished;
+	return finished;
 }
 
-void Companion::Input::Video::finish() 
+void Companion::Input::Video::finish()
 {
-    finished = true;
+	finished = true;
 }

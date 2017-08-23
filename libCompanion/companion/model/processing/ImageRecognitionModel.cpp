@@ -18,44 +18,44 @@
 
 #include "ImageRecognitionModel.h"
 
-Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel() 
+Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel()
 {
-    ira = new Companion::Algorithm::IRA();
+	ira = new Companion::Algorithm::IRA();
 }
 
-Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel(int id, cv::Mat image) 
+Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel(int id, cv::Mat image)
 {
 	this->id = id;
 	this->image = image;
 }
 
-Companion::Model::Processing::ImageRecognitionModel::~ImageRecognitionModel() 
+Companion::Model::Processing::ImageRecognitionModel::~ImageRecognitionModel()
 {
-    image.release();
-    delete ira;
+	image.release();
+	delete ira;
 }
 
-const cv::Mat &Companion::Model::Processing::ImageRecognitionModel::getImage() const 
+const cv::Mat &Companion::Model::Processing::ImageRecognitionModel::getImage() const
 {
-    return image;
+	return image;
 }
 
-void Companion::Model::Processing::ImageRecognitionModel::setImage(const cv::Mat &image) 
+void Companion::Model::Processing::ImageRecognitionModel::setImage(const cv::Mat &image)
 {
-    ImageRecognitionModel::image = image;
+	ImageRecognitionModel::image = image;
 }
 
-Companion::Algorithm::IRA *Companion::Model::Processing::ImageRecognitionModel::getIra() const 
+Companion::Algorithm::IRA *Companion::Model::Processing::ImageRecognitionModel::getIra() const
 {
-    return ira;
+	return ira;
 }
 
-void Companion::Model::Processing::ImageRecognitionModel::setID(int id) 
+void Companion::Model::Processing::ImageRecognitionModel::setID(int id)
 {
-    ImageRecognitionModel::id = id;
+	ImageRecognitionModel::id = id;
 }
 
-const int Companion::Model::Processing::ImageRecognitionModel::getID() const 
+const int Companion::Model::Processing::ImageRecognitionModel::getID() const
 {
-    return id;
+	return id;
 }

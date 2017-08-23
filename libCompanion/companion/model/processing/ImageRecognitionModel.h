@@ -22,92 +22,92 @@
 #include <opencv2/core/core.hpp>
 #include <companion/algo/util/IRA.h>
 
-namespace Companion 
+namespace Companion
 {
 
-    namespace Model 
+	namespace Model
 	{
 
-        namespace Processing 
+		namespace Processing
 		{
 
-            /**
-             * Default model type for an image recognition implementation class for an scene or object.
-             * @author Andreas Sekulski
-             */
-            class COMP_EXPORTS ImageRecognitionModel 
+			/**
+			 * Default model type for an image recognition implementation class for an scene or object.
+			 * @author Andreas Sekulski
+			 */
+			class COMP_EXPORTS ImageRecognitionModel
 			{
 
-            public:
+			public:
 
-                /**
-                 * Creates an default image recognition model class.
-                 */
-                ImageRecognitionModel();
+				/**
+				 * Creates an default image recognition model class.
+				 */
+				ImageRecognitionModel();
 
-                /**
-                 * Create an default image recognition model with a given ID and image.
-                 * @param id ID to set.
-                 * @param image Image to set.
-                 */
-                ImageRecognitionModel(int id, cv::Mat image);
+				/**
+				 * Create an default image recognition model with a given ID and image.
+				 * @param id ID to set.
+				 * @param image Image to set.
+				 */
+				ImageRecognitionModel(int id, cv::Mat image);
 
-                /**
-                 * Destructor.
-                 */
-                virtual ~ImageRecognitionModel();
+				/**
+				 * Destructor.
+				 */
+				virtual ~ImageRecognitionModel();
 
-                /**
-                 * Gets image which is stored, if no image is stored image is empty.
-                 * @return An image if is set otherwise image is empty.
-                 */
-                const cv::Mat &getImage() const;
+				/**
+				 * Gets image which is stored, if no image is stored image is empty.
+				 * @return An image if is set otherwise image is empty.
+				 */
+				const cv::Mat &getImage() const;
 
-                /**
-                 * Sets given image.
-                 * @param image Image to set.
-                 */
-                void setImage(const cv::Mat &image);
+				/**
+				 * Sets given image.
+				 * @param image Image to set.
+				 */
+				void setImage(const cv::Mat &image);
 
-                /**
-                 * Gets IRA class to store last object detection.
-                 * @return IRA class to obtain informations about last object detection.
-                 */
-                Companion::Algorithm::IRA *getIra() const;
+				/**
+				 * Gets IRA class to store last object detection.
+				 * @return IRA class to obtain informations about last object detection.
+				 */
+				Companion::Algorithm::IRA *getIra() const;
 
-                /**
-                 * Sets the ID for this model.
-                 * @param id ID to set.
-                 */
-                void setID(int id);
+				/**
+				 * Sets the ID for this model.
+				 * @param id ID to set.
+				 */
+				void setID(int id);
 
-                /**
-                 * Gets the ID of this model.
-                 * @return  The ID of this model.
-                 */
-                const int getID() const;
+				/**
+				 * Gets the ID of this model.
+				 * @return  The ID of this model.
+				 */
+				const int getID() const;
 
-            protected:
+			protected:
 
-                /**
-                 * The ID of this model.
-                 */
-                int id;
+				/**
+				 * The ID of this model.
+				 */
+				int id;
 
-                /**
-                 * Image to store.
-                 */
-                cv::Mat image;
+				/**
+				 * Image to store.
+				 */
+				cv::Mat image;
 
-                /**
-                 * Image reduction algorithm to store last object detection position.
-                 */
-                Companion::Algorithm::IRA *ira;
+				/**
+				 * Image reduction algorithm to store last object detection position.
+				 */
+				Companion::Algorithm::IRA *ira;
 
-            };
+			};
 
-        }
-    }
+		}
+	}
 
 }
 

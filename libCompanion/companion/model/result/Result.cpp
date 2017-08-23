@@ -27,17 +27,17 @@ Companion::Model::Result::Result(int scoring, int id, Companion::Draw::Drawable 
 
 Companion::Model::Result::~Result() {}
 
-int Companion::Model::Result::getScoring() const 
+int Companion::Model::Result::getScoring() const
 {
-    return scoring;
+	return scoring;
 }
 
-Companion::Draw::Drawable *Companion::Model::Result::getModel() const 
+Companion::Draw::Drawable *Companion::Model::Result::getModel() const
 {
-    return model;
+	return model;
 }
 
-int Companion::Model::Result::getId() const 
+int Companion::Model::Result::getId() const
 {
-    return id;
+	return id;
 }

@@ -26,51 +26,51 @@
 #include <companion/util/CompanionError.h>
 #include <opencv2/imgproc.hpp>
 
-namespace Companion 
+namespace Companion
 {
 
-    namespace Algorithm 
+	namespace Algorithm
 	{
 
-        /**
-         * Shape detection implementation to detect region of interest.
-         * @author Andreas Sekulski
-         */
-        class COMP_EXPORTS ShapeDetection : public ImageRecognition 
+		/**
+		 * Shape detection implementation to detect region of interest.
+		 * @author Andreas Sekulski
+		 */
+		class COMP_EXPORTS ShapeDetection : public ImageRecognition
 		{
 
-            public:
+		public:
 
-				/**
-				 * Shape detection construtor to detect different shapes. Shape detection function used in this order
-				 * dilate(erode(morph(image)))
-				 * @param morphKernel Morphology kernel size.
-				 * @param erodeKernel Erode kernel size.
-				 * @param dilateKernel Dilate kernel size.
-				 * @param cannyThreshold Canny threshold to indicate corners.
-				 * @param dilateIteration Count dilate iterations.
-				 */
-				ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)), 
-							   cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
-							   cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),
-					           int cannyThreshold = 50, 
-					           int dilateIteration = 3);
+			/**
+			 * Shape detection construtor to detect different shapes. Shape detection function used in this order
+			 * dilate(erode(morph(image)))
+			 * @param morphKernel Morphology kernel size.
+			 * @param erodeKernel Erode kernel size.
+			 * @param dilateKernel Dilate kernel size.
+			 * @param cannyThreshold Canny threshold to indicate corners.
+			 * @param dilateIteration Count dilate iterations.
+			 */
+			ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)),
+				cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
+				cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),
+				int cannyThreshold = 50,
+				int dilateIteration = 3);
 
-				virtual ~ShapeDetection();
+			virtual ~ShapeDetection();
 
-				/**
-				 * Shape detection algorithm detection to obtain possible region of interest (ROI).
-				 * @param frame Image frame to obtain all roi objects.
-				 * @throws Companion::Error::Code If an error occurred in search operation.
-				 * @return An result model if an object is detected otherwise nullptr.
-				 */
-				std::vector<Companion::Draw::Frame*> executeAlgorithm(cv::Mat frame);
+			/**
+			 * Shape detection algorithm detection to obtain possible region of interest (ROI).
+			 * @param frame Image frame to obtain all roi objects.
+			 * @throws Companion::Error::Code If an error occurred in search operation.
+			 * @return An result model if an object is detected otherwise nullptr.
+			 */
+			std::vector<Companion::Draw::Frame*> executeAlgorithm(cv::Mat frame);
 
-                /**
-                 * Indicator if this algorithm use cuda.
-                 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-                 */
-                bool isCuda();
+			/**
+			 * Indicator if this algorithm use cuda.
+			 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+			 */
+			bool isCuda();
 
 		private:
 
@@ -90,7 +90,7 @@ namespace Companion
 			cv::Mat erodeKernel;
 
 			/**
-			 * Dilate kernel for dilate operation. 
+			 * Dilate kernel for dilate operation.
 			 */
 			cv::Mat dilateKernel;
 
@@ -98,9 +98,9 @@ namespace Companion
 			 * Dilate iteration counter to repeat dilate operation.
 			 */
 			int dilateIteration;
-        };
+		};
 
-    }
+	}
 }
 
 
