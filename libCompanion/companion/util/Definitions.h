@@ -21,23 +21,22 @@
 
 #include <companion/model/result/Result.h>
 
-namespace Companion {
+namespace Companion
+{
+	/**
+	 * Callback result definition.
+	 */
+	#define CALLBACK_RESULT std::vector<Companion::Model::Result*>
 
-    /**
-     * Callback result definition.
-     */
-    #define CALLBACK_RESULT std::vector<Companion::Model::Result*>
+	 /**
+	  * Default success callback function declaration to obtain results from algorithms.
+	  */
+	#define SUCCESS_CALLBACK void(CALLBACK_RESULT, cv::Mat)
 
-    /**
-     * Default success callback function declaration to obtain results from algorithms.
-     */
-    #define SUCCESS_CALLBACK void(CALLBACK_RESULT, cv::Mat)
-
-    /**
-     * Default error callback function declaration to obtain error results from companion.
-     */
-    #define ERROR_CALLBACK void(Companion::Error::Code)
-
+	  /**
+	   * Default error callback function declaration to obtain error results from companion.
+	   */
+	#define ERROR_CALLBACK void(Companion::Error::Code)
 }
 
 #endif //COMPANION_DEFINITIONS_H

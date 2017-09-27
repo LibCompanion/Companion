@@ -18,59 +18,69 @@
 
 #include "Video.h"
 
-Companion::Input::Video::Video(int device) {
+Companion::Input::Video::Video(int device)
+{
 
-    cv::VideoCapture cap(device);
+	cv::VideoCapture cap(device);
 
-    if (!cap.isOpened()) {
-        throw Companion::Error::Code::invalid_video_src;
-    }
+	if (!cap.isOpened())
+	{
+		throw Companion::Error::Code::invalid_video_src;
+	}
 
-    capture = cap;
-    finished = false;
+	capture = cap;
+	finished = false;
 }
 
 
-Companion::Input::Video::Video(std::string url) {
+Companion::Input::Video::Video(std::string url)
+{
 
-    cv::VideoCapture cap(url);
+	cv::VideoCapture cap(url);
 
-    if (!cap.isOpened()) {
-        throw Companion::Error::Code::invalid_video_src;
-    }
+	if (!cap.isOpened())
+	{
+		throw Companion::Error::Code::invalid_video_src;
+	}
 
-    capture = cap;
-    finished = false;
+	capture = cap;
+	finished = false;
 }
 
-Companion::Input::Video::~Video() {
-    // No need to close capture device because closing will be done from VideoCapture destructor.
+Companion::Input::Video::~Video()
+{
+	// No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
-cv::Mat Companion::Input::Video::obtainImage() {
+cv::Mat Companion::Input::Video::obtainImage()
+{
 
-    cv::Mat frame;
+	cv::Mat frame;
 
-    if (!capture.isOpened() || finished) {
-        finished = true;
-        return frame;
-    }
+	if (!capture.isOpened() || finished)
+	{
+		finished = true;
+		return frame;
+	}
 
-    // Obtain image frame.
-    capture >> frame;
+	// Obtain image frame.
+	capture >> frame;
 
-    if (frame.empty()) {
-        // If frame empty video is finished.
-        finished = true;
-    }
+	if (frame.empty())
+	{
+		// If frame empty video is finished.
+		finished = true;
+	}
 
-    return frame;
+	return frame;
 }
 
-bool Companion::Input::Video::isFinished() {
-    return finished;
+bool Companion::Input::Video::isFinished()
+{
+	return finished;
 }
 
-void Companion::Input::Video::finish() {
-    finished = true;
+void Companion::Input::Video::finish()
+{
+	finished = true;
 }

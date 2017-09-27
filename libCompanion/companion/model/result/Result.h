@@ -22,48 +22,71 @@
 #include <string>
 #include <companion/draw/Drawable.h>
 
-namespace Companion {
+namespace Companion
+{
 
-    namespace Model {
+	namespace Model
+	{
 
-        /**
-         * Result model class to store object detection scoring.
-         *
-         * @author Andreas Sekulski
-         */
-        class Result {
+		/**
+		 * Result model class to store object detection scoring.
+		 * @author Andreas Sekulski
+		 */
+		class Result
+		{
 
-        public:
+		public:
 
-            Result(int scoring, int id, Draw::Drawable *model);
+			/**
+			 * Constructor to create a result model.
+			 * @param scoring Scoring value from matching between 0 and 100 percent.
+			 * @param id Identificator from model.
+			 * @param model Drawable model to get position from model in image.
+			 */
+			Result(int scoring, int id, Draw::Drawable *model);
 
-            virtual ~Result();
+			/**
+			 * Destructor
+			 */
+			virtual ~Result();
 
-            int getScoring() const;
+			/**
+			 * Return scoring value between 0 to 100 percent. 100 percent total match 0 percent no match.
+			 * @return Scoring value which contains with detected object in frame.
+			 */
+			int getScoring() const;
 
-            int getId() const;
+			/**
+			 * Get identificator from object.
+			 * @return Identificator from detected object.
+			 */
+			int getId() const;
 
-            Draw::Drawable *getModel() const;
+			/**
+			 * Drawable model to get position from detected object.
+			 * @return Drawable model from detected object.
+			 */
+			Draw::Drawable *getModel() const;
 
-        private:
+		private:
 
-            /**
-             * Score matching in percentage 0 - 100 %.
-             */
-            int scoring;
+			/**
+			 * Score matching in percentage 0 - 100 percent.
+			 */
+			int scoring;
 
-            /**
-             * ID from object.
-             */
-            int id;
+			/**
+			 * ID from object.
+			 */
+			int id;
 
-            /**
-             * Object detection result.
-             */
-            Companion::Draw::Drawable *model;
-        };
+			/**
+			 * Object detection result.
+			 */
+			Companion::Draw::Drawable *model;
+		};
 
-    }
+	}
 }
 
 #endif //COMPANION_RESULT_H

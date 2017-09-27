@@ -22,29 +22,32 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/Definitions.h>
 
-namespace Companion {
+namespace Companion
+{
 
-    namespace Processing {
+	namespace Processing
+	{
 
-        /**
-         * Image processing interface class to create specific image processing jobs to detect objects or regions of interests.
-         *
-         * @author Andreas Sekulski
-         */
-        class COMP_EXPORTS ImageProcessing {
+		/**
+		 * Image processing interface class to create specific image processing jobs to detect objects or regions of interests.
+		 *
+		 * @author Andreas Sekulski
+		 */
+		class COMP_EXPORTS ImageProcessing
+		{
 
-        public:
+		public:
 
-            /**
-             * Execution from given image processing algo implementation like face recognition or object detection.
-             * @param frame Obtained image frame from producer thread.
-             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
-             *          every detected object.
-             */
-            virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
-        };
+			/**
+			 * Execution from given image processing algo implementation like face recognition or object detection.
+			 * @param frame Obtained image frame from producer thread.
+			 * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+			 *          every detected object.
+			 */
+			virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
+		};
 
-    }
+	}
 
 }
 

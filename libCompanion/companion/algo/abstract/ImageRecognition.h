@@ -19,39 +19,30 @@
 #ifndef COMPANION_IMAGERECOGNITION_H
 #define COMPANION_IMAGERECOGNITION_H
 
-#include <companion/model/processing/ImageRecognitionModel.h>
-#include <companion/model/result/Result.h>
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion {
+namespace Companion
+{
 
-    namespace Algorithm {
+	namespace Algorithm
+	{
 
-        /**
-         * Image recognition abstract class to implement specific image recognition algorithms.
-         * @author Andreas Sekulski
-         */
-        class COMP_EXPORTS ImageRecognition {
+		/**
+		 * Image recognition abstract class to implement specific image recognition algorithms.
+		 * @author Andreas Sekulski
+		 */
+		class COMP_EXPORTS ImageRecognition
+		{
 
-        public:
+		public:
 
-            /**
-             * Specific algorithm implementation like simple compare or template matching.
-             * @param searchModel Search model to compare.
-             * @param compareModel Compare model to check if contains in search model.
-             * @throws Companion::Error::Code If an error occured in search operation.
-             */
-            virtual Companion::Model::Result* algo(Companion::Model::Processing::ImageRecognitionModel *searchModel,
-                                                   Companion::Model::Processing::ImageRecognitionModel *compareModel) = 0;
-
-            /**
-             * Indicator if this algorithm use cuda.
-             * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-             */
-            virtual bool isCuda() = 0;
-        };
-    }
+			/**
+			 * Indicator if this algorithm use cuda.
+			 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+			 */
+			virtual bool isCuda() = 0;
+		};
+	}
 }
-
-
 
 #endif //COMPANION_IMAGERECOGNITION_H

@@ -24,65 +24,92 @@
 #include <companion/model/processing/ImageRecognitionModel.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/draw/Drawable.h>
-#include <companion/algo/abstract/ImageRecognition.h>
+#include <companion/algo/2D/FeatureMatching.h>
+#include <companion/algo/2D/ShapeDetection.h>
 #include <companion/Configuration.h>
+#include <omp.h>
 
-namespace Companion {
+namespace Companion
+{
 
-    namespace Processing {
+	namespace Processing
+	{
 
-        /**
-         * 2D Object detection implementation.
-         *
-         * @author Andreas Sekulski
-         */
-        class COMP_EXPORTS ObjectDetection : public ImageProcessing {
+		/**
+		 * 2D Object detection implementation.
+		 * @author Andreas Sekulski
+		 */
+		class COMP_EXPORTS ObjectDetection : public ImageProcessing
+		{
 
-        public:
+		public:
 
-            /**
-             * Constructor to create an object detection algorithm implementation.
-             * @param companion Configuration class to obtain model entities to verify.
-             * @param imageRecognition Image recognition algorithm to use, for example feature matching.
-             * @param scaling Scaling to resize an image. Default is full hd.
-             */
-            ObjectDetection(Companion::Configuration *companion,
-                            Algorithm::ImageRecognition *imageRecognition,
-                            Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080);
+			/**
+			 * Constructor to create an object detection algorithm implementation.
+			 * @param companion Configuration class to obtain model entities to verify.
+			 * @param matchingAlgo Image recognition algorithm to use, for example feature matching.
+			 * @param scaling Scaling to resize an image. Default is full hd.
+			 * @param shapeDetection Shape detection algorithm to detect roi's in images optional if not set complete image will be searched.
+			 */
+			ObjectDetection(Companion::Configuration *companion,
+				Companion::Algorithm::Matching *matchingAlgo,
+				Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080,
+				Companion::Algorithm::ShapeDetection *shapeDetection = nullptr);
 
-            /**
-             * Destructor
-             */
-            virtual ~ObjectDetection();
+			/**
+			 * Destructor
+			 */
+			virtual ~ObjectDetection();
 
-            /**
-             * Try to detect all objects from given frame.
-             * @param frame Frame to check for an object location.
-             * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
-             *          every detected object.
-             */
-            virtual CALLBACK_RESULT execute(cv::Mat frame);
+			/**
+			 * Try to detect all objects from given frame.
+			 * @param frame Frame to check for an object location.
+			 * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+			 *          every detected object.
+			 */
+			virtual CALLBACK_RESULT execute(cv::Mat frame);
 
-        private:
+		private:
 
-            /**
-             * Scaling enumerator to resize image.
-             */
-            Companion::SCALING scaling;
+			/**
+			 * Scaling enumerator to resize image.
+			 */
+			Companion::SCALING scaling;
 
-            /**
-             * Companion configuration which contains model data to search.
-             */
-            Companion::Configuration *companion;
+			/**
+			 * Companion configuration which contains model data to search.
+			 */
+			Companion::Configuration *companion;
 
-            /**
-             * FeatureMatching algorithm setup.
-             */
-            Algorithm::ImageRecognition *imageRecognition;
-        };
+			/**
+			 * Matching algorithm.
+			 */
+			Companion::Algorithm::Matching *matchingAlgo;
 
-    }
+			/**
+			 * Shape detection algorithm.
+			 */
+			Companion::Algorithm::ShapeDetection *shapeDetection;
 
+			/**
+			 * Processing method to detect objects.
+			 * @param sceneModel Scene model to check.
+			 * @param objectModel Object model to search in scene.
+			 * @param rois Region of interests list if exists.
+			 * @param frame Scene frame.
+			 * @param originalX Original x size from frame.
+			 * @param originalY Original y size from frame.
+			 * @param objects Objects list from all detected objects.
+			 */
+			void processing(Model::Processing::FeatureMatchingModel* sceneModel,
+				Model::Processing::FeatureMatchingModel* objectModel,
+				std::vector<Companion::Draw::Frame*> rois,
+				cv::Mat frame,
+				int originalX,
+				int originalY,
+				CALLBACK_RESULT &objects);
+		};
+	}
 }
 
 #endif //COMPANION_OBJECTDETECTION_H

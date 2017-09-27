@@ -16,14 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+endif()
+
+if(OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif()
 
 # Add source files
 set(SOURCE
         Configuration.cpp Configuration.h
         algo/abstract/ImageRecognition.h
-        algo/abstract/AbstractFeatureMatching.cpp algo/abstract/AbstractFeatureMatching.h
+        algo/abstract/Matching.h
         algo/2D/FeatureMatching.cpp algo/2D/FeatureMatching.h
+        algo/2D/ShapeDetection.cpp algo/2D/ShapeDetection.h
         algo/util/IRA.cpp algo/util/IRA.h
         draw/Drawable.h
         draw/Frame.cpp draw/Frame.h

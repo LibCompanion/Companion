@@ -21,7 +21,6 @@ if(WIN32)
     set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation Directory")
 endif()
 
-
 # Configure CMake project
 project(Companion)
 
@@ -32,12 +31,14 @@ else()
     cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 endif()
 
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE Release)
+ENDIF(NOT CMAKE_BUILD_TYPE)
 
 # Define CMake Flags
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release")
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 set(CMAKE_DEBUG_POSTFIX "D")
-
 
 # Define interactive CMake Flags
 option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF)
@@ -52,7 +53,6 @@ endif()
 # Define global properties
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-
 # Configure dependencies
 set(OpenCVComponents "core" "imgproc" "imgcodecs" "features2d" "videoio" "calib3d")
 if(Companion_USE_CUDA)
@@ -66,6 +66,7 @@ endif()
 
 find_package(OpenCV REQUIRED ${OpenCVComponents})
 find_package(OpenMP REQUIRED)
+find_package(OpenMP)
 
 # For developer
 if(Companion_DEBUG)

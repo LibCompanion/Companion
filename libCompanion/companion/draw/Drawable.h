@@ -22,33 +22,36 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion {
+namespace Companion
+{
 
-    namespace Draw {
+	namespace Draw
+	{
 
-        /**
-         * Abstract class implementation for an area.
-         * @author Andreas Sekulski.
-         */
-        class COMP_EXPORTS Drawable {
+		/**
+		 * Abstract class implementation for an area.
+		 * @author Andreas Sekulski.
+		 */
+		class COMP_EXPORTS Drawable
+		{
 
-        public:
-            /**
-             * Draw given object to image.
-             * @param image Image to draw an object.
-             */
-            virtual void draw(cv::Mat image) = 0;
+		public:
+			/**
+			 * Draw given object to image.
+			 * @param image Image to draw an object.
+			 */
+			virtual void draw(cv::Mat image) = 0;
 
-            /**
-             * Ratio to scale position from drawable to new location.
-             * @param cWidth Current width.
-             * @param cHeight Current height.
-             * @param nWidth New width.
-             * @param nHeight New height.
-             */
-            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
-        };
-    }
+			/**
+			 * Ratio to scale position from drawable to new location.
+			 * @param cWidth Current width.
+			 * @param cHeight Current height.
+			 * @param nWidth New width.
+			 * @param nHeight New height.
+			 */
+			virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
+		};
+	}
 }
 
 #endif //COMPANION_DRAWABLE_H
