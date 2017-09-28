@@ -1,53 +1,34 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/basics/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/basics/</loc>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
     <loc>https://libcompanion.github.io/libCompanion/build/</loc>
   </url>
   
   <url>
-    <loc>https://libcompanion.github.io/libCompanion/build/</loc>
+    <loc>https://libcompanion.github.io/libCompanion/gettingstarted/</loc>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/docs/</loc>
+  </url>
+  
+  <url>
+    <loc>https://libcompanion.github.io/libCompanion/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://libcompanion.github.io/libCompanion/</loc>
-    <priority>0</priority>
   </url>
   
   <url>
-    <loc>https://libcompanion.github.io/libCompanion/companion/</loc>
+    <loc>https://libcompanion.github.io/libCompanion/docs/objectdetection/</loc>
   </url>
   
   <url>
-    <loc>https://libcompanion.github.io/libCompanion/companion/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/docs/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/docs/</loc>
-  </url>
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/gettingstarted/</loc>
-  </url>
-  
-  <url>
-    <loc>https://libcompanion.github.io/libCompanion/gettingstarted/</loc>
+    <loc>https://libcompanion.github.io/libCompanion/tags/</loc>
     <priority>0</priority>
   </url>
   
