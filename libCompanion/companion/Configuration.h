@@ -82,6 +82,14 @@ namespace Companion
 		 */
 		bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
+	    /**
+		 * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
+		 * @param model Model to delete.
+		 * @throws Companion::Error::Code Companion error code if currently search is using.
+		 * @return True if model deleted otherwise false.
+		 */
+		bool removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
+
 		/**
 		 * Clear all models which are searched.
 		 */
