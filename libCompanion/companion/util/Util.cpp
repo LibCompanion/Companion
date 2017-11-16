@@ -44,19 +44,15 @@ bool Companion::Util::checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bo
 {
 	double diag0 = cv::norm(topRight-bottomLeft);
 	double diag1 = cv::norm(topLeft-bottomRight);
-
     float diff;
+
     if (diag0 >= diag1) {
         diff = (1 - (diag1 / diag0)) * 100;
     } else {
         diff = (1 - (diag0 / diag1)) * 100;
     }
-    std::cout << diff << std::endl;
 
-
-
-	bool valid = diff < threshold;
-	return valid && (diag0 > distance) && (diag1 > distance);
+	return diff < threshold && (diag0 > distance) && (diag1 > distance);
 }
 
 void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat)
