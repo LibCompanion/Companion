@@ -83,6 +83,15 @@ namespace Companion
 		static void resizeImage(cv::Mat &img, SCALING scaling);
 
 		/**
+		 * Checks if a point is distant enough from a given origin.
+		 * @param origin Origin point.
+		 * @param point Point whose distance should be checked.
+		 * @param distance Minimum distance.
+		 * @return <code>true</code> if point is distant enough otherwise <code>false</code>
+		 */
+		static bool checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance);
+
+		/**
 		 * Ratio to set new point from scaled frame.
 		 * @param point Point to calculate new positions.
 		 * @param cWidth Current width.

@@ -55,7 +55,7 @@ namespace Companion
 			 * @param matcher FeatureMatcher to set.
 			 * @param matcherType FeatureMatcher type which is used like FlannBased or Bruteforce.
 			 * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
-			 * @param countMatches How much matches need to get an good matching result. Default is by 40.
+			 * @param countMatches Maximum number from feature matches to obtain a good matching result. Default is by 40.
 			 * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
 			 * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
 			 * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
@@ -101,21 +101,21 @@ namespace Companion
 			virtual ~FeatureMatching();
 
 			/**
-			* Feature matching algorithm implementation to search in an scene model this given object model.
-			* @param sceneModel Scene model to verify for matching.
-			* @param objectModel Object model to search in scene.
-			* @param roi A region of interest to detect for searched for object if nullptr not used.
-			* @return An result model if an object is detected otherwise nullptr.
-			*/
-			Companion::Model::Result *executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
-				Model::Processing::FeatureMatchingModel *objectModel,
-				Companion::Draw::Frame *roi);
-
-			/**
 			 * Calculate key points for given model.
 			 * @param model Model to calculate keypoints.
 			 */
 			void calculateKeyPoints(Model::Processing::FeatureMatchingModel *model);
+
+			/**
+			  * Feature matching algorithm implementation to search in an scene model this given object model.
+			  * @param sceneModel Scene model to verify for matching.
+			  * @param objectModel Object model to search in scene.
+			  * @param roi A region of interest to detect for searched for object if nullptr not used.
+			  * @return An result model if an object is detected otherwise nullptr.
+			  */
+			Companion::Model::Result *executeAlgorithm(Model::Processing::FeatureMatchingModel *sceneModel,
+													   Model::Processing::FeatureMatchingModel *objectModel,
+													   Companion::Draw::Frame *roi);
 
 			/**
 			 * Indicator if this algorithm use cuda.
@@ -124,6 +124,16 @@ namespace Companion
 			bool isCuda();
 
 		private:
+
+			/**
+			 * Default knnMatch neighboors to find features.
+			 */
+			static float DEFAULT_NEIGHBOR;
+
+			/**
+			 * Default ratio test value to obtain only good feature matches.
+			 */
+			static float DEFAULT_RATIO_VALUE;
 
 			/**
 			 * Indicator how many pixels the corners of a found area should be distant from each other. Default value is 10.

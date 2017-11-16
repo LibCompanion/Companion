@@ -18,6 +18,9 @@
 
 #include "FeatureMatching.h"
 
+float Companion::Algorithm::FeatureMatching::DEFAULT_NEIGHBOR = 2;
+float Companion::Algorithm::FeatureMatching::DEFAULT_RATIO_VALUE = 0.8;
+
 Companion::Algorithm::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::FeatureDetector> detector,
 	cv::Ptr<cv::DescriptorExtractor> extractor,
@@ -30,7 +33,6 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 	int ransacMaxIters,
 	int findHomographyMethod)
 {
-
 	this->detector = detector;
 	this->extractor = extractor;
 	this->matcherType = matcherType;
@@ -104,11 +106,16 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 
 	cvtColor(sceneImage, sceneImage, CV_BGR2GRAY); // Convert image to grayscale
 
-												   // --------------------------------------------------
-												   // Scene and model preparation start
-												   // --------------------------------------------------
+    //cv::Ptr<cv::FeatureDetector> detector;
+    //cv::Ptr<cv::DescriptorExtractor> extractor;
+	//detector = objectModel->getMatchingConfiguration()->createFeatureDetector();
+    //extractor = objectModel->getMatchingConfiguration()->createFeatureDescriptor();
 
-												   // ------ IRA scene handling. Currently works only for CPU usage ------
+	// --------------------------------------------------
+	// Scene and model preparation start
+	// --------------------------------------------------
+
+	// ------ IRA scene handling. Currently works only for CPU usage ------
 	if (useIRA && ira->isObjectDetected()) // IRA USED & OBJECT DETECTED
 	{
 		// Cut out scene from last detected object and set this as new scene to check.
@@ -167,7 +174,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 	// Feature matching algorithm
 	// --------------------------------------------------
 	// If object and scene descriptor and keypoints exists..
-	if (!cudaUsed && !descriptorsObject.empty() && !descriptorsScene.empty() && keypointsObject.size() > 0 && keypointsScene.size() > 0)
+	if (!cudaUsed && !descriptorsObject.empty() && !descriptorsScene.empty() && !keypointsObject.empty() && !keypointsScene.empty())
 	{
 		// If matching type is flan based, scene and object must be in CV_32F format.
 		if (matcherType == cv::DescriptorMatcher::FLANNBASED)
@@ -178,11 +185,15 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 
 		// ------ CPU USAGE ------
 		// Matching descriptor vectors
-		matcher->knnMatch(descriptorsObject, descriptorsScene, matches, 2);
+		matcher->knnMatch(descriptorsObject, descriptorsScene, matches, DEFAULT_NEIGHBOR);
+
+        #if Companion_DEBUG
+        std::cout << "Matches size : " << matches.size() << std::endl;
+        #endif
 
 		// Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
 		// Neighbourhoods comparison
-		ratio_test(matches, goodMatches, 0.80);
+		ratio_test(matches, goodMatches, DEFAULT_RATIO_VALUE);
 
 		drawable = obtainMatchingResult(sceneImage,
 			objectImage,
@@ -247,6 +258,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 		// TODO := SCORING CALCULATION
 		// Object found
 		result = new Companion::Model::Result(100, objectModel->getID(), drawable);
+
 		sceneImage.release();
 		objectImage.release();
 	}
@@ -299,13 +311,35 @@ void Companion::Algorithm::FeatureMatching::ratio_test(const std::vector<std::ve
 	std::vector<cv::DMatch> &good_matches,
 	float ratio)
 {
-	for (int i = 0; i < matches.size(); ++i)
-	{
-		if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance))
-		{
-			good_matches.push_back(matches[i][0]);
-		}
-	}
+    unsigned long position = 0;
+    bool insertElement;
+    for (int i = 0; i < matches.size(); ++i)
+    {
+        if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance))
+        {
+            position = 0;
+            insertElement = false;
+            if(good_matches.empty()) {
+                good_matches.push_back(matches[i][0]);
+            } else {
+                while(position < good_matches.size() && !insertElement) {
+                    if(good_matches.at(position).distance > matches[i][0].distance) {
+                        good_matches.insert(good_matches.begin() + position, matches[i][0]);
+                        insertElement = true;
+                        if(good_matches.size() > countMatches) {
+                            // Delete last element if maximum is reached
+                            good_matches.erase(good_matches.end() - 1);
+                        }
+                    }
+                    position++;
+                }
+                if(!insertElement && good_matches.size() < countMatches) {
+                    good_matches.push_back(matches[i][0]);
+                }
+            }
+
+        }
+    }
 
 }
 
@@ -355,7 +389,7 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::obtainMatching
 	feature_points_scene.clear();
 
 	// Count of good matches if results are good enough.
-	if (good_matches.size() > countMatches)
+	if (good_matches.size() >= countMatches)
 	{
 
 		obtainKeypointsFromGoodMatches(good_matches,
@@ -424,6 +458,7 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
 	// Offset is recalculate position from last recognition if exists.
 	cv::Point2f offset = cv::Point2f(lastRect.x, lastRect.y);
 
+    // ToDo = What happens if your scan a image upside down?
 	// Focus area - Scene Corners
 	//   0               1
 	//   -----------------
@@ -461,16 +496,11 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
 	cv::Point2f bottomLeft = scene_corners[3] + offset;
 
 	// Check for minimum corner distance
-	if (Companion::Util::hasDistantPosition(topLeft, topRight, this->cornerDistance) &&
-		Companion::Util::hasDistantPosition(topLeft, bottomRight, this->cornerDistance) &&
-		Companion::Util::hasDistantPosition(topLeft, bottomLeft, this->cornerDistance) &&
-		Companion::Util::hasDistantPosition(topRight, bottomRight, this->cornerDistance) &&
-		Companion::Util::hasDistantPosition(topRight, bottomLeft, this->cornerDistance) &&
-		Companion::Util::hasDistantPosition(bottomRight, bottomLeft, this->cornerDistance))
-	{
-		// Create a drawable frame to represent the calculated area
-		frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
-	}
+    if (Companion::Util::checkDistantDiagonals(topRight, bottomLeft, topLeft, bottomRight, 3, this->cornerDistance))
+    {
+        // Create a drawable frame to represent the calculated area
+        frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
+    }
 
 	// If IRA is used...
 	if (useIRA && frame != nullptr)
