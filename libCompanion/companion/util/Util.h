@@ -83,15 +83,6 @@ namespace Companion
 		static void resizeImage(cv::Mat &img, SCALING scaling);
 
 		/**
-		 * Checks if a point is distant enough from a given origin.
-		 * @param origin Origin point.
-		 * @param point Point whose distance should be checked.
-		 * @param distance Minimum distance.
-		 * @return <code>true</code> if point is distant enough otherwise <code>false</code>
-		 */
-		static bool checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance);
-
-		/**
 		 * Ratio to set new point from scaled frame.
 		 * @param point Point to calculate new positions.
 		 * @param cWidth Current width.
@@ -109,6 +100,18 @@ namespace Companion
 		 * @return <code>true</code> if point is distant enough otherwise <code>false</code>
 		 */
 		static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
+
+        /**
+         * Checks diagonals from detected points to check if result is a valid rectangle.
+         * @param topRight Top right detected position from object.
+         * @param bottomLeft Bottom left detected position from object.
+         * @param topLeft Top left detected position from object.
+         * @param bottomRight Bottom right detected position from object.
+         * @param threshold Threshold in 0 to 100 percentage to validate rectangle.
+         * @param distance Minimum distance from corners.
+         * @return <code>true</code> if point is distant enough otherwise <code>false</code>
+         */
+        static bool checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance);
 
 		/**
 		 * Converts an image to the given color format. BGR is expected as source format.

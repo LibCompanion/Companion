@@ -75,7 +75,6 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 	Companion::Draw::Frame *roi)
 {
 
-
 	// Set of variables for feature matching.
 	cv::Mat sceneImage, objectImage;
 	std::vector<std::vector<cv::DMatch>> matches;
@@ -98,18 +97,13 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 	objectImage = objectModel->getImage(); // Get object scene
 	ira = objectModel->getIra();  // Get IRA from object model
 
-								  // Check if images are loaded...
+    // Check if images are loaded...
 	if (!Util::isImageLoaded(sceneImage) || !Util::isImageLoaded(objectImage))
 	{
 		throw Companion::Error::Code::image_not_found;
 	}
 
 	cvtColor(sceneImage, sceneImage, CV_BGR2GRAY); // Convert image to grayscale
-
-    //cv::Ptr<cv::FeatureDetector> detector;
-    //cv::Ptr<cv::DescriptorExtractor> extractor;
-	//detector = objectModel->getMatchingConfiguration()->createFeatureDetector();
-    //extractor = objectModel->getMatchingConfiguration()->createFeatureDescriptor();
 
 	// --------------------------------------------------
 	// Scene and model preparation start
@@ -186,10 +180,6 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 		// ------ CPU USAGE ------
 		// Matching descriptor vectors
 		matcher->knnMatch(descriptorsObject, descriptorsScene, matches, DEFAULT_NEIGHBOR);
-
-        #if Companion_DEBUG
-        std::cout << "Matches size : " << matches.size() << std::endl;
-        #endif
 
 		// Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
 		// Neighbourhoods comparison

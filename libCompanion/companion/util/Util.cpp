@@ -47,9 +47,9 @@ bool Companion::Util::checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bo
     float diff;
 
     if (diag0 >= diag1) {
-        diff = (1 - (diag1 / diag0)) * 100;
+        diff = static_cast<float>((1 - (diag1 / diag0)) * 100);
     } else {
-        diff = (1 - (diag0 / diag1)) * 100;
+        diff = static_cast<float>((1 - (diag0 / diag1)) * 100);
     }
 
 	return diff < threshold && (diag0 > distance) && (diag1 > distance);
