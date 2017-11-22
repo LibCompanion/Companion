@@ -40,6 +40,21 @@ bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, 
 	return (std::abs(origin.x - point.x) >= distance) || (std::abs(origin.y - point.y) >= distance);
 }
 
+bool Companion::Util::checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance)
+{
+	double diag0 = cv::norm(topRight-bottomLeft);
+	double diag1 = cv::norm(topLeft-bottomRight);
+    float diff;
+
+    if (diag0 >= diag1) {
+        diff = static_cast<float>((1 - (diag1 / diag0)) * 100);
+    } else {
+        diff = static_cast<float>((1 - (diag0 / diag1)) * 100);
+    }
+
+	return diff < threshold && (diag0 > distance) && (diag1 > distance);
+}
+
 void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat)
 {
 	switch (colorFormat)
