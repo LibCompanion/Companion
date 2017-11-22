@@ -226,7 +226,7 @@ namespace Companion
 			* @param good_matches Vector to store good matches.
 			* @param ratio Ratio which matches are good enough.
 			*/
-			void ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
+			void ratioTest(const std::vector<std::vector<cv::DMatch>> &matches,
 				std::vector<cv::DMatch> &good_matches,
 				float ratio);
 

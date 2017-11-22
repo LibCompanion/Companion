@@ -19,7 +19,7 @@
 #include "FeatureMatching.h"
 
 float Companion::Algorithm::FeatureMatching::DEFAULT_NEIGHBOR = 2;
-float Companion::Algorithm::FeatureMatching::DEFAULT_RATIO_VALUE = 0.8;
+float Companion::Algorithm::FeatureMatching::DEFAULT_RATIO_VALUE = 0.80;
 
 Companion::Algorithm::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::FeatureDetector> detector,
@@ -183,7 +183,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 
 		// Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
 		// Neighbourhoods comparison
-		ratio_test(matches, goodMatches, DEFAULT_RATIO_VALUE);
+		ratioTest(matches, goodMatches, DEFAULT_RATIO_VALUE);
 
 		drawable = obtainMatchingResult(sceneImage,
 			objectImage,
@@ -221,7 +221,7 @@ Companion::Model::Result *Companion::Algorithm::FeatureMatching::executeAlgorith
 
 		// Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
 		// Neighbourhoods comparison
-		ratio_test(matches, goodMatches, 0.80);
+		ratioTest(matches, goodMatches, 0.80);
 
 		drawable = obtainMatchingResult(sceneImage,
 			objectImage,
@@ -297,7 +297,7 @@ Companion::Model::Result* Companion::Algorithm::FeatureMatching::repeatAlgorithm
 	return nullptr;
 }
 
-void Companion::Algorithm::FeatureMatching::ratio_test(const std::vector<std::vector<cv::DMatch>> &matches,
+void Companion::Algorithm::FeatureMatching::ratioTest(const std::vector<std::vector<cv::DMatch>> &matches,
 	std::vector<cv::DMatch> &good_matches,
 	float ratio)
 {
