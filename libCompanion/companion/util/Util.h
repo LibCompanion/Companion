@@ -92,26 +92,18 @@ namespace Companion
 		 */
 		static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
-		/**
-		 * Checks if a point is distant enough from a given origin.
-		 * @param origin Origin point.
-		 * @param point Point whose distance should be checked.
-		 * @param distance Minimum distance.
-		 * @return <code>true</code> if point is distant enough otherwise <code>false</code>
-		 */
-		static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
-
         /**
-         * Checks diagonals from detected points to check if result is a valid rectangle.
-         * @param topRight Top right detected position from object.
-         * @param bottomLeft Bottom left detected position from object.
-         * @param topLeft Top left detected position from object.
-         * @param bottomRight Bottom right detected position from object.
-         * @param threshold Threshold in 0 to 100 percentage to validate rectangle.
-         * @param distance Minimum distance from corners.
-         * @return <code>true</code> if point is distant enough otherwise <code>false</code>
+         * Validates the rectangular shape of a detected area.
+         * @param topRight Top right corner of the detected area.
+         * @param bottomLeft Bottom left corner of the detected area.
+         * @param topLeft Top left corner of the detected area.
+         * @param bottomRight Bottom right corner of the detected area.
+         * @param minSidelLength Minimum length of the detected area's sides (in pixels).
+         * @param maxSideDeviation Maximum deviation of the sides' lengths.
+         * @param maxDiagonalDeviation Maximum deviation of the diagonals' lengths.
+         * @return <code>true</code> if the diagonals are long enough and both have a similar length, <code>false</code> otherwise
          */
-        static bool checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance);
+        static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
 		/**
 		 * Converts an image to the given color format. BGR is expected as source format.
@@ -124,6 +116,14 @@ namespace Companion
 	private:
 
 		static cv::Point getScaling(SCALING scaling);
+
+        /**
+         * Calculates the deviation between two lengths.
+         * @param x first length
+         * @param y second length
+         * return deviation in percent
+         */
+        static double getDeviation(double x, double y);
 	};
 
 }

@@ -35,24 +35,26 @@ void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, i
 	point.y = static_cast<int>((point.y / static_cast<float>(cHeight)) * nHeight);
 }
 
-bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance)
+bool Companion::Util::validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength, float maxSideDeviation, float maxDiagonalDeviation)
 {
-	return (std::abs(origin.x - point.x) >= distance) || (std::abs(origin.y - point.y) >= distance);
+    double top = cv::norm(topRight - topLeft);
+    double bottom = cv::norm(bottomRight - bottomLeft);
+    double left = cv::norm(bottomLeft - topLeft);
+    double right = cv::norm(bottomRight - topRight);
+	double diag0 = cv::norm(topRight-bottomLeft);
+    double diag1 = cv::norm(topLeft-bottomRight);
+
+    double topBottomDeviation = Util::getDeviation(top, bottom);
+    double leftRightDeviation = Util::getDeviation(left, right);
+    double diagonalDeviation = Util::getDeviation(diag0, diag1);
+
+	return (topBottomDeviation < maxSideDeviation) && (leftRightDeviation < maxSideDeviation) && (diagonalDeviation < maxDiagonalDeviation)
+        && (top > minSidelLength) && (bottom > minSidelLength) && (left > minSidelLength) && (right > minSidelLength);
 }
 
-bool Companion::Util::checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance)
+double Companion::Util::getDeviation(double x, double y)
 {
-	double diag0 = cv::norm(topRight-bottomLeft);
-	double diag1 = cv::norm(topLeft-bottomRight);
-    float diff;
-
-    if (diag0 >= diag1) {
-        diff = static_cast<float>((1 - (diag1 / diag0)) * 100);
-    } else {
-        diff = static_cast<float>((1 - (diag0 / diag1)) * 100);
-    }
-
-	return diff < threshold && (diag0 > distance) && (diag1 > distance);
+    return (x >= y) ? (1 - (y / x)) : (1 - (x / y));
 }
 
 void Companion::Util::convertColor(cv::Mat& src, cv::Mat& dst, Companion::ColorFormat colorFormat)

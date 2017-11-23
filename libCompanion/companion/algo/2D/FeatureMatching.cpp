@@ -23,7 +23,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::DescriptorExtractor> extractor,
 	cv::Ptr<cv::DescriptorMatcher> matcher,
 	int matcherType,
-	int cornerDistance,
+	int minSidelLength,
 	int countMatches,
 	bool useIRA,
 	double reprojThreshold,
@@ -34,7 +34,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 	this->extractor = extractor;
 	this->matcherType = matcherType;
 	this->matcher = matcher;
-	this->cornerDistance = cornerDistance;
+	this->minSidelLength = minSidelLength;
 	this->countMatches = countMatches;
 	this->useIRA = useIRA;
 	this->cudaUsed = false;
@@ -46,7 +46,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 #if Companion_USE_CUDA
 Companion::Algorithm::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::Feature2D> cudaFeatureMatching,
-	int cornerDistance,
+	int minSidelLength,
 	int countMatches,
 	double reprojThreshold,
 	int ransacMaxIters,
@@ -54,7 +54,7 @@ Companion::Algorithm::FeatureMatching::FeatureMatching(
 {
 
 	this->cudaFeatureMatching = cudaFeatureMatching;
-	this->cornerDistance = cornerDistance;
+	this->minSidelLength = minSidelLength;
 	this->countMatches = countMatches;
 	this->useIRA = false;
 	this->cudaUsed = true;
@@ -482,8 +482,8 @@ Companion::Draw::Drawable* Companion::Algorithm::FeatureMatching::calculateArea(
 	cv::Point2f bottomRight = scene_corners[2] + offset;
 	cv::Point2f bottomLeft = scene_corners[3] + offset;
 
-	// Check for minimum corner distance
-    if (Companion::Util::checkDistantDiagonals(topRight, bottomLeft, topLeft, bottomRight, 3, this->cornerDistance))
+	// Validate the rectangular shape of the detected area
+    if (Companion::Util::validateShape(topRight, bottomLeft, topLeft, bottomRight, this->minSidelLength))
     {
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);
