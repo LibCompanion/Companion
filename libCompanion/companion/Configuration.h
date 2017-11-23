@@ -31,204 +31,204 @@
 namespace Companion
 {
 
-	/**
-	 * Companion configuration class to setup an computer vision usage like feature matching.
-	 *
-	 * @author Andreas Sekulski
-	 */
-	class COMP_EXPORTS Configuration
-	{
+    /**
+     * Companion configuration class to setup an computer vision usage like feature matching.
+     *
+     * @author Andreas Sekulski
+     */
+    class COMP_EXPORTS Configuration
+    {
 
-	public:
+    public:
 
-		/**
-		 * Constructor to create an companion helper class to start image processing setup.
-		 */
-		Configuration();
+        /**
+         * Constructor to create an companion helper class to start image processing setup.
+         */
+        Configuration();
 
-		/**
-		 * Default destructor.
-		 */
-		virtual ~Configuration();
+        /**
+         * Default destructor.
+         */
+        virtual ~Configuration();
 
-		/**
-		 * Executes companion configuration.
-		 * @throws error Companion::Error::Code error code if an invalid configuration is set.
-		 */
-		void run();
+        /**
+         * Executes companion configuration.
+         * @throws error Companion::Error::Code error code if an invalid configuration is set.
+         */
+        void run();
 
-		/**
-		 * Stops current running stream worker if it's executes.
-		 */
-		void stop();
+        /**
+         * Stops current running stream worker if it's executes.
+         */
+        void stop();
 
-		/**
-		 * Obtain streaming source pointer if set.
-		 * @throws Companion::Error::Code Companion error code if video source is not set.
-		 * @return Streaming source to obtain images.
-		 */
-		Companion::Input::Stream *getSource() const;
+        /**
+         * Obtain streaming source pointer if set.
+         * @throws Companion::Error::Code Companion error code if video source is not set.
+         * @return Streaming source to obtain images.
+         */
+        Companion::Input::Stream *getSource() const;
 
-		/**
-		 * Set streaming source to companion.
-		 * @param source Video source to set like an camera or video.
-		 */
-		void setSource(Companion::Input::Stream *source);
+        /**
+         * Set streaming source to companion.
+         * @param source Video source to set like an camera or video.
+         */
+        void setSource(Companion::Input::Stream *source);
 
-		/**
-		 * Add searching model type. For example an object (feature) which should be detected.
-		 * @param model Model to search.
-		 * @return True if model is added false if not.
-		 */
-		bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
+        /**
+         * Add searching model type. For example an object (feature) which should be detected.
+         * @param model Model to search.
+         * @return True if model is added false if not.
+         */
+        bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
-	    /**
-		 * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
-		 * @param model Model to delete.
-		 * @throws Companion::Error::Code Companion error code if currently search is using.
-		 * @return True if model deleted otherwise false.
-		 */
-		bool removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
+        /**
+         * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
+         * @param model Model to delete.
+         * @throws Companion::Error::Code Companion error code if currently search is using.
+         * @return True if model deleted otherwise false.
+         */
+        bool removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
 
-		/**
-		 * Clear all models which are searched.
-		 */
-		void clearModels();
+        /**
+         * Clear all models which are searched.
+         */
+        void clearModels();
 
-		/**
-		 * Get model vector which contains all searched models.
-		 * @return Vector from all searched models, if no models are set this vector is empty.
-		 */
-		const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &getModels() const;
+        /**
+         * Get model vector which contains all searched models.
+         * @return Vector from all searched models, if no models are set this vector is empty.
+         */
+        const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &getModels() const;
 
-		/**
-		 * Gets current processing algorithm which should be used.
-		 * @throws Companion::Error::Code Companion error code if image processing is not set.
-		 * @return Image processing algorithm which should be used.
-		 */
-		Companion::Processing::ImageProcessing *getProcessing() const;
+        /**
+         * Gets current processing algorithm which should be used.
+         * @throws Companion::Error::Code Companion error code if image processing is not set.
+         * @return Image processing algorithm which should be used.
+         */
+        Companion::Processing::ImageProcessing *getProcessing() const;
 
-		/**
-		 * Set image processing algorithm for example ObjectDetection.
-		 * @param processing Image processing algorithm to use.
-		 */
-		void setProcessing(Companion::Processing::ImageProcessing *processing);
+        /**
+         * Set image processing algorithm for example ObjectDetection.
+         * @param processing Image processing algorithm to use.
+         */
+        void setProcessing(Companion::Processing::ImageProcessing *processing);
 
-		/**
-		 * Get skip frame rate.
-		 * @return Skip frame rate, how many frames should be skipped.
-		 */
-		int getSkipFrame() const;
+        /**
+         * Get skip frame rate.
+         * @return Skip frame rate, how many frames should be skipped.
+         */
+        int getSkipFrame() const;
 
-		/**
-		 * Sets skip frame rate.
-		 * @param skipFrame Number of frames which should be skipped after image processing should be used.
-		 */
-		void setSkipFrame(int skipFrame);
+        /**
+         * Sets skip frame rate.
+         * @param skipFrame Number of frames which should be skipped after image processing should be used.
+         */
+        void setSkipFrame(int skipFrame);
 
-		/**
-		* Get image buffer store rate.
-		* @return Image buffer frame rate default 5 images are stored to buffer.
-		*/
-		int getImageBuffer() const;
+        /**
+        * Get image buffer store rate.
+        * @return Image buffer frame rate default 5 images are stored to buffer.
+        */
+        int getImageBuffer() const;
 
-		/**
-		* Sets image buffer size to store.
-		* @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
-		*/
-		void setImageBuffer(int imageBuffer);
+        /**
+        * Sets image buffer size to store.
+        * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
+        */
+        void setImageBuffer(int imageBuffer);
 
-		/**
-		 * Sets a given result handler. The result handler returns a list of all detected objects as result models.
-		 * The source image will be converted to the given format.
-		 *
-		 * @param callback Function pointer which contains result event handler.
-		 * @param colorFormat Color format of the returned image.
-		 */
-		void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
+        /**
+         * Sets a given result handler. The result handler returns a list of all detected objects as result models.
+         * The source image will be converted to the given format.
+         *
+         * @param callback Function pointer which contains result event handler.
+         * @param colorFormat Color format of the returned image.
+         */
+        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
-		/**
-		 * Gets an callback handler if set.
-		 * @throws Companion::Error::Code Companion error code if callback is not set.
-		 * @return An callback handler if set.
-		 */
-		const std::function<SUCCESS_CALLBACK> &getCallback() const;
+        /**
+         * Gets an callback handler if set.
+         * @throws Companion::Error::Code Companion error code if callback is not set.
+         * @return An callback handler if set.
+         */
+        const std::function<SUCCESS_CALLBACK> &getCallback() const;
 
-		/**
-		 * Sets an error callback handler.
-		 * @param callback Error handler to set.
-		 */
-		void setErrorHandler(std::function<ERROR_CALLBACK> callback);
+        /**
+         * Sets an error callback handler.
+         * @param callback Error handler to set.
+         */
+        void setErrorHandler(std::function<ERROR_CALLBACK> callback);
 
-		/**
-		 * Get error callback if exists.
-		 * @throws Companion::Error::Code Companion error code if callback is not set.
-		 * @return Error callback if set.
-		 */
-		const std::function<ERROR_CALLBACK> &getErrorCallback() const;
+        /**
+         * Get error callback if exists.
+         * @throws Companion::Error::Code Companion error code if callback is not set.
+         * @return Error callback if set.
+         */
+        const std::function<ERROR_CALLBACK> &getErrorCallback() const;
 
-	private:
+    private:
 
-		/**
-		 * Callback event handler to send results back to main application.
-		 */
-		std::function<SUCCESS_CALLBACK> callback;
+        /**
+         * Callback event handler to send results back to main application.
+         */
+        std::function<SUCCESS_CALLBACK> callback;
 
-		/**
-		 * Callback for an error.
-		 */
-		std::function<ERROR_CALLBACK> errorCallback;
+        /**
+         * Callback for an error.
+         */
+        std::function<ERROR_CALLBACK> errorCallback;
 
-		/**
-		 * Data stream source to obtain images.
-		 */
-		Companion::Input::Stream* source;
+        /**
+         * Data stream source to obtain images.
+         */
+        Companion::Input::Stream* source;
 
-		/**
-		 * Search models to detect objects from source.
-		 */
-		std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
+        /**
+         * Search models to detect objects from source.
+         */
+        std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 
-		/**
-		 * Image processing implementation for example an object detection.
-		 */
-		Companion::Processing::ImageProcessing* processing;
+        /**
+         * Image processing implementation for example an object detection.
+         */
+        Companion::Processing::ImageProcessing* processing;
 
-		/**
-		 * Number of frames to skip to process next image.
-		 */
-		int skipFrame;
+        /**
+         * Number of frames to skip to process next image.
+         */
+        int skipFrame;
 
-		/*
-		 * Image buffer size to store image. Default is 5.
-		 */
-		int imageBuffer;
+        /*
+         * Image buffer size to store image. Default is 5.
+         */
+        int imageBuffer;
 
-		/**
-		 * @brief threadsRunning Indicator if threads currently running.
-		 */
-		bool threadsRunning;
+        /**
+         * @brief threadsRunning Indicator if threads currently running.
+         */
+        bool threadsRunning;
 
-		/**
-		 * Consumer thread to store image data.
-		 */
-		std::thread consumer;
+        /**
+         * Consumer thread to store image data.
+         */
+        std::thread consumer;
 
-		/**
-		 * Producer thread to image processing given image data.
-		 */
-		std::thread producer;
+        /**
+         * Producer thread to image processing given image data.
+         */
+        std::thread producer;
 
-		/**
-		 * Stream worker which runs an single job.
-		 */
-		Companion::Thread::StreamWorker* worker;
+        /**
+         * Stream worker which runs an single job.
+         */
+        Companion::Thread::StreamWorker* worker;
 
-		/**
-		 * Color format of the image in the result callback.
-		 */
-		Companion::ColorFormat colorFormat;
-	};
+        /**
+         * Color format of the image in the result callback.
+         */
+        Companion::ColorFormat colorFormat;
+    };
 }
 
 #endif //COMPANION_COMPANION_H

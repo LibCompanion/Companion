@@ -20,7 +20,7 @@
 
 Companion::Algorithm::IRA::IRA()
 {
-	this->lop.x = NO_OBJECT_DETECTED;
+    this->lop.x = NO_OBJECT_DETECTED;
     this->lop.y = NO_OBJECT_DETECTED;
 }
 
@@ -31,7 +31,7 @@ Companion::Algorithm::IRA::~IRA()
 
 const cv::Rect &Companion::Algorithm::IRA::getLastObjectPosition() const
 {
-	return this->lop;
+    return this->lop;
 }
 
 void Companion::Algorithm::IRA::setLastObjectPosition(int x, int y, int width, int height)
@@ -72,6 +72,6 @@ void Companion::Algorithm::IRA::clear()
 
 bool Companion::Algorithm::IRA::isObjectDetected()
 {
-	// ToDo := Currently 10000 because of an IFIS video bug to small areas for IRA...
-	return (this->lop.area() > 10000) && (this->lop.width > NO_OBJECT_DETECTED) && (this->lop.height > NO_OBJECT_DETECTED);
+    // ToDo := Currently 10000 because of an IFIS video bug to small areas for IRA...
+    return (this->lop.area() > 10000) && (this->lop.width > NO_OBJECT_DETECTED) && (this->lop.height > NO_OBJECT_DETECTED);
 }

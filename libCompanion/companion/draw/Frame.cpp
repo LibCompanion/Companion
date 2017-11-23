@@ -19,78 +19,78 @@
 #include "Frame.h"
 
 Companion::Draw::Frame::Frame(cv::Point topLeft,
-	cv::Point topRight,
-	cv::Point bottomLeft,
-	cv::Point bottomRight,
-	cv::Scalar color,
-	int thickness)
+    cv::Point topRight,
+    cv::Point bottomLeft,
+    cv::Point bottomRight,
+    cv::Scalar color,
+    int thickness)
 {
-	this->topLeft = topLeft;
-	this->topRight = topRight;
-	this->bottomLeft = bottomLeft;
-	this->bottomRight = bottomRight;
-	this->color = color;
-	this->thickness = thickness;
+    this->topLeft = topLeft;
+    this->topRight = topRight;
+    this->bottomLeft = bottomLeft;
+    this->bottomRight = bottomRight;
+    this->color = color;
+    this->thickness = thickness;
 }
 
 Companion::Draw::Frame::~Frame() {}
 
 void Companion::Draw::Frame::draw(cv::Mat image)
 {
-	Line* top = new Companion::Draw::Line(this->topLeft, this->topRight, this->color, this->thickness);
-	Line* left = new Companion::Draw::Line(this->topLeft, this->bottomLeft, this->color, this->thickness);
-	Line* right = new Companion::Draw::Line(this->topRight, this->bottomRight, this->color, this->thickness);
-	Line* bikini_bottom = new Companion::Draw::Line(this->bottomLeft, this->bottomRight, this->color, this->thickness); // Easter egg :-)
+    Line* top = new Companion::Draw::Line(this->topLeft, this->topRight, this->color, this->thickness);
+    Line* left = new Companion::Draw::Line(this->topLeft, this->bottomLeft, this->color, this->thickness);
+    Line* right = new Companion::Draw::Line(this->topRight, this->bottomRight, this->color, this->thickness);
+    Line* bikini_bottom = new Companion::Draw::Line(this->bottomLeft, this->bottomRight, this->color, this->thickness); // Easter egg :-)
 
-	// Draw it
-	top->draw(image);
-	left->draw(image);
-	right->draw(image);
-	bikini_bottom->draw(image);
+    // Draw it
+    top->draw(image);
+    left->draw(image);
+    right->draw(image);
+    bikini_bottom->draw(image);
 
-	// Cleanup after draw
-	delete top;
-	delete left;
-	delete right;
-	delete bikini_bottom;
+    // Cleanup after draw
+    delete top;
+    delete left;
+    delete right;
+    delete bikini_bottom;
 }
 
 void Companion::Draw::Frame::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-	Util::ratioPosition(this->topLeft, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(this->topRight, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(this->bottomLeft, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(this->bottomRight, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->topLeft, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->topRight, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->bottomLeft, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->bottomRight, cWidth, cHeight, nWidth, nHeight);
 }
 
 const cv::Point &Companion::Draw::Frame::getTopLeft() const
 {
-	return this->topLeft;
+    return this->topLeft;
 }
 
 const cv::Point &Companion::Draw::Frame::getTopRight() const
 {
-	return this->topRight;
+    return this->topRight;
 }
 
 const cv::Point &Companion::Draw::Frame::getBottomLeft() const
 {
-	return this->bottomLeft;
+    return this->bottomLeft;
 }
 
 const cv::Point &Companion::Draw::Frame::getBottomRight() const
 {
-	return this->bottomRight;
+    return this->bottomRight;
 }
 
 const cv::Scalar &Companion::Draw::Frame::getColor() const
 {
-	return this->color;
+    return this->color;
 }
 
 int Companion::Draw::Frame::getThickness() const
 {
-	return this->thickness;
+    return this->thickness;
 }
 
 void Companion::Draw::Frame::setTopLeft(const cv::Point &topLeft)

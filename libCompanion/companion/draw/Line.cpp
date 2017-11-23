@@ -20,15 +20,15 @@
 
 Companion::Draw::Line::Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness)
 {
-	this->start = start;
-	this->end = end;
-	this->color = color;
-	this->thickness = thickness;
+    this->start = start;
+    this->end = end;
+    this->color = color;
+    this->thickness = thickness;
 }
 
 const cv::Point &Companion::Draw::Line::getStart() const
 {
-	return this->start;
+    return this->start;
 }
 
 void Companion::Draw::Line::setStart(const cv::Point &start)
@@ -38,7 +38,7 @@ void Companion::Draw::Line::setStart(const cv::Point &start)
 
 const cv::Point &Companion::Draw::Line::getEnd() const
 {
-	return this->end;
+    return this->end;
 }
 
 void Companion::Draw::Line::setEnd(const cv::Point &end)
@@ -48,7 +48,7 @@ void Companion::Draw::Line::setEnd(const cv::Point &end)
 
 const cv::Scalar &Companion::Draw::Line::getColor() const
 {
-	return this->color;
+    return this->color;
 }
 
 void Companion::Draw::Line::setColor(const cv::Scalar &color)
@@ -58,7 +58,7 @@ void Companion::Draw::Line::setColor(const cv::Scalar &color)
 
 int Companion::Draw::Line::getThickness() const
 {
-	return this->thickness;
+    return this->thickness;
 }
 
 void Companion::Draw::Line::setThickness(int thickness)
@@ -68,11 +68,11 @@ void Companion::Draw::Line::setThickness(int thickness)
 
 void Companion::Draw::Line::draw(cv::Mat image)
 {
-	cv::line(image, this->start, this->end, this->color, this->thickness);
+    cv::line(image, this->start, this->end, this->color, this->thickness);
 }
 
 void Companion::Draw::Line::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-	Util::ratioPosition(this->start, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->start, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
 }

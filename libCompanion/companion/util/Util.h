@@ -27,70 +27,70 @@
 namespace Companion
 {
 
-	/**
-	 * Enumeration class for color formats.
-	 */
-	enum class COMP_EXPORTS ColorFormat
-	{
-		RGB,
-		RGBA,
-		BGR,
-		BGRA,
-		GRAY
-	};
+    /**
+     * Enumeration class for color formats.
+     */
+    enum class COMP_EXPORTS ColorFormat
+    {
+        RGB,
+        RGBA,
+        BGR,
+        BGRA,
+        GRAY
+    };
 
-	/**
-	 * Enumeration class for scaling.
-	 */
-	enum class COMP_EXPORTS SCALING
-	{
-		SCALE_2048x1152,
-		SCALE_1920x1080,
-		SCALE_1600x900,
-		SCALE_1408x792,
-		SCALE_1344x756,
-		SCALE_1280x720,
-		SCALE_1152x648,
-		SCALE_1024x576,
-		SCALE_960x540,
-		SCALE_896x504,
-		SCALE_800x450,
-		SCALE_768x432,
-		SCALE_640x360
-	};
+    /**
+     * Enumeration class for scaling.
+     */
+    enum class COMP_EXPORTS SCALING
+    {
+        SCALE_2048x1152,
+        SCALE_1920x1080,
+        SCALE_1600x900,
+        SCALE_1408x792,
+        SCALE_1344x756,
+        SCALE_1280x720,
+        SCALE_1152x648,
+        SCALE_1024x576,
+        SCALE_960x540,
+        SCALE_896x504,
+        SCALE_800x450,
+        SCALE_768x432,
+        SCALE_640x360
+    };
 
-	/**
-	 * Utility class for opencv.
-	 * @author Andreas Sekulksi
-	 */
-	class COMP_EXPORTS Util
-	{
+    /**
+     * Utility class for opencv.
+     * @author Andreas Sekulksi
+     */
+    class COMP_EXPORTS Util
+    {
 
-	public:
+    public:
 
-		/**
-		 * Checks if given image is loaded.
-		 * @param img Image to check if it's not null.
-		 * @return <code>true</code> if image is loaded, <code>false</code> otherwise
-		 */
-		static bool isImageLoaded(cv::Mat &img);
+        /**
+         * Checks if given image is loaded.
+         * @param img Image to check if it's not null.
+         * @return <code>true</code> if image is loaded, <code>false</code> otherwise
+         */
+        static bool isImageLoaded(cv::Mat &img);
 
-		/**
-		 * Resize given image.
-		 * @param img Image to resize.
-		 * @param scaling Scaling factor to resize.
-		 */
-		static void resizeImage(cv::Mat &img, SCALING scaling);
+        /**
+         * Resize given image.
+         * @param img Image to resize.
+         * @param scaling Scaling factor to resize.
+         */
+        static void resizeImage(cv::Mat &img, SCALING scaling);
 
-		/**
-		 * Ratio to set new point from scaled frame.
-		 * @param point Point to calculate new positions.
-		 * @param cWidth Current width.
-		 * @param cHeight Current height.
-		 * @param nWidth New width.
-		 * @param nHeight New height.
-		 */
-		static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
+        /**
+         * Ratio to set new point from scaled frame.
+         * @param point Point to calculate new positions.
+         * @param cWidth Current width.
+         * @param cHeight Current height.
+         * @param nWidth New width.
+         * @param nHeight New height.
+         */
+        static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
          * Validates the rectangular shape of a detected area.
@@ -105,17 +105,17 @@ namespace Companion
          */
         static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
-		/**
-		 * Converts an image to the given color format. BGR is expected as source format.
-		 * @param src Source image.
-		 * @param dst Destination image.
-		 * @param colorFormat Color format for the converted image.
-		 */
-		static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
+        /**
+         * Converts an image to the given color format. BGR is expected as source format.
+         * @param src Source image.
+         * @param dst Destination image.
+         * @param colorFormat Color format for the converted image.
+         */
+        static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
 
-	private:
+    private:
 
-		static cv::Point getScaling(SCALING scaling);
+        static cv::Point getScaling(SCALING scaling);
 
         /**
          * Calculates the deviation between two lengths.
@@ -124,7 +124,7 @@ namespace Companion
          * return deviation in percent
          */
         static double getDeviation(double x, double y);
-	};
+    };
 
 }
 

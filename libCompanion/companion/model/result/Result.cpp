@@ -20,24 +20,24 @@
 
 Companion::Model::Result::Result(int scoring, int id, Companion::Draw::Drawable *model)
 {
-	this->scoring = scoring;
-	this->id = id;
-	this->model = model;
+    this->scoring = scoring;
+    this->id = id;
+    this->model = model;
 }
 
 Companion::Model::Result::~Result() {}
 
 int Companion::Model::Result::getScoring() const
 {
-	return this->scoring;
+    return this->scoring;
 }
 
 Companion::Draw::Drawable *Companion::Model::Result::getModel() const
 {
-	return this->model;
+    return this->model;
 }
 
 int Companion::Model::Result::getId() const
 {
-	return this->id;
+    return this->id;
 }

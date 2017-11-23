@@ -28,7 +28,7 @@ Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const
 {
-	return descriptors;
+    return descriptors;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors)
@@ -39,7 +39,7 @@ void Companion::Model::Processing::FeatureMatchingModel::setDescriptors(const cv
 
 const std::vector<cv::KeyPoint> &Companion::Model::Processing::FeatureMatchingModel::getKeypoints() const
 {
-	return this->keypoints;
+    return this->keypoints;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints)
@@ -49,16 +49,16 @@ void Companion::Model::Processing::FeatureMatchingModel::setKeypoints(const std:
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
-	cv::Ptr<cv::DescriptorExtractor> extractor)
+    cv::Ptr<cv::DescriptorExtractor> extractor)
 {
-	// Generates problems with detect and compute because image is not an mat object it is an gpu::mat
+    // Generates problems with detect and compute because image is not an mat object it is an gpu::mat
     this->keypoints.clear();
     this->descriptors.empty();
-	detector->detect(this->image, this->keypoints);
-	extractor->compute(this->image, this->keypoints, this->descriptors);
+    detector->detect(this->image, this->keypoints);
+    extractor->compute(this->image, this->keypoints, this->descriptors);
 }
 
 bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated()
 {
-	return !this->keypoints.empty();
+    return !this->keypoints.empty();
 }

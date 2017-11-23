@@ -25,19 +25,19 @@ Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel()
 
 Companion::Model::Processing::ImageRecognitionModel::ImageRecognitionModel(int id, cv::Mat image)
 {
-	this->id = id;
-	this->image = image;
+    this->id = id;
+    this->image = image;
 }
 
 Companion::Model::Processing::ImageRecognitionModel::~ImageRecognitionModel()
 {
     this->image.release();
-	delete this->ira;
+    delete this->ira;
 }
 
 const cv::Mat &Companion::Model::Processing::ImageRecognitionModel::getImage() const
 {
-	return this->image;
+    return this->image;
 }
 
 void Companion::Model::Processing::ImageRecognitionModel::setImage(const cv::Mat &image)
@@ -47,15 +47,15 @@ void Companion::Model::Processing::ImageRecognitionModel::setImage(const cv::Mat
 
 Companion::Algorithm::IRA *Companion::Model::Processing::ImageRecognitionModel::getIra() const
 {
-	return this->ira;
+    return this->ira;
 }
 
 void Companion::Model::Processing::ImageRecognitionModel::setID(int id)
 {
-	this->id = id;
+    this->id = id;
 }
 
 const int Companion::Model::Processing::ImageRecognitionModel::getID() const
 {
-	return this->id;
+    return this->id;
 }
