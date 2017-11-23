@@ -107,7 +107,7 @@ namespace Companion
 			/**
 			 * Default initial position if no object was detected in last frame.
 			 */
-			const int NO_OBJECT_DETECTED = 0;
+			static constexpr int NO_OBJECT_DETECTED = 0;
 
 		};
 	}

@@ -47,7 +47,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 	if (!frame.empty())
 	{
 		sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
-		models = companion->getModels();
+		models = this->companion->getModels();
 
 		oldX = frame.cols;
 		oldY = frame.rows;
@@ -57,7 +57,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 		Util::resizeImage(frame, this->scaling);
 		sceneModel->setImage(frame);
 
-		featureMatching = dynamic_cast<Companion::Algorithm::FeatureMatching*>(matchingAlgo);
+		featureMatching = dynamic_cast<Companion::Algorithm::FeatureMatching*>(this->matchingAlgo);
 		if (featureMatching != nullptr)
 		{
 			// Matching algorithm is feature matching.
@@ -65,13 +65,13 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 			featureMatching->calculateKeyPoints(sceneModel);
 		}
 
-		if (shapeDetection != nullptr)
+		if (this->shapeDetection != nullptr)
 		{
 			// If shape detection should be used obtain all posible rois from frame.
-			rois = shapeDetection->executeAlgorithm(sceneModel->getImage());
+			rois = this->shapeDetection->executeAlgorithm(sceneModel->getImage());
 		}
 
-		if (matchingAlgo->isCuda())
+		if (this->matchingAlgo->isCuda())
 		{
 			for (int x = 0; x < models.size(); x++)
 			{
@@ -125,7 +125,7 @@ void Companion::Processing::ObjectDetection::processing(Model::Processing::Featu
 	if (rois.size() == 0)
 	{
 		// If rois not found or used
-		result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+		result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
 	}
 	else
 	{
@@ -133,7 +133,7 @@ void Companion::Processing::ObjectDetection::processing(Model::Processing::Featu
 		// If rois found
 		while (index < rois.size())
 		{
-			result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+			result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
 			index++;
 		}
 	}

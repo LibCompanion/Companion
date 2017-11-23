@@ -128,12 +128,12 @@ namespace Companion
 			/**
 			 * Default knnMatch neighboors to find features.
 			 */
-			static float DEFAULT_NEIGHBOR;
+			static constexpr float DEFAULT_NEIGHBOR = 2.0f;
 
 			/**
 			 * Default ratio test value to obtain only good feature matches.
 			 */
-			static float DEFAULT_RATIO_VALUE;
+			static constexpr float DEFAULT_RATIO_VALUE = 0.8f;
 
 			/**
 			 * Indicator how many pixels the corners of a found area should be distant from each other. Default value is 10.

@@ -71,7 +71,7 @@ namespace Companion
 		/**
 		 * Checks if given image is loaded.
 		 * @param img Image to check if it's not null.
-		 * @return <code>true</code> if image is loaded otherwise <code>false</code>
+		 * @return <code>true</code> if image is loaded, <code>false</code> otherwise
 		 */
 		static bool isImageLoaded(cv::Mat &img);
 

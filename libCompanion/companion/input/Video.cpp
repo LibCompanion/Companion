@@ -28,8 +28,8 @@ Companion::Input::Video::Video(int device)
 		throw Companion::Error::Code::invalid_video_src;
 	}
 
-	capture = cap;
-	finished = false;
+    this->capture = cap;
+    this->finished = false;
 }
 
 
@@ -43,8 +43,8 @@ Companion::Input::Video::Video(std::string url)
 		throw Companion::Error::Code::invalid_video_src;
 	}
 
-	capture = cap;
-	finished = false;
+    this->capture = cap;
+    this->finished = false;
 }
 
 Companion::Input::Video::~Video()
@@ -57,19 +57,19 @@ cv::Mat Companion::Input::Video::obtainImage()
 
 	cv::Mat frame;
 
-	if (!capture.isOpened() || finished)
+	if (!this->capture.isOpened() || this->finished)
 	{
-		finished = true;
+        this->finished = true;
 		return frame;
 	}
 
 	// Obtain image frame.
-	capture >> frame;
+    this->capture >> frame;
 
 	if (frame.empty())
 	{
 		// If frame empty video is finished.
-		finished = true;
+        this->finished = true;
 	}
 
 	return frame;
@@ -77,10 +77,10 @@ cv::Mat Companion::Input::Video::obtainImage()
 
 bool Companion::Input::Video::isFinished()
 {
-	return finished;
+	return this->finished;
 }
 
 void Companion::Input::Video::finish()
 {
-	finished = true;
+    this->finished = true;
 }

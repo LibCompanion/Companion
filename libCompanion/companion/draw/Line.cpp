@@ -28,51 +28,51 @@ Companion::Draw::Line::Line(cv::Point start, cv::Point end, cv::Scalar color, in
 
 const cv::Point &Companion::Draw::Line::getStart() const
 {
-	return start;
+	return this->start;
 }
 
 void Companion::Draw::Line::setStart(const cv::Point &start)
 {
-	Line::start = start;
+    this->start = start;
 }
 
 const cv::Point &Companion::Draw::Line::getEnd() const
 {
-	return end;
+	return this->end;
 }
 
 void Companion::Draw::Line::setEnd(const cv::Point &end)
 {
-	Line::end = end;
+    this->end = end;
 }
 
 const cv::Scalar &Companion::Draw::Line::getColor() const
 {
-	return color;
+	return this->color;
 }
 
 void Companion::Draw::Line::setColor(const cv::Scalar &color)
 {
-	Line::color = color;
+    this->color = color;
 }
 
 int Companion::Draw::Line::getThickness() const
 {
-	return thickness;
+	return this->thickness;
 }
 
 void Companion::Draw::Line::setThickness(int thickness)
 {
-	Line::thickness = thickness;
+    this->thickness = thickness;
 }
 
 void Companion::Draw::Line::draw(cv::Mat image)
 {
-	cv::line(image, start, end, color, thickness);
+	cv::line(image, this->start, this->end, this->color, this->thickness);
 }
 
 void Companion::Draw::Line::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-	Util::ratioPosition(start, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(end, cWidth, cHeight, nWidth, nHeight);
+	Util::ratioPosition(this->start, cWidth, cHeight, nWidth, nHeight);
+	Util::ratioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
 }

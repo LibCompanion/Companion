@@ -31,8 +31,8 @@ void Companion::Util::resizeImage(cv::Mat &img, SCALING scaling)
 
 void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight)
 {
-	point.x = (int)(((float)point.x / (float)cWidth) * nWidth);
-	point.y = (int)(((float)point.y / (float)cHeight) * nHeight);
+	point.x = static_cast<int>((point.x / static_cast<float>(cWidth)) * nWidth);
+	point.y = static_cast<int>((point.y / static_cast<float>(cHeight)) * nHeight);
 }
 
 bool Companion::Util::hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance)

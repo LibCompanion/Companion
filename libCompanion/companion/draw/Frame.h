@@ -52,7 +52,7 @@ namespace Companion
 				cv::Point topRight,
 				cv::Point bottomLeft,
 				cv::Point bottomRight,
-				cv::Scalar color = cv::Scalar(0, 255, 0, 255),
+				cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
 				int thickness = 4);
 
 			/**

@@ -18,13 +18,13 @@
 
 #include "ShapeDetection.h"
 
-Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, int cannyThreshold, int dilateIteration)
+Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, double cannyThreshold, int dilateIteration)
 {
-	ShapeDetection::morphKernel = morphKernel;
-	ShapeDetection::erodeKernel = erodeKernel;
-	ShapeDetection::dilateKernel = dilateKernel;
-	ShapeDetection::cannyThreshold = cannyThreshold;
-	ShapeDetection::dilateIteration = dilateIteration;
+    this->morphKernel = morphKernel;
+    this->erodeKernel = erodeKernel;
+    this->dilateKernel = dilateKernel;
+	this->cannyThreshold = cannyThreshold;
+    this->dilateIteration = dilateIteration;
 }
 
 Companion::Algorithm::ShapeDetection::~ShapeDetection()
@@ -58,12 +58,12 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 	}
 
 	cvtColor(frame, frame, cv::COLOR_BGR2GRAY);
-	cv::Canny(frame, frame, cannyThreshold, cannyThreshold * 3, 3);
+	cv::Canny(frame, frame, this->cannyThreshold, this->cannyThreshold * 3.0, 3);
 
 	// Morphological Transformations - http://docs.opencv.org/trunk/d9/d61/tutorial_py_morphological_ops.html
-	morphologyEx(frame, frame, CV_MOP_CLOSE, morphKernel);
-	erode(frame, frame, erodeKernel);
-	dilate(frame, frame, dilateKernel, cv::Point(-1, -1), dilateIteration);
+	morphologyEx(frame, frame, CV_MOP_CLOSE, this->morphKernel);
+	erode(frame, frame, this->erodeKernel);
+	dilate(frame, frame, this->dilateKernel, cv::Point(-1, -1), this->dilateIteration);
 
 	// Contour Retrieval Mode - http://docs.opencv.org/3.1.0/d9/d8b/tutorial_py_contours_hierarchy.html
 	// CV_RETR_EXTERNAL, CV_RETR_LIST, CV_RETR_CCOMP, CV_RETR_TREE
