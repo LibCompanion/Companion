@@ -21,66 +21,66 @@
 Companion::Input::Video::Video(int device)
 {
 
-	cv::VideoCapture cap(device);
+    cv::VideoCapture cap(device);
 
-	if (!cap.isOpened())
-	{
-		throw Companion::Error::Code::invalid_video_src;
-	}
+    if (!cap.isOpened())
+    {
+        throw Companion::Error::Code::invalid_video_src;
+    }
 
-	capture = cap;
-	finished = false;
+    this->capture = cap;
+    this->finished = false;
 }
 
 
 Companion::Input::Video::Video(std::string url)
 {
 
-	cv::VideoCapture cap(url);
+    cv::VideoCapture cap(url);
 
-	if (!cap.isOpened())
-	{
-		throw Companion::Error::Code::invalid_video_src;
-	}
+    if (!cap.isOpened())
+    {
+        throw Companion::Error::Code::invalid_video_src;
+    }
 
-	capture = cap;
-	finished = false;
+    this->capture = cap;
+    this->finished = false;
 }
 
 Companion::Input::Video::~Video()
 {
-	// No need to close capture device because closing will be done from VideoCapture destructor.
+    // No need to close capture device because closing will be done from VideoCapture destructor.
 }
 
 cv::Mat Companion::Input::Video::obtainImage()
 {
 
-	cv::Mat frame;
+    cv::Mat frame;
 
-	if (!capture.isOpened() || finished)
-	{
-		finished = true;
-		return frame;
-	}
+    if (!this->capture.isOpened() || this->finished)
+    {
+        this->finished = true;
+        return frame;
+    }
 
-	// Obtain image frame.
-	capture >> frame;
+    // Obtain image frame.
+    this->capture >> frame;
 
-	if (frame.empty())
-	{
-		// If frame empty video is finished.
-		finished = true;
-	}
+    if (frame.empty())
+    {
+        // If frame empty video is finished.
+        this->finished = true;
+    }
 
-	return frame;
+    return frame;
 }
 
 bool Companion::Input::Video::isFinished()
 {
-	return finished;
+    return this->finished;
 }
 
 void Companion::Input::Video::finish()
 {
-	finished = true;
+    this->finished = true;
 }

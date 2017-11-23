@@ -27,104 +27,104 @@
 namespace Companion
 {
 
-	/**
-	 * Enumeration class for color formats.
-	 */
-	enum class COMP_EXPORTS ColorFormat
-	{
-		RGB,
-		RGBA,
-		BGR,
-		BGRA,
-		GRAY
-	};
+    /**
+     * Enumeration class for color formats.
+     */
+    enum class COMP_EXPORTS ColorFormat
+    {
+        RGB,
+        RGBA,
+        BGR,
+        BGRA,
+        GRAY
+    };
 
-	/**
-	 * Enumeration class for scaling.
-	 */
-	enum class COMP_EXPORTS SCALING
-	{
-		SCALE_2048x1152,
-		SCALE_1920x1080,
-		SCALE_1600x900,
-		SCALE_1408x792,
-		SCALE_1344x756,
-		SCALE_1280x720,
-		SCALE_1152x648,
-		SCALE_1024x576,
-		SCALE_960x540,
-		SCALE_896x504,
-		SCALE_800x450,
-		SCALE_768x432,
-		SCALE_640x360
-	};
+    /**
+     * Enumeration class for scaling.
+     */
+    enum class COMP_EXPORTS SCALING
+    {
+        SCALE_2048x1152,
+        SCALE_1920x1080,
+        SCALE_1600x900,
+        SCALE_1408x792,
+        SCALE_1344x756,
+        SCALE_1280x720,
+        SCALE_1152x648,
+        SCALE_1024x576,
+        SCALE_960x540,
+        SCALE_896x504,
+        SCALE_800x450,
+        SCALE_768x432,
+        SCALE_640x360
+    };
 
-	/**
-	 * Utility class for opencv.
-	 * @author Andreas Sekulksi
-	 */
-	class COMP_EXPORTS Util
-	{
+    /**
+     * Utility class for opencv.
+     * @author Andreas Sekulksi
+     */
+    class COMP_EXPORTS Util
+    {
 
-	public:
-
-		/**
-		 * Checks if given image is loaded.
-		 * @param img Image to check if it's not null.
-		 * @return <code>true</code> if image is loaded otherwise <code>false</code>
-		 */
-		static bool isImageLoaded(cv::Mat &img);
-
-		/**
-		 * Resize given image.
-		 * @param img Image to resize.
-		 * @param scaling Scaling factor to resize.
-		 */
-		static void resizeImage(cv::Mat &img, SCALING scaling);
-
-		/**
-		 * Ratio to set new point from scaled frame.
-		 * @param point Point to calculate new positions.
-		 * @param cWidth Current width.
-		 * @param cHeight Current height.
-		 * @param nWidth New width.
-		 * @param nHeight New height.
-		 */
-		static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
-
-		/**
-		 * Checks if a point is distant enough from a given origin.
-		 * @param origin Origin point.
-		 * @param point Point whose distance should be checked.
-		 * @param distance Minimum distance.
-		 * @return <code>true</code> if point is distant enough otherwise <code>false</code>
-		 */
-		static bool hasDistantPosition(cv::Point2f origin, cv::Point2f point, int distance);
+    public:
 
         /**
-         * Checks diagonals from detected points to check if result is a valid rectangle.
-         * @param topRight Top right detected position from object.
-         * @param bottomLeft Bottom left detected position from object.
-         * @param topLeft Top left detected position from object.
-         * @param bottomRight Bottom right detected position from object.
-         * @param threshold Threshold in 0 to 100 percentage to validate rectangle.
-         * @param distance Minimum distance from corners.
-         * @return <code>true</code> if point is distant enough otherwise <code>false</code>
+         * Checks if given image is loaded.
+         * @param img Image to check if it's not null.
+         * @return <code>true</code> if image is loaded, <code>false</code> otherwise
          */
-        static bool checkDistantDiagonals(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int threshold, int distance);
+        static bool isImageLoaded(cv::Mat &img);
 
-		/**
-		 * Converts an image to the given color format. BGR is expected as source format.
-		 * @param src Source image.
-		 * @param dst Destination image.
-		 * @param colorFormat Color format for the converted image.
-		 */
-		static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
+        /**
+         * Resize given image.
+         * @param img Image to resize.
+         * @param scaling Scaling factor to resize.
+         */
+        static void resizeImage(cv::Mat &img, SCALING scaling);
 
-	private:
+        /**
+         * Ratio to set new point from scaled frame.
+         * @param point Point to calculate new positions.
+         * @param cWidth Current width.
+         * @param cHeight Current height.
+         * @param nWidth New width.
+         * @param nHeight New height.
+         */
+        static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
-		static cv::Point getScaling(SCALING scaling);
-	};
+        /**
+         * Validates the rectangular shape of a detected area.
+         * @param topRight Top right corner of the detected area.
+         * @param bottomLeft Bottom left corner of the detected area.
+         * @param topLeft Top left corner of the detected area.
+         * @param bottomRight Bottom right corner of the detected area.
+         * @param minSidelLength Minimum length of the detected area's sides (in pixels).
+         * @param maxSideDeviation Maximum deviation of the sides' lengths.
+         * @param maxDiagonalDeviation Maximum deviation of the diagonals' lengths.
+         * @return <code>true</code> if the diagonals are long enough and both have a similar length, <code>false</code> otherwise
+         */
+        static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
+
+        /**
+         * Converts an image to the given color format. BGR is expected as source format.
+         * @param src Source image.
+         * @param dst Destination image.
+         * @param colorFormat Color format for the converted image.
+         */
+        static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
+
+    private:
+
+        static cv::Point getScaling(SCALING scaling);
+
+        /**
+         * Calculates the deviation between two lengths.
+         * @param x first length
+         * @param y second length
+         * return deviation in percent
+         */
+        static double getDeviation(double x, double y);
+    };
 
 }
 

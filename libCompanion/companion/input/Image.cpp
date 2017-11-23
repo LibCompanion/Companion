@@ -18,73 +18,74 @@
 
 #include "Image.h"
 
-Companion::Input::Image::Image(int maxImages) : maxImages(maxImages)
+Companion::Input::Image::Image(int maxImages)
 {
-	this->exitStream = false;
-	this->exitAfterProcessing = false;
+    this->exitStream = false;
+    this->exitAfterProcessing = false;
+    this->maxImages = maxImages;
 }
 
 Companion::Input::Image::~Image() {}
 
 bool Companion::Input::Image::addImage(std::string imgPath)
 {
-	return addImage(cv::imread(imgPath));
+    return addImage(cv::imread(imgPath));
 }
 
 bool Companion::Input::Image::addImage(cv::Mat img)
 {
 
-	if (!img.empty())
-	{
-		// Limit queue size to keep memory low
-		std::unique_lock<std::mutex> lk(mx);
-		cv.wait(lk, [this] { return images.size() < maxImages; });
-		// Stores only img which exists.
-		images.push(img);
-		return true;
-	}
+    if (!img.empty())
+    {
+        // Limit queue size to keep memory low
+        std::unique_lock<std::mutex> lk(this->mx);
+        this->cv.wait(lk, [this] { return this->images.size() < this->maxImages; });
+        // Stores only img which exists.
+        this->images.push(img);
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 bool Companion::Input::Image::addImage(int width, int height, int type, uchar* data)
 {
-	return addImage(cv::Mat(cv::Size(width, height), type, data));
+    return addImage(cv::Mat(cv::Size(width, height), type, data));
 }
 
 cv::Mat Companion::Input::Image::obtainImage()
 {
 
-	cv::Mat image;
-	std::unique_lock<std::mutex> lk(mx);
-	if (!images.empty())
-	{
-		// Get first image from fifo
-		image = images.front();
-		images.pop();
+    cv::Mat image;
+    std::unique_lock<std::mutex> lk(this->mx);
+    if (!this->images.empty())
+    {
+        // Get first image from fifo
+        image = this->images.front();
+        this->images.pop();
 
-		// Notify image input stream
-		if (images.size() < maxImages)
-		{
-			cv.notify_one();
-		}
-	}
+        // Notify image input stream
+        if (this->images.size() < this->maxImages)
+        {
+            this->cv.notify_one();
+        }
+    }
 
-	return image;
+    return image;
 }
 
 bool Companion::Input::Image::isFinished()
 {
-	std::unique_lock<std::mutex> lk(mx);
-	return exitStream || (exitAfterProcessing && images.empty());
+    std::unique_lock<std::mutex> lk(this->mx);
+    return this->exitStream || (this->exitAfterProcessing && this->images.empty());
 }
 
 void Companion::Input::Image::finish()
 {
-	exitStream = true;
+    this->exitStream = true;
 }
 
 void Companion::Input::Image::finishAfterProcessing()
 {
-	exitAfterProcessing = true;
+    this->exitAfterProcessing = true;
 }
