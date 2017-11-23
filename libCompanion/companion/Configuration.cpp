@@ -105,11 +105,11 @@ bool Companion::Configuration::addModel(Companion::Model::Processing::ImageRecog
     return false;
 }
 
-bool Companion::Configuration::removeModel(Companion::Model::Processing::ImageRecognitionModel *model)
+bool Companion::Configuration::removeModel(int modelID)
 {
     for (int index = 0; index < this->models.size(); index++)
     {
-        if (this->models.at(index)->getID() == model->getID()) {
+        if (this->models.at(index)->getID() == modelID) {
             this->models.erase(this->models.begin() + index);
             return true;
         }
