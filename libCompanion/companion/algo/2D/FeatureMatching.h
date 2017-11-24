@@ -58,8 +58,8 @@ namespace Companion
              * @param countMatches Maximum number from feature matches to obtain a good matching result. Default is by 40.
              * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
              * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
-             * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
-             * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
+             * @param ransacMaxIters Homography parameter: Maximum number of RANSAC iterations (2000 is the maximum). Default is by 500.
+             * @param findHomographyMethod Method used to compute a homography matrix. Default is by RANSAC.
              */
             FeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
                 cv::Ptr<cv::DescriptorExtractor> extractor,
