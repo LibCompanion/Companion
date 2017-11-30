@@ -21,8 +21,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d.hpp>
-
-#include "ImageRecognitionModel.h"
+#include <companion/algo/util/IRA.h>
 
 namespace Companion
 {
@@ -37,7 +36,7 @@ namespace Companion
 			 * Comparison data model to store search results from an feature matching algo.
 			 * @author Andreas Sekulski
 			 */
-			class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel
+			class COMP_EXPORTS FeatureMatchingModel
 			{
 
 			public:
@@ -91,6 +90,36 @@ namespace Companion
 				void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
 					cv::Ptr<cv::DescriptorExtractor> extractor);
 
+				/**
+				 * Gets image which is stored, if no image is stored image is empty.
+				 * @return An image if is set otherwise image is empty.
+				 */
+				const cv::Mat &getImage() const;
+
+				/**
+				 * Sets given image.
+				 * @param image Image to set.
+				 */
+				void setImage(const cv::Mat &image);
+
+				/**
+				 * Gets IRA class to store last object detection.
+				 * @return IRA class to obtain informations about last object detection.
+				 */
+				Companion::Algorithm::IRA *getIra() const;
+
+				/**
+				 * Sets the ID for this model.
+				 * @param id ID to set.
+				 */
+				void setID(int id);
+
+				/**
+				 * Gets the ID of this model.
+				 * @return  The ID of this model.
+				 */
+				const int getID() const;
+
 			private:
 
 				/**
@@ -102,6 +131,21 @@ namespace Companion
 				 * Keypoints from matching.
 				 */
 				std::vector<cv::KeyPoint> keypoints;
+
+				/**
+				 * The ID of this model.
+ 				 */
+				int id;
+
+				/**
+				 * Image to store.
+				 */
+				cv::Mat image;
+
+				/**
+				 * Image reduction algorithm to store last object detection position.
+				 */
+				Companion::Algorithm::IRA *ira;
 
 			};
 		}

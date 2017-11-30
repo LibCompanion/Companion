@@ -69,6 +69,13 @@ namespace Companion
 	public:
 
 		/**
+		* Cut given image frame from cut area.
+		* @param cutArea Area to cut subframe.
+		* @return Cutted image.
+		*/
+		static cv::Mat cutImage(cv::Mat img, cv::Rect cutArea);
+
+		/**
 		 * Checks if given image is loaded.
 		 * @param img Image to check if it's not null.
 		 * @return <code>true</code> if image is loaded otherwise <code>false</code>
@@ -81,6 +88,13 @@ namespace Companion
 		 * @param scaling Scaling factor to resize.
 		 */
 		static void resizeImage(cv::Mat &img, SCALING scaling);
+
+		/**
+		* Resize given image.
+		* @param img Image to resize.
+		* @param size Width and Height in pixel to resize image.
+		*/
+		static void resizeImage(cv::Mat &img, cv::Size size);
 
 		/**
 		 * Ratio to set new point from scaled frame.

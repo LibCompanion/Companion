@@ -21,7 +21,6 @@
 
 #include <opencv2/core/core.hpp>
 #include <companion/processing/ImageProcessing.h>
-#include <companion/model/processing/ImageRecognitionModel.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/draw/Drawable.h>
 #include <companion/algo/2D/FeatureMatching.h>
@@ -39,27 +38,45 @@ namespace Companion
 		 * 2D Object detection implementation.
 		 * @author Andreas Sekulski
 		 */
-		class COMP_EXPORTS ObjectDetection : public ImageProcessing
+		class COMP_EXPORTS FeatureDetection : public ImageProcessing
 		{
 
 		public:
 
 			/**
 			 * Constructor to create an object detection algorithm implementation.
-			 * @param companion Configuration class to obtain model entities to verify.
 			 * @param matchingAlgo Image recognition algorithm to use, for example feature matching.
 			 * @param scaling Scaling to resize an image. Default is full hd.
 			 * @param shapeDetection Shape detection algorithm to detect roi's in images optional if not set complete image will be searched.
 			 */
-			ObjectDetection(Companion::Configuration *companion,
-				Companion::Algorithm::Matching *matchingAlgo,
+			FeatureDetection(Companion::Algorithm::Matching *matchingAlgo,
 				Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080,
 				Companion::Algorithm::ShapeDetection *shapeDetection = nullptr);
 
 			/**
+			 * Add searching model type. For example an object (feature) which should be detected.
+			 * @param model Model to search.
+			 * @return True if model is added false if not.
+			 */
+			bool addModel(Companion::Model::Processing::FeatureMatchingModel *model);
+
+			/**
+			 * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
+			 * @param model Model to delete.
+			 * @throws Companion::Error::Code Companion error code if currently search is using.
+			 * @return True if model deleted otherwise false.
+			 */
+			bool removeModel(Companion::Model::Processing::FeatureMatchingModel *model);
+
+			/**
+			 * Clear all models which are searched.
+			 */
+			void clearModels();
+
+			/**
 			 * Destructor
 			 */
-			virtual ~ObjectDetection();
+			virtual ~FeatureDetection();
 
 			/**
 			 * Try to detect all objects from given frame.
@@ -77,11 +94,6 @@ namespace Companion
 			Companion::SCALING scaling;
 
 			/**
-			 * Companion configuration which contains model data to search.
-			 */
-			Companion::Configuration *companion;
-
-			/**
 			 * Matching algorithm.
 			 */
 			Companion::Algorithm::Matching *matchingAlgo;
@@ -90,6 +102,11 @@ namespace Companion
 			 * Shape detection algorithm.
 			 */
 			Companion::Algorithm::ShapeDetection *shapeDetection;
+
+            /**
+             * Feature matching models.
+             */
+            std::vector<Companion::Model::Processing::FeatureMatchingModel*> models;
 
 			/**
 			 * Processing method to detect objects.

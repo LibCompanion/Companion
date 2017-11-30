@@ -20,7 +20,6 @@
 #define COMPANION_SHAPEDETECTION_H
 
 #include <companion/algo/abstract/ImageRecognition.h>
-#include <companion/model/processing/ImageRecognitionModel.h>
 #include <companion/model/result/Result.h>
 #include <companion/draw/Frame.h>
 #include <companion/util/CompanionError.h>

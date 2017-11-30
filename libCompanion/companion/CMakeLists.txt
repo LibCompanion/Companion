@@ -32,10 +32,9 @@ set(SOURCE
         draw/Frame.cpp draw/Frame.h
         draw/Line.cpp draw/Line.h
         model/processing/FeatureMatchingModel.cpp model/processing/FeatureMatchingModel.h
-        model/processing/ImageRecognitionModel.cpp model/processing/ImageRecognitionModel.h
         model/result/Result.cpp model/result/Result.h
         processing/ImageProcessing.h
-        processing/2D/ObjectDetection.cpp processing/2D/ObjectDetection.h
+        processing/2D/FeatureDetection.cpp processing/2D/FeatureDetection.h
         input/Stream.h
         input/Video.cpp input/Video.h
         input/Image.cpp input/Image.h
@@ -43,7 +42,7 @@ set(SOURCE
         util/CompanionError.h
         util/Util.cpp util/Util.h
         util/Definitions.h
-        util/exportapi/ExportAPIDefinitions.h)
+        util/exportapi/ExportAPIDefinitions.h model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h processing/2D/HashDetection.cpp processing/2D/HashDetection.h)
 
 # Create MSVC filter
 if(MSVC)

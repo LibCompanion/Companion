@@ -23,7 +23,7 @@
 #include <thread>
 #include <companion/thread/StreamWorker.h>
 #include <companion/input/Stream.h>
-#include <companion/model/processing/ImageRecognitionModel.h>
+#include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/algo/abstract/ImageRecognition.h>
 #include <companion/processing/ImageProcessing.h>
 #include <companion/util/Definitions.h>
@@ -74,32 +74,6 @@ namespace Companion
 		 * @param source Video source to set like an camera or video.
 		 */
 		void setSource(Companion::Input::Stream *source);
-
-		/**
-		 * Add searching model type. For example an object (feature) which should be detected.
-		 * @param model Model to search.
-		 * @return True if model is added false if not.
-		 */
-		bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
-
-	    /**
-		 * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
-		 * @param model Model to delete.
-		 * @throws Companion::Error::Code Companion error code if currently search is using.
-		 * @return True if model deleted otherwise false.
-		 */
-		bool removeModel(Companion::Model::Processing::ImageRecognitionModel *model);
-
-		/**
-		 * Clear all models which are searched.
-		 */
-		void clearModels();
-
-		/**
-		 * Get model vector which contains all searched models.
-		 * @return Vector from all searched models, if no models are set this vector is empty.
-		 */
-		const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &getModels() const;
 
 		/**
 		 * Gets current processing algorithm which should be used.
@@ -183,11 +157,6 @@ namespace Companion
 		 * Data stream source to obtain images.
 		 */
 		Companion::Input::Stream* source;
-
-		/**
-		 * Search models to detect objects from source.
-		 */
-		std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 
 		/**
 		 * Image processing implementation for example an object detection.

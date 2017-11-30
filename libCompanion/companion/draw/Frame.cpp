@@ -88,6 +88,11 @@ const cv::Scalar &Companion::Draw::Frame::getColor() const
 	return color;
 }
 
+cv::Rect Companion::Draw::Frame::cutArea()
+{
+	return cv::Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+}
+
 int Companion::Draw::Frame::getThickness() const
 {
 	return thickness;
