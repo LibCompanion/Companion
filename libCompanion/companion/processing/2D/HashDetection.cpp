@@ -64,6 +64,7 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 
 	cv::Mat query;
 	std::pair<cv::Mat_<float>, cv::Mat> dataset = model->generateDataset();
+	std::vector<Companion::Model::Result *> results;
 
 	// Obtain all shapes from image to detect.
 	std::vector<Companion::Draw::Frame*> frames = shapeDetection->executeAlgorithm(frame);
@@ -111,12 +112,17 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 		// ToDo := SCORING VALUE
 		for (int r = 0; r < std::min(10, (int)rank.size()); ++r)
 		{
+			if (r == 0)
+			{
+				results.push_back(new Companion::Model::Result(100, rank.at(r).first, frames.at(i)));
+			}
+
 			std::cout << "RANK ID :" << rank.at(r).first << " Value " << rank.at(r).second << std::endl;
 		}
 		std::cout << "-------------------------------------------------------"<< std::endl;
 	}
 
-    return std::vector<Companion::Model::Result *>();
+    return results;
 }
 
 
