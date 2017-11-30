@@ -16,38 +16,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ObjectDetection.h"
+#include "FeatureDetection.h"
 
-Companion::Processing::ObjectDetection::ObjectDetection(Companion::Configuration *companion,
-	Companion::Algorithm::Matching *matchingAlgo,
+Companion::Processing::FeatureDetection::FeatureDetection(Companion::Algorithm::Matching *matchingAlgo,
 	Companion::SCALING scaling,
 	Companion::Algorithm::ShapeDetection *shapeDetection)
 {
-	this->companion = companion;
 	this->matchingAlgo = matchingAlgo;
 	this->scaling = scaling;
 	this->shapeDetection = shapeDetection;
 }
 
-Companion::Processing::ObjectDetection::~ObjectDetection()
+Companion::Processing::FeatureDetection::~FeatureDetection()
 {
-
 }
 
-CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
+CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 {
-
 	Companion::Algorithm::FeatureMatching *featureMatching;
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
 	CALLBACK_RESULT objects;
-	std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
 	std::vector<Companion::Draw::Frame*> rois;
 	int oldX, oldY;
 
 	if (!frame.empty())
 	{
 		sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
-		models = companion->getModels();
 
 		oldX = frame.cols;
 		oldY = frame.rows;
@@ -76,7 +70,7 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 			for (int x = 0; x < models.size(); x++)
 			{
 				processing(sceneModel,
-					dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x)),
+					models.at(x),
 					rois,
 					frame,
 					oldX,
@@ -86,11 +80,11 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 		}
 		else
 		{
-			#pragma omp parallel for
+			//#pragma omp parallel for
 			for (int x = 0; x < models.size(); x++)
 			{
 				processing(sceneModel,
-					dynamic_cast<Companion::Model::Processing::FeatureMatchingModel*>(models.at(x)),
+					models.at(x),
 					rois,
 					frame,
 					oldX,
@@ -106,8 +100,8 @@ CALLBACK_RESULT Companion::Processing::ObjectDetection::execute(cv::Mat frame)
 	return objects;
 }
 
-void Companion::Processing::ObjectDetection::processing(Model::Processing::FeatureMatchingModel* sceneModel,
-	Model::Processing::FeatureMatchingModel* objectModel,
+void Companion::Processing::FeatureDetection::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
+    Companion::Model::Processing::FeatureMatchingModel* objectModel,
 	std::vector<Companion::Draw::Frame*> rois,
 	cv::Mat frame,
 	int originalX,
@@ -145,4 +139,33 @@ void Companion::Processing::ObjectDetection::processing(Model::Processing::Featu
 		// Store detected object and its ID to vector.
 		objects.push_back(result);
 	}
+}
+
+bool Companion::Processing::FeatureDetection::addModel(Companion::Model::Processing::FeatureMatchingModel *model)
+{
+
+	if (!model->getImage().empty())
+	{
+		this->models.push_back(model);
+		return true;
+	}
+
+	return false;
+}
+
+bool Companion::Processing::FeatureDetection::removeModel(Companion::Model::Processing::FeatureMatchingModel *model)
+{
+	for (int index = 0; index < this->models.size(); index++)
+	{
+		if (this->models.at(index)->getID() == model->getID()) {
+			this->models.erase(this->models.begin() + index);
+			return true;
+		}
+	}
+	return false;
+}
+
+void Companion::Processing::FeatureDetection::clearModels()
+{
+	this->models.clear();
 }

@@ -106,6 +106,12 @@ namespace Companion
 			const cv::Scalar &getColor() const;
 
 			/**
+			 * Obtain cut area from frame.
+			 * @return Cut area as rect to use to cut a subframe.
+			 */
+			cv::Rect cutArea();
+
+			/**
 			 * Get thickness size from frame, if 0 no frame will be drawn.
 			 * @return Get thickness size from frame.
 			 */

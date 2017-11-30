@@ -18,7 +18,12 @@
 
 #include "Util.h"
 
-bool Companion::Util::isImageLoaded(cv::Mat &img)
+cv::Mat Companion::Util::cutImage(cv::Mat img, cv::Rect cutArea)
+{
+	return cv::Mat(img, cutArea);
+}
+
+ bool Companion::Util::isImageLoaded(cv::Mat &img)
 {
 	return !img.empty();
 }
@@ -27,6 +32,11 @@ void Companion::Util::resizeImage(cv::Mat &img, SCALING scaling)
 {
 	cv::Point size = getScaling(scaling);
 	cv::resize(img, img, cv::Size(size.x, size.y), cv::INTER_AREA);
+}
+
+void Companion::Util::resizeImage(cv::Mat & img, cv::Size size)
+{
+	cv::resize(img, img, size);
 }
 
 void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight)

@@ -72,6 +72,5 @@ void Companion::Algorithm::IRA::clear()
 
 bool Companion::Algorithm::IRA::isObjectDetected()
 {
-	// ToDo := Currently 10000 because of an IFIS video bug to small areas for IRA...
-	return lop.area() > 10000 && lop.width > NO_OBJECT_DETECTED && lop.height > NO_OBJECT_DETECTED;
+	return lop.width > NO_OBJECT_DETECTED && lop.height > NO_OBJECT_DETECTED;
 }
