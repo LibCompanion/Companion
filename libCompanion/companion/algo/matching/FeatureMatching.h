@@ -286,12 +286,6 @@ namespace Companion::Algorithm::Matching
 											 bool isIRAUsed,
 											 bool isROIUsed,
 											 Companion::Draw::Frame *roi);
-
-        #if Companion_DEBUG
-                        void showFeatureMatches(cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
-                        cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
-                        std::vector<cv::DMatch>& goodMatches, std::string windowName);
-        #endif
 	};
 }
 

@@ -115,7 +115,6 @@ namespace Companion
 		/**
 		 * Sets a given result handler. The result handler returns a list of all detected objects as result models.
 		 * The source image will be converted to the given format.
-		 *
 		 * @param callback Function pointer which contains result event handler.
 		 * @param colorFormat Color format of the returned image.
 		 */

@@ -42,7 +42,7 @@ namespace Companion::Model
         Result(int scoring, int id, Draw::Drawable *model);
 
         /**
-         * Destructor
+         * Default destructor
          */
         virtual ~Result();
 

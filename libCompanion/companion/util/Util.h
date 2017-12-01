@@ -137,6 +137,11 @@ namespace Companion
 
 	private:
 
+		/**
+		 * Get scaling from given enumeration as point representation.
+		 * @param scaling Scaling to obtain point.
+		 * @return Scaling as point representation which x is width and y height in px.
+		 */
 		static cv::Point getScaling(SCALING scaling);
 	};
 

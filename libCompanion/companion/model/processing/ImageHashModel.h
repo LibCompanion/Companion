@@ -71,10 +71,19 @@ namespace Companion::Model::Processing
          **/
         cv::Mat imageDataset;
 
+        /**
+         * Hash values to store from all models.
+         */
         cv::Mat_<float> hash;
 
+        /**
+         * Index dataset from all models.
+         */
         cv::Mat indexDataset;
 
+        /**
+         * Score pair from all given models.
+         */
         std::vector<std::pair<int, float>> scores;
 
         /**

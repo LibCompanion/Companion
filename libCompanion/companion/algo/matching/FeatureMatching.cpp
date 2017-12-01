@@ -448,7 +448,6 @@ Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::calc
 	// Offset is recalculate position from last recognition if exists.
 	cv::Point2f offset = cv::Point2f(lastRect.x, lastRect.y);
 
-    // ToDo = What happens if your scan a image upside down?
 	// Focus area - Scene Corners
 	//   0               1
 	//   -----------------
@@ -530,24 +529,3 @@ Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::calc
 
 	return frame;
 }
-
-#if Companion_DEBUG
-void Companion::Algorithm::matching::FeatureMatching::showFeatureMatches(
-	cv::Mat& objectImg, std::vector<cv::KeyPoint>& objectKeypoints,
-	cv::Mat& sceneImg, std::vector<cv::KeyPoint>& sceneKeypoints,
-	std::vector<cv::DMatch>& goodMatches, std::string windowName)
-{
-	// Build only in debug mode for development
-	cv::Mat imgMatches;
-
-	if (!objectImg.empty() && !sceneImg.empty())
-	{
-		cv::drawMatches(objectImg, objectKeypoints, sceneImg, sceneKeypoints,
-			goodMatches, imgMatches, cv::Scalar::all(-1), cv::Scalar::all(-1),
-			std::vector<char>(), cv::DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-
-		//-- Show detected matches
-		cv::imshow(windowName, imgMatches);
-	}
-}
-#endif

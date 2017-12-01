@@ -27,16 +27,27 @@
 
 namespace Companion::Processing
 {
-    // ToDo : Documentation
 
+    /**
+     * Hash detection implementation to detect object from a image with hash values.
+     */
     class COMP_EXPORTS HashDetection : public ImageProcessing {
 
     public:
 
+        /**
+         * Hash detection construtor to create a object detector.
+         * @param modelSize Model size in pixel.
+         * @param shapeDetection Shape detection algorithm to detect ROI's.
+         * @param hashing Hashing algorithm implementation for example LSH.
+         */
         HashDetection(cv::Size modelSize, 
             Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
             Companion::Algorithm::Hashing::Hashing *hashing);
 
+        /**
+         * Default destructor.
+         */
         virtual ~HashDetection();
 
         /**
@@ -47,20 +58,36 @@ namespace Companion::Processing
          */
         virtual CALLBACK_RESULT execute(cv::Mat frame);
 
+        /**
+         * Adds a model to search.
+         * @param id Identity from model.
+         * @param image Image from model to store as hash.
+         * @return TRUE if model is added otherwise false.
+         */
         bool addModel(int id, cv::Mat image);
 
     private:
 
+        /**
+         * Stores model size in pixel.
+         */
         cv::Size modelSize;
 
+        /**
+         * Stores shape detection algorithm to search for roi's.
+         */
         Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
 
+        /**
+         * Models to detect.
+         */
         Companion::Model::Processing::ImageHashModel *model;
 
+        /**
+         * Stores hashing algorithm to detect objects.
+         */
         Companion::Algorithm::Hashing::Hashing *hashing;
-
     };
 }
-
 
 #endif //COMPANION_HASHDETECTION_H

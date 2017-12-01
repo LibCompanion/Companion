@@ -51,6 +51,9 @@ namespace Companion::Algorithm::Detection
                        int cannyThreshold = 50,
                        int dilateIteration = 3);
 
+        /**
+         * Default destructor.
+         */
         virtual ~ShapeDetection();
 
         /**

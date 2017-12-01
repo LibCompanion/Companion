@@ -26,11 +26,22 @@
 
 namespace Companion::Algorithm::Hashing
 {
+    /**
+     * Interface class to create hashing algorithm for image recognition for example locality sensitive hashing (lsh).
+     * @author Andreas Sekulski
+     */
     class COMP_EXPORTS Hashing : public ImageRecognition
     {
 
         public:
 
+            /**
+             * Specific algorithm implementation for a hashing process.
+             * @param model Image hash model to compare.
+             * @param query Query image to compare with hash model.
+             * @param roi Region of interest position to check.
+             * @return Nullptr if no matching success otherwise a Result.
+             */
             virtual Companion::Model::Result* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, 
                 cv::Mat query, Companion::Draw::Frame *roi) = 0;
 
