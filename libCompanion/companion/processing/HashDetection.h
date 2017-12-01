@@ -22,6 +22,7 @@
 #include <companion/algo/detection/ShapeDetection.h>
 #include <companion/processing/ImageProcessing.h>
 #include <companion/model/processing/ImageHashModel.h>
+#include <companion/algo/hashing/Hashing.h>
 #include <companion/util/Util.h>
 
 namespace Companion::Processing
@@ -32,7 +33,9 @@ namespace Companion::Processing
 
     public:
 
-        HashDetection(cv::Size modelSize, Companion::Algorithm::Detection::ShapeDetection *shapeDetection);
+        HashDetection(cv::Size modelSize, 
+            Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
+            Companion::Algorithm::Hashing::Hashing *hashing);
 
         virtual ~HashDetection();
 
@@ -54,7 +57,7 @@ namespace Companion::Processing
 
         Companion::Model::Processing::ImageHashModel *model;
 
-        std::vector<std::pair<int, float>> scores;
+        Companion::Algorithm::Hashing::Hashing *hashing;
 
     };
 }

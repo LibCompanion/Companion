@@ -46,7 +46,7 @@ set(SOURCE
         util/CompanionError.h
         util/Util.cpp util/Util.h
         util/Definitions.h
-        util/exportapi/ExportAPIDefinitions.h model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h processing/HashDetection.cpp processing/HashDetection.h)
+        util/exportapi/ExportAPIDefinitions.h model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h processing/HashDetection.cpp processing/HashDetection.h algo/hashing/LSH.cpp algo/hashing/LSH.h algo/hashing/Hashing.h)
 
 # Create MSVC filter
 if(MSVC)

@@ -49,15 +49,18 @@ namespace Companion::Model::Processing
 
         /**
          * Add descriptor from given image.
+         * @param id ID from model.
          * @param descriptor Descriptor to add.
          */
-        void addDescriptor(cv::Mat &descriptor);
+        void addDescriptor(int id, cv::Mat &descriptor);
 
         /**
          * Generates dataset from current image hash model.
          * @return Generated dataset contains in first element hashed images and second index dataset.
          */
         std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
+
+        const std::vector<std::pair<int, float>> &getScores() const;
 
     private:
 
@@ -71,6 +74,8 @@ namespace Companion::Model::Processing
         cv::Mat_<float> hash;
 
         cv::Mat indexDataset;
+
+        std::vector<std::pair<int, float>> scores;
 
         /**
          * Generates from all image descriptors hash values.

@@ -27,10 +27,14 @@ Companion::Model::Processing::ImageHashModel::~ImageHashModel()
 {
 }
 
-void Companion::Model::Processing::ImageHashModel::addDescriptor(cv::Mat &descriptor)
+void Companion::Model::Processing::ImageHashModel::addDescriptor(int id, cv::Mat &descriptor)
 {
 	imageDataset.push_back(descriptor);
-	this->newModelAdded = true;
+    
+    // Store this id for a scoring
+    scores.push_back({id, 0});
+    
+    this->newModelAdded = true;
 }
 
 std::pair<cv::Mat_<float>, cv::Mat> Companion::Model::Processing::ImageHashModel::generateDataset()
@@ -84,4 +88,8 @@ cv::Mat Companion::Model::Processing::ImageHashModel::generateIndexDataset(cv::M
 	}
 
 	return this->indexDataset;
+}
+
+const std::vector<std::pair<int, float>> &Companion::Model::Processing::ImageHashModel::getScores() const {
+    return scores;
 }
