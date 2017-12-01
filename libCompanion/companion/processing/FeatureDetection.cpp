@@ -18,9 +18,9 @@
 
 #include "FeatureDetection.h"
 
-Companion::Processing::FeatureDetection::FeatureDetection(Companion::Algorithm::Matching *matchingAlgo,
+Companion::Processing::FeatureDetection::FeatureDetection(Companion::Algorithm::Matching::Matching *matchingAlgo,
 	Companion::SCALING scaling,
-	Companion::Algorithm::ShapeDetection *shapeDetection)
+	Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
 {
 	this->matchingAlgo = matchingAlgo;
 	this->scaling = scaling;
@@ -33,7 +33,7 @@ Companion::Processing::FeatureDetection::~FeatureDetection()
 
 CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 {
-	Companion::Algorithm::FeatureMatching *featureMatching;
+	Companion::Algorithm::Matching::FeatureMatching *featureMatching;
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
 	CALLBACK_RESULT objects;
 	std::vector<Companion::Draw::Frame*> rois;
@@ -51,10 +51,10 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 		Util::resizeImage(frame, this->scaling);
 		sceneModel->setImage(frame);
 
-		featureMatching = dynamic_cast<Companion::Algorithm::FeatureMatching*>(matchingAlgo);
+		featureMatching = dynamic_cast<Companion::Algorithm::Matching::FeatureMatching*>(matchingAlgo);
 		if (featureMatching != nullptr)
 		{
-			// Matching algorithm is feature matching.
+			// matching algorithm is feature matching.
 			// Pre calculate full image scene model keypoints
 			featureMatching->calculateKeyPoints(sceneModel);
 		}

@@ -26,71 +26,65 @@
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
 
-namespace Companion {
+namespace Companion::Model::Processing
+{
 
-    namespace Model {
+    /**
+     * Image hashing model to generate from images a hash representation.
+     * @author Andreas Sekulski
+     */
+    class COMP_EXPORTS ImageHashModel {
 
-        namespace Processing {
+    public:
 
-			/**
-			 * Image hashing model to generate from images a hash representation.
-			 * @author Andreas Sekulski
-			 */
-            class COMP_EXPORTS ImageHashModel {
+        /**
+         * Default constructor.
+         */
+        ImageHashModel();
 
-			public:
+        /**
+         * Default destructor.
+         */
+        virtual ~ImageHashModel();
 
-                /**
-                 * Default constructor.
-                 */
-				ImageHashModel();
+        /**
+         * Add descriptor from given image.
+         * @param descriptor Descriptor to add.
+         */
+        void addDescriptor(cv::Mat &descriptor);
 
-                /**
-                 * Default destructor.
-                 */
-                virtual ~ImageHashModel();
+        /**
+         * Generates dataset from current image hash model.
+         * @return Generated dataset contains in first element hashed images and second index dataset.
+         */
+        std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
 
-                /**
-                 * Add descriptor from given image.
-                 * @param descriptor Descriptor to add.
-                 */
-				void addDescriptor(cv::Mat &descriptor);
+    private:
 
-                /**
-                 * Generates dataset from current image hash model.
-                 * @return Generated dataset contains in first element hashed images and second index dataset.
-                 */
-                std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
+        bool newModelAdded;
 
-			private:
+        /**
+         * RAWR image models to compare in a 1 dimensional array.
+         **/
+        cv::Mat imageDataset;
 
-				bool newModelAdded;
+        cv::Mat_<float> hash;
 
-				/**
-				 * RAWR image models to compare in a 1 dimensional array.
-				 **/
-				cv::Mat imageDataset;
+        cv::Mat indexDataset;
 
-				cv::Mat_<float> hash;
+        /**
+         * Generates from all image descriptors hash values.
+         * @return 1D Image hashes matrix.
+         */
+        cv::Mat_<float> generateHashImages();
 
-				cv::Mat indexDataset;
-
-                /**
-                 * Generates from all image descriptors hash values.
-                 * @return 1D Image hashes matrix.
-                 */
-                cv::Mat_<float> generateHashImages();
-
-                /**
-                 * Generates index dataset from given hash.
-                 * @param hash Hash images to generate index dataset.
-                 * @return Index dataset from hash image.
-                 */
-                cv::Mat generateIndexDataset(cv::Mat_<float> hash);
-            };
-        }
-    }
+        /**
+         * Generates index dataset from given hash.
+         * @param hash Hash images to generate index dataset.
+         * @return Index dataset from hash image.
+         */
+        cv::Mat generateIndexDataset(cv::Mat_<float> hash);
+    };
 }
-
 
 #endif //COMPANION_IMAGEHASHMODEL_H

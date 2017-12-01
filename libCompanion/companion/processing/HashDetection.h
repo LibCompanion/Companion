@@ -19,45 +19,44 @@
 #ifndef COMPANION_HASHDETECTION_H
 #define COMPANION_HASHDETECTION_H
 
-#include <companion/algo/2D/ShapeDetection.h>
+#include <companion/algo/detection/ShapeDetection.h>
 #include <companion/processing/ImageProcessing.h>
 #include <companion/model/processing/ImageHashModel.h>
 #include <companion/util/Util.h>
 
-namespace Companion {
+namespace Companion::Processing
+{
+    // ToDo : Documentation
 
-	namespace Processing {
+    class COMP_EXPORTS HashDetection : public ImageProcessing {
 
-		class COMP_EXPORTS HashDetection : public ImageProcessing {
+    public:
 
-		public:
+        HashDetection(cv::Size modelSize, Companion::Algorithm::Detection::ShapeDetection *shapeDetection);
 
-			HashDetection(cv::Size modelSize, Companion::Algorithm::ShapeDetection *shapeDetection);
+        virtual ~HashDetection();
 
-			virtual ~HashDetection();
+        /**
+         * Execution from given image processing algo implementation like face recognition or object detection.
+         * @param frame Obtained image frame from producer thread.
+         * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
+         *          every detected object.
+         */
+        virtual CALLBACK_RESULT execute(cv::Mat frame);
 
-			/**
-			 * Execution from given image processing algo implementation like face recognition or object detection.
-			 * @param frame Obtained image frame from producer thread.
-			 * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
-			 *          every detected object.
-			 */
-			virtual CALLBACK_RESULT execute(cv::Mat frame);
+        bool addModel(int id, cv::Mat image);
 
-			bool addModel(int id ,cv::Mat image);
+    private:
 
-		private:
+        cv::Size modelSize;
 
-			cv::Size modelSize;
+        Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
 
-			Companion::Algorithm::ShapeDetection *shapeDetection;
+        Companion::Model::Processing::ImageHashModel *model;
 
-			Companion::Model::Processing::ImageHashModel *model;
+        std::vector<std::pair<int, float>> scores;
 
-			std::vector<std::pair<int, float>> scores;
-
-		};
-	}
+    };
 }
 
 

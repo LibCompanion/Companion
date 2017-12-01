@@ -18,23 +18,23 @@
 
 #include "IRA.h"
 
-Companion::Algorithm::IRA::IRA()
+Companion::Algorithm::Matching::UTIL::IRA::IRA()
 {
 	lop.x = NO_OBJECT_DETECTED;
 	lop.y = NO_OBJECT_DETECTED;
 }
 
-Companion::Algorithm::IRA::~IRA()
+Companion::Algorithm::Matching::UTIL::IRA::~IRA()
 {
 
 }
 
-const cv::Rect &Companion::Algorithm::IRA::getLastObjectPosition() const
+const cv::Rect &Companion::Algorithm::Matching::UTIL::IRA::getLastObjectPosition() const
 {
 	return lop;
 }
 
-void Companion::Algorithm::IRA::setLastObjectPosition(int x, int y, int width, int height)
+void Companion::Algorithm::Matching::UTIL::IRA::setLastObjectPosition(int x, int y, int width, int height)
 {
 	lop.x = x;
 	lop.y = y;
@@ -42,27 +42,27 @@ void Companion::Algorithm::IRA::setLastObjectPosition(int x, int y, int width, i
 	lop.height = height;
 }
 
-void Companion::Algorithm::IRA::setWidth(int width)
+void Companion::Algorithm::Matching::UTIL::IRA::setWidth(int width)
 {
 	lop.width = width;
 }
 
-void Companion::Algorithm::IRA::setHeight(int height)
+void Companion::Algorithm::Matching::UTIL::IRA::setHeight(int height)
 {
 	lop.height = height;
 }
 
-void Companion::Algorithm::IRA::setX(int x)
+void Companion::Algorithm::Matching::UTIL::IRA::setX(int x)
 {
 	lop.x = x;
 }
 
-void Companion::Algorithm::IRA::setY(int y)
+void Companion::Algorithm::Matching::UTIL::IRA::setY(int y)
 {
 	lop.y = y;
 }
 
-void Companion::Algorithm::IRA::clear()
+void Companion::Algorithm::Matching::UTIL::IRA::clear()
 {
 	lop.x = NO_OBJECT_DETECTED;
 	lop.y = NO_OBJECT_DETECTED;
@@ -70,7 +70,7 @@ void Companion::Algorithm::IRA::clear()
 	lop.height = NO_OBJECT_DETECTED;
 }
 
-bool Companion::Algorithm::IRA::isObjectDetected()
+bool Companion::Algorithm::Matching::UTIL::IRA::isObjectDetected()
 {
 	return lop.width > NO_OBJECT_DETECTED && lop.height > NO_OBJECT_DETECTED;
 }

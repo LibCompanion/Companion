@@ -18,7 +18,7 @@
 
 #include "HashDetection.h"
 
-Companion::Processing::HashDetection::HashDetection(cv::Size modelSize, Companion::Algorithm::ShapeDetection *shapeDetection)
+Companion::Processing::HashDetection::HashDetection(cv::Size modelSize, Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
 {
 	this->modelSize = modelSize;
 	this->shapeDetection = shapeDetection;
@@ -42,7 +42,7 @@ bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
 		Companion::Util::resizeImage(image, modelSize);
 	}
 	
-	// 2D converting to 1D Matrix and store to descriptor
+	// detection converting to 1D Matrix and store to descriptor
 	image.reshape(1, 1).convertTo(descriptor, CV_32F);
 
 	// Store this id for a scoring
@@ -109,7 +109,6 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 
 		// LSH implementation end result should be returned... ToDo
 
-		// ToDo := SCORING VALUE
 		for (int r = 0; r < std::min(10, (int)rank.size()); ++r)
 		{
 			if (r == 0)

@@ -18,7 +18,7 @@
 
 #include "ShapeDetection.h"
 
-Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, int cannyThreshold, int dilateIteration)
+Companion::Algorithm::Detection::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, int cannyThreshold, int dilateIteration)
 {
 	ShapeDetection::morphKernel = morphKernel;
 	ShapeDetection::erodeKernel = erodeKernel;
@@ -27,12 +27,12 @@ Companion::Algorithm::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Ma
 	ShapeDetection::dilateIteration = dilateIteration;
 }
 
-Companion::Algorithm::ShapeDetection::~ShapeDetection()
+Companion::Algorithm::Detection::ShapeDetection::~ShapeDetection()
 {
 
 }
 
-std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::executeAlgorithm(cv::Mat frame)
+std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetection::executeAlgorithm(cv::Mat frame)
 {
 	cv::Point topLeft; // Top left coordinate from rectangl.e
 	cv::Point bottomRight; // Bottom right coordinate from rectangle
@@ -110,7 +110,7 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::ShapeDetection::execu
 	return rois;
 }
 
-bool Companion::Algorithm::ShapeDetection::isCuda()
+bool Companion::Algorithm::Detection::ShapeDetection::isCuda()
 {
 	return false;
 }

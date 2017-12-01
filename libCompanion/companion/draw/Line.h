@@ -25,117 +25,111 @@
 #include <opencv2/opencv.hpp>
 #include <companion/util/Util.h>
 
-namespace Companion
+namespace Companion::Draw
 {
-
-	namespace Draw
+	/**
+	 * Class implementation to draw an single line.
+	 * @author Andreas Sekulski
+	 */
+	class COMP_EXPORTS Line : public Drawable
 	{
 
+	public:
+
 		/**
-		 * Class implementation to draw an single line.
-		 * @author Andreas Sekulski
+		 * Constructor to create an single line.
+		 * @param start Start draw position from line.
+		 * @param end End draw position from line
+		 * @param color Color from line.
+		 * @param thickness Thickness from line.
 		 */
-		class COMP_EXPORTS Line : public Drawable
-		{
+		Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness);
 
-		public:
+		/**
+		 * Get starting point from line to draw.
+		 * @return Starting point from line.
+		 */
+		const cv::Point &getStart() const;
 
-			/**
-			 * Constructor to create an single line.
-			 * @param start Start draw position from line.
-			 * @param end End draw position from line
-			 * @param color Color from line.
-			 * @param thickness Thickness from line.
-			 */
-			Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness);
+		/**
+		 * Sets an given starting point from line.
+		 * @param start Starting point to set from line.
+		 */
+		void setStart(const cv::Point &start);
 
-			/**
-			 * Get starting point from line to draw.
-			 * @return Starting point from line.
-			 */
-			const cv::Point &getStart() const;
+		/**
+		 * Get endpoint from line.
+		 * @return Endpoint from line.
+		 */
+		const cv::Point &getEnd() const;
 
-			/**
-			 * Sets an given starting point from line.
-			 * @param start Starting point to set from line.
-			 */
-			void setStart(const cv::Point &start);
+		/**
+		 * Sets given endpoint from line.
+		 * @param end Endpoint to set.
+		 */
+		void setEnd(const cv::Point &end);
 
-			/**
-			 * Get endpoint from line.
-			 * @return Endpoint from line.
-			 */
-			const cv::Point &getEnd() const;
+		/**
+		 * Get color from line.
+		 * @return Color code from line.
+		 */
+		const cv::Scalar &getColor() const;
 
-			/**
-			 * Sets given endpoint from line.
-			 * @param end Endpoint to set.
-			 */
-			void setEnd(const cv::Point &end);
+		/**
+		 * Sets given color code for line.
+		 * @param color Color to draw line.
+		 */
+		void setColor(const cv::Scalar &color);
 
-			/**
-			 * Get color from line.
-			 * @return Color code from line.
-			 */
-			const cv::Scalar &getColor() const;
+		/**
+		 * Get thickness from line.
+		 * @return Line thicknees.
+		 */
+		int getThickness() const;
 
-			/**
-			 * Sets given color code for line.
-			 * @param color Color to draw line.
-			 */
-			void setColor(const cv::Scalar &color);
+		/**
+		 * Sets given line thickness must be greater or equal 1.
+		 * @param thickness Thickness to set.
+		 */
+		void setThickness(int thickness);
 
-			/**
-			 * Get thickness from line.
-			 * @return Line thicknees.
-			 */
-			int getThickness() const;
+		/**
+		 * Draw an single line to image.
+		 * @param image Image to draw lines.
+		 */
+		virtual void draw(cv::Mat image);
 
-			/**
-			 * Sets given line thickness must be greater or equal 1.
-			 * @param thickness Thickness to set.
-			 */
-			void setThickness(int thickness);
+		/**
+		 * Ratio to scale position from drawable to new location.
+		 * @param cWidth Current width.
+		 * @param cHeight Current height.
+		 * @param nWidth New width.
+		 * @param nHeight New height.
+		 */
+		virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
-			/**
-			 * Draw an single line to image.
-			 * @param image Image to draw lines.
-			 */
-			virtual void draw(cv::Mat image);
+	private:
 
-			/**
-			 * Ratio to scale position from drawable to new location.
-			 * @param cWidth Current width.
-			 * @param cHeight Current height.
-			 * @param nWidth New width.
-			 * @param nHeight New height.
-			 */
-			virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+		/**
+		 * Starting point from line.
+		 */
+		cv::Point start;
 
-		private:
+		/**
+		 * Endpoint from line.
+		 */
+		cv::Point end;
 
-			/**
-			 * Starting point from line.
-			 */
-			cv::Point start;
+		/**
+		 * Color code from line.
+		 */
+		cv::Scalar color;
 
-			/**
-			 * Endpoint from line.
-			 */
-			cv::Point end;
-
-			/**
-			 * Color code from line.
-			 */
-			cv::Scalar color;
-
-			/**
-			 * Line thickness.
-			 */
-			int thickness;
-		};
-
-	}
+		/**
+		 * Line thickness.
+		 */
+		int thickness;
+	};
 }
 
 #endif //COMPANION_LINE_H

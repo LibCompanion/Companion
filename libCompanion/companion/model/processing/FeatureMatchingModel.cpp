@@ -19,7 +19,7 @@
 #include "FeatureMatchingModel.h"
 
 Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
-	this->ira = new Companion::Algorithm::IRA();
+	this->ira = new Companion::Algorithm::Matching::UTIL::IRA();
 }
 
 Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
@@ -76,7 +76,7 @@ void Companion::Model::Processing::FeatureMatchingModel::setImage(const cv::Mat 
 	FeatureMatchingModel::image = image;
 }
 
-Companion::Algorithm::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
+Companion::Algorithm::Matching::UTIL::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
 {
 	return ira;
 }

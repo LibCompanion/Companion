@@ -21,28 +21,23 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion
+namespace Companion::Algorithm
 {
-
-	namespace Algorithm
+	/**
+	 * Image recognition abstract class to implement specific image recognition algorithms.
+	 * @author Andreas Sekulski
+	 */
+	class COMP_EXPORTS ImageRecognition
 	{
 
+	public:
+
 		/**
-		 * Image recognition abstract class to implement specific image recognition algorithms.
-		 * @author Andreas Sekulski
+		 * Indicator if this algorithm use cuda.
+		 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
 		 */
-		class COMP_EXPORTS ImageRecognition
-		{
-
-		public:
-
-			/**
-			 * Indicator if this algorithm use cuda.
-			 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-			 */
-			virtual bool isCuda() = 0;
-		};
-	}
+		virtual bool isCuda() = 0;
+	};
 }
 
 #endif //COMPANION_IMAGERECOGNITION_H
