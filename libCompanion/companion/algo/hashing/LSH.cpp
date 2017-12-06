@@ -18,7 +18,7 @@
 
 #include "LSH.h"
 
-Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(Companion::Model::Processing::ImageHashModel * model, 
+Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(Companion::Model::Processing::ImageHashModel * model,
     cv::Mat query, 
     Companion::Draw::Frame *roi)
 {
@@ -50,10 +50,7 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     //Make a copy of scores and rank them
     std::vector<std::pair<int, float>> rank;
     rank.assign(scores.begin(), scores.end());
-    sort(rank.begin(), rank.end(), [](auto &a, auto &b)
-    {
-        return a.second < b.second;
-    });
+    sort(rank.begin(), rank.end(), sortRank());
 
     for (int r = 0; r < std::min(10, (int)rank.size()); ++r)
     {

@@ -28,7 +28,7 @@
 
 #include "Stream.h"
 
-namespace Companion::Input
+namespace Companion { namespace Input
 {
 	/**
 	 * Streaming class implementation for an subset from images.
@@ -128,6 +128,6 @@ namespace Companion::Input
 		 */
 		int maxImages;
 	};
-}
+}}
 
 #endif //COMPANION_IMAGE_H

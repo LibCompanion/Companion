@@ -19,13 +19,12 @@
 #ifndef COMPANION_MATCHING_H
 #define COMPANION_MATCHING_H
 
-#include "companion/algo/ImageRecognition.h"
-
+#include <companion/algo/ImageRecognition.h>
 #include <companion/model/Result.h>
 #include <companion/draw/Frame.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 
-namespace Companion::Algorithm::Matching
+namespace Companion { namespace Algorithm { namespace Matching
 {
 	/**
 	 * Abstract matching class implementation for all default matching algorithms like feature matching or template matching.
@@ -53,6 +52,6 @@ namespace Companion::Algorithm::Matching
          */
 		virtual bool isCuda() = 0;
 	};
-}
+}}}
 
 #endif //COMPANION_MATCHING_H

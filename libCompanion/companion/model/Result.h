@@ -22,7 +22,7 @@
 #include <string>
 #include <companion/draw/Drawable.h>
 
-namespace Companion::Model
+namespace Companion { namespace Model
 {
     /**
      * Result model class to store object detection scoring.
@@ -81,6 +81,6 @@ namespace Companion::Model
          */
         Companion::Draw::Drawable *model;
     };
-}
+}}
 
 #endif //COMPANION_RESULT_H

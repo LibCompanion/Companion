@@ -25,7 +25,7 @@
 #include <companion/util/CompanionError.h>
 #include <opencv2/imgproc.hpp>
 
-namespace Companion::Algorithm::Detection
+namespace Companion { namespace Algorithm { namespace Detection
 {
     /**
      * Shape detection implementation to detect region of interest.
@@ -97,6 +97,6 @@ namespace Companion::Algorithm::Detection
          */
         int dilateIteration;
     };
-}
+}}}
 
 #endif //COMPANION_SHAPEDETECTION_H

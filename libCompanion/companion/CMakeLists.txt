@@ -17,12 +17,8 @@
 #
 
 if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
-
-if(MSVC)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++latest")
-endif(MSVC)
 
 # Add source files
 set(SOURCE
@@ -46,7 +42,11 @@ set(SOURCE
         util/CompanionError.h
         util/Util.cpp util/Util.h
         util/Definitions.h
-        util/exportapi/ExportAPIDefinitions.h model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h processing/HashDetection.cpp processing/HashDetection.h algo/hashing/LSH.cpp algo/hashing/LSH.h algo/hashing/Hashing.h)
+        util/exportapi/ExportAPIDefinitions.h
+        model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h
+        processing/HashDetection.cpp processing/HashDetection.h
+        algo/hashing/LSH.cpp algo/hashing/LSH.h
+        algo/hashing/Hashing.h)
 
 # Create MSVC filter
 if(MSVC)

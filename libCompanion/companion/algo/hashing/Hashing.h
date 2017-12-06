@@ -24,7 +24,7 @@
 #include <companion/model/processing/ImageHashModel.h>
 #include <companion/draw/Frame.h>
 
-namespace Companion::Algorithm::Hashing
+namespace Companion { namespace Algorithm { namespace Hashing
 {
     /**
      * Interface class to create hashing algorithm for image recognition for example locality sensitive hashing (lsh).
@@ -34,6 +34,15 @@ namespace Companion::Algorithm::Hashing
     {
 
         public:
+
+            /**
+             * Ranking method to sort pairs.
+             */
+            struct sortRank {
+                bool operator()(const std::pair<int,int> &left, const std::pair<int,int> &right) {
+                    return left.second < right.second;
+                }
+            };
 
             /**
              * Specific algorithm implementation for a hashing process.
@@ -51,6 +60,6 @@ namespace Companion::Algorithm::Hashing
              */
             virtual bool isCuda() = 0;
     };
-}
+}}}
 
 #endif //COMPANION_HASHING_H

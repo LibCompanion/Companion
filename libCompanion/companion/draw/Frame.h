@@ -24,7 +24,7 @@
 
 #include <opencv2/core/core.hpp>
 
-namespace Companion::Draw
+namespace Companion { namespace Draw
 {
     /**
 	 * Implementation class to draw multiple lines.
@@ -181,6 +181,6 @@ namespace Companion::Draw
 		 */
 	    int thickness;
     };
-}
+}}
 
 #endif //COMPANION_LINES_H

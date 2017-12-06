@@ -25,7 +25,7 @@
 
 #include "Stream.h"
 
-namespace Companion::Input
+namespace Companion { namespace Input
 {
     /**
      * Video streaming OpenCV realization to obtain images from an video or livestream.
@@ -84,6 +84,6 @@ namespace Companion::Input
          */
         bool finished;
     };
-}
+}}
 
 #endif //COMPANION_VIDEO_CAPTURE_H

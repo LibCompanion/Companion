@@ -30,7 +30,7 @@
 #include <companion/util/Util.h>
 #include <companion/util/Definitions.h>
 
-namespace Companion::Thread
+namespace Companion { namespace Thread
 {
     /**
      * Stream worker class implementation to produce and consume images from an video source.
@@ -106,6 +106,6 @@ namespace Companion::Thread
          */
         bool storeFrame(cv::Mat frame);
     };
-}
+}}
 
 #endif //COMPANION_STREAMWORKER_H

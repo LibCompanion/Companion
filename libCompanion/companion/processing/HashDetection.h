@@ -25,7 +25,7 @@
 #include <companion/algo/hashing/Hashing.h>
 #include <companion/util/Util.h>
 
-namespace Companion::Processing
+namespace Companion { namespace Processing
 {
 
     /**
@@ -88,6 +88,6 @@ namespace Companion::Processing
          */
         Companion::Algorithm::Hashing::Hashing *hashing;
     };
-}
+}}
 
 #endif //COMPANION_HASHDETECTION_H

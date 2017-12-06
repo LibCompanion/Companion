@@ -19,14 +19,14 @@
 #ifndef COMPANION_IMAGEHASHMODEL_H
 #define COMPANION_IMAGEHASHMODEL_H
 
-#include <companion\util\Definitions.h>
+#include <companion/util/Definitions.h>
 #include <vector>
 #include <string>
 #include <random>
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
 
-namespace Companion::Model::Processing
+namespace Companion { namespace Model { namespace Processing
 {
 
     /**
@@ -99,6 +99,6 @@ namespace Companion::Model::Processing
          */
         cv::Mat generateIndexDataset(cv::Mat_<float> hash);
     };
-}
+}}}
 
 #endif //COMPANION_IMAGEHASHMODEL_H

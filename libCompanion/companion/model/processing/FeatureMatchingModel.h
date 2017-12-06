@@ -23,7 +23,7 @@
 #include <opencv2/features2d.hpp>
 #include <companion/algo/matching/util/IRA.h>
 
-namespace Companion::Model::Processing
+namespace Companion { namespace Model { namespace Processing
 {
     /**
      * Comparison data model to store search results from an feature matching algo.
@@ -141,6 +141,6 @@ namespace Companion::Model::Processing
         Companion::Algorithm::Matching::UTIL::IRA *ira;
 
     };
-}
+}}}
 
 #endif //COMPANION_COMPARISON_H

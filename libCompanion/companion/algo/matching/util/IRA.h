@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion::Algorithm::Matching::UTIL
+namespace Companion { namespace Algorithm { namespace Matching { namespace UTIL
 {
     /**
      * Image reduction algorithm (IRA) implementation to improve performance for an supported image recognition.
@@ -106,6 +106,6 @@ namespace Companion::Algorithm::Matching::UTIL
         const int NO_OBJECT_DETECTED = 0;
 
     };
-}
+}}}}
 
 #endif //COMPANION_IRA_H

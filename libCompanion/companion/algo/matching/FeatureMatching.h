@@ -19,13 +19,13 @@
 #ifndef COMPANION_FEATUREMATCHING_H
 #define COMPANION_FEATUREMATCHING_H
 
-#include <companion/algo/Matching/Matching.h>
+#include <companion/algo/matching/Matching.h>
 #include <companion/draw/Frame.h>
 #include <companion/model/Result.h>
 #include <companion/util/CompanionError.h>
 #include <companion/algo/matching/util/IRA.h>
 
-namespace Companion::Algorithm::Matching
+namespace Companion { namespace Algorithm { namespace Matching
 {
     /**
 	 * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
@@ -287,6 +287,6 @@ namespace Companion::Algorithm::Matching
 											 bool isROIUsed,
 											 Companion::Draw::Frame *roi);
 	};
-}
+}}}
 
 #endif //COMPANION_FEATUREMATCHING_H

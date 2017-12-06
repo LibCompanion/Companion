@@ -28,7 +28,7 @@
 #include <companion/Configuration.h>
 #include <omp.h>
 
-namespace Companion::Processing
+namespace Companion { namespace Processing
 {
 
     /**
@@ -123,6 +123,6 @@ namespace Companion::Processing
             int originalY,
             CALLBACK_RESULT &objects);
     };
-}
+}}
 
 #endif //COMPANION_OBJECTDETECTION_H

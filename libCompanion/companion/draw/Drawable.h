@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion::Draw
+namespace Companion { namespace Draw
 {
 	/**
 	 * Abstract class implementation for an area.
@@ -47,6 +47,6 @@ namespace Companion::Draw
 		 */
 		virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
 	};
-}
+}}
 
 #endif //COMPANION_DRAWABLE_H

@@ -25,7 +25,7 @@
 #include <opencv2/opencv.hpp>
 #include <companion/util/Util.h>
 
-namespace Companion::Draw
+namespace Companion { namespace Draw
 {
 	/**
 	 * Class implementation to draw an single line.
@@ -130,6 +130,6 @@ namespace Companion::Draw
 		 */
 		int thickness;
 	};
-}
+}}
 
 #endif //COMPANION_LINE_H

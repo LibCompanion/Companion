@@ -21,7 +21,7 @@
 
 #include "Hashing.h"
 
-namespace Companion::Algorithm::Hashing
+namespace Companion { namespace Algorithm { namespace Hashing
 {
     /**
      * Local sensitive hashing implemetation for hash image compare.
@@ -48,6 +48,6 @@ namespace Companion::Algorithm::Hashing
             */
             bool isCuda();
     };
-}
+}}}
 
 #endif //COMPANION_LSH_H

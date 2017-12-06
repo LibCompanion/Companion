@@ -21,7 +21,7 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion::Error
+namespace Companion { namespace Error
 {
     /// Enumeration class for error codes
     enum class COMP_EXPORTS Code
@@ -96,6 +96,6 @@ namespace Companion::Error
 
         return error;
     }
-}
+}}
 
 #endif //COMPANION_ERROR_H

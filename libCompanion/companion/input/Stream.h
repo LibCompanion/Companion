@@ -21,7 +21,7 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion::Input
+namespace Companion { namespace Input
 {
 	/**
 	 * Data stream interface class to obtain image processing data for example from an video or an set of images.
@@ -49,6 +49,6 @@ namespace Companion::Input
 		 */
 		virtual void finish() = 0;
 	};
-}
+}}
 
 #endif //COMPANION_STREAM_H

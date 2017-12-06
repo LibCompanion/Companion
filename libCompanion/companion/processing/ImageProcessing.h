@@ -22,7 +22,7 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/Definitions.h>
 
-namespace Companion::Processing
+namespace Companion { namespace Processing
 {
     /**
      * Image processing interface class to create specific image processing jobs for example to detect objects or regions of interests.
@@ -41,6 +41,6 @@ namespace Companion::Processing
          */
         virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
     };
-}
+}}
 
 #endif //COMPANION_IMAGEPROCESSING_H

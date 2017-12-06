@@ -21,7 +21,7 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion::Algorithm
+namespace Companion { namespace Algorithm
 {
 	/**
 	 * Image recognition abstract class to implement specific image recognition algorithms.
@@ -38,6 +38,6 @@ namespace Companion::Algorithm
 		 */
 		virtual bool isCuda() = 0;
 	};
-}
+}}
 
 #endif //COMPANION_IMAGERECOGNITION_H
