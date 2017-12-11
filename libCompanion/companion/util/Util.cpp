@@ -39,6 +39,12 @@ void Companion::Util::resizeImage(cv::Mat & img, cv::Size size)
 	cv::resize(img, img, size);
 }
 
+void Companion::Util::resizeImage(cv::Mat & img, int width)
+{
+    float aspect = float(img.cols) / float(img.rows);
+    cv::resize(img, img, cv::Size(width, width / aspect));
+}
+
 void Companion::Util::ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight)
 {
 	point.x = (int)(((float)point.x / (float)cWidth) * nWidth);
@@ -144,6 +150,10 @@ cv::Point Companion::Util::getScaling(SCALING scaling)
 		size.x = 640;
 		size.y = 360;
 		break;
+    case Companion::SCALING::SCALE_320x180:
+        size.x = 320;
+        size.y = 180;
+        break;
 	}
 
 	return size;

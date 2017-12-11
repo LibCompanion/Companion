@@ -62,7 +62,7 @@ bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
 CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame) 
 {
 	cv::Mat query;
-	std::vector<Companion::Model::Result*> results;
+    CALLBACK_RESULT results;
     Companion::Model::Result* result;
 
 	// Obtain all shapes from image to detect.

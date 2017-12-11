@@ -56,7 +56,8 @@ namespace Companion
 		SCALE_896x504,
 		SCALE_800x450,
 		SCALE_768x432,
-		SCALE_640x360
+		SCALE_640x360,
+        SCALE_320x180
 	};
 
 	/**
@@ -90,11 +91,18 @@ namespace Companion
 		static void resizeImage(cv::Mat &img, SCALING scaling);
 
 		/**
-		* Resize given image.
-		* @param img Image to resize.
-		* @param size Width and Height in pixel to resize image.
-		*/
+		 * Resize given image.
+		 * @param img Image to resize.
+		 * @param size Width and Height in pixel to resize image.
+		 */
 		static void resizeImage(cv::Mat &img, cv::Size size);
+
+        /**
+         * Resize given image to given aspect ratio width.
+         * @param width Image width in px.
+         * @param size Width and Height in pixel to resize image.
+         */
+        static void resizeImage(cv::Mat &img, int width);
 
 		/**
 		 * Ratio to set new point from scaled frame.
