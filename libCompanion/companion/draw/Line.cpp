@@ -20,59 +20,80 @@
 
 Companion::Draw::Line::Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness)
 {
-	this->start = start;
-	this->end = end;
-	this->color = color;
-	this->thickness = thickness;
+    this->start = start;
+    this->end = end;
+    this->color = color;
+    this->thickness = thickness;
 }
 
 const cv::Point &Companion::Draw::Line::getStart() const
 {
-	return start;
+    return start;
 }
 
 void Companion::Draw::Line::setStart(const cv::Point &start)
 {
-	Line::start = start;
+    Line::start = start;
 }
 
 const cv::Point &Companion::Draw::Line::getEnd() const
 {
-	return end;
+    return end;
 }
 
 void Companion::Draw::Line::setEnd(const cv::Point &end)
 {
-	Line::end = end;
+    Line::end = end;
 }
 
 const cv::Scalar &Companion::Draw::Line::getColor() const
 {
-	return color;
+    return color;
 }
 
 void Companion::Draw::Line::setColor(const cv::Scalar &color)
 {
-	Line::color = color;
+    Line::color = color;
 }
 
 int Companion::Draw::Line::getThickness() const
 {
-	return thickness;
+    return thickness;
 }
 
 void Companion::Draw::Line::setThickness(int thickness)
 {
-	Line::thickness = thickness;
+    Line::thickness = thickness;
 }
 
 void Companion::Draw::Line::draw(cv::Mat image)
 {
-	cv::line(image, start, end, color, thickness);
+    cv::line(image, start, end, color, thickness);
 }
 
 void Companion::Draw::Line::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-	Util::ratioPosition(start, cWidth, cHeight, nWidth, nHeight);
-	Util::ratioPosition(end, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(start, cWidth, cHeight, nWidth, nHeight);
+    Util::ratioPosition(end, cWidth, cHeight, nWidth, nHeight);
+}
+
+cv::Rect Companion::Draw::Line::cutArea()
+{
+    return cv::Rect(start.x, start.y, start.x + end.x, start.y + end.y);
+}
+
+int Companion::Draw::Line::getGroundZeroX() {
+    return start.x;
+}
+
+int Companion::Draw::Line::getGroundZeroY() {
+    return start.y;
+}
+
+void Companion::Draw::Line::moveGroundZero(int x, int y) {
+    start.x = start.x + x;
+    start.y = start.y + y;
+
+    end.x = end.x + x;
+    end.y = end.y + y;
 }

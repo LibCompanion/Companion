@@ -35,8 +35,6 @@ Companion::Processing::HashDetection::~HashDetection()
 
 bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
 {
-	// ToDo := Check if image is grayscale AND SAME SIZE if not abort --> false...
-
 	cv::Mat descriptor;
 
 	// Resize images to correct size if needed
@@ -64,10 +62,10 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 	cv::Mat query;
     CALLBACK_RESULT results;
     Companion::Model::Result* result;
+    std::map<int, Companion::Model::Result*> scorings;
 
 	// Obtain all shapes from image to detect.
 	std::vector<Companion::Draw::Frame*> frames = shapeDetection->executeAlgorithm(frame);
-
     for (int i = 0; i < frames.size(); i++)
     {
         query = Util::cutImage(frame, frames.at(i)->cutArea());
@@ -76,8 +74,22 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
         result = hashing->executeAlgorithm(model, query, frames.at(i));
         if (result != nullptr)
         {
-            results.push_back(result);
+            // Score only best results from rois
+            if (scorings.find(result->getId()) == scorings.end()) {
+                scorings[result->getId()] = result;
+            } else if(scorings[result->getId()]->getScoring() < result->getScoring()) {
+                scorings[result->getId()] = result;
+            }
         }
+    }
+
+    std::map<int, Companion::Model::Result*>::iterator it = scorings.begin();
+    while (it != scorings.end())
+    {
+        // Obtain all results.
+        results.push_back(it->second);
+        // Increment the Iterator to point to next entry
+        it++;
     }
 
     return results;

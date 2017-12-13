@@ -71,47 +71,54 @@ namespace Companion { namespace Draw
 		 */
 	    virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
-	    /**
-		 * Get top left point position from frame.
-		 * @return Top left point position.
-		 */
-	    const cv::Point &getTopLeft() const;
+        /**
+         * Obtain ground zero x position.
+         * @return X coordinate from drawable object.
+         */
+        virtual int getGroundZeroX();
 
-	    /**
-		 * Get top right point position from frame.
-		 * @return Top right point position.
-		 */
-	    const cv::Point &getTopRight() const;
+        /**
+         * Obtain ground zero y position.
+         * @return Y coordinate from drawable object.
+         */
+        virtual int getGroundZeroY();
 
-	    /**
-		 * Get bottom left point position from frame.
-		 * @return Bottom left point position.
-		 */
-	    const cv::Point &getBottomLeft() const;
+        /**
+         * Move from ground zero drawable.
+         * @param x X vector to move.
+         * @param y Y vector to move.
+         */
+        virtual void moveGroundZero(int x, int y);
 
-	    /**
-		 * Get bottom right point position from frame.
-		 * @return Bottom right point position.
-		 */
-	    const cv::Point &getBottomRight() const;
+        /**
+         * Set color frame.
+         * @param color Color frame to set.
+         */
+        virtual void setColor(const cv::Scalar &color);
+
+        /**
+         * Obtain cut area from frame.
+         * @return Cut area as rect to use to cut a subframe.
+         */
+        virtual cv::Rect cutArea();
 
 	    /**
 		 * Get color frame code.
 		 * @return Scalar color from frame.
 		 */
-	    const cv::Scalar &getColor() const;
-
-	    /**
-		 * Obtain cut area from frame.
-		 * @return Cut area as rect to use to cut a subframe.
-		 */
-	    cv::Rect cutArea();
+        virtual const cv::Scalar &getColor() const;
 
 	    /**
 		 * Get thickness size from frame, if 0 no frame will be drawn.
 		 * @return Get thickness size from frame.
 		 */
-	    int getThickness() const;
+        virtual int getThickness() const;
+
+		/**
+ 		 * Set thickness size from frame.
+ 		 * @param thickness Thickness size.
+ 		 */
+        virtual void setThickness(int thickness);
 
 	    /**
 		 * Set top left position from frame.
@@ -137,17 +144,29 @@ namespace Companion { namespace Draw
 		 */
 	    void setBottomRight(const cv::Point &bottomRight);
 
-	    /**
-		 * Set color frame.
-		 * @param color Color frame to set.
-		 */
-	    void setColor(const cv::Scalar &color);
+        /**
+         * Get top left point position from frame.
+         * @return Top left point position.
+         */
+        const cv::Point &getTopLeft() const;
 
-	    /**
-		 * Set thickness size from frame.
-		 * @param thickness Thickness size.
-		 */
-	    void setThickness(int thickness);
+        /**
+         * Get top right point position from frame.
+         * @return Top right point position.
+         */
+        const cv::Point &getTopRight() const;
+
+        /**
+         * Get bottom left point position from frame.
+         * @return Bottom left point position.
+         */
+        const cv::Point &getBottomLeft() const;
+
+        /**
+         * Get bottom right point position from frame.
+         * @return Bottom right point position.
+         */
+        const cv::Point &getBottomRight() const;
 
     private:
 

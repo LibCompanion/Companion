@@ -19,10 +19,11 @@
 #include "HybridDetection.h"
 
 Companion::Processing::HybridDetection::HybridDetection(Companion::Processing::HashDetection *hashDetection,
-    Companion::Algorithm::Matching::Matching *featureMatching)
+    Companion::Algorithm::Matching::Matching *featureMatching, int resize)
 {
     this->hashDetection = hashDetection;
     this->featureMatching = featureMatching;
+    this->resize = resize;
 }
 
 Companion::Processing::HybridDetection::~HybridDetection()
@@ -64,21 +65,29 @@ CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
 
     hashResults = hashDetection->execute(frame);
 
-    int oldX = frame.cols;
-    int oldY = frame.rows;
-
     if (!hashResults.empty())
     {
         sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
-        //This frame can be cutted to improve detection
-        Util::resizeImage(frame, 400);
-        sceneModel->setImage(frame);
 
         #pragma omp parallel for
         for (int i = 0; i < hashResults.size(); i++)
         {
             hashResult = hashResults.at(i);
             modelID = hashResult->getId();
+
+            // This frame can be cut to improve detection
+            Companion::Draw::Drawable *cutDrawable = hashResult->getModel();
+            cv::Mat cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
+
+            int oldX = cutImage.cols;
+            int oldY = cutImage.rows;
+            if(resize != 100)
+            {
+                Util::resizeImage(cutImage, cutImage.cols * resize / 100);
+            }
+
+            sceneModel->setImage(cutImage);
+
             objectModel = models[modelID];
             objectModel->getIra()->clear();
 
@@ -86,7 +95,8 @@ CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
 
             if (fmResult != nullptr)
             {
-                fmResult->getModel()->ratio(frame.cols, frame.rows, oldX, oldY);
+                fmResult->getModel()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
+                fmResult->getModel()->moveGroundZero(cutDrawable->getGroundZeroX(), cutDrawable->getGroundZeroY());
                 cbResults.push_back(fmResult);
             }
 

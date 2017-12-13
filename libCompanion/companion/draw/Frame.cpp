@@ -126,4 +126,26 @@ void Companion::Draw::Frame::setColor(const cv::Scalar &color)
 void Companion::Draw::Frame::setThickness(int thickness)
 {
 	Frame::thickness = thickness;
+}
+
+int Companion::Draw::Frame::getGroundZeroX() {
+    return topLeft.x;
+}
+
+int Companion::Draw::Frame::getGroundZeroY() {
+	return topRight.y;
+}
+
+void Companion::Draw::Frame::moveGroundZero(int x, int y) {
+	topLeft.x = topLeft.x + x;
+	topLeft.y = topLeft.y + y;
+
+	topRight.x = topRight.x + x;
+	topRight.y = topRight.y + y;
+
+	bottomLeft.x = bottomLeft.x + x;
+	bottomLeft.y = bottomLeft.y + y;
+
+	bottomRight.x = bottomRight.x + x;
+	bottomRight.y = bottomRight.y + y;
 };

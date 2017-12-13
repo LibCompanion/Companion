@@ -38,7 +38,8 @@ namespace Companion { namespace Error
         invalid_video_src, ///< If given video source is invalid like an error path.
         no_image_processing_algo_set, ///< If no image processing algo is used.
         no_handler_set, ///< If no callback handler is set.
-        no_cuda_device ///< If no CUDA device is ready to use.
+        no_cuda_device, ///< If no CUDA device is ready to use.
+        not_implemented ///< If method is not implemented.
     };
 
     /**
@@ -91,6 +92,9 @@ namespace Companion { namespace Error
             break;
         case Code::no_cuda_device:
             error = "No CUDA device can be used.";
+            break;
+        case Code ::not_implemented:
+            error = "Method not implemented.";
             break;
         }
 

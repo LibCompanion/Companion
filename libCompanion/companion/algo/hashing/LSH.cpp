@@ -56,13 +56,9 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     {
         if (r == 0)
         {
-            result = new Companion::Model::Result(100, rank.at(r).first, roi);
+            result = new Companion::Model::Result(static_cast<int>(rank.at(r).second), rank.at(r).first, roi);
         }
-
-        std::cout << "RANK ID :" << rank.at(r).first << " Value " << rank.at(r).second << std::endl;
     }
-    std::cout << "-------------------------------------------------------" << std::endl;
-
 
     return result;
 }
