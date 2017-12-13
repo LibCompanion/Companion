@@ -25,71 +25,65 @@
 
 #include "Stream.h"
 
-namespace Companion
+namespace Companion { namespace Input
 {
-
-    namespace Input
+    /**
+     * Video streaming OpenCV realization to obtain images from an video or livestream.
+     * @author Andreas Sekulski
+     */
+    class COMP_EXPORTS Video : public Stream
     {
 
+    public:
+
         /**
-         * Video streaming OpenCV realization to obtain images from an video or livestream.
-         * @author Andreas Sekulski
+          * Connects to an given physical device.
+          * @param device Device number to connect.
+          * @throws Companion::Error::Code If wrong device number is selected.
+          */
+        Video(int device);
+
+        /**
+         * Plays an video stream from given url.
+         * @param url Video path to stream.
+         * @throws Companion::Error::Code If invalid url is used.
          */
-        class COMP_EXPORTS Video : public Stream
-        {
+        Video(std::string url);
 
-        public:
+        /**
+         * Default destructor.
+         */
+        virtual ~Video();
 
-            /**
-              * Connects to an given physical device.
-              * @param device Device number to connect.
-              * @throws Companion::Error::Code If wrong device number is selected.
-              */
-            Video(int device);
+        /**
+         * Obtain next image from open video stream.
+         * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
+         */
+        cv::Mat obtainImage();
 
-            /**
-             * Plays an video stream from given url.
-             * @param url Video path to stream.
-             * @throws Companion::Error::Code If invalid url is used.
-             */
-            Video(std::string url);
+        /**
+         * Indicator if stream is finished.
+         * @return True if video is finished otherwise false.
+         */
+        bool isFinished();
 
-            /**
-             * Default destructor.
-             */
-            virtual ~Video();
+        /**
+         * Stop this stream.
+         */
+        void finish();
 
-            /**
-             * Obtain next image from open video stream.
-             * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
-             */
-            cv::Mat obtainImage();
+    private:
 
-            /**
-             * Indicator if stream is finished.
-             * @return True if video is finished otherwise false.
-             */
-            bool isFinished();
+        /**
+         * Stores video device or video streaming.
+         */
+        cv::VideoCapture capture;
 
-            /**
-             * Stop this stream.
-             */
-            void finish();
-
-        private:
-
-            /**
-             * Stores video device or video streaming.
-             */
-            cv::VideoCapture capture;
-
-            /**
-             * Indicator if video is finished.
-             */
-            bool finished;
-        };
-
-    }
-}
+        /**
+         * Indicator if video is finished.
+         */
+        bool finished;
+    };
+}}
 
 #endif //COMPANION_VIDEO_CAPTURE_H

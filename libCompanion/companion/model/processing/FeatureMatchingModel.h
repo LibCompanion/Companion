@@ -21,91 +21,126 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d.hpp>
+#include <companion/algo/matching/util/IRA.h>
 
-#include "ImageRecognitionModel.h"
-
-namespace Companion
+namespace Companion { namespace Model { namespace Processing
 {
-
-    namespace Model
+    /**
+     * Comparison data model to store search results from an feature matching algo.
+     * @author Andreas Sekulski
+     */
+    class COMP_EXPORTS FeatureMatchingModel
     {
 
-        namespace Processing
-        {
+    public:
 
-            /**
-             * Comparison data model to store search results from an feature matching algo.
-             * @author Andreas Sekulski
-             */
-            class COMP_EXPORTS FeatureMatchingModel : public ImageRecognitionModel
-            {
+        /**
+         * Constructor to create an feature matching model.
+         */
+        FeatureMatchingModel();
 
-            public:
+        /**
+         * Destructor from feature matching model.
+         */
+        virtual ~FeatureMatchingModel();
 
-                /**
-                 * Constructor to create an feature matching model.
-                 */
-                FeatureMatchingModel();
+        /**
+         * Get descriptors from feature matching if exists.
+         * @return An empty cv::Mat descriptor if no matching exists otherwise an cv::Mat descriptor.
+         */
+        const cv::Mat &getDescriptors() const;
 
-                /**
-                 * Destructor from feature matching model.
-                 */
-                virtual ~FeatureMatchingModel();
+        /**
+         * Sets an descriptor matching.
+         * @param descriptors Descriptor matching to set.
+         */
+        void setDescriptors(const cv::Mat &descriptors);
 
-                /**
-                 * Get descriptors from feature matching if exists.
-                 * @return An empty cv::Mat descriptor if no matching exists otherwise an cv::Mat descriptor.
-                 */
-                const cv::Mat &getDescriptors() const;
+        /**
+         * Get all keypoints from matching.
+         * @return If keypoints not exists keypoints is empty otherwise an filled keypoints set.
+         */
+        const std::vector<cv::KeyPoint> &getKeypoints() const;
 
-                /**
-                 * Sets an descriptor matching.
-                 * @param descriptors Descriptor matching to set.
-                 */
-                void setDescriptors(const cv::Mat &descriptors);
+        /**
+         * Checks if keypoints are already calculated.
+         * @return <b>True</b> if keypoints are calculated otherwise <b>False</b>
+         */
+        bool keypointsCalculated();
 
-                /**
-                 * Get all keypoints from matching.
-                 * @return If keypoints not exists keypoints is empty otherwise an filled keypoints set.
-                 */
-                const std::vector<cv::KeyPoint> &getKeypoints() const;
+        /**
+         * Sets given keypoints from matching.
+         * @param keypoints Keypoints to set.
+         */
+        void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
-                /**
-                 * Checks if keypoints are already calculated.
-                 * @return <b>True</b> if keypoints are calculated otherwise <b>False</b>
-                 */
-                bool keypointsCalculated();
+        /**
+         * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores this. This operation
+         * not working for Cuda feature detectors because they need cv::gpu::Mat.
+         * @param detector FeatureDetector to use.
+         * @param extractor Extractor to use.
+         */
+        void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
+            cv::Ptr<cv::DescriptorExtractor> extractor);
 
-                /**
-                 * Sets given keypoints from matching.
-                 * @param keypoints Keypoints to set.
-                 */
-                void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
+        /**
+         * Gets image which is stored, if no image is stored image is empty.
+         * @return An image if is set otherwise image is empty.
+         */
+        const cv::Mat &getImage() const;
 
-                /**
-                 * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores this. This operation
-                 * not working for Cuda feature detectors because they need cv::gpu::Mat.
-                 * @param detector FeatureDetector to use.
-                 * @param extractor Extractor to use.
-                 */
-                void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
-                    cv::Ptr<cv::DescriptorExtractor> extractor);
+        /**
+         * Sets given image.
+         * @param image Image to set.
+         */
+        void setImage(const cv::Mat &image);
 
-            private:
+        /**
+         * Gets IRA class to store last object detection.
+         * @return IRA class to obtain informations about last object detection.
+         */
+        Companion::Algorithm::Matching::UTIL::IRA *getIra() const;
 
-                /**
-                 * Feature descriptors from matching.
-                 */
-                cv::Mat descriptors;
+        /**
+         * Sets the ID for this model.
+         * @param id ID to set.
+         */
+        void setID(int id);
 
-                /**
-                 * Keypoints from matching.
-                 */
-                std::vector<cv::KeyPoint> keypoints;
+        /**
+         * Gets the ID of this model.
+         * @return  The ID of this model.
+         */
+        const int getID() const;
 
-            };
-        }
-    }
-}
+    private:
+
+        /**
+         * Feature descriptors from matching.
+         */
+        cv::Mat descriptors;
+
+        /**
+         * Keypoints from matching.
+         */
+        std::vector<cv::KeyPoint> keypoints;
+
+        /**
+         * The ID of this model.
+         */
+        int id;
+
+        /**
+         * Image to store.
+         */
+        cv::Mat image;
+
+        /**
+         * Image reduction algorithm to store last object detection position.
+         */
+        Companion::Algorithm::Matching::UTIL::IRA *ira;
+
+    };
+}}}
 
 #endif //COMPANION_COMPARISON_H

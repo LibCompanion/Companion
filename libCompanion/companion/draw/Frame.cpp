@@ -88,6 +88,11 @@ const cv::Scalar &Companion::Draw::Frame::getColor() const
     return this->color;
 }
 
+cv::Rect Companion::Draw::Frame::cutArea()
+{
+	return cv::Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+}
+
 int Companion::Draw::Frame::getThickness() const
 {
     return this->thickness;
@@ -120,5 +125,27 @@ void Companion::Draw::Frame::setColor(const cv::Scalar &color)
 
 void Companion::Draw::Frame::setThickness(int thickness)
 {
-    this->thickness = thickness;
+	Frame::thickness = thickness;
+}
+
+int Companion::Draw::Frame::getGroundZeroX() {
+    return topLeft.x;
+}
+
+int Companion::Draw::Frame::getGroundZeroY() {
+	return topRight.y;
+}
+
+void Companion::Draw::Frame::moveGroundZero(int x, int y) {
+	topLeft.x = topLeft.x + x;
+	topLeft.y = topLeft.y + y;
+
+	topRight.x = topRight.x + x;
+	topRight.y = topRight.y + y;
+
+	bottomLeft.x = bottomLeft.x + x;
+	bottomLeft.y = bottomLeft.y + y;
+
+	bottomRight.x = bottomRight.x + x;
+	bottomRight.y = bottomRight.y + y;
 };

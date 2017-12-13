@@ -39,25 +39,26 @@ namespace Companion
         GRAY
     };
 
-    /**
-     * Enumeration class for scaling.
-     */
-    enum class COMP_EXPORTS SCALING
-    {
-        SCALE_2048x1152,
-        SCALE_1920x1080,
-        SCALE_1600x900,
-        SCALE_1408x792,
-        SCALE_1344x756,
-        SCALE_1280x720,
-        SCALE_1152x648,
-        SCALE_1024x576,
-        SCALE_960x540,
-        SCALE_896x504,
-        SCALE_800x450,
-        SCALE_768x432,
-        SCALE_640x360
-    };
+	/**
+	 * Enumeration class for scaling.
+	 */
+	enum class COMP_EXPORTS SCALING
+	{
+		SCALE_2048x1152,
+		SCALE_1920x1080,
+		SCALE_1600x900,
+		SCALE_1408x792,
+		SCALE_1344x756,
+		SCALE_1280x720,
+		SCALE_1152x648,
+		SCALE_1024x576,
+		SCALE_960x540,
+		SCALE_896x504,
+		SCALE_800x450,
+		SCALE_768x432,
+		SCALE_640x360,
+        SCALE_320x180
+	};
 
     /**
      * Utility class for opencv.
@@ -68,12 +69,19 @@ namespace Companion
 
     public:
 
-        /**
-         * Checks if given image is loaded.
-         * @param img Image to check if it's not null.
-         * @return <code>true</code> if image is loaded, <code>false</code> otherwise
-         */
-        static bool isImageLoaded(cv::Mat &img);
+		/**
+		* Cut given image frame from cut area.
+		* @param cutArea Area to cut subframe.
+		* @return Cutted image.
+		*/
+		static cv::Mat cutImage(cv::Mat img, cv::Rect cutArea);
+
+		/**
+		 * Checks if given image is loaded.
+		 * @param img Image to check if it's not null.
+		 * @return <code>true</code> if image is loaded otherwise <code>false</code>
+		 */
+		static bool isImageLoaded(cv::Mat &img);
 
         /**
          * Resize given image.
@@ -82,15 +90,29 @@ namespace Companion
          */
         static void resizeImage(cv::Mat &img, SCALING scaling);
 
+		/**
+		 * Resize given image.
+		 * @param img Image to resize.
+		 * @param size Width and Height in pixel to resize image.
+		 */
+		static void resizeImage(cv::Mat &img, cv::Size size);
+
         /**
-         * Ratio to set new point from scaled frame.
-         * @param point Point to calculate new positions.
-         * @param cWidth Current width.
-         * @param cHeight Current height.
-         * @param nWidth New width.
-         * @param nHeight New height.
+         * Resize given image to given aspect ratio width.
+         * @param width Image width in px.
+         * @param size Width and Height in pixel to resize image.
          */
-        static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
+        static void resizeImage(cv::Mat &img, int width);
+
+		/**
+		 * Ratio to set new point from scaled frame.
+		 * @param point Point to calculate new positions.
+		 * @param cWidth Current width.
+		 * @param cHeight Current height.
+		 * @param nWidth New width.
+		 * @param nHeight New height.
+		 */
+		static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
          * Validates the rectangular shape of a detected area.
@@ -117,14 +139,13 @@ namespace Companion
 
         static cv::Point getScaling(SCALING scaling);
 
-        /**
-         * Calculates the deviation between two lengths.
-         * @param x first length
-         * @param y second length
-         * return deviation in percent
-         */
-        static double getDeviation(double x, double y);
-    };
+		/**
+		 * Get scaling from given enumeration as point representation.
+		 * @param scaling Scaling to obtain point.
+		 * @return Scaling as point representation which x is width and y height in px.
+		 */
+		static cv::Point getScaling(SCALING scaling);
+	};
 
 }
 

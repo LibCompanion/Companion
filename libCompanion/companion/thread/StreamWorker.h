@@ -30,88 +30,82 @@
 #include <companion/util/Util.h>
 #include <companion/util/Definitions.h>
 
-namespace Companion
+namespace Companion { namespace Thread
 {
-
-    namespace Thread
+    /**
+     * Stream worker class implementation to produce and consume images from an video source.
+     * @author Andreas Sekulski
+     */
+    class COMP_EXPORTS StreamWorker
     {
 
+    public:
+
         /**
-         * Stream worker class implementation to produce and consume images from an video source.
-         * @author Andreas Sekulski
+         * Constructor to create an producer streaming class to obtain images from an video and store to an queue.
+         * @param buffer Buffer size to store images. Default is one image buffer.
+         * @param colorFormat Color format of the returned image.
          */
-        class COMP_EXPORTS StreamWorker
-        {
+        StreamWorker(int buffer = 1, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
-        public:
+        /**
+         * Method to produce video stream data and store to his queue.
+         * @param stream Stream source to obtain images.
+         * @param skipFrame Skiping frame rate if set.
+         * @param errorCallback Error callback handler.
+         */
+        void produce(Companion::Input::Stream *stream,
+            int skipFrame,
+            std::function<ERROR_CALLBACK> errorCallback);
 
-            /**
-             * Constructor to create an producer streaming class to obtain images from an video and store to an queue.
-             * @param buffer Buffer size to store images. Default is one image buffer.
-             * @param colorFormat Color format of the returned image.
-             */
-            StreamWorker(int buffer = 1, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
+        /**
+         * Method to obtain video stream data from stored queue and process it.
+         * @param companion Configuration file which includes processing method.
+         * @param errorCallback Error callback handler.
+         * @param callback Callback handler to return results.
+         */
+        void consume(Companion::Processing::ImageProcessing *processing,
+            std::function<ERROR_CALLBACK> errorCallback,
+            std::function<SUCCESS_CALLBACK> callback);
 
-            /**
-             * Method to produce video stream data and store to his queue.
-             * @param stream Stream source to obtain images.
-             * @param skipFrame Skiping frame rate if set.
-             * @param errorCallback Error callback handler.
-             */
-            void produce(Companion::Input::Stream *stream,
-                int skipFrame,
-                std::function<ERROR_CALLBACK> errorCallback);
+    private:
 
-            /**
-             * Method to obtain video stream data from stored queue and process it.
-             * @param companion Configuration file which includes processing method.
-             * @param errorCallback Error callback handler.
-             * @param callback Callback handler to return results.
-             */
-            void consume(Companion::Processing::ImageProcessing *processing,
-                std::function<ERROR_CALLBACK> errorCallback,
-                std::function<SUCCESS_CALLBACK> callback);
+        /**
+         * @brief finished Indicator to cancel threads.
+         */
+        bool finished;
 
-        private:
+        /**
+         * Buffer size to store max. images.
+         */
+        int buffer;
 
-            /**
-             * @brief finished Indicator to cancel threads.
-             */
-            bool finished;
+        /**
+         * Color format of the image in the result callback.
+         */
+        Companion::ColorFormat colorFormat;
 
-            /**
-             * Buffer size to store max. images.
-             */
-            int buffer;
+        /**
+         * Mutex to lock or unlock.
+         */
+        std::mutex mx;
 
-            /**
-             * Color format of the image in the result callback.
-             */
-            Companion::ColorFormat colorFormat;
+        /**
+         * Condition to wait.
+         */
+        std::condition_variable cv;
 
-            /**
-             * Mutex to lock or unlock.
-             */
-            std::mutex mx;
+        /**
+         * Queue to store images from video stream.
+         */
+        std::queue<cv::Mat> queue;
 
-            /**
-             * Condition to wait.
-             */
-            std::condition_variable cv;
-
-            /**
-             * Queue to store images from video stream.
-             */
-            std::queue<cv::Mat> queue;
-
-            /**
-             * Stores frame to queue.
-             * @param frame Frame to store to queue.
-             */
-            bool storeFrame(cv::Mat frame);
-        };
-
-    }
-}
+        /**
+         * Stores frame to queue.
+         * @param frame Frame to store to queue.
+         */
+        bool storeFrame(cv::Mat frame);
+    };
+}}
 
 #endif //COMPANION_STREAMWORKER_H

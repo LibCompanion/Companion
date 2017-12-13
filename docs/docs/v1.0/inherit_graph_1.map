@@ -1,3 +1,8 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_companion_1_1_algorithm_1_1_i_r_a.html" title="Companion::Algorithm::IRA" alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node1" href="$class_companion_1_1_algorithm_1_1_image_recognition.html" title="Companion::Algorithm\l::ImageRecognition" alt="" coords="5,71,156,112"/>
+<area shape="rect" id="node2" href="$class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html" title="Companion::Algorithm\l::Detection::ShapeDetection" alt="" coords="204,5,391,47"/>
+<area shape="rect" id="node3" href="$class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html" title="Companion::Algorithm\l::Hashing::Hashing" alt="" coords="222,71,373,112"/>
+<area shape="rect" id="node5" href="$class_companion_1_1_algorithm_1_1_matching_1_1_matching.html" title="Companion::Algorithm\l::Matching::Matching" alt="" coords="222,136,373,177"/>
+<area shape="rect" id="node4" href="$class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html" title="Companion::Algorithm\l::Hashing::LSH" alt="" coords="457,71,608,112"/>
+<area shape="rect" id="node6" href="$class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html" title="Companion::Algorithm\l::Matching::FeatureMatching" alt="" coords="439,136,627,177"/>
 </map>

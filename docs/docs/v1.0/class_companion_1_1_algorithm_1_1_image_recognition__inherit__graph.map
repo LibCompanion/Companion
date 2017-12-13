@@ -1,5 +1,7 @@
 <map id="Companion::Algorithm::ImageRecognition" name="Companion::Algorithm::ImageRecognition">
-<area shape="rect" id="node2" href="$class_companion_1_1_algorithm_1_1_matching.html" title="Companion::Algorithm\l::Matching" alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node4" href="$class_companion_1_1_algorithm_1_1_shape_detection.html" title="Companion::Algorithm\l::ShapeDetection" alt="" coords="180,95,331,136"/>
-<area shape="rect" id="node3" href="$class_companion_1_1_algorithm_1_1_feature_matching.html" title="Companion::Algorithm\l::FeatureMatching" alt="" coords="5,184,156,225"/>
+<area shape="rect" id="node2" href="$class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html" title="Companion::Algorithm\l::Detection::ShapeDetection" alt="" coords="204,5,391,47"/>
+<area shape="rect" id="node3" href="$class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html" title="Companion::Algorithm\l::Hashing::Hashing" alt="" coords="222,71,373,112"/>
+<area shape="rect" id="node5" href="$class_companion_1_1_algorithm_1_1_matching_1_1_matching.html" title="Companion::Algorithm\l::Matching::Matching" alt="" coords="222,136,373,177"/>
+<area shape="rect" id="node4" href="$class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html" title="Companion::Algorithm\l::Hashing::LSH" alt="" coords="457,71,608,112"/>
+<area shape="rect" id="node6" href="$class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html" title="Companion::Algorithm\l::Matching::FeatureMatching" alt="" coords="439,136,627,177"/>
 </map>

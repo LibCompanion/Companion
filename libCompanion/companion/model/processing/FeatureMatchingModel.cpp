@@ -18,12 +18,15 @@
 
 #include "FeatureMatchingModel.h"
 
-Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {}
+Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
+	this->ira = new Companion::Algorithm::Matching::UTIL::IRA();
+}
 
 Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
 {
-    this->keypoints.clear();
-    this->descriptors.release();
+	keypoints.clear();
+	descriptors.release();
+	delete ira;
 }
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const
@@ -61,4 +64,29 @@ void Companion::Model::Processing::FeatureMatchingModel::calculateKeyPointsAndDe
 bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated()
 {
     return !this->keypoints.empty();
+}
+
+const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getImage() const
+{
+	return image;
+}
+
+void Companion::Model::Processing::FeatureMatchingModel::setImage(const cv::Mat &image)
+{
+	FeatureMatchingModel::image = image;
+}
+
+Companion::Algorithm::Matching::UTIL::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
+{
+	return ira;
+}
+
+void Companion::Model::Processing::FeatureMatchingModel::setID(int id)
+{
+	FeatureMatchingModel::id = id;
+}
+
+const int Companion::Model::Processing::FeatureMatchingModel::getID() const
+{
+	return id;
 }

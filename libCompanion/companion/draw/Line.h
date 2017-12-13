@@ -21,16 +21,13 @@
 
 #include "Drawable.h"
 
+#include <companion/util/CompanionError.h>
 #include <opencv2/core/core.hpp>
 #include <opencv2/opencv.hpp>
 #include <companion/util/Util.h>
 
-namespace Companion
-{
-
-    namespace Draw
+namespace Companion { namespace Draw
     {
-
         /**
          * Class implementation to draw an single line.
          * @author Andreas Sekulski
@@ -48,6 +45,70 @@ namespace Companion
              * @param thickness Thickness from line.
              */
             Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness);
+
+            /**
+             * Draw an single line to image.
+             * @param image Image to draw lines.
+             */
+            virtual void draw(cv::Mat image);
+
+            /**
+             * Ratio to scale position from drawable to new location.
+             * @param cWidth Current width.
+             * @param cHeight Current height.
+             * @param nWidth New width.
+             * @param nHeight New height.
+             */
+            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+
+            /**
+             * Obtain cut area from drawable.
+             * @return Cut area as rect for a cut frame.
+             */
+            virtual cv::Rect cutArea();
+
+            /**
+             * Obtain ground zero x position.
+             * @return X coordinate from drawable object.
+             */
+            virtual int getGroundZeroX();
+
+            /**
+             * Obtain ground zero y position.
+             * @return Y coordinate from drawable object.
+             */
+            virtual int getGroundZeroY();
+
+            /**
+             * Move from ground zero drawable.
+             * @param x X vector to move.
+             * @param y Y vector to move.
+             */
+            virtual void moveGroundZero(int x, int y);
+
+            /**
+             * Sets given color code for line.
+             * @param color Color to draw line.
+             */
+            virtual void setColor(const cv::Scalar &color);
+
+            /**
+             * Get color from line.
+             * @return Color code from line.
+             */
+            virtual const cv::Scalar &getColor() const;
+
+            /**
+             * Sets given line thickness must be greater or equal 1.
+             * @param thickness Thickness to set.
+             */
+            virtual void setThickness(int thickness);
+
+            /**
+             * Get thickness from line.
+             * @return Line thicknees.
+             */
+            virtual int getThickness() const;
 
             /**
              * Get starting point from line to draw.
@@ -73,45 +134,6 @@ namespace Companion
              */
             void setEnd(const cv::Point &end);
 
-            /**
-             * Get color from line.
-             * @return Color code from line.
-             */
-            const cv::Scalar &getColor() const;
-
-            /**
-             * Sets given color code for line.
-             * @param color Color to draw line.
-             */
-            void setColor(const cv::Scalar &color);
-
-            /**
-             * Get thickness from line.
-             * @return Line thicknees.
-             */
-            int getThickness() const;
-
-            /**
-             * Sets given line thickness must be greater or equal 1.
-             * @param thickness Thickness to set.
-             */
-            void setThickness(int thickness);
-
-            /**
-             * Draw an single line to image.
-             * @param image Image to draw lines.
-             */
-            virtual void draw(cv::Mat image);
-
-            /**
-             * Ratio to scale position from drawable to new location.
-             * @param cWidth Current width.
-             * @param cHeight Current height.
-             * @param nWidth New width.
-             * @param nHeight New height.
-             */
-            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
-
         private:
 
             /**
@@ -134,8 +156,6 @@ namespace Companion
              */
             int thickness;
         };
-
-    }
-}
+    }}
 
 #endif //COMPANION_LINE_H

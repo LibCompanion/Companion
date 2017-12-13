@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['hasdistantposition',['hasDistantPosition',['../class_companion_1_1_util.html#a89c8dc51005797a561b6f816918f3a78',1,'Companion::Util']]]
+  ['hasdistantposition',['hasDistantPosition',['../class_companion_1_1_util.html#a89c8dc51005797a561b6f816918f3a78',1,'Companion::Util']]],
+  ['hashdetection',['HashDetection',['../class_companion_1_1_processing_1_1_hash_detection.html',1,'Companion::Processing']]],
+  ['hashdetection',['HashDetection',['../class_companion_1_1_processing_1_1_hash_detection.html#a3b5376eb60dfb7329422e6125b791a40',1,'Companion::Processing::HashDetection']]],
+  ['hashing',['Hashing',['../class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html',1,'Companion::Algorithm::Hashing']]],
+  ['hybriddetection',['HybridDetection',['../class_companion_1_1_processing_1_1_hybrid_detection.html',1,'Companion::Processing']]],
+  ['hybriddetection',['HybridDetection',['../class_companion_1_1_processing_1_1_hybrid_detection.html#aabceb3d21ad401c6c1aa0d287fc171ec',1,'Companion::Processing::HybridDetection']]]
 ];

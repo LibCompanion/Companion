@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['objectdetection',['ObjectDetection',['../class_companion_1_1_processing_1_1_object_detection.html#aa62e62924b316cdfe7194f64ec002b59',1,'Companion::Processing::ObjectDetection']]],
-  ['obtainimage',['obtainImage',['../class_companion_1_1_input_1_1_image.html#ad7f59bafc29bbf767dca6d8d7368de7a',1,'Companion::Input::Image::obtainImage()'],['../class_companion_1_1_input_1_1_stream.html#a23aa6645b50b4be1b8e898097128f5e1',1,'Companion::Input::Stream::obtainImage()'],['../class_companion_1_1_input_1_1_video.html#a26676ab633f28ebc308af6ccde51284a',1,'Companion::Input::Video::obtainImage()']]]
+  ['movegroundzero',['moveGroundZero',['../class_companion_1_1_draw_1_1_drawable.html#a7e207d4dc5ecc8a60ac6fa94230eaa86',1,'Companion::Draw::Drawable::moveGroundZero()'],['../class_companion_1_1_draw_1_1_frame.html#a2381bcb5df80e03179201f82515b86d5',1,'Companion::Draw::Frame::moveGroundZero()'],['../class_companion_1_1_draw_1_1_line.html#aa09607f387c8878d277183e4566f35a9',1,'Companion::Draw::Line::moveGroundZero()']]]
 ];

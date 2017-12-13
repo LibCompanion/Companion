@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="generator" content="Hugo 0.29" />
+    <meta name="generator" content="Hugo 0.31.1" />
     <meta name="description" content="Documentation page from LibCompanion">
 <meta name="author" content="Andreas Sekulski">
 
@@ -13,19 +13,19 @@
     <title>Object Detection :: Companion</title>
     
     
-    <link href="https://libcompanion.github.io/libCompanion/css/nucleus.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/font-awesome.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/hybrid.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/featherlight.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/perfect-scrollbar.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/horsey.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/theme.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/hugo-theme.css?1506594364" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/nucleus.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/font-awesome.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/hybrid.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/featherlight.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/perfect-scrollbar.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/horsey.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/theme.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/hugo-theme.css?1513170412" rel="stylesheet">
     
-      <link href="https://libcompanion.github.io/libCompanion/css/theme-blue.css?1506594364" rel="stylesheet">
+      <link href="https://libcompanion.github.io/libCompanion/css/theme-blue.css?1513170412" rel="stylesheet">
     
 
-    <script src="https://libcompanion.github.io/libCompanion/js/jquery-2.x.min.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/jquery-2.x.min.js?1513170412"></script>
     
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{ 
@@ -220,6 +220,9 @@
 <ul>
 <li>
 <ul>
+<li><a href="#feature-matching">Feature Matching</a></li>
+<li><a href="#image-hashing">Image Hashing</a></li>
+<li><a href="#hybrids">Hybrids</a></li>
 <li><a href="#code-examples">Code Examples</a></li>
 </ul></li>
 </ul></li>
@@ -242,6 +245,8 @@
         
 
 
+
+<h3 id="feature-matching">Feature Matching</h3>
 
 <p>This compontent is a interface for all object detection implementations for example <a href="http://docs.opencv.org/trunk/dc/dc3/tutorial_py_matcher.html">Feature Matching</a> or <a href="http://docs.opencv.org/3.2.0/de/da9/tutorial_template_matching.html">Template Matching</a> based on OpenCV 3. This interface requires a Companion::Algorithm::Matching implentation which is a image processing algorithm. To improve image processing results images can be scaled to different dimensions. Optional a shape detection implementation can be attached to get only Region of Interests (ROI).</p>
 
@@ -269,7 +274,7 @@ ObjectDetection(Companion::Configuration *companion,
 <tbody>
 <tr>
 <td>Feature Matching</td>
-<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_feature_matching.html">Companion::Algorithm::FeatureMatching</a></td>
+<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html">Companion::Algorithm::Matching::FeatureMatching</a></td>
 </tr>
 </tbody>
 </table>
@@ -287,14 +292,94 @@ ObjectDetection(Companion::Configuration *companion,
 <tbody>
 <tr>
 <td>Rectangle Detection</td>
-<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_shape_detection.html">Companion::Algorithm::ShapeDetection</a></td>
+<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html">Companion::Algorithm::Detection::ShapeDetection</a></td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="image-hashing">Image Hashing</h3>
+
+<p>For image Hash processing use the HashDetection interface. This interface needs a fixed model size in px for searched models. To detect region of interests a shape detection must be set and at least the supported hashing processing for example LSH.</p>
+
+<pre><code>/**
+ * Hash detection construtor to create a object detector.
+ * @param modelSize Model size in pixel.
+ * @param shapeDetection Shape detection algorithm to detect ROI's.
+ * @param hashing Hashing algorithm implementation for example LSH.
+ */
+HashDetection(cv::Size modelSize,
+  Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
+  Companion::Algorithm::Hashing::Hashing *hashing);
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Supported Hashing Algorithms</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Local sensitive hashing (LSH)</td>
+<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html">Companion::Algorithm::Hashing::LSH</a></td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="hybrids">Hybrids</h3>
+
+<p>A hybrid approach is implemented to search for image models (ROIs) and to verify roi with a feature matcher.</p>
+
+<pre><code>/**
+ * Hybrid detection constructor to use this image processing implementation.
+ * @param hashDetection Hash detection image processing to use.
+ * @param featureMatching Feature matching to verify detected hashes.
+ * @param resize Resize image factor from 1 to 100. 100 original scale 1 is 99 percentage smaller image.
+ */
+HybridDetection(Companion::Processing::HashDetection *hashDetection,
+  Companion::Algorithm::Matching::Matching *featureMatching,
+  int resize = 100);
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Supported Matching Algorithms</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Feature Matching</td>
+<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html">Companion::Algorithm::Matching::FeatureMatching</a></td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+
+<table>
+<thead>
+<tr>
+<th>Supported Hashing Algorithms</th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Local sensitive hashing (LSH)</td>
+<td><a href="https://libcompanion.github.io/libCompanion/docs/v1.0/class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html">Companion::Algorithm::Hashing::LSH</a></td>
 </tr>
 </tbody>
 </table>
 
 <h3 id="code-examples">Code Examples</h3>
 
-<p>Code examples can be found in LibCompanion Samples <a href="https://github.com/LibCompanion/libCompanionSamples/tree/master/samples/FeatureMatching">Repository</a> for <b>CPU</b> and <b>Cuda</b> usage.</p>
+<p>Code examples can be found in LibCompanion samples <a href="https://github.com/LibCompanion/libCompanionSamples/tree/master/samples/FeatureMatching">repository</a> for <b>CPU</b> and <b>Cuda</b> usage.</p>
 
 
 <footer class=" footline" >
@@ -421,20 +506,20 @@ ObjectDetection(Companion::Configuration *companion,
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="https://libcompanion.github.io/libCompanion/js/clipboard.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.jquery.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/jquery.sticky-kit.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/featherlight.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/html5shiv-printshiv.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/highlight.pack.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/clipboard.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.jquery.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/jquery.sticky-kit.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/featherlight.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/html5shiv-printshiv.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/highlight.pack.js?1513170412"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="https://libcompanion.github.io/libCompanion/js/modernizr.custom.71422.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/learn.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/hugo-learn.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/modernizr.custom.71422.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/learn.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/hugo-learn.js?1513170412"></script>
 
-    <link href="https://libcompanion.github.io/libCompanion/mermaid/mermaid.css?1506594364" type="text/css" rel="stylesheet" />
-    <script src="https://libcompanion.github.io/libCompanion/mermaid/mermaid.js?1506594364"></script>
+    <link href="https://libcompanion.github.io/libCompanion/mermaid/mermaid.css?1513170412" type="text/css" rel="stylesheet" />
+    <script src="https://libcompanion.github.io/libCompanion/mermaid/mermaid.js?1513170412"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

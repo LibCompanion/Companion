@@ -30,10 +30,9 @@ Companion::Configuration::Configuration()
 
 Companion::Configuration::~Configuration()
 {
-    this->models.clear();
-    delete this->source;
-    delete this->processing;
-    delete this->worker;
+	delete this->source;
+	delete this->processing;
+	delete this->worker;
 }
 
 void Companion::Configuration::run()
@@ -91,40 +90,6 @@ Companion::Input::Stream *Companion::Configuration::getSource() const
 void Companion::Configuration::setSource(Companion::Input::Stream *source)
 {
     this->source = source;
-}
-
-bool Companion::Configuration::addModel(Companion::Model::Processing::ImageRecognitionModel *model)
-{
-
-    if (!model->getImage().empty())
-    {
-        this->models.push_back(model);
-        return true;
-    }
-
-    return false;
-}
-
-bool Companion::Configuration::removeModel(int modelID)
-{
-    for (int index = 0; index < this->models.size(); index++)
-    {
-        if (this->models.at(index)->getID() == modelID) {
-            this->models.erase(this->models.begin() + index);
-            return true;
-        }
-    }
-    return false;
-}
-
-void Companion::Configuration::clearModels()
-{
-    this->models.clear();
-}
-
-const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &Companion::Configuration::getModels() const
-{
-    return this->models;
 }
 
 Companion::Processing::ImageProcessing *Companion::Configuration::getProcessing() const

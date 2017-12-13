@@ -23,8 +23,8 @@
 #include <thread>
 #include <companion/thread/StreamWorker.h>
 #include <companion/input/Stream.h>
-#include <companion/model/processing/ImageRecognitionModel.h>
-#include <companion/algo/abstract/ImageRecognition.h>
+#include <companion/model/processing/FeatureMatchingModel.h>
+#include <companion/algo/ImageRecognition.h>
 #include <companion/processing/ImageProcessing.h>
 #include <companion/util/Definitions.h>
 
@@ -75,37 +75,12 @@ namespace Companion
          */
         void setSource(Companion::Input::Stream *source);
 
-        /**
-         * Add searching model type. For example an object (feature) which should be detected.
-         * @param model Model to search.
-         * @return True if model is added false if not.
-         */
-        bool addModel(Companion::Model::Processing::ImageRecognitionModel *model);
-
-        /**
-         * Removes given model if it exists. This method can only be used safetly if the searching process is not running.
-         * @param modelID ID of the model to remove.
-         * @return True if model deleted otherwise false.
-         */
-        bool removeModel(int modelID);
-
-        /**
-         * Clear all models which are searched.
-         */
-        void clearModels();
-
-        /**
-         * Get model vector which contains all searched models.
-         * @return Vector from all searched models, if no models are set this vector is empty.
-         */
-        const std::vector<Companion::Model::Processing::ImageRecognitionModel *> &getModels() const;
-
-        /**
-         * Gets current processing algorithm which should be used.
-         * @throws Companion::Error::Code Companion error code if image processing is not set.
-         * @return Image processing algorithm which should be used.
-         */
-        Companion::Processing::ImageProcessing *getProcessing() const;
+		/**
+		 * Gets current processing algorithm which should be used.
+		 * @throws Companion::Error::Code Companion error code if image processing is not set.
+		 * @return Image processing algorithm which should be used.
+		 */
+		Companion::Processing::ImageProcessing *getProcessing() const;
 
         /**
          * Set image processing algorithm for example ObjectDetection.
@@ -137,14 +112,13 @@ namespace Companion
         */
         void setImageBuffer(int imageBuffer);
 
-        /**
-         * Sets a given result handler. The result handler returns a list of all detected objects as result models.
-         * The source image will be converted to the given format.
-         *
-         * @param callback Function pointer which contains result event handler.
-         * @param colorFormat Color format of the returned image.
-         */
-        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
+		/**
+		 * Sets a given result handler. The result handler returns a list of all detected objects as result models.
+		 * The source image will be converted to the given format.
+		 * @param callback Function pointer which contains result event handler.
+		 * @param colorFormat Color format of the returned image.
+		 */
+		void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
         /**
          * Gets an callback handler if set.
@@ -183,15 +157,10 @@ namespace Companion
          */
         Companion::Input::Stream* source;
 
-        /**
-         * Search models to detect objects from source.
-         */
-        std::vector<Companion::Model::Processing::ImageRecognitionModel*> models;
-
-        /**
-         * Image processing implementation for example an object detection.
-         */
-        Companion::Processing::ImageProcessing* processing;
+		/**
+		 * Image processing implementation for example an object detection.
+		 */
+		Companion::Processing::ImageProcessing* processing;
 
         /**
          * Number of frames to skip to process next image.

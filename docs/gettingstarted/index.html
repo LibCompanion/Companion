@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="generator" content="Hugo 0.29" />
+    <meta name="generator" content="Hugo 0.31.1" />
     <meta name="description" content="Documentation page from LibCompanion">
 <meta name="author" content="Andreas Sekulski">
 
@@ -13,19 +13,19 @@
     <title>Getting Started :: Companion</title>
     
     
-    <link href="https://libcompanion.github.io/libCompanion/css/nucleus.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/font-awesome.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/hybrid.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/featherlight.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/perfect-scrollbar.min.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/horsey.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/theme.css?1506594364" rel="stylesheet">
-    <link href="https://libcompanion.github.io/libCompanion/css/hugo-theme.css?1506594364" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/nucleus.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/font-awesome.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/hybrid.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/featherlight.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/perfect-scrollbar.min.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/horsey.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/theme.css?1513170412" rel="stylesheet">
+    <link href="https://libcompanion.github.io/libCompanion/css/hugo-theme.css?1513170412" rel="stylesheet">
     
-      <link href="https://libcompanion.github.io/libCompanion/css/theme-blue.css?1506594364" rel="stylesheet">
+      <link href="https://libcompanion.github.io/libCompanion/css/theme-blue.css?1513170412" rel="stylesheet">
     
 
-    <script src="https://libcompanion.github.io/libCompanion/js/jquery-2.x.min.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/jquery-2.x.min.js?1513170412"></script>
     
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{ 
@@ -385,18 +385,13 @@ algorithms.</p>
 cv::Ptr&lt;cv::DescriptorMatcher&gt; matcher = cv::DescriptorMatcher::create(type);
 cv::Ptr&lt;cv::BRISK&gt; feature = cv::BRISK::create(60);
 
-Companion::Algorithm::ImageRecognition* recognition = new Companion::Algorithm::FeatureMatching(
-    feature, 
-    feature, 
-    matcher, 
-    type, 
-    10, 
-    40, 
-    true);
+Companion::Algorithm::Matching::Matching *matching = new Companion::Algorithm::Matching::FeatureMatching(
+  feature, feature, matcher, type, 10, 40, true);
 
-companion-&gt;setProcessing(new Companion::Processing::ObjectDetection(companion,
-    matching,
-    Companion::SCALING::SCALE_640x360));
+Companion::Processing::FeatureDetection* detection = new Companion::Processing::FeatureDetection(
+  matching, Companion::SCALING::SCALE_640x360);
+  
+companion-&gt;setProcessing(detection);
 </code></pre>
 
 <h3 id="execution">Execution</h3>
@@ -540,20 +535,20 @@ Error Code will be thrown.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="https://libcompanion.github.io/libCompanion/js/clipboard.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.jquery.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/jquery.sticky-kit.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/featherlight.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/html5shiv-printshiv.min.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/highlight.pack.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/clipboard.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/perfect-scrollbar.jquery.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/jquery.sticky-kit.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/featherlight.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/html5shiv-printshiv.min.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/highlight.pack.js?1513170412"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="https://libcompanion.github.io/libCompanion/js/modernizr.custom.71422.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/learn.js?1506594364"></script>
-    <script src="https://libcompanion.github.io/libCompanion/js/hugo-learn.js?1506594364"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/modernizr.custom.71422.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/learn.js?1513170412"></script>
+    <script src="https://libcompanion.github.io/libCompanion/js/hugo-learn.js?1513170412"></script>
 
-    <link href="https://libcompanion.github.io/libCompanion/mermaid/mermaid.css?1506594364" type="text/css" rel="stylesheet" />
-    <script src="https://libcompanion.github.io/libCompanion/mermaid/mermaid.js?1506594364"></script>
+    <link href="https://libcompanion.github.io/libCompanion/mermaid/mermaid.css?1513170412" type="text/css" rel="stylesheet" />
+    <script src="https://libcompanion.github.io/libCompanion/mermaid/mermaid.js?1513170412"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

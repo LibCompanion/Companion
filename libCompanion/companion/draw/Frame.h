@@ -24,163 +24,182 @@
 
 #include <opencv2/core/core.hpp>
 
-namespace Companion
+namespace Companion { namespace Draw
 {
-
-    namespace Draw
+    /**
+	 * Implementation class to draw multiple lines.
+	 * @author Andreas Sekulski
+	 */
+    class COMP_EXPORTS Frame : public Drawable
     {
 
+    public:
+
+	    /**
+		 * Constructor to create an frame.
+		 * @param topLeft Top left position.
+		 * @param topRight Top right position.
+		 * @param bottomLeft Bottom left position.
+		 * @param bottomRight Bottom right position.
+		 * @param color Color from frame.
+		 * @param thickness Thickness from frame.
+		 */
+	    Frame(cv::Point topLeft,
+		    cv::Point topRight,
+		    cv::Point bottomLeft,
+		    cv::Point bottomRight,
+		    cv::Scalar color = cv::Scalar(0, 255, 0, 255),
+		    int thickness = 4);
+
+	    /**
+		 * Destructor.
+		 */
+	    virtual ~Frame();
+
+	    /**
+		 * Draw lines to image.
+		 * @param image Image to draw lines.
+		 */
+	    virtual void draw(cv::Mat image);
+
+	    /**
+		 * Ratio to scale position from drawable to new location.
+		 * @param cWidth Current width.
+		 * @param cHeight Current height.
+		 * @param nWidth New width.
+		 * @param nHeight New height.
+		 */
+	    virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+
         /**
-         * Implementation class to draw multiple lines.
-         * @author Andreas Sekulski
+         * Obtain ground zero x position.
+         * @return X coordinate from drawable object.
          */
-        class COMP_EXPORTS Frame : public Drawable
-        {
+        virtual int getGroundZeroX();
 
-        public:
+        /**
+         * Obtain ground zero y position.
+         * @return Y coordinate from drawable object.
+         */
+        virtual int getGroundZeroY();
 
-            /**
-              * Constructor to create an frame.
-              * @param topLeft Top left position.
-              * @param topRight Top right position.
-              * @param bottomLeft Bottom left position.
-              * @param bottomRight Bottom right position.
-              * @param color Color from frame.
-              * @param thickness Thickness from frame.
-              */
-            Frame(cv::Point topLeft,
-                cv::Point topRight,
-                cv::Point bottomLeft,
-                cv::Point bottomRight,
-                cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
-                int thickness = 4);
+        /**
+         * Move from ground zero drawable.
+         * @param x X vector to move.
+         * @param y Y vector to move.
+         */
+        virtual void moveGroundZero(int x, int y);
 
-            /**
-             * Destructor.
-             */
-            virtual ~Frame();
+        /**
+         * Set color frame.
+         * @param color Color frame to set.
+         */
+        virtual void setColor(const cv::Scalar &color);
 
-            /**
-             * Draw lines to image.
-             * @param image Image to draw lines.
-             */
-            virtual void draw(cv::Mat image);
+        /**
+         * Obtain cut area from frame.
+         * @return Cut area as rect to use to cut a subframe.
+         */
+        virtual cv::Rect cutArea();
 
-            /**
-             * Ratio to scale position from drawable to new location.
-             * @param cWidth Current width.
-             * @param cHeight Current height.
-             * @param nWidth New width.
-             * @param nHeight New height.
-             */
-            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+	    /**
+		 * Get color frame code.
+		 * @return Scalar color from frame.
+		 */
+        virtual const cv::Scalar &getColor() const;
 
-            /**
-             * Get top left point position from frame.
-             * @return Top left point position.
-             */
-            const cv::Point &getTopLeft() const;
+	    /**
+		 * Get thickness size from frame, if 0 no frame will be drawn.
+		 * @return Get thickness size from frame.
+		 */
+        virtual int getThickness() const;
 
-            /**
-             * Get top right point position from frame.
-             * @return Top right point position.
-             */
-            const cv::Point &getTopRight() const;
+		/**
+ 		 * Set thickness size from frame.
+ 		 * @param thickness Thickness size.
+ 		 */
+        virtual void setThickness(int thickness);
 
-            /**
-             * Get bottom left point position from frame.
-             * @return Bottom left point position.
-             */
-            const cv::Point &getBottomLeft() const;
+	    /**
+		 * Set top left position from frame.
+		 * @param topLeft Top left frame position.
+		 */
+	    void setTopLeft(const cv::Point &topLeft);
 
-            /**
-             * Get bottom right point position from frame.
-             * @return Bottom right point position.
-             */
-            const cv::Point &getBottomRight() const;
+	    /**
+		 * Set top right position from frame.
+		 * @param topRight Top right frame position.
+		 */
+	    void setTopRight(const cv::Point &topRight);
 
-            /**
-             * Get color frame code.
-             * @return Scalar color from frame.
-             */
-            const cv::Scalar &getColor() const;
+	    /**
+		 * Set bottom left position from frame.
+		 * @param bottomLeft Bottom left frame position.
+		 */
+	    void setBottomLeft(const cv::Point &bottomLeft);
 
-            /**
-             * Get thickness size from frame, if 0 no frame will be drawn.
-             * @return Get thickness size from frame.
-             */
-            int getThickness() const;
+	    /**
+		 * Set bottom right position from frame.
+		 * @param bottomRight Bottom right frame position.
+		 */
+	    void setBottomRight(const cv::Point &bottomRight);
 
-            /**
-             * Set top left position from frame.
-             * @param topLeft Top left frame position.
-             */
-            void setTopLeft(const cv::Point &topLeft);
+        /**
+         * Get top left point position from frame.
+         * @return Top left point position.
+         */
+        const cv::Point &getTopLeft() const;
 
-            /**
-             * Set top right position from frame.
-             * @param topRight Top right frame position.
-             */
-            void setTopRight(const cv::Point &topRight);
+        /**
+         * Get top right point position from frame.
+         * @return Top right point position.
+         */
+        const cv::Point &getTopRight() const;
 
-            /**
-             * Set bottom left position from frame.
-             * @param bottomLeft Bottom left frame position.
-             */
-            void setBottomLeft(const cv::Point &bottomLeft);
+        /**
+         * Get bottom left point position from frame.
+         * @return Bottom left point position.
+         */
+        const cv::Point &getBottomLeft() const;
 
-            /**
-             * Set bottom right position from frame.
-             * @param bottomRight Bottom right frame position.
-             */
-            void setBottomRight(const cv::Point &bottomRight);
+        /**
+         * Get bottom right point position from frame.
+         * @return Bottom right point position.
+         */
+        const cv::Point &getBottomRight() const;
 
-            /**
-             * Set color frame.
-             * @param color Color frame to set.
-             */
-            void setColor(const cv::Scalar &color);
+    private:
 
-            /**
-             * Set thickness size from frame.
-             * @param thickness Thickness size.
-             */
-            void setThickness(int thickness);
+	    /**
+		 * Top left position from frame.
+		 */
+	    cv::Point topLeft;
 
-        private:
+	    /**
+		 * Top right position from frame.
+		 */
+	    cv::Point topRight;
 
-            /**
-             * Top left position from frame.
-             */
-            cv::Point topLeft;
+	    /**
+		 * Bottom left position from frame.
+		 */
+	    cv::Point bottomLeft;
 
-            /**
-             * Top right position from frame.
-             */
-            cv::Point topRight;
+	    /**
+		 * Bottom right position from frame.
+		 */
+	    cv::Point bottomRight;
 
-            /**
-             * Bottom left position from frame.
-             */
-            cv::Point bottomLeft;
+	    /**
+		 * Color from frame.
+		 */
+	    cv::Scalar color;
 
-            /**
-             * Bottom right position from frame.
-             */
-            cv::Point bottomRight;
-
-            /**
-             * Color from frame.
-             */
-            cv::Scalar color;
-
-            /**
-             * Thickness size from frame.
-             */
-            int thickness;
-        };
-
-    }
-}
+	    /**
+		 * Thickness size from frame.
+		 */
+	    int thickness;
+    };
+}}
 
 #endif //COMPANION_LINES_H

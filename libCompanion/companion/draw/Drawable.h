@@ -22,36 +22,81 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion
+namespace Companion { namespace Draw
 {
+	/**
+	 * Abstract class implementation for an area.
+	 * @author Andreas Sekulski.
+	 */
+	class COMP_EXPORTS Drawable
+	{
 
-    namespace Draw
-    {
+	public:
+		/**
+		 * Draw given object to image.
+		 * @param image Image to draw an object.
+		 */
+		virtual void draw(cv::Mat image) = 0;
+
+		/**
+		 * Ratio to scale position from drawable to new location.
+		 * @param cWidth Current width.
+		 * @param cHeight Current height.
+		 * @param nWidth New width.
+		 * @param nHeight New height.
+		 */
+		virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
 
         /**
-         * Abstract class implementation for an area.
-         * @author Andreas Sekulski.
+         * Obtain cut area from drawable.
+         * @return Cut area as rect for a cut frame.
          */
-        class COMP_EXPORTS Drawable
-        {
+        virtual cv::Rect cutArea() = 0;
 
-        public:
-            /**
-             * Draw given object to image.
-             * @param image Image to draw an object.
-             */
-            virtual void draw(cv::Mat image) = 0;
+        /**
+         * Obtain ground zero x position.
+         * @return X coordinate from drawable object.
+         */
+		virtual int getGroundZeroX() = 0;
 
-            /**
-             * Ratio to scale position from drawable to new location.
-             * @param cWidth Current width.
-             * @param cHeight Current height.
-             * @param nWidth New width.
-             * @param nHeight New height.
-             */
-            virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
-        };
-    }
-}
+        /**
+         * Obtain ground zero y position.
+         * @return Y coordinate from drawable object.
+         */
+		virtual int getGroundZeroY() = 0;
+
+        /**
+         * Move from ground zero drawable.
+         * @param x X vector to move.
+         * @param y Y vector to move.
+         */
+		virtual void moveGroundZero(int x, int y) = 0;
+
+        /**
+         * Set color from drawable.
+         * @param color Color to set.
+         */
+        virtual void setColor(const cv::Scalar &color) = 0;
+
+        /**
+         * Get color from drawable.
+         * @return Scalar color from frame.
+         */
+        virtual const cv::Scalar &getColor() const = 0;
+
+        /**
+         * Get thickness size from drawable.
+         * @return Get thickness size from frame.
+         */
+        virtual int getThickness() const = 0;
+
+        /**
+          * Set thickness size from drawable.
+          * @param thickness Thickness size.
+          */
+        virtual void setThickness(int thickness) = 0;
+
+	};
+}}
 
 #endif //COMPANION_DRAWABLE_H
