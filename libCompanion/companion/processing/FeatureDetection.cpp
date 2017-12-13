@@ -51,7 +51,7 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 		Util::resizeImage(frame, this->scaling);
 		sceneModel->setImage(frame);
 
-		featureMatching = dynamic_cast<Companion::Algorithm::Matching::FeatureMatching*>(matchingAlgo);
+		featureMatching = dynamic_cast<Companion::Algorithm::Matching::FeatureMatching*>(this->matchingAlgo);
 		if (featureMatching != nullptr)
 		{
 			// matching algorithm is feature matching.
@@ -59,13 +59,13 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 			featureMatching->calculateKeyPoints(sceneModel);
 		}
 
-		if (shapeDetection != nullptr)
+		if (this->shapeDetection != nullptr)
 		{
 			// If shape detection should be used obtain all posible rois from frame.
-			rois = shapeDetection->executeAlgorithm(sceneModel->getImage());
+			rois = this->shapeDetection->executeAlgorithm(sceneModel->getImage());
 		}
 
-		if (matchingAlgo->isCuda())
+		if (this->matchingAlgo->isCuda())
 		{
 			for (int x = 0; x < models.size(); x++)
 			{
@@ -119,7 +119,7 @@ void Companion::Processing::FeatureDetection::processing(Companion::Model::Proce
 	if (rois.size() == 0)
 	{
 		// If rois not found or used
-		result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+		result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
 	}
 	else
 	{
@@ -127,7 +127,7 @@ void Companion::Processing::FeatureDetection::processing(Companion::Model::Proce
 		// If rois found
 		while (index < rois.size())
 		{
-			result = matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+			result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
 			index++;
 		}
 	}
@@ -153,11 +153,11 @@ bool Companion::Processing::FeatureDetection::addModel(Companion::Model::Process
 	return false;
 }
 
-bool Companion::Processing::FeatureDetection::removeModel(Companion::Model::Processing::FeatureMatchingModel *model)
+bool Companion::Processing::FeatureDetection::removeModel(int modelID)
 {
 	for (int index = 0; index < this->models.size(); index++)
 	{
-		if (this->models.at(index)->getID() == model->getID()) {
+        if (this->models.at(index)->getID() == modelID) {
 			this->models.erase(this->models.begin() + index);
 			return true;
 		}

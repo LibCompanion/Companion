@@ -58,12 +58,11 @@ namespace Companion { namespace Processing
         bool addModel(Companion::Model::Processing::FeatureMatchingModel *model);
 
         /**
-         * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
-         * @param model Model to delete.
-         * @throws Companion::Error::Code Companion error code if currently search is using.
+         * Removes given model if it exists. This method can only be used safetly if the searching process is not running.
+         * @param modelID ID of the model to remove.
          * @return True if model deleted otherwise false.
          */
-        bool removeModel(Companion::Model::Processing::FeatureMatchingModel *model);
+        bool removeModel(int modelID);
 
         /**
          * Clear all models which are searched.

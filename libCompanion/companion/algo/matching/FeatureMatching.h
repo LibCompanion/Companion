@@ -51,18 +51,18 @@ namespace Companion { namespace Algorithm { namespace Matching
          * @param extractor FeatureExtractor to set.
          * @param matcher FeatureMatcher to set.
          * @param matcherType FeatureMatcher type which is used like FlannBased or Bruteforce.
-         * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
+         * @param minSidelLength Minimum length of the detected area's sides (in pixels). Default value is 10. 
          * @param countMatches Maximum number from feature matches to obtain a good matching result. Default is by 40.
          * @param useIRA Indicator to use IRA algorithm to use last detected objects from last scene. By default IRA is deactivated.
          * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
-         * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
-         * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
+         * @param ransacMaxIters Homography parameter: Maximum number of RANSAC iterations (2000 is the maximum). Default is by 500.
+         * @param findHomographyMethod Method used to compute a homography matrix. Default is by RANSAC.
          */
 		FeatureMatching(cv::Ptr<cv::FeatureDetector> detector,
 						cv::Ptr<cv::DescriptorExtractor> extractor,
 						cv::Ptr<cv::DescriptorMatcher> matcher,
 						int matcherType,
-						int cornerDistance = 10,
+						int minSidelLength = 10,
 						int countMatches = 40,
 						bool useIRA = false,
 						double reprojThreshold = 3.0,
@@ -77,14 +77,14 @@ namespace Companion { namespace Algorithm { namespace Matching
                          * Following feature matching cuda algorithms can be used cv::cuda::ORB or cv::cuda::SURF.
                          *
                          * @param cudaFeatureMatching Cuda based feature matching algorithm.
-                         * @param cornerDistance How many pixels the corners of a found area should be distant from each other. Default value is 10.
+                         * @param minSidelLength Minimum length of the detected area's sides (in pixels). Default value is 10. 
                          * @param countMatches How much matches need to get an good matching result. Default is by 40.
                          * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
                          * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
                          * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
                          */
                         FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
-                                        int cornerDistance = 10,
+                                        int minSidelLength = 10,
                                         int countMatches = 40,
                                         double reprojThreshold = 3.0,
                                         int ransacMaxIters = 500,
@@ -125,17 +125,17 @@ namespace Companion { namespace Algorithm { namespace Matching
 		/**
          * Default knnMatch neighboors to find features.
          */
-		static float DEFAULT_NEIGHBOR;
+        static constexpr float DEFAULT_NEIGHBOR = 2.0f;
 
 		/**
          * Default ratio test value to obtain only good feature matches.
          */
-		static float DEFAULT_RATIO_VALUE;
+        static constexpr float DEFAULT_RATIO_VALUE = 0.8f;
 
 		/**
-         * Indicator how many pixels the corners of a found area should be distant from each other. Default value is 10.
+         * Minimum length of the detected area's sides (in pixels). Default value is 10.
          */
-		int cornerDistance = 10;
+		int minSidelLength = 10;
 
 		/**
          * Indicator how much matches need to get an good matching result. Default value is 40.

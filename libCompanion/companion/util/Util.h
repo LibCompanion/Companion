@@ -79,7 +79,7 @@ namespace Companion
 		/**
 		 * Checks if given image is loaded.
 		 * @param img Image to check if it's not null.
-		 * @return <code>true</code> if image is loaded otherwise <code>false</code>
+		 * @return <code>true</code> if image is loaded, <code>false</code> otherwise
 		 */
 		static bool isImageLoaded(cv::Mat &img);
 
@@ -127,14 +127,6 @@ namespace Companion
          */
         static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
-		/**
-         * Calculates the deviation between two lengths.
-         * @param x first length
-         * @param y second length
-         * return deviation in percent
-         */
-		static double getDeviation(double x, double y);
-
         /**
          * Converts an image to the given color format. BGR is expected as source format.
          * @param src Source image.
@@ -151,6 +143,14 @@ namespace Companion
 		 * @return Scaling as point representation which x is width and y height in px.
 		 */
 		static cv::Point getScaling(SCALING scaling);
+
+        /**
+         * Calculates the deviation between two lengths.
+         * @param x first length
+         * @param y second length
+         * return deviation in percent
+         */
+        static double getDeviation(double x, double y);
 	};
 
 }

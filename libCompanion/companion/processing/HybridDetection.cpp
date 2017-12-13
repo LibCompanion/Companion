@@ -39,9 +39,9 @@ void Companion::Processing::HybridDetection::addModel(cv::Mat image, int id)
     hashDetection->addModel(id, image);
 }
 
-void Companion::Processing::HybridDetection::removeModel(int id)
+void Companion::Processing::HybridDetection::removeModel(int modelID)
 {
-    models.erase(id);
+    models.erase(modelID);
     // ToDo delete method for hashDetection...
 }
 
@@ -96,7 +96,7 @@ CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
             if (fmResult != nullptr)
             {
                 fmResult->getModel()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
-                fmResult->getModel()->moveGroundZero(cutDrawable->getGroundZeroX(), cutDrawable->getGroundZeroY());
+                fmResult->getModel()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
                 cbResults.push_back(fmResult);
             }
 

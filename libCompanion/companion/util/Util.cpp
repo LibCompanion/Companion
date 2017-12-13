@@ -57,8 +57,8 @@ bool Companion::Util::validateShape(cv::Point2f topRight, cv::Point2f bottomLeft
     double bottom = cv::norm(bottomRight - bottomLeft);
     double left = cv::norm(bottomLeft - topLeft);
     double right = cv::norm(bottomRight - topRight);
-    double diag0 = cv::norm(topRight-bottomLeft);
-    double diag1 = cv::norm(topLeft-bottomRight);
+    double diag0 = cv::norm(topRight - bottomLeft);
+    double diag1 = cv::norm(topLeft - bottomRight);
 
     double topBottomDeviation = Util::getDeviation(top, bottom);
     double leftRightDeviation = Util::getDeviation(left, right);

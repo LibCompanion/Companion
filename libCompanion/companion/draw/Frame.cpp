@@ -90,7 +90,7 @@ const cv::Scalar &Companion::Draw::Frame::getColor() const
 
 cv::Rect Companion::Draw::Frame::cutArea()
 {
-	return cv::Rect(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - topLeft.y);
+	return cv::Rect(this->topLeft.x, this->topLeft.y, this->bottomRight.x - this->topLeft.x, this->bottomRight.y - this->topLeft.y);
 }
 
 int Companion::Draw::Frame::getThickness() const
@@ -125,27 +125,27 @@ void Companion::Draw::Frame::setColor(const cv::Scalar &color)
 
 void Companion::Draw::Frame::setThickness(int thickness)
 {
-	Frame::thickness = thickness;
+    this->thickness = thickness;
 }
 
-int Companion::Draw::Frame::getGroundZeroX() {
-    return topLeft.x;
+int Companion::Draw::Frame::getOriginX() {
+    return this->topLeft.x;
 }
 
-int Companion::Draw::Frame::getGroundZeroY() {
-	return topRight.y;
+int Companion::Draw::Frame::getOriginY() {
+	return this->topRight.y;
 }
 
-void Companion::Draw::Frame::moveGroundZero(int x, int y) {
-	topLeft.x = topLeft.x + x;
-	topLeft.y = topLeft.y + y;
+void Companion::Draw::Frame::moveOrigin(int x, int y) {
+    this->topLeft.x = this->topLeft.x + x;
+    this->topLeft.y = this->topLeft.y + y;
 
-	topRight.x = topRight.x + x;
-	topRight.y = topRight.y + y;
+    this->topRight.x = this->topRight.x + x;
+    this->topRight.y = this->topRight.y + y;
 
-	bottomLeft.x = bottomLeft.x + x;
-	bottomLeft.y = bottomLeft.y + y;
+    this->bottomLeft.x = this->bottomLeft.x + x;
+    this->bottomLeft.y = this->bottomLeft.y + y;
 
-	bottomRight.x = bottomRight.x + x;
-	bottomRight.y = bottomRight.y + y;
+    this->bottomRight.x = this->bottomRight.x + x;
+    this->bottomRight.y = this->bottomRight.y + y;
 };

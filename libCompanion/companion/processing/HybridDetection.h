@@ -61,11 +61,10 @@ namespace Companion { namespace Processing
             void addModel(cv::Mat image, int id);
 
             /**
-             * Deletes given model if exists. This method can only safely used if searching process is not RUNNING!.
-             * @param model Model to delete.
-             * @throws Companion::Error::Code Companion error code if currently search is using.
+             * Removes given model if it exists. This method can only be used safetly if the searching process is not running.
+             * @param modelID ID of the model to remove.
              */
-            void removeModel(int id);
+            void removeModel(int modelID);
 
             /**
              * Clear all models which are searched.

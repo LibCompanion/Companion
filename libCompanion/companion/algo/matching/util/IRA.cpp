@@ -20,57 +20,56 @@
 
 Companion::Algorithm::Matching::UTIL::IRA::IRA()
 {
-	lop.x = NO_OBJECT_DETECTED;
-	lop.y = NO_OBJECT_DETECTED;
+    this->lop.x = NO_OBJECT_DETECTED;
+    this->lop.y = NO_OBJECT_DETECTED;
 }
 
 Companion::Algorithm::Matching::UTIL::IRA::~IRA()
 {
-
 }
 
 const cv::Rect &Companion::Algorithm::Matching::UTIL::IRA::getLastObjectPosition() const
 {
-	return lop;
+    return this->lop;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::setLastObjectPosition(int x, int y, int width, int height)
 {
-	lop.x = x;
-	lop.y = y;
-	lop.width = width;
-	lop.height = height;
+    this->lop.x = x;
+    this->lop.y = y;
+    this->lop.width = width;
+    this->lop.height = height;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::setWidth(int width)
 {
-	lop.width = width;
+    this->lop.width = width;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::setHeight(int height)
 {
-	lop.height = height;
+    this->lop.height = height;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::setX(int x)
 {
-	lop.x = x;
+    this->lop.x = x;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::setY(int y)
 {
-	lop.y = y;
+    this->lop.y = y;
 }
 
 void Companion::Algorithm::Matching::UTIL::IRA::clear()
 {
-	lop.x = NO_OBJECT_DETECTED;
-	lop.y = NO_OBJECT_DETECTED;
-	lop.width = NO_OBJECT_DETECTED;
-	lop.height = NO_OBJECT_DETECTED;
+    this->lop.x = NO_OBJECT_DETECTED;
+    this->lop.y = NO_OBJECT_DETECTED;
+    this->lop.width = NO_OBJECT_DETECTED;
+    this->lop.height = NO_OBJECT_DETECTED;
 }
 
 bool Companion::Algorithm::Matching::UTIL::IRA::isObjectDetected()
 {
-	return lop.width > NO_OBJECT_DETECTED && lop.height > NO_OBJECT_DETECTED;
+	return (this->lop.width > NO_OBJECT_DETECTED) && (this->lop.height > NO_OBJECT_DETECTED);
 }

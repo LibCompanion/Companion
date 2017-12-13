@@ -54,23 +54,23 @@ namespace Companion { namespace Draw
         virtual cv::Rect cutArea() = 0;
 
         /**
-         * Obtain ground zero x position.
+         * Obtain origin x position.
          * @return X coordinate from drawable object.
          */
-		virtual int getGroundZeroX() = 0;
+		virtual int getOriginX() = 0;
 
         /**
-         * Obtain ground zero y position.
+         * Obtain origin y position.
          * @return Y coordinate from drawable object.
          */
-		virtual int getGroundZeroY() = 0;
+		virtual int getOriginY() = 0;
 
         /**
-         * Move from ground zero drawable.
+         * Move from origin drawable.
          * @param x X vector to move.
          * @param y Y vector to move.
          */
-		virtual void moveGroundZero(int x, int y) = 0;
+		virtual void moveOrigin(int x, int y) = 0;
 
         /**
          * Set color from drawable.

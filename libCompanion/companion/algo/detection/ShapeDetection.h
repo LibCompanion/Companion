@@ -48,7 +48,7 @@ namespace Companion { namespace Algorithm { namespace Detection
         ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)),
                        cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
                        cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),
-                       int cannyThreshold = 50,
+                       double cannyThreshold = 50.0,
                        int dilateIteration = 3);
 
         /**
@@ -75,7 +75,7 @@ namespace Companion { namespace Algorithm { namespace Detection
         /**
          * Canny threshold value to obtain edges.
          */
-        int cannyThreshold;
+        double cannyThreshold;
 
         /**
          * Morphology transformation kernel for morphologyEx operation.

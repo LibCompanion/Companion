@@ -48,7 +48,7 @@ namespace Companion { namespace Draw
 		    cv::Point topRight,
 		    cv::Point bottomLeft,
 		    cv::Point bottomRight,
-		    cv::Scalar color = cv::Scalar(0, 255, 0, 255),
+		    cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
 		    int thickness = 4);
 
 	    /**
@@ -72,23 +72,23 @@ namespace Companion { namespace Draw
 	    virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
-         * Obtain ground zero x position.
+         * Obtain origin x position.
          * @return X coordinate from drawable object.
          */
-        virtual int getGroundZeroX();
+        virtual int getOriginX();
 
         /**
-         * Obtain ground zero y position.
+         * Obtain origin y position.
          * @return Y coordinate from drawable object.
          */
-        virtual int getGroundZeroY();
+        virtual int getOriginY();
 
         /**
-         * Move from ground zero drawable.
+         * Move from origin drawable.
          * @param x X vector to move.
          * @param y Y vector to move.
          */
-        virtual void moveGroundZero(int x, int y);
+        virtual void moveOrigin(int x, int y);
 
         /**
          * Set color frame.

@@ -24,14 +24,14 @@ Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
 
 Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
 {
-	keypoints.clear();
-	descriptors.release();
-	delete ira;
+	this->keypoints.clear();
+	this->descriptors.release();
+	delete this->ira;
 }
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const
 {
-    return descriptors;
+    return this->descriptors;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors)
@@ -68,25 +68,25 @@ bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated()
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getImage() const
 {
-	return image;
+	return this->image;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setImage(const cv::Mat &image)
 {
-	FeatureMatchingModel::image = image;
+	this->image = image;
 }
 
 Companion::Algorithm::Matching::UTIL::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
 {
-	return ira;
+	return this->ira;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setID(int id)
 {
-	FeatureMatchingModel::id = id;
+    this->id = id;
 }
 
 const int Companion::Model::Processing::FeatureMatchingModel::getID() const
 {
-	return id;
+	return this->id;
 }

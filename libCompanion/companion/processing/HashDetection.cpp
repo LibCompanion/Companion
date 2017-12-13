@@ -30,7 +30,7 @@ Companion::Processing::HashDetection::HashDetection(cv::Size modelSize,
 
 Companion::Processing::HashDetection::~HashDetection()
 {
-	delete model;
+	delete this->model;
 }
 
 bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
@@ -52,7 +52,7 @@ bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
 	// 2 (...)
 	// ...
 	// n (n)
-	model->addDescriptor(id, descriptor);
+	this->model->addDescriptor(id, descriptor);
 	
 	return true;
 }
@@ -71,7 +71,7 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
         query = Util::cutImage(frame, frames.at(i)->cutArea());
         Companion::Util::resizeImage(query, modelSize);
         Companion::Util::convertColor(query, query, Companion::ColorFormat::GRAY);
-        result = hashing->executeAlgorithm(model, query, frames.at(i));
+        result = hashing->executeAlgorithm(this->model, query, frames.at(i));
         if (result != nullptr)
         {
             // Score only best results from rois
@@ -94,5 +94,4 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 
     return results;
 }
-
 
