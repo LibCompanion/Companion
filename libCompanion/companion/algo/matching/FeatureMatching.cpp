@@ -485,7 +485,7 @@ Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::calc
 	cv::Point2f bottomLeft = scene_corners[3] + offset;
 
 	// Check for minimum corner distance
-    if (Companion::Util::checkDistantDiagonals(topRight, bottomLeft, topLeft, bottomRight, 3, this->cornerDistance))
+    if (Companion::Util::validateShape(topRight, bottomLeft, topLeft, bottomRight, 3, this->cornerDistance))
     {
         // Create a drawable frame to represent the calculated area
         frame = new Companion::Draw::Frame(topLeft, topRight, bottomLeft, bottomRight);

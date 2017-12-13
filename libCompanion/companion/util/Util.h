@@ -127,6 +127,14 @@ namespace Companion
          */
         static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
+		/**
+         * Calculates the deviation between two lengths.
+         * @param x first length
+         * @param y second length
+         * return deviation in percent
+         */
+		static double getDeviation(double x, double y);
+
         /**
          * Converts an image to the given color format. BGR is expected as source format.
          * @param src Source image.
@@ -136,8 +144,6 @@ namespace Companion
         static void convertColor(cv::Mat& src, cv::Mat& dst, ColorFormat colorFormat);
 
     private:
-
-        static cv::Point getScaling(SCALING scaling);
 
 		/**
 		 * Get scaling from given enumeration as point representation.
