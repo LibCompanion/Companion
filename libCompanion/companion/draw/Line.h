@@ -71,20 +71,20 @@ namespace Companion { namespace Draw
              * Obtain ground zero x position.
              * @return X coordinate from drawable object.
              */
-            virtual int getGroundZeroX();
+            virtual int getOriginX();
 
             /**
              * Obtain ground zero y position.
              * @return Y coordinate from drawable object.
              */
-            virtual int getGroundZeroY();
+            virtual int getOriginY();
 
             /**
              * Move from ground zero drawable.
              * @param x X vector to move.
              * @param y Y vector to move.
              */
-            virtual void moveGroundZero(int x, int y);
+            virtual void moveOrigin(int x, int y);
 
             /**
              * Sets given color code for line.

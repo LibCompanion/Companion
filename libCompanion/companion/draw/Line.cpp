@@ -82,15 +82,15 @@ cv::Rect Companion::Draw::Line::cutArea()
     return cv::Rect(this->start.x, this->start.y, this->start.x + this->end.x, this->start.y + this->end.y);
 }
 
-int Companion::Draw::Line::getGroundZeroX() {
+int Companion::Draw::Line::getOriginX() {
     return this->start.x;
 }
 
-int Companion::Draw::Line::getGroundZeroY() {
+int Companion::Draw::Line::getOriginY() {
     return this->start.y;
 }
 
-void Companion::Draw::Line::moveGroundZero(int x, int y) {
+void Companion::Draw::Line::moveOrigin(int x, int y) {
     this->start.x = this->start.x + x;
     this->start.y = this->start.y + y;
 
