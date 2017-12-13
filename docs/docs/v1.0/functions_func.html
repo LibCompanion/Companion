@@ -71,7 +71,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul class="tablist">
       <li><a href="functions.html"><span>All</span></a></li>
       <li class="current"><a href="functions_func.html"><span>Functions</span></a></li>
-      <li><a href="functions_vars.html"><span>Variables</span></a></li>
     </ul>
   </div>
   <div id="navrow4" class="tabs3">
@@ -86,6 +85,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_k"><span>k</span></a></li>
       <li><a href="#index_l"><span>l</span></a></li>
+      <li><a href="#index_m"><span>m</span></a></li>
       <li><a href="#index_o"><span>o</span></a></li>
       <li><a href="#index_p"><span>p</span></a></li>
       <li><a href="#index_r"><span>r</span></a></li>
@@ -113,27 +113,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 &#160;
 
 <h3><a class="anchor" id="index_a"></a>- a -</h3><ul>
+<li>addDescriptor()
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_hash_model.html#a28850b5b6ab3a5be2bc90bdbe0fcd347">Companion::Model::Processing::ImageHashModel</a>
+</li>
 <li>addImage()
 : <a class="el" href="class_companion_1_1_input_1_1_image.html#adce79b94f8f305c454cc03f491adbcfa">Companion::Input::Image</a>
 </li>
 <li>addModel()
-: <a class="el" href="class_companion_1_1_configuration.html#ac31f828c25b02c997a8a3d58cde92d87">Companion::Configuration</a>
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#ad0405587807999e6024706e7e3a8acf8">Companion::Processing::FeatureDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hash_detection.html#a6c3fb37a6a6db631b66fa3cd9d6dcc01">Companion::Processing::HashDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#ae9a359dfc04393450c9e1f0075644c74">Companion::Processing::HybridDetection</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
 <li>calculateKeyPoints()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_feature_matching.html#a4c82c43e5c4b65de67d29081a06e24ad">Companion::Algorithm::FeatureMatching</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html#ad540812ceed0bb2c4cd5fb4c46ffd3df">Companion::Algorithm::Matching::FeatureMatching</a>
 </li>
 <li>calculateKeyPointsAndDescriptors()
 : <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a6ca30f60ceee43795818dcff66a79ef8">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
+<li>checkDistantDiagonals()
+: <a class="el" href="class_companion_1_1_util.html#a1609b7818781fd567b2340557d8ad660">Companion::Util</a>
+</li>
 <li>clear()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a943cb096cb2098aebe295502d7b237d6">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#ab6c33e2f9a37b42c0c6de782694f1a8a">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>clearModels()
-: <a class="el" href="class_companion_1_1_configuration.html#ab043ffa2b8f835bd4a4f52d1b7a46192">Companion::Configuration</a>
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#a04c9b8631a893dacafdf3e52015d042b">Companion::Processing::FeatureDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#ad38f70ad60301968b0ee491b7b8a2963">Companion::Processing::HybridDetection</a>
 </li>
 <li>Configuration()
 : <a class="el" href="class_companion_1_1_configuration.html#afe070c2c4a44b62e373b9daa979539b8">Companion::Configuration</a>
@@ -143,6 +152,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </li>
 <li>convertColor()
 : <a class="el" href="class_companion_1_1_util.html#ac3ee7e9305bd79fc7ed8500dd08294bb">Companion::Util</a>
+</li>
+<li>cutArea()
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#af74fe69f873aeb93074f72dc74824e5c">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a3f47b43526be585632d46cb6427ad047">Companion::Draw::Frame</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_line.html#a305fd2595cbb8c729a86fa3571bd5974">Companion::Draw::Line</a>
+</li>
+<li>cutImage()
+: <a class="el" href="class_companion_1_1_util.html#a93ef0594d5505eff1618ee7669826270">Companion::Util</a>
 </li>
 </ul>
 
@@ -158,20 +175,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <h3><a class="anchor" id="index_e"></a>- e -</h3><ul>
 <li>execute()
-: <a class="el" href="class_companion_1_1_processing_1_1_image_processing.html#aa98961a1aec505b789ecb24cc2078996">Companion::Processing::ImageProcessing</a>
-, <a class="el" href="class_companion_1_1_processing_1_1_object_detection.html#a71c61c6dd36d15791dcbaa6ffb0f1afe">Companion::Processing::ObjectDetection</a>
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#a9c274487e467f98284c2b5938e712265">Companion::Processing::FeatureDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hash_detection.html#a465960b351766c60541c35cc5c5fb209">Companion::Processing::HashDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#a32e0cc2b93b3f34976792112d9fd4d17">Companion::Processing::HybridDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_image_processing.html#aa98961a1aec505b789ecb24cc2078996">Companion::Processing::ImageProcessing</a>
 </li>
 <li>executeAlgorithm()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_feature_matching.html#ade34bb829969b35261115c929f07c592">Companion::Algorithm::FeatureMatching</a>
-, <a class="el" href="class_companion_1_1_algorithm_1_1_matching.html#a5a9b531367a4eda0011fb9e3249e69ff">Companion::Algorithm::Matching</a>
-, <a class="el" href="class_companion_1_1_algorithm_1_1_shape_detection.html#ac092a8d5eef692cc3609b3a9a03363cd">Companion::Algorithm::ShapeDetection</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html#a93616a0c6baf29c4654b8dc00d435bdd">Companion::Algorithm::Detection::ShapeDetection</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html#a05b8c98b25e2246a32428363908859b1">Companion::Algorithm::Hashing::Hashing</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html#ab39ce5bd1b760f798d14382032952852">Companion::Algorithm::Hashing::LSH</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html#a9764f2f8f60230951c54d09b8095cb14">Companion::Algorithm::Matching::FeatureMatching</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_matching.html#afa743160815849d7db7313ca44cbcf88">Companion::Algorithm::Matching::Matching</a>
 </li>
 </ul>
 
 
 <h3><a class="anchor" id="index_f"></a>- f -</h3><ul>
+<li>FeatureDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#aa67d999045e28a01d223e6d4e7bbc820">Companion::Processing::FeatureDetection</a>
+</li>
 <li>FeatureMatching()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_feature_matching.html#add49b8c9d2e4c4c8e81788e495e7b2e0">Companion::Algorithm::FeatureMatching</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html#aea2cb072d15aa3e6b083e0f6450902db">Companion::Algorithm::Matching::FeatureMatching</a>
 </li>
 <li>FeatureMatchingModel()
 : <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#ad86da12805ca6c7aecedbb180a0fe8f0">Companion::Model::Processing::FeatureMatchingModel</a>
@@ -191,6 +215,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_g"></a>- g -</h3><ul>
+<li>generateDataset()
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_hash_model.html#a70d7f7555886fce72cb5aec60a614621">Companion::Model::Processing::ImageHashModel</a>
+</li>
 <li>getBottomLeft()
 : <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a98e2b1651bc17e48dac215117fb91633">Companion::Draw::Frame</a>
 </li>
@@ -201,7 +228,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_configuration.html#aba920f1bbcf8c7e632cb95648be5f450">Companion::Configuration</a>
 </li>
 <li>getColor()
-: <a class="el" href="class_companion_1_1_draw_1_1_frame.html#ac3e105be3a82f707188e262f335414d4">Companion::Draw::Frame</a>
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#aaf0ac902ea705b685deb508f3c90bd7c">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#ac3e105be3a82f707188e262f335414d4">Companion::Draw::Frame</a>
 , <a class="el" href="class_companion_1_1_draw_1_1_line.html#ac1c339623703d5c6f40118cf874db239">Companion::Draw::Line</a>
 </li>
 <li>getDescriptors()
@@ -213,32 +241,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>getErrorCallback()
 : <a class="el" href="class_companion_1_1_configuration.html#afb739e0e81402603e84f7ad01c60ef34">Companion::Configuration</a>
 </li>
+<li>getGroundZeroX()
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#a0726aa84f4934a7b2aa611777ac8f73b">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a3226dac5e3743a0b5426ef4b5ba83e7c">Companion::Draw::Frame</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_line.html#af867a1164a57522e1d25c1ca3f716934">Companion::Draw::Line</a>
+</li>
+<li>getGroundZeroY()
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#a9363be5aaae84485617c8a14641d4d6b">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a37df1a5df820d9f7a4d1bb788f36f1c1">Companion::Draw::Frame</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_line.html#af9e57fd9d38d1e2a1845ebfedbd40014">Companion::Draw::Line</a>
+</li>
 <li>getID()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a7acf69249791eabb91c03c918f2e9a43">Companion::Model::Processing::ImageRecognitionModel</a>
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a5d608a23a8816d030d3f91e85a145bed">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>getId()
 : <a class="el" href="class_companion_1_1_model_1_1_result.html#abdbcb03ae8663783940e36b41c757a25">Companion::Model::Result</a>
 </li>
 <li>getImage()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a1e61f742bd7fbd030c7d5ed34e69fd72">Companion::Model::Processing::ImageRecognitionModel</a>
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a1e97b1fc0e5b8de587f2aa71a87dd4a9">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>getImageBuffer()
 : <a class="el" href="class_companion_1_1_configuration.html#a8463922ae977413769655ddceaf733b2">Companion::Configuration</a>
 </li>
 <li>getIra()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a72dfd7f2e1bb9de6a856d98242dd597f">Companion::Model::Processing::ImageRecognitionModel</a>
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a5400c6838822cfa71a71711246dccbb0">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>getKeypoints()
 : <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a474a89fa1b2280824d9721bd5a203d92">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>getLastObjectPosition()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a01a4ae274b976ba7ebcaa26842276224">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a7a9658bd9eca1e39b0109ea4562a2594">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>getModel()
 : <a class="el" href="class_companion_1_1_model_1_1_result.html#ae710093cca984fba21f62f2c759e3356">Companion::Model::Result</a>
-</li>
-<li>getModels()
-: <a class="el" href="class_companion_1_1_configuration.html#a1d2eaafd1051279eea1044b51b2b97bc">Companion::Configuration</a>
 </li>
 <li>getProcessing()
 : <a class="el" href="class_companion_1_1_configuration.html#a4efe8c33537a0b95ee9e75187767292a">Companion::Configuration</a>
@@ -256,7 +291,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_draw_1_1_line.html#aaa8bd28aec64742b2188fd8acc9d3f91">Companion::Draw::Line</a>
 </li>
 <li>getThickness()
-: <a class="el" href="class_companion_1_1_draw_1_1_frame.html#aa629b8e2f0dd2756c8590a73896ec28f">Companion::Draw::Frame</a>
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#afefb4443fa4d53ce82937202efa8c307">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#aa629b8e2f0dd2756c8590a73896ec28f">Companion::Draw::Frame</a>
 , <a class="el" href="class_companion_1_1_draw_1_1_line.html#ac52c5ef788aecc08ad5fbdeaceb156b2">Companion::Draw::Line</a>
 </li>
 <li>getTopLeft()
@@ -272,6 +308,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>hasDistantPosition()
 : <a class="el" href="class_companion_1_1_util.html#a89c8dc51005797a561b6f816918f3a78">Companion::Util</a>
 </li>
+<li>HashDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_hash_detection.html#a3b5376eb60dfb7329422e6125b791a40">Companion::Processing::HashDetection</a>
+</li>
+<li>HybridDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#aabceb3d21ad401c6c1aa0d287fc171ec">Companion::Processing::HybridDetection</a>
+</li>
 </ul>
 
 
@@ -279,17 +321,19 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>Image()
 : <a class="el" href="class_companion_1_1_input_1_1_image.html#a0c158063108145ca071c55b0a36bba26">Companion::Input::Image</a>
 </li>
-<li>ImageRecognitionModel()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#ac90eb84906fd011abf4927b6171b034d">Companion::Model::Processing::ImageRecognitionModel</a>
+<li>ImageHashModel()
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_hash_model.html#a50f1a1797d8c7efde8ae25c4ee117fb7">Companion::Model::Processing::ImageHashModel</a>
 </li>
 <li>IRA()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#aa1b3a7913ecb8ac390915a501d1619c6">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a9ab289370cbf773201e6ed5ff25f41de">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>isCuda()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_feature_matching.html#a95c453fb7d0086c8ac379130173ee067">Companion::Algorithm::FeatureMatching</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html#ad2819c38269dc42f23ba092f202ef05c">Companion::Algorithm::Detection::ShapeDetection</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html#a5549a53a434eb08455b9aafc26d7a9d6">Companion::Algorithm::Hashing::Hashing</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_hashing_1_1_l_s_h.html#aa1d2107b8fa7818ad8594ee5f0fe1d52">Companion::Algorithm::Hashing::LSH</a>
 , <a class="el" href="class_companion_1_1_algorithm_1_1_image_recognition.html#a97e4960f39da01e8faf08abe7ce0a5f8">Companion::Algorithm::ImageRecognition</a>
-, <a class="el" href="class_companion_1_1_algorithm_1_1_matching.html#a47b0efdae479944df2166070ccf21214">Companion::Algorithm::Matching</a>
-, <a class="el" href="class_companion_1_1_algorithm_1_1_shape_detection.html#ab84515661b72edf280cd9f2bdfb1d349">Companion::Algorithm::ShapeDetection</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html#afe9decc35bcb982a2c23fe62481497b4">Companion::Algorithm::Matching::FeatureMatching</a>
+, <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_matching.html#a9d3784b2d79d47eb98e7b295f48ecc00">Companion::Algorithm::Matching::Matching</a>
 </li>
 <li>isFinished()
 : <a class="el" href="class_companion_1_1_input_1_1_image.html#af452735dfa98b98a6d14aaa76570f719">Companion::Input::Image</a>
@@ -300,7 +344,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_util.html#ab4e9c90ace2e492aa77b2748aecdbbfd">Companion::Util</a>
 </li>
 <li>isObjectDetected()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a93517abccd16d3e0ddd378ee2b27679b">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a4636010852373d7bc0e668fae8492d87">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 </ul>
 
@@ -319,10 +363,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </ul>
 
 
-<h3><a class="anchor" id="index_o"></a>- o -</h3><ul>
-<li>ObjectDetection()
-: <a class="el" href="class_companion_1_1_processing_1_1_object_detection.html#aa62e62924b316cdfe7194f64ec002b59">Companion::Processing::ObjectDetection</a>
+<h3><a class="anchor" id="index_m"></a>- m -</h3><ul>
+<li>moveGroundZero()
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#a7e207d4dc5ecc8a60ac6fa94230eaa86">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a2381bcb5df80e03179201f82515b86d5">Companion::Draw::Frame</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_line.html#aa09607f387c8878d277183e4566f35a9">Companion::Draw::Line</a>
 </li>
+</ul>
+
+
+<h3><a class="anchor" id="index_o"></a>- o -</h3><ul>
 <li>obtainImage()
 : <a class="el" href="class_companion_1_1_input_1_1_image.html#ad7f59bafc29bbf767dca6d8d7368de7a">Companion::Input::Image</a>
 , <a class="el" href="class_companion_1_1_input_1_1_stream.html#a23aa6645b50b4be1b8e898097128f5e1">Companion::Input::Stream</a>
@@ -347,8 +397,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>ratioPosition()
 : <a class="el" href="class_companion_1_1_util.html#a7348f3e83db82bba592799c1e12ac0db">Companion::Util</a>
 </li>
+<li>removeModel()
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#a1198327222eaa5b6d62e681cd52a66a2">Companion::Processing::FeatureDetection</a>
+, <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#aaf9dbdba99dcc553b8a9f2163c3aff07">Companion::Processing::HybridDetection</a>
+</li>
 <li>resizeImage()
-: <a class="el" href="class_companion_1_1_util.html#a750a1cb439f0032567994dabf3132659">Companion::Util</a>
+: <a class="el" href="class_companion_1_1_util.html#ae1777f87f14c6a460787c8d5e14309a8">Companion::Util</a>
 </li>
 <li>Result()
 : <a class="el" href="class_companion_1_1_model_1_1_result.html#aaf9153bf172cd87152af08670eff7566">Companion::Model::Result</a>
@@ -367,7 +421,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a3a7d7067b04357f55255c035f0edc2e0">Companion::Draw::Frame</a>
 </li>
 <li>setColor()
-: <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a95e32d871a4856a225d15eb1296f79fc">Companion::Draw::Frame</a>
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#a2f9a435ac20e9e8802772019b6ac8023">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a95e32d871a4856a225d15eb1296f79fc">Companion::Draw::Frame</a>
 , <a class="el" href="class_companion_1_1_draw_1_1_line.html#a5f422f915bad9ec5114875b05cc25ff5">Companion::Draw::Line</a>
 </li>
 <li>setDescriptors()
@@ -380,13 +435,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_configuration.html#a533e78db16557ce6946809bb8c2665e3">Companion::Configuration</a>
 </li>
 <li>setHeight()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a5b00d4be70203af4f3ac2eff634cd70b">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#adf53408fd7f65c852388306b6d240b6e">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>setID()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a19ac910de792f5c728774da812629c6f">Companion::Model::Processing::ImageRecognitionModel</a>
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a7f8e108df91642391e59ccfe4f06ba89">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>setImage()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a61c988a129c8d2c4bb9ac16c9aaa39a6">Companion::Model::Processing::ImageRecognitionModel</a>
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a037e666341595a59c3c1195797aecfaa">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>setImageBuffer()
 : <a class="el" href="class_companion_1_1_configuration.html#a5be32b110277928845a34718a9f8c5cb">Companion::Configuration</a>
@@ -395,7 +450,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a031976a8ced3481cfe1161d5a9599102">Companion::Model::Processing::FeatureMatchingModel</a>
 </li>
 <li>setLastObjectPosition()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#af5e6fc591c0e6fb46050f96fa1048350">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a8982727cbf20a2e541c536cb21913b49">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>setProcessing()
 : <a class="el" href="class_companion_1_1_configuration.html#a76fc089a15477a535922c9f05b61980b">Companion::Configuration</a>
@@ -413,7 +468,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_draw_1_1_line.html#a287a7ac4032284eb383b23774b83cc41">Companion::Draw::Line</a>
 </li>
 <li>setThickness()
-: <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a6cb4af129032fd58beed11b6b664fb9e">Companion::Draw::Frame</a>
+: <a class="el" href="class_companion_1_1_draw_1_1_drawable.html#a8a92b4bd2b93d040824c3216011141c2">Companion::Draw::Drawable</a>
+, <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a6cb4af129032fd58beed11b6b664fb9e">Companion::Draw::Frame</a>
 , <a class="el" href="class_companion_1_1_draw_1_1_line.html#ab44ff871aaa4dfe155d62bc3aeff9822">Companion::Draw::Line</a>
 </li>
 <li>setTopLeft()
@@ -423,16 +479,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a2b9b4dd8a13d02092a2ad73504befd0c">Companion::Draw::Frame</a>
 </li>
 <li>setWidth()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a4c3b8666fa7a2f87a165d27ae7f73576">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a42738585cfe97eac8132489e4d91a251">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>setX()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a96da0a7eb485b0669a69c524669f356a">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#ad5945d041cebbc7807a6224de2c3a6ef">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>setY()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#a0e43ffe7703a5fe3532eb3033065fedb">Companion::Algorithm::IRA</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a1f9382965b1c8de9f24174cda14b8301">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>ShapeDetection()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_shape_detection.html#af9ed06ed93390f86db90c6a9ae8f6faa">Companion::Algorithm::ShapeDetection</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html#a503215ba5a341efb4154b185a3dc02e0">Companion::Algorithm::Detection::ShapeDetection</a>
 </li>
 <li>stop()
 : <a class="el" href="class_companion_1_1_configuration.html#a25418141eb3f9b2985ad3b6bf9a4f0d6">Companion::Configuration</a>
@@ -454,8 +510,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~Configuration()
 : <a class="el" href="class_companion_1_1_configuration.html#a3f126a9940dfc10116fa55f55114d7d2">Companion::Configuration</a>
 </li>
+<li>~FeatureDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_feature_detection.html#a3b1b64a59641da675b5d8869c8a94fa9">Companion::Processing::FeatureDetection</a>
+</li>
 <li>~FeatureMatching()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_feature_matching.html#a1525df436c41e9a95e528dd589c34f99">Companion::Algorithm::FeatureMatching</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_feature_matching.html#a84da3c920681c27fd387106fc914ecb7">Companion::Algorithm::Matching::FeatureMatching</a>
 </li>
 <li>~FeatureMatchingModel()
 : <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_feature_matching_model.html#a7f8fd28304ce8089e4bfc020aba4fb40">Companion::Model::Processing::FeatureMatchingModel</a>
@@ -463,20 +522,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>~Frame()
 : <a class="el" href="class_companion_1_1_draw_1_1_frame.html#a42541868880d08d93eb43daee90428f5">Companion::Draw::Frame</a>
 </li>
+<li>~HashDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_hash_detection.html#a79bc6eaa1fb5c1bce6426e111e1bc75f">Companion::Processing::HashDetection</a>
+</li>
+<li>~HybridDetection()
+: <a class="el" href="class_companion_1_1_processing_1_1_hybrid_detection.html#a23f63a97ec2a0124e84fd53b119592c5">Companion::Processing::HybridDetection</a>
+</li>
 <li>~Image()
 : <a class="el" href="class_companion_1_1_input_1_1_image.html#a199d6b4c6da56d81fd04a33e9f61e5af">Companion::Input::Image</a>
 </li>
-<li>~ImageRecognitionModel()
-: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html#a479c8731862ce69cb096070529d62844">Companion::Model::Processing::ImageRecognitionModel</a>
+<li>~ImageHashModel()
+: <a class="el" href="class_companion_1_1_model_1_1_processing_1_1_image_hash_model.html#abcec20ae7e9eda057ba0f004355114d0">Companion::Model::Processing::ImageHashModel</a>
 </li>
 <li>~IRA()
-: <a class="el" href="class_companion_1_1_algorithm_1_1_i_r_a.html#aca3531fd592da293b497eee7bf6ba934">Companion::Algorithm::IRA</a>
-</li>
-<li>~ObjectDetection()
-: <a class="el" href="class_companion_1_1_processing_1_1_object_detection.html#aa4cfd582978d9d68a1e476093f34e91d">Companion::Processing::ObjectDetection</a>
+: <a class="el" href="class_companion_1_1_algorithm_1_1_matching_1_1_u_t_i_l_1_1_i_r_a.html#a80e461c76a3d3561423988386b709f95">Companion::Algorithm::Matching::UTIL::IRA</a>
 </li>
 <li>~Result()
 : <a class="el" href="class_companion_1_1_model_1_1_result.html#aaf988dfd371ec4aee4de622049794d9f">Companion::Model::Result</a>
+</li>
+<li>~ShapeDetection()
+: <a class="el" href="class_companion_1_1_algorithm_1_1_detection_1_1_shape_detection.html#a15bfd679e2c2b55dfdb4f8179e234731">Companion::Algorithm::Detection::ShapeDetection</a>
 </li>
 <li>~Video()
 : <a class="el" href="class_companion_1_1_input_1_1_video.html#a4b0fc2297600deaba8e50e112fac21c2">Companion::Input::Video</a>

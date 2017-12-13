@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['image',['Image',['../class_companion_1_1_input_1_1_image.html',1,'Companion::Input']]],
-  ['imageprocessing',['ImageProcessing',['../class_companion_1_1_processing_1_1_image_processing.html',1,'Companion::Processing']]],
-  ['imagerecognition',['ImageRecognition',['../class_companion_1_1_algorithm_1_1_image_recognition.html',1,'Companion::Algorithm']]],
-  ['imagerecognitionmodel',['ImageRecognitionModel',['../class_companion_1_1_model_1_1_processing_1_1_image_recognition_model.html',1,'Companion::Model::Processing']]],
-  ['ira',['IRA',['../class_companion_1_1_algorithm_1_1_i_r_a.html',1,'Companion::Algorithm']]]
+  ['hashdetection',['HashDetection',['../class_companion_1_1_processing_1_1_hash_detection.html',1,'Companion::Processing']]],
+  ['hashing',['Hashing',['../class_companion_1_1_algorithm_1_1_hashing_1_1_hashing.html',1,'Companion::Algorithm::Hashing']]],
+  ['hybriddetection',['HybridDetection',['../class_companion_1_1_processing_1_1_hybrid_detection.html',1,'Companion::Processing']]]
 ];

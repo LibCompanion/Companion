@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['objectdetection',['ObjectDetection',['../class_companion_1_1_processing_1_1_object_detection.html',1,'Companion::Processing']]]
+  ['matching',['Matching',['../class_companion_1_1_algorithm_1_1_matching_1_1_matching.html',1,'Companion::Algorithm::Matching']]]
 ];
