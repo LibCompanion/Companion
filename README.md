@@ -2,10 +2,14 @@
 
 [Companion](https://libcompanion.github.io/libCompanion/) is a computer vision library written with OpenCV 3.
 
+# Documentation
+
+Documentation page can be reached at https://libcompanion.github.io/libCompanion.
+
 # Supported Plattforms
 
 * Windows
-* UWP
+* Universal Windows Platform (UWP)
 * Linux
 
 # Dependencies
@@ -13,9 +17,7 @@
 Following dependencies are needed to build libCompanion.
 
 * OpenCV Version 3.X
-* Cuda Support*
-
-\* Optional
+* Cuda 8 (Cuda 9 is currently not supported) to use Cuda features.
 
 # Build LibCompanion
 
@@ -56,11 +58,6 @@ If you desire to build Companion for *Universal Windows Platform* you can simply
 cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
 ```
 If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure*. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
-
-# Getting Started
-
-An usage example for an 2D Object detection setup is implemented under Main folder.
-For more Information go to this [Getting Started](https://nepitwin.github.io/libCompanion/gettingstarted/) Guide.
 
 ## License
 
