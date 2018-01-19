@@ -62,7 +62,7 @@ If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOO
 ## License
 
 This program is an image recognition library written with OpenCV.
-Copyright (C) 2016-2017 Andreas Sekulski
+Copyright (C) 2016-2018 Andreas Sekulski
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
