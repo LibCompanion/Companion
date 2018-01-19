@@ -31,9 +31,9 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     query.reshape(1, 1).convertTo(query, CV_32F);
     query = query * hashImages;
 
-    for (int i = 0; i < query.rows; i++)
+    for (size_t i = 0; i < query.rows; i++)
     {
-        for (int j = 0; j < query.cols; j++)
+        for (size_t j = 0; j < query.cols; j++)
         {
             query.at<float>(i, j) = query.at<float>(i, j) > 0 ? 1 : 0;
         }
@@ -42,7 +42,7 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     query.convertTo(query, CV_8U);
 
     //Search for similar samples in the dataset
-    for (int row = 0; row < datasetImages.rows; ++row)
+    for (size_t row = 0; row < datasetImages.rows; ++row)
     {
         scores[row].second = norm(query, datasetImages.row(row), cv::NORM_HAMMING);
     }
@@ -52,7 +52,7 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     rank.assign(scores.begin(), scores.end());
     sort(rank.begin(), rank.end(), sortRank());
 
-    for (int r = 0; r < std::min(10, (int)rank.size()); ++r)
+    for (size_t r = 0; r < std::min(10, (int)rank.size()); ++r)
     {
         if (r == 0)
         {

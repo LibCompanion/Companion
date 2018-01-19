@@ -29,6 +29,7 @@
 #include <companion/util/CompanionError.h>
 #include <companion/util/Util.h>
 #include <companion/util/Definitions.h>
+#include <companion/util/CompanionException.h>
 
 namespace Companion { namespace Thread
 {

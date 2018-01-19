@@ -66,7 +66,7 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 
 	// Obtain all shapes from image to detect.
 	std::vector<Companion::Draw::Frame*> frames = shapeDetection->executeAlgorithm(frame);
-    for (int i = 0; i < frames.size(); i++)
+    for (size_t i = 0; i < frames.size(); i++)
     {
         query = Util::cutImage(frame, frames.at(i)->cutArea());
         Companion::Util::resizeImage(query, modelSize);

@@ -37,6 +37,7 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
 	CALLBACK_RESULT objects;
 	std::vector<Companion::Draw::Frame*> rois;
+    std::vector<Companion::Error::Code> errors;
 	int oldX, oldY;
 
 	if (!frame.empty())
@@ -67,30 +68,45 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 
 		if (this->matchingAlgo->isCuda())
 		{
-			for (int x = 0; x < models.size(); x++)
+			for (size_t x = 0; x < models.size(); x++)
 			{
-				processing(sceneModel,
-					models.at(x),
-					rois,
-					frame,
-					oldX,
-					oldY,
-					objects);
+                processing(sceneModel,
+                    models.at(x),
+                    rois,
+                    frame,
+                    oldX,
+                    oldY,
+                    objects);
+				
 			}
 		}
 		else
 		{
-			#pragma omp parallel for
+            errors.clear();
+            #pragma omp parallel for
 			for (int x = 0; x < models.size(); x++)
 			{
-				processing(sceneModel,
-					models.at(x),
-					rois,
-					frame,
-					oldX,
-					oldY,
-					objects);
+                try
+                {
+                    processing(sceneModel,
+                        models.at(x),
+                        rois,
+                        frame,
+                        oldX,
+                        oldY,
+                        objects);
+                }
+                catch (Companion::Error::Code errorCode)
+                {
+                    #pragma omp critical
+                    errors.push_back(errorCode);
+                }
 			}
+
+            if (!errors.empty())
+            {
+                throw Companion::Error::CompanionException(errors);
+            }
 		}
 
 		frame.release();
@@ -118,16 +134,30 @@ void Companion::Processing::FeatureDetection::processing(Companion::Model::Proce
 
 	if (rois.size() == 0)
 	{
-		// If rois not found or used
-		result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+        try 
+        {
+            // If rois not found or used
+            result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+        }
+        catch (Companion::Error::Code errorCode)
+        {
+            throw errorCode;
+        }
 	}
 	else
 	{
-		int index = 0;
+		size_t index = 0;
 		// If rois found
 		while (index < rois.size())
 		{
-			result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+            try 
+            {
+                result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+            }
+            catch (Companion::Error::Code errorCode)
+            {
+                throw errorCode;
+            }
 			index++;
 		}
 	}
@@ -155,7 +185,7 @@ bool Companion::Processing::FeatureDetection::addModel(Companion::Model::Process
 
 bool Companion::Processing::FeatureDetection::removeModel(int modelID)
 {
-	for (int index = 0; index < this->models.size(); index++)
+	for (size_t index = 0; index < this->models.size(); index++)
 	{
         if (this->models.at(index)->getID() == modelID) {
 			this->models.erase(this->models.begin() + index);

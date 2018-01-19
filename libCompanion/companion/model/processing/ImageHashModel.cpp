@@ -74,9 +74,9 @@ cv::Mat Companion::Model::Processing::ImageHashModel::generateIndexDataset(cv::M
 	{
 		cv::Mat images = imageDataset * hash;
 
-		for (int i = 0; i < images.rows; i++)
+		for (size_t i = 0; i < images.rows; i++)
 		{
-			for (int j = 0; j < images.cols; j++)
+			for (size_t j = 0; j < images.cols; j++)
 			{
 				images.at<float>(i, j) = images.at<float>(i, j) > 0 ? 1 : 0;
 			}

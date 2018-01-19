@@ -46,7 +46,7 @@ set(SOURCE
         model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h
         processing/HashDetection.cpp processing/HashDetection.h
         algo/hashing/LSH.cpp algo/hashing/LSH.h
-        algo/hashing/Hashing.h processing/HybridDetection.cpp processing/HybridDetection.h)
+        algo/hashing/Hashing.h processing/HybridDetection.cpp processing/HybridDetection.h util/CompanionException.cpp util/CompanionException.h)
 
 # Create MSVC filter
 if(MSVC)

@@ -300,7 +300,7 @@ void Companion::Algorithm::Matching::FeatureMatching::ratioTest(const std::vecto
 {
     unsigned long position = 0;
     bool insertElement;
-    for (int i = 0; i < matches.size(); ++i)
+    for (size_t i = 0; i < matches.size(); ++i)
     {
         if (matches[i].size() >= 2 && (matches[i][0].distance < ratio * matches[i][1].distance))
         {
@@ -341,7 +341,7 @@ void Companion::Algorithm::Matching::FeatureMatching::obtainKeypointsFromGoodMat
 	int queryIdx;
 
 	// Get the keypoints from the good matches
-	for (int i = 0; i < good_matches.size(); i++)
+	for (size_t i = 0; i < good_matches.size(); i++)
 	{
 		trainIdx = good_matches[i].trainIdx;
 		queryIdx = good_matches[i].queryIdx;

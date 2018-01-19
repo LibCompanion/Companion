@@ -23,6 +23,7 @@
 #include <companion/processing/ImageProcessing.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/draw/Drawable.h>
+#include <companion/util/CompanionException.h>
 #include <companion/algo/matching/FeatureMatching.h>
 #include <companion/algo/detection/ShapeDetection.h>
 #include <companion/Configuration.h>

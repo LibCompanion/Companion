@@ -62,44 +62,62 @@ CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
     int modelID;
     Companion::Model::Processing::FeatureMatchingModel *sceneModel;
     Companion::Model::Processing::FeatureMatchingModel *objectModel;
+    std::vector<Companion::Error::Code> errors;
 
     hashResults = hashDetection->execute(frame);
 
     if (!hashResults.empty())
     {
         sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
+        errors.clear();
 
         #pragma omp parallel for
         for (int i = 0; i < hashResults.size(); i++)
         {
-            hashResult = hashResults.at(i);
-            modelID = hashResult->getId();
-
-            // This frame can be cut to improve detection
-            Companion::Draw::Drawable *cutDrawable = hashResult->getModel();
-            cv::Mat cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
-
-            int oldX = cutImage.cols;
-            int oldY = cutImage.rows;
-            if(resize != 100)
+            try
             {
-                Util::resizeImage(cutImage, cutImage.cols * resize / 100);
-            }
+                hashResult = hashResults.at(i);
+                modelID = hashResult->getId();
 
-            sceneModel->setImage(cutImage);
+                // This frame can be cut to improve detection
+                Companion::Draw::Drawable *cutDrawable = hashResult->getModel();
+                cv::Mat cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
 
-            objectModel = models[modelID];
-            objectModel->getIra()->clear();
+                int oldX = cutImage.cols;
+                int oldY = cutImage.rows;
+                if(resize != 100)
+                {
+                    Util::resizeImage(cutImage, cutImage.cols * resize / 100);
+                }
 
-            fmResult = featureMatching->executeAlgorithm(sceneModel, objectModel, nullptr);
+                sceneModel->setImage(cutImage);
 
-            if (fmResult != nullptr)
+                objectModel = models[modelID];
+                objectModel->getIra()->clear();
+
+            
+                fmResult = featureMatching->executeAlgorithm(sceneModel, objectModel, nullptr);
+            
+            
+
+                if (fmResult != nullptr)
+                {
+                    fmResult->getModel()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
+                    fmResult->getModel()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
+                    cbResults.push_back(fmResult);
+                }
+
+                }
+            catch (Companion::Error::Code errorCode)
             {
-                fmResult->getModel()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
-                fmResult->getModel()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
-                cbResults.push_back(fmResult);
+                #pragma omp critical
+                errors.push_back(errorCode);
             }
+        }
 
+        if (!errors.empty())
+        {
+            throw Companion::Error::CompanionException(errors);
         }
 
         delete sceneModel;

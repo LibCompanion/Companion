@@ -96,30 +96,41 @@ void Companion::Thread::StreamWorker::consume(
     cv::Mat frame;
     cv::Mat resultBGR;
 
-    try
+    while (!this->finished)
     {
-        while (!this->finished)
+
+        std::unique_lock<std::mutex> lk(this->mx);
+        this->cv.wait(lk, [this] {return this->finished || !this->queue.empty(); });
+
+        if (!this->queue.empty())
         {
-
-            std::unique_lock<std::mutex> lk(this->mx);
-            this->cv.wait(lk, [this] {return this->finished || !this->queue.empty(); });
-
-            if (!this->queue.empty())
+            try
             {
                 frame = this->queue.front();
                 this->queue.pop();
                 Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
                 callback(processing->execute(frame), resultBGR);
-                frame.release();
-                resultBGR.release();
+            }
+            catch (Companion::Error::Code errorCode)
+            {
+                // Single error messages from processing
+                errorCallback(errorCode);
+            }
+            catch (Companion::Error::CompanionException ex)
+            {
+                // Multiple error messages only called by parallelized methods.
+                while (ex.hasNext())
+                {
+                    errorCallback(ex.next());
+                }
             }
 
+            frame.release();
+            resultBGR.release();
         }
+
     }
-    catch (Companion::Error::Code errorCode)
-    {
-        errorCallback(errorCode);
-    }
+    
 }
 
 bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame)

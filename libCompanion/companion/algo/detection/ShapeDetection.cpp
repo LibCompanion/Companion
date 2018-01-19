@@ -69,7 +69,7 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetec
 	// CV_RETR_EXTERNAL, CV_RETR_LIST, CV_RETR_CCOMP, CV_RETR_TREE
 	findContours(frame, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
-	for (int i = 0; i < contours.size(); i++)
+	for (size_t i = 0; i < contours.size(); i++)
 	{
 		cv::approxPolyDP(cv::Mat(contours[i]), approx, cv::arcLength(cv::Mat(contours[i]), true) * 0.01, true);
 
@@ -81,7 +81,7 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetec
 
 		if ((approx.size() >= 4) && (approx.size() <= 20))
 		{
-			for (int i = 0; i < approx.size(); i++)
+			for (size_t i = 0; i < approx.size(); i++)
 			{
 				mostLeftCoordinate = (approx.at(i).x < mostLeftCoordinate) ? approx.at(i).x : mostLeftCoordinate;
 				lowestCoordinate = (approx.at(i).y < lowestCoordinate) ? approx.at(i).y : lowestCoordinate;

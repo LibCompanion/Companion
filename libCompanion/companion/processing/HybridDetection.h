@@ -26,6 +26,7 @@
 #include <companion/algo/detection/ShapeDetection.h>
 #include <companion/model/Result.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
+#include <companion/util/CompanionException.h>
 
 namespace Companion { namespace Processing
 {
