@@ -77,7 +77,6 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
                     oldX,
                     oldY,
                     objects);
-				
 			}
 		}
 		else
@@ -166,8 +165,10 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
 	{
 		// Create old image size
 		result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
-		// Store recognized object and its ID to vector.
-		objects.push_back(result);
+        // Store recognized object and its ID to vector.
+        #pragma omp critical
+		objects.push_back(dynamic_cast<Companion::Model::Result::Result*>(result));
+
 	}
 }
 

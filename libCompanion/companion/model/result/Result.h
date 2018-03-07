@@ -41,6 +41,11 @@ namespace Companion { namespace Model { namespace Result
 
     public:
 
+        /**
+         * Constructor to create a result model.
+         * @param scoring Scoring value from matching between 0 and 100 percent.
+         * @param drawable Drawable result that shows the location of the detected or recognized object in the image.
+         */
         Result(int scoring, Draw::Drawable *drawable);
 
         /**

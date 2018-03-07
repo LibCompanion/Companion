@@ -21,7 +21,7 @@
 
 #include <companion/algo/recognition/Recognition.h>
 #include <companion/draw/Frame.h>
-#include <companion/model/Result/RecognitionResult.h>
+#include <companion/model/result/RecognitionResult.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 
 namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching

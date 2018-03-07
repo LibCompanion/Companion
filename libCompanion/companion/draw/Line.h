@@ -44,7 +44,10 @@ namespace Companion { namespace Draw
          * @param color Color from line.
          * @param thickness Thickness from line.
          */
-        Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness);
+        Line(cv::Point start,
+             cv::Point end,
+             cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
+             int thickness = 4);
 
         /**
          * Draw an single line to image.
