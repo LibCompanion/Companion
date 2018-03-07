@@ -41,12 +41,12 @@ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 set(CMAKE_DEBUG_POSTFIX "D")
 
 # Define interactive CMake Flags
-option(Companion_BUILD_SHARED_LIBRARY "Build libCompanion as shared library" OFF)
+option(Companion_BUILD_SHARED_LIBRARY "Build Companion as shared library" OFF)
 
 # Cuda and current samples are not supported when building for Windows Store
 if(NOT WINDOWS_STORE)
     option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
-    option(Companion_USE_CUDA "Use cuda implementation of libCompanion" OFF)
+    option(Companion_USE_CUDA "Use cuda implementation of Companion" OFF)
     option(Companion_USE_XFEATURES_2D "Use non free module" OFF)
 endif()
 
@@ -76,13 +76,13 @@ if(Companion_DEBUG)
     add_definitions(-DCompanion_DEBUG)
 endif()
 
-# Configure libCompanion
-add_subdirectory(libCompanion)
+# Configure Companion
+add_subdirectory(Companion)
 
 # Configure to build additional modules
 if(Companion_BUILD_SAMPLES)
-	if(EXISTS "${PROJECT_SOURCE_DIR}/libCompanionSamples/CMakeLists.txt")
-		add_subdirectory(libCompanionSamples)
+	if(EXISTS "${PROJECT_SOURCE_DIR}/CompanionSamples/CMakeLists.txt")
+		add_subdirectory(CompanionSamples)
 	else()
 		set(Companion_SAMPLE_MODULE "Path_to_Samples_Module" CACHE PATH "Sample module path")
         add_subdirectory(${Companion_SAMPLE_MODULE} samples)
