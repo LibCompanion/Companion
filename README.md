@@ -6,7 +6,7 @@
 
 Documentation page can be reached at https://libcompanion.github.io/CompanionDoc/.
 
-# Supported Plattforms
+# Supported Platforms
 
 * Windows
 * Universal Windows Platform (UWP)
@@ -21,8 +21,8 @@ Following dependencies are needed to build libCompanion.
 
 # Build Companion
 
-Simply use cmake or cmake-gui to build Companion for your platform.
-Enable the Cuda flag to build LibCompanion with implemented Cuda features.
+Simply use CMake or CMake GUI to build Companion for your platform.
+Enable the Cuda flag to build Companion with implemented Cuda features.
 
 ```
 cmake -DCompanion_USE_CUDA=ON/OFF
@@ -32,8 +32,7 @@ make install
 
 # Build Companion Samples
 
-[Samples](https://github.com/LibCompanion/CompanionSamples) are included as submodule or can be set in an cmake path.
-To build samples you must enable Companion_BUILD_SAMPLES flag.
+[Samples](https://github.com/LibCompanion/CompanionSamples) are included as a submodule or can be referenced via the CMake variable `Companion_SAMPLE_MODULE`. To build the samples you have to enable the `Companion_BUILD_SAMPLES` flag.
 
 ## Build Samples from Submodule
 
@@ -57,10 +56,11 @@ If you desire to build Companion for *Universal Windows Platform* you can simply
 ```
 cmake -DCMAKE_TOOLCHAIN_FILE=UWPToolchain.cmake
 ```
-If you prefer the cmake-gui instead, make sure to add the parameter ```CMAKE_TOOLCHAIN_FILE``` to the configuration before pressing *Configure*. Select FILEPATH as the parameter type and choose the file ```UWPToolchain.cmake``` as the parameter value.
+If you prefer the CMake GUI instead, make sure to add the variable `CMAKE_TOOLCHAIN_FILE` to the configuration before pressing *Configure*. Select FILEPATH as the variable type and choose the file `UWPToolchain.cmake` as the value.
 
 ## License
 
+```
 This program is an image recognition library written with OpenCV.
 Copyright (C) 2016-2018 Andreas Sekulski
 
@@ -76,3 +76,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```
