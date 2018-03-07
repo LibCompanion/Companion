@@ -18,7 +18,7 @@
 
 #include "FeatureMatching.h"
 
-Companion::Algorithm::Matching::FeatureMatching::FeatureMatching(
+Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::FeatureDetector> detector,
 	cv::Ptr<cv::DescriptorExtractor> extractor,
 	cv::Ptr<cv::DescriptorMatcher> matcher,
@@ -44,7 +44,7 @@ Companion::Algorithm::Matching::FeatureMatching::FeatureMatching(
 }
 
 #if Companion_USE_CUDA
-Companion::Algorithm::Matching::FeatureMatching::FeatureMatching(
+Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(
 	cv::Ptr<cv::Feature2D> cudaFeatureMatching,
 	int minSidelLength,
 	int countMatches,
@@ -64,9 +64,9 @@ Companion::Algorithm::Matching::FeatureMatching::FeatureMatching(
 }
 #endif
 
-Companion::Algorithm::Matching::FeatureMatching::~FeatureMatching() {}
+Companion::Algorithm::Recognition::Matching::FeatureMatching::~FeatureMatching() {}
 
-Companion::Model::Result *Companion::Algorithm::Matching::FeatureMatching::executeAlgorithm(
+Companion::Model::Result::RecognitionResult *Companion::Algorithm::Recognition::Matching::FeatureMatching::executeAlgorithm(
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel,
 	Companion::Model::Processing::FeatureMatchingModel *objectModel,
 	Companion::Draw::Frame *roi)
@@ -78,11 +78,11 @@ Companion::Model::Result *Companion::Algorithm::Matching::FeatureMatching::execu
 	std::vector<cv::DMatch> goodMatches;
 	std::vector<cv::KeyPoint> keypointsScene, keypointsObject;
 	cv::Mat descriptorsScene, descriptorsObject;
-	Companion::Model::Result *result = nullptr;
+	Companion::Model::Result::RecognitionResult *result = nullptr;
 	Companion::Draw::Drawable *drawable = nullptr;
 	bool isIRAUsed = false;
 	bool isROIUsed = false;
-	Companion::Algorithm::Matching::UTIL::IRA* ira;
+	Companion::Algorithm::Recognition::Matching::UTIL::IRA* ira;
 
 	// Clear all lists from last run.
 	matches.clear();
@@ -244,7 +244,7 @@ Companion::Model::Result *Companion::Algorithm::Matching::FeatureMatching::execu
 	{
 		// TODO := SCORING CALCULATION
 		// Object found
-		result = new Companion::Model::Result(100, objectModel->getID(), drawable);
+		result = new Companion::Model::Result::RecognitionResult(100, objectModel->getID(), drawable);
 
 		sceneImage.release();
 		objectImage.release();
@@ -260,12 +260,12 @@ Companion::Model::Result *Companion::Algorithm::Matching::FeatureMatching::execu
 	return result;
 }
 
-bool Companion::Algorithm::Matching::FeatureMatching::isCuda()
+bool Companion::Algorithm::Recognition::Matching::FeatureMatching::isCuda() const
 {
 	return this->cudaUsed;
 }
 
-void Companion::Algorithm::Matching::FeatureMatching::calculateKeyPoints(Companion::Model::Processing::FeatureMatchingModel *model)
+void Companion::Algorithm::Recognition::Matching::FeatureMatching::calculateKeyPoints(Companion::Model::Processing::FeatureMatchingModel *model)
 {
 	if (!isCuda())
 	{
@@ -273,12 +273,12 @@ void Companion::Algorithm::Matching::FeatureMatching::calculateKeyPoints(Compani
 	}
 }
 
-Companion::Model::Result* Companion::Algorithm::Matching::FeatureMatching::repeatAlgorithm(
+Companion::Model::Result::RecognitionResult* Companion::Algorithm::Recognition::Matching::FeatureMatching::repeatAlgorithm(
     Companion::Model::Processing::FeatureMatchingModel *sceneModel,
     Companion::Model::Processing::FeatureMatchingModel *objectModel,
 	Companion::Draw::Frame *roi,
 	bool isIRAUsed,
-	Companion::Algorithm::Matching::UTIL::IRA* ira,
+	Companion::Algorithm::Recognition::Matching::UTIL::IRA* ira,
 	bool isROIUsed)
 {
 	if (isIRAUsed)
@@ -294,7 +294,7 @@ Companion::Model::Result* Companion::Algorithm::Matching::FeatureMatching::repea
 	return nullptr;
 }
 
-void Companion::Algorithm::Matching::FeatureMatching::ratioTest(const std::vector<std::vector<cv::DMatch>> &matches,
+void Companion::Algorithm::Recognition::Matching::FeatureMatching::ratioTest(const std::vector<std::vector<cv::DMatch>> &matches,
 	std::vector<cv::DMatch> &good_matches,
 	float ratio)
 {
@@ -330,7 +330,7 @@ void Companion::Algorithm::Matching::FeatureMatching::ratioTest(const std::vecto
 
 }
 
-void Companion::Algorithm::Matching::FeatureMatching::obtainKeypointsFromGoodMatches(
+void Companion::Algorithm::Recognition::Matching::FeatureMatching::obtainKeypointsFromGoodMatches(
 	std::vector<cv::DMatch> &good_matches,
 	std::vector<cv::KeyPoint> &keypoints_object,
 	std::vector<cv::KeyPoint> &keypoints_scene,
@@ -355,7 +355,7 @@ void Companion::Algorithm::Matching::FeatureMatching::obtainKeypointsFromGoodMat
 
 }
 
-Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::obtainMatchingResult(
+Companion::Draw::Drawable* Companion::Algorithm::Recognition::Matching::FeatureMatching::obtainMatchingResult(
 	cv::Mat &sceneImage,
 	cv::Mat &objectImage,
 	std::vector<cv::DMatch> &good_matches,
@@ -406,7 +406,7 @@ Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::obta
 	return drawable;
 }
 
-Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::calculateArea(
+Companion::Draw::Drawable* Companion::Algorithm::Recognition::Matching::FeatureMatching::calculateArea(
 	cv::Mat &homography,
 	cv::Mat &sceneImage,
 	cv::Mat &objectImage,
@@ -431,7 +431,7 @@ Companion::Draw::Drawable* Companion::Algorithm::Matching::FeatureMatching::calc
 
 	//-- Draw lines between the corners (the mapped object in the scene - image_2 )
 	cv::Rect lastRect = cv::Rect();
-	Companion::Algorithm::Matching::UTIL::IRA *ira = cModel->getIra();
+	Companion::Algorithm::Recognition::Matching::UTIL::IRA *ira = cModel->getIra();
 
 	if (isIRAUsed) // IRA was used
 	{

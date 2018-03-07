@@ -16,47 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_HASHDETECTION_H
-#define COMPANION_HASHDETECTION_H
+#ifndef COMPANION_HASHRECOGNITION_H
+#define COMPANION_HASHRECOGNITION_H
 
-#include <companion/algo/detection/ShapeDetection.h>
 #include <companion/processing/ImageProcessing.h>
+#include <companion/algo/detection/ShapeDetection.h>
 #include <companion/model/processing/ImageHashModel.h>
-#include <companion/algo/hashing/Hashing.h>
+#include <companion/algo/recognition/hashing/Hashing.h>
 #include <companion/util/Util.h>
 
-namespace Companion { namespace Processing
+namespace Companion { namespace Processing { namespace Recognition
 {
-
     /**
-     * Hash detection implementation to detect object from a image with hash values.
+     * Hash recognition implementation to recognize objects based on hash values.
      */
-    class COMP_EXPORTS HashDetection : public ImageProcessing {
+    class COMP_EXPORTS HashRecognition : public ImageProcessing
+    {
 
     public:
 
         /**
-         * Hash detection construtor to create a object detector.
+         * Hash recognition construtor.
          * @param modelSize Model size in pixel.
          * @param shapeDetection Shape detection algorithm to detect ROI's.
-         * @param hashing Hashing algorithm implementation for example LSH.
+         * @param hashing Hashing algorithm implementation, for example LSH.
          */
-        HashDetection(cv::Size modelSize, 
+        HashRecognition(cv::Size modelSize,
             Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
-            Companion::Algorithm::Hashing::Hashing *hashing);
+            Companion::Algorithm::Recognition::Hashing::Hashing *hashing);
 
         /**
          * Default destructor.
          */
-        virtual ~HashDetection();
-
-        /**
-         * Execution from given image processing algo implementation like face recognition or object detection.
-         * @param frame Obtained image frame from producer thread.
-         * @return  An empty vector if no objects are detected or otherwise a pair of a Drawable and the ID for
-         *          every detected object.
-         */
-        virtual CALLBACK_RESULT execute(cv::Mat frame);
+        virtual ~HashRecognition();
 
         /**
          * Adds a model to search.
@@ -65,6 +57,14 @@ namespace Companion { namespace Processing
          * @return TRUE if model is added otherwise false.
          */
         bool addModel(int id, cv::Mat image);
+
+        /**
+         * Try to recognize all objects in the given frame.
+         * @param frame Frame to check for an object location.
+         * @return  An empty vector if no objects are recognized or otherwise a pair of a Drawable and the ID for
+         *          every recognized object.
+         */
+        CALLBACK_RESULT execute(cv::Mat frame);
 
     private:
 
@@ -79,15 +79,15 @@ namespace Companion { namespace Processing
         Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
 
         /**
-         * Models to detect.
+         * Models to recognize.
          */
         Companion::Model::Processing::ImageHashModel *model;
 
         /**
-         * Stores hashing algorithm to detect objects.
+         * Stores hashing algorithm to recognized objects.
          */
-        Companion::Algorithm::Hashing::Hashing *hashing;
+        Companion::Algorithm::Recognition::Hashing::Hashing *hashing;
     };
-}}
+}}}
 
-#endif //COMPANION_HASHDETECTION_H
+#endif //COMPANION_HASHRECOGNITION_H

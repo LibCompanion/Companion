@@ -16,27 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_DEFINITIONS_H
-#define COMPANION_DEFINITIONS_H
+#ifndef COMPANION_RECOGNITION_H
+#define COMPANION_RECOGNITION_H
 
-#include <companion/model/result/Result.h>
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion
+namespace Companion { namespace Algorithm { namespace Recognition
 {
-    /**
-     * Callback result definition.
-     */
-    #define CALLBACK_RESULT std::vector<Companion::Model::Result::Result*>
+	/**
+	 * Recognition abstract class to implement specific recognition algorithms.
+	 * @author Andreas Sekulski
+	 */
+	class COMP_EXPORTS Recognition
+	{
 
-     /**
-      * Default success callback function declaration to obtain results from algorithms.
-      */
-    #define SUCCESS_CALLBACK void(CALLBACK_RESULT, cv::Mat)
+	public:
 
-      /**
-       * Default error callback function declaration to obtain error results from companion.
-       */
-    #define ERROR_CALLBACK void(Companion::Error::Code)
-}
+		/**
+		 * Indicator if this algorithm uses cuda.
+		 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+		 */
+		virtual bool isCuda() const = 0;
+	};
+}}}
 
-#endif //COMPANION_DEFINITIONS_H
+#endif //COMPANION_RECOGNITION_H

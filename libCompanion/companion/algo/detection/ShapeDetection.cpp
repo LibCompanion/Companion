@@ -18,23 +18,35 @@
 
 #include "ShapeDetection.h"
 
-Companion::Algorithm::Detection::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, double cannyThreshold, int dilateIteration)
+Companion::Algorithm::Detection::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, Shape shape, double cannyThreshold, int dilateIteration)
 {
     this->morphKernel = morphKernel;
     this->erodeKernel = erodeKernel;
     this->dilateKernel = dilateKernel;
+    this->shape = shape;
     this->cannyThreshold = cannyThreshold;
     this->dilateIteration = dilateIteration;
 }
 
 Companion::Algorithm::Detection::ShapeDetection::~ShapeDetection()
 {
-
 }
 
 std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetection::executeAlgorithm(cv::Mat frame)
 {
-	cv::Point topLeft; // Top left coordinate from rectangl.e
+    std::vector<Companion::Draw::Frame*> rois;
+    switch (this->shape) {
+        case Shape::QUAD:
+            rois = this->obtainQuads(frame);
+            break;
+    }
+
+    return rois;
+}
+
+std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetection::obtainQuads(cv::Mat frame)
+{
+	cv::Point topLeft; // Top left coordinate from rectangle
 	cv::Point bottomRight; // Bottom right coordinate from rectangle
 	cv::Point diff;
 	int minDistance;
@@ -110,7 +122,12 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetec
 	return rois;
 }
 
-bool Companion::Algorithm::Detection::ShapeDetection::isCuda()
+bool Companion::Algorithm::Detection::ShapeDetection::isCuda() const
 {
 	return false;
+}
+
+Companion::Algorithm::Detection::Shape Companion::Algorithm::Detection::ShapeDetection::getShape() const
+{
+    return this->shape;
 }

@@ -16,28 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_IMAGERECOGNITION_H
-#define COMPANION_IMAGERECOGNITION_H
+#include "DetectionResult.h"
 
-#include <companion/util/exportapi/ExportAPIDefinitions.h>
-
-namespace Companion { namespace Algorithm
+Companion::Model::Result::DetectionResult::DetectionResult(int scoring, std::string objectType, Companion::Draw::Drawable *drawable) : Result(scoring, drawable)
 {
-	/**
-	 * Image recognition abstract class to implement specific image recognition algorithms.
-	 * @author Andreas Sekulski
-	 */
-	class COMP_EXPORTS ImageRecognition
-	{
+    this->objectType = objectType;
+}
 
-	public:
+Companion::Model::Result::DetectionResult::~DetectionResult()
+{
+}
 
-		/**
-		 * Indicator if this algorithm use cuda.
-		 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-		 */
-		virtual bool isCuda() = 0;
-	};
-}}
+std::string Companion::Model::Result::DetectionResult::getObjectType() const
+{
+    return this->objectType;
+}
 
-#endif //COMPANION_IMAGERECOGNITION_H
+std::string Companion::Model::Result::DetectionResult::getDescription() const
+{
+    return this->objectType;
+}
+
+Companion::Model::Result::ResultType Companion::Model::Result::DetectionResult::getType() const
+{
+    return ResultType::DETECTION;
+}

@@ -16,55 +16,54 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "HybridDetection.h"
+#include "HybridRecognition.h"
 
-Companion::Processing::HybridDetection::HybridDetection(Companion::Processing::HashDetection *hashDetection,
-    Companion::Algorithm::Matching::Matching *featureMatching, int resize)
+Companion::Processing::Recognition::HybridRecognition::HybridRecognition(Companion::Processing::Recognition::HashRecognition *hashRecognition,
+    Companion::Algorithm::Recognition::Matching::Matching *featureMatching, int resize)
 {
-    this->hashDetection = hashDetection;
+    this->hashRecognition = hashRecognition;
     this->featureMatching = featureMatching;
     this->resize = resize;
 }
 
-Companion::Processing::HybridDetection::~HybridDetection()
+Companion::Processing::Recognition::HybridRecognition::~HybridRecognition()
 {
 }
 
-void Companion::Processing::HybridDetection::addModel(cv::Mat image, int id)
+void Companion::Processing::Recognition::HybridRecognition::addModel(cv::Mat image, int id)
 {
     Companion::Model::Processing::FeatureMatchingModel *model = new Companion::Model::Processing::FeatureMatchingModel();
     model->setID(id);
     model->setImage(image);
-    models[id] = model;
-    hashDetection->addModel(id, image);
+    this->models[id] = model;
+    this->hashRecognition->addModel(id, image);
 }
 
-void Companion::Processing::HybridDetection::removeModel(int modelID)
+void Companion::Processing::Recognition::HybridRecognition::removeModel(int modelID)
 {
-    models.erase(modelID);
-    // ToDo delete method for hashDetection...
+    this->models.erase(modelID);
+    // ToDo delete method for hashRecognition...
 }
 
-void Companion::Processing::HybridDetection::clearModels()
+void Companion::Processing::Recognition::HybridRecognition::clearModels()
 {
-    models.clear();
-    // ToDo delete method for hashDetection...
+    this->models.clear();
+    // ToDo delete method for hashRecognition...
 }
 
-CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
+CALLBACK_RESULT Companion::Processing::Recognition::HybridRecognition::execute(cv::Mat frame)
 {
     CALLBACK_RESULT cbResults;
-    std::vector<Companion::Model::Result*> results;
-    Companion::Model::Result* hashResult;
-    std::vector<Companion::Model::Result*> hashResults;
-    Companion::Model::Result *fmResult;
+    Companion::Model::Result::RecognitionResult* hashResult;
+    std::vector<Companion::Model::Result::Result*> hashResults;
+    Companion::Model::Result::RecognitionResult *fmResult;
     cv::Mat roiFrame;
     int modelID;
     Companion::Model::Processing::FeatureMatchingModel *sceneModel;
     Companion::Model::Processing::FeatureMatchingModel *objectModel;
     std::vector<Companion::Error::Code> errors;
 
-    hashResults = hashDetection->execute(frame);
+    hashResults = this->hashRecognition->execute(frame);
 
     if (!hashResults.empty())
     {
@@ -76,34 +75,39 @@ CALLBACK_RESULT Companion::Processing::HybridDetection::execute(cv::Mat frame)
         {
             try
             {
-                hashResult = hashResults.at(i);
+                hashResult = dynamic_cast<Companion::Model::Result::RecognitionResult*>(hashResults.at(i));
+                if (hashResult == nullptr)
+                {
+                    continue;
+                }
+
                 modelID = hashResult->getId();
 
-                // This frame can be cut to improve detection
-                Companion::Draw::Drawable *cutDrawable = hashResult->getModel();
+                // This frame can be cut to improve recognition
+                Companion::Draw::Drawable *cutDrawable = hashResult->getDrawable();
                 cv::Mat cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
 
                 int oldX = cutImage.cols;
                 int oldY = cutImage.rows;
-                if(resize != 100)
+                if(this->resize != 100)
                 {
-                    Util::resizeImage(cutImage, cutImage.cols * resize / 100);
+                    Util::resizeImage(cutImage, cutImage.cols * this->resize / 100);
                 }
 
                 sceneModel->setImage(cutImage);
 
-                objectModel = models[modelID];
+                objectModel = this->models[modelID];
                 objectModel->getIra()->clear();
 
             
-                fmResult = featureMatching->executeAlgorithm(sceneModel, objectModel, nullptr);
+                fmResult = this->featureMatching->executeAlgorithm(sceneModel, objectModel, nullptr);
             
             
 
                 if (fmResult != nullptr)
                 {
-                    fmResult->getModel()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
-                    fmResult->getModel()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
+                    fmResult->getDrawable()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
+                    fmResult->getDrawable()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
                     cbResults.push_back(fmResult);
                 }
 

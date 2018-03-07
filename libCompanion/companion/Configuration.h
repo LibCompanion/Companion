@@ -16,15 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_COMPANION_H
-#define COMPANION_COMPANION_H
+#ifndef COMPANION_CONFIGURATION_H
+#define COMPANION_CONFIGURATION_H
 
 #include <functional>
 #include <thread>
 #include <companion/thread/StreamWorker.h>
 #include <companion/input/Stream.h>
-#include <companion/model/processing/FeatureMatchingModel.h>
-#include <companion/algo/ImageRecognition.h>
 #include <companion/processing/ImageProcessing.h>
 #include <companion/util/Definitions.h>
 
@@ -83,7 +81,7 @@ namespace Companion
 		Companion::Processing::ImageProcessing *getProcessing() const;
 
         /**
-         * Set image processing algorithm for example ObjectDetection.
+         * Set image processing algorithm, for example object detection or image recognition.
          * @param processing Image processing algorithm to use.
          */
         void setProcessing(Companion::Processing::ImageProcessing *processing);
@@ -113,7 +111,7 @@ namespace Companion
         void setImageBuffer(int imageBuffer);
 
 		/**
-		 * Sets a given result handler. The result handler returns a list of all detected objects as result models.
+		 * Sets a result callback handler.
 		 * The source image will be converted to the given format.
 		 * @param callback Function pointer which contains result event handler.
 		 * @param colorFormat Color format of the returned image.
@@ -158,7 +156,7 @@ namespace Companion
         Companion::Input::Stream* source;
 
 		/**
-		 * Image processing implementation for example an object detection.
+		 * Image processing implementation, for example an object detection or image recognition.
 		 */
 		Companion::Processing::ImageProcessing* processing;
 
@@ -199,4 +197,4 @@ namespace Companion
     };
 }
 
-#endif //COMPANION_COMPANION_H
+#endif //COMPANION_CONFIGURATION_H

@@ -19,13 +19,11 @@
 #ifndef COMPANION_FEATUREMATCHING_H
 #define COMPANION_FEATUREMATCHING_H
 
-#include <companion/algo/matching/Matching.h>
-#include <companion/draw/Frame.h>
-#include <companion/model/Result.h>
+#include <companion/algo/recognition/matching/Matching.h>
+#include <companion/algo/recognition/matching/util/IRA.h>
 #include <companion/util/CompanionError.h>
-#include <companion/algo/matching/util/IRA.h>
 
-namespace Companion { namespace Algorithm { namespace Matching
+namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching
 {
     /**
 	 * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
@@ -108,17 +106,17 @@ namespace Companion { namespace Algorithm { namespace Matching
          * @param sceneModel Scene model to verify for matching.
          * @param objectModel Object model to search in scene.
          * @param roi A region of interest to detect for searched for object if nullptr not used.
-         * @return An result model if an object is detected otherwise nullptr.
+         * @return A recognition result model if an object is detected otherwise nullptr.
          */
-		Companion::Model::Result *executeAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
-            Companion::Model::Processing::FeatureMatchingModel *objectModel,
-			Companion::Draw::Frame *roi);
+		Companion::Model::Result::RecognitionResult *executeAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
+                                                                      Companion::Model::Processing::FeatureMatchingModel *objectModel,
+			                                                          Companion::Draw::Frame *roi);
 
 		/**
-         * Indicator if this algorithm use cuda.
+         * Indicator if this algorithm uses cuda.
          * @return True if cuda will be used otherwise false.
          */
-		bool isCuda();
+		bool isCuda() const;
 
 	private:
 
@@ -208,12 +206,12 @@ namespace Companion { namespace Algorithm { namespace Matching
          * @param isROIUsed Check if region of interests is used in last search iteration.
          * @return Result model with given object if exists in image otherwise a nullptr.
          */
-		Companion::Model::Result *repeatAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
-            Companion::Model::Processing::FeatureMatchingModel *objectModel,
-            Companion::Draw::Frame *roi,
-			bool isIRAUsed,
-			Companion::Algorithm::Matching::UTIL::IRA *ira,
-			bool isROIUsed);
+		Companion::Model::Result::RecognitionResult *repeatAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
+                                                                     Companion::Model::Processing::FeatureMatchingModel *objectModel,
+                                                                     Companion::Draw::Frame *roi,
+			                                                         bool isIRAUsed,
+			                                                         Companion::Algorithm::Recognition::Matching::UTIL::IRA *ira,
+			                                                         bool isROIUsed);
 
 		/**
          * Ratio test implementation to improve results from matching to obtain only good results. <br>
@@ -223,8 +221,8 @@ namespace Companion { namespace Algorithm { namespace Matching
          * @param ratio Ratio which matches are good enough.
          */
 		void ratioTest(const std::vector<std::vector<cv::DMatch>> &matches,
-						std::vector<cv::DMatch> &good_matches,
-						float ratio);
+                       std::vector<cv::DMatch> &good_matches,
+                       float ratio);
 
 		/**
          * Filter to obtain only good feature point which matches.
@@ -287,6 +285,6 @@ namespace Companion { namespace Algorithm { namespace Matching
 											 bool isROIUsed,
 											 Companion::Draw::Frame *roi);
 	};
-}}}
+}}}}
 
 #endif //COMPANION_FEATUREMATCHING_H

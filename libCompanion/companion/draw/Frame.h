@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_LINES_H
-#define COMPANION_LINES_H
+#ifndef COMPANION_FRAME_H
+#define COMPANION_FRAME_H
 
 #include "Drawable.h"
 #include "Line.h"
@@ -202,4 +202,4 @@ namespace Companion { namespace Draw
     };
 }}
 
-#endif //COMPANION_LINES_H
+#endif //COMPANION_FRAME_H

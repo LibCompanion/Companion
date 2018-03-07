@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_VIDEO_CAPTURE_H
-#define COMPANION_VIDEO_CAPTURE_H
+#ifndef COMPANION_VIDEO_H
+#define COMPANION_VIDEO_H
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/videoio.hpp>
@@ -86,4 +86,4 @@ namespace Companion { namespace Input
     };
 }}
 
-#endif //COMPANION_VIDEO_CAPTURE_H
+#endif //COMPANION_VIDEO_H

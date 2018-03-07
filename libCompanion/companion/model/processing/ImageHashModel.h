@@ -19,12 +19,13 @@
 #ifndef COMPANION_IMAGEHASHMODEL_H
 #define COMPANION_IMAGEHASHMODEL_H
 
-#include <companion/util/Definitions.h>
 #include <vector>
 #include <string>
 #include <random>
 #include <opencv2/core.hpp>
 #include <opencv2/opencv.hpp>
+#include <companion/util/Definitions.h>
+#include <companion/util/exportapi/ExportAPIDefinitions.h>
 
 namespace Companion { namespace Model { namespace Processing
 {
@@ -60,15 +61,22 @@ namespace Companion { namespace Model { namespace Processing
          */
         std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
 
+        /**
+         * Returns the result scores.
+         * @return Result scores.
+         */
         const std::vector<std::pair<int, float>> &getScores() const;
 
     private:
 
+        /**
+         * Indicates whether a new model was added.
+         */
         bool newModelAdded;
 
         /**
          * RAWR image models to compare in a 1 dimensional array.
-         **/
+         */
         cv::Mat imageDataset;
 
         /**

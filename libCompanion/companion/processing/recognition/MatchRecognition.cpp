@@ -16,9 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FeatureDetection.h"
+#include "MatchRecognition.h"
 
-Companion::Processing::FeatureDetection::FeatureDetection(Companion::Algorithm::Matching::Matching *matchingAlgo,
+Companion::Processing::Recognition::MatchRecognition::MatchRecognition(Companion::Algorithm::Recognition::Matching::Matching *matchingAlgo,
 	Companion::SCALING scaling,
 	Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
 {
@@ -27,13 +27,13 @@ Companion::Processing::FeatureDetection::FeatureDetection(Companion::Algorithm::
 	this->shapeDetection = shapeDetection;
 }
 
-Companion::Processing::FeatureDetection::~FeatureDetection()
+Companion::Processing::Recognition::MatchRecognition::~MatchRecognition()
 {
 }
 
-CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
+CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv::Mat frame)
 {
-	Companion::Algorithm::Matching::FeatureMatching *featureMatching;
+	Companion::Algorithm::Recognition::Matching::FeatureMatching *featureMatching;
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
 	CALLBACK_RESULT objects;
 	std::vector<Companion::Draw::Frame*> rois;
@@ -52,10 +52,10 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 		Util::resizeImage(frame, this->scaling);
 		sceneModel->setImage(frame);
 
-		featureMatching = dynamic_cast<Companion::Algorithm::Matching::FeatureMatching*>(this->matchingAlgo);
+		featureMatching = dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->matchingAlgo);
 		if (featureMatching != nullptr)
 		{
-			// matching algorithm is feature matching.
+			// Matching algorithm is feature matching
 			// Pre calculate full image scene model keypoints
 			featureMatching->calculateKeyPoints(sceneModel);
 		}
@@ -116,7 +116,7 @@ CALLBACK_RESULT Companion::Processing::FeatureDetection::execute(cv::Mat frame)
 	return objects;
 }
 
-void Companion::Processing::FeatureDetection::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
+void Companion::Processing::Recognition::MatchRecognition::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
     Companion::Model::Processing::FeatureMatchingModel* objectModel,
 	std::vector<Companion::Draw::Frame*> rois,
 	cv::Mat frame,
@@ -124,7 +124,7 @@ void Companion::Processing::FeatureDetection::processing(Companion::Model::Proce
 	int originalY,
 	CALLBACK_RESULT &objects)
 {
-	Companion::Model::Result* result = nullptr;
+	Companion::Model::Result::RecognitionResult* result = nullptr;
 
 	if (!objectModel)
 	{
@@ -165,13 +165,13 @@ void Companion::Processing::FeatureDetection::processing(Companion::Model::Proce
 	if (result != nullptr)
 	{
 		// Create old image size
-		result->getModel()->ratio(frame.cols, frame.rows, originalX, originalY);
-		// Store detected object and its ID to vector.
+		result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
+		// Store recognized object and its ID to vector.
 		objects.push_back(result);
 	}
 }
 
-bool Companion::Processing::FeatureDetection::addModel(Companion::Model::Processing::FeatureMatchingModel *model)
+bool Companion::Processing::Recognition::MatchRecognition::addModel(Companion::Model::Processing::FeatureMatchingModel *model)
 {
 
 	if (!model->getImage().empty())
@@ -183,7 +183,7 @@ bool Companion::Processing::FeatureDetection::addModel(Companion::Model::Process
 	return false;
 }
 
-bool Companion::Processing::FeatureDetection::removeModel(int modelID)
+bool Companion::Processing::Recognition::MatchRecognition::removeModel(int modelID)
 {
 	for (size_t index = 0; index < this->models.size(); index++)
 	{
@@ -195,7 +195,7 @@ bool Companion::Processing::FeatureDetection::removeModel(int modelID)
 	return false;
 }
 
-void Companion::Processing::FeatureDetection::clearModels()
+void Companion::Processing::Recognition::MatchRecognition::clearModels()
 {
 	this->models.clear();
 }

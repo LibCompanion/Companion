@@ -16,30 +16,35 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_IMAGEPROCESSING_H
-#define COMPANION_IMAGEPROCESSING_H
+#ifndef COMPANION_DETECTION_H
+#define COMPANION_DETECTION_H
 
-#include <opencv2/core/core.hpp>
-#include <companion/util/Definitions.h>
+#include <companion/draw/Frame.h>
 
-namespace Companion { namespace Processing
+namespace Companion { namespace Algorithm { namespace Detection
 {
     /**
-     * Image processing interface class to create specific image processing jobs for example to recognize objects or to detect regions of interests.
+     * Detection abstract class to detect specific regions of interest.
      * @author Andreas Sekulski
      */
-    class COMP_EXPORTS ImageProcessing
+    class COMP_EXPORTS Detection
     {
 
     public:
 
         /**
-         * Execution from given image processing algorithm implementation like face detection or image recognition.
-         * @param frame Obtained image frame from producer thread.
-         * @return A vector of results for the given image or an empty vector if no objects are detected.
+         * Detection algorithm to detect specific regions of interest (ROI).
+         * @param frame Image frame to obtain all roi objects from.
+         * @return A vector of frames that represent the detected regions.
          */
-        virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
-    };
-}}
+        virtual std::vector<Companion::Draw::Frame*> executeAlgorithm(cv::Mat frame) = 0;
 
-#endif //COMPANION_IMAGEPROCESSING_H
+        /**
+         * Indicator if this algorithm uses cuda.
+         * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+         */
+        virtual bool isCuda() const = 0;
+    };
+}}}
+
+#endif //COMPANION_DETECTION_H

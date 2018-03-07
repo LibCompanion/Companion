@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_EXPORT_API_DEFINITIONS_H
-#define COMPANION_EXPORT_API_DEFINITIONS_H
+#ifndef COMPANION_EXPORTAPIDEFINITIONS_H
+#define COMPANION_EXPORTAPIDEFINITIONS_H
 
 namespace Companion
 {
@@ -64,4 +64,4 @@ namespace Companion
     #endif
 }
 
-#endif //COMPANION_EXPORT_API_DEFINITIONS_H
+#endif //COMPANION_EXPORTAPIDEFINITIONS_H

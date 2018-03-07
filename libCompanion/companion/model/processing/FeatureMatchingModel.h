@@ -16,12 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_COMPARISON_H
-#define COMPANION_COMPARISON_H
+#ifndef COMPANION_FEATUREMATCHINGMODEL_H
+#define COMPANION_FEATUREMATCHINGMODEL_H
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d.hpp>
-#include <companion/algo/matching/util/IRA.h>
+#include <companion/algo/recognition/matching/util/IRA.h>
 
 namespace Companion { namespace Model { namespace Processing
 {
@@ -96,10 +96,10 @@ namespace Companion { namespace Model { namespace Processing
         void setImage(const cv::Mat &image);
 
         /**
-         * Gets IRA class to store last object detection.
-         * @return IRA class to obtain informations about last object detection.
+         * Gets IRA class to store last recognized object's location.
+         * @return IRA class to obtain informations about last recognized object' location.
          */
-        Companion::Algorithm::Matching::UTIL::IRA *getIra() const;
+        Companion::Algorithm::Recognition::Matching::UTIL::IRA *getIra() const;
 
         /**
          * Sets the ID for this model.
@@ -136,11 +136,11 @@ namespace Companion { namespace Model { namespace Processing
         cv::Mat image;
 
         /**
-         * Image reduction algorithm to store last object detection position.
+         * Image reduction algorithm to store last recognized object's location.
          */
-        Companion::Algorithm::Matching::UTIL::IRA *ira;
+        Companion::Algorithm::Recognition::Matching::UTIL::IRA *ira;
 
     };
 }}}
 
-#endif //COMPANION_COMPARISON_H
+#endif //COMPANION_FEATUREMATCHINGMODEL_H

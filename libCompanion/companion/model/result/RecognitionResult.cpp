@@ -16,27 +16,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_DEFINITIONS_H
-#define COMPANION_DEFINITIONS_H
+#include "RecognitionResult.h"
 
-#include <companion/model/result/Result.h>
-
-namespace Companion
+Companion::Model::Result::RecognitionResult::RecognitionResult(int scoring, int id, Companion::Draw::Drawable *drawable) : Result(scoring, drawable)
 {
-    /**
-     * Callback result definition.
-     */
-    #define CALLBACK_RESULT std::vector<Companion::Model::Result::Result*>
-
-     /**
-      * Default success callback function declaration to obtain results from algorithms.
-      */
-    #define SUCCESS_CALLBACK void(CALLBACK_RESULT, cv::Mat)
-
-      /**
-       * Default error callback function declaration to obtain error results from companion.
-       */
-    #define ERROR_CALLBACK void(Companion::Error::Code)
+    this->id = id;
 }
 
-#endif //COMPANION_DEFINITIONS_H
+Companion::Model::Result::RecognitionResult::~RecognitionResult()
+{
+}
+
+int Companion::Model::Result::RecognitionResult::getId() const
+{
+    return this->id;
+}
+
+std::string Companion::Model::Result::RecognitionResult::getDescription() const
+{
+    return std::to_string(this->id);
+}
+
+Companion::Model::Result::ResultType Companion::Model::Result::RecognitionResult::getType() const
+{
+    return ResultType::RECOGNITION;
+}

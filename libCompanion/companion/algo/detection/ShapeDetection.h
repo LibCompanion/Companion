@@ -19,35 +19,42 @@
 #ifndef COMPANION_SHAPEDETECTION_H
 #define COMPANION_SHAPEDETECTION_H
 
-#include <companion/algo/ImageRecognition.h>
-#include <companion/model/Result.h>
-#include <companion/draw/Frame.h>
-#include <companion/util/CompanionError.h>
 #include <opencv2/imgproc.hpp>
+#include <companion/algo/detection/Detection.h>
+#include <companion/util/CompanionError.h>
 
 namespace Companion { namespace Algorithm { namespace Detection
 {
     /**
-     * Shape detection implementation to detect region of interest.
+     * Possible shapes.
+     */
+    enum class COMP_EXPORTS Shape
+    {
+        QUAD
+    };
+
+    /**
+     * Shape detection implementation to detect specifially shaped regions of interest.
      * @author Andreas Sekulski
      */
-    class COMP_EXPORTS ShapeDetection : public ImageRecognition
+    class COMP_EXPORTS ShapeDetection : public Detection
     {
 
     public:
 
         /**
-         * Shape detection construtor to detect different shapes. Shape detection function used in this order
-         * dilate(erode(morph(image)))
+         * Shape detection construtor. Shape detection functions are used in this order: dilate(erode(morph(image))).
          * @param morphKernel Morphology kernel size.
          * @param erodeKernel Erode kernel size.
          * @param dilateKernel Dilate kernel size.
+         * @param shape Shape type (default is QUAD).
          * @param cannyThreshold Canny threshold to indicate corners.
          * @param dilateIteration Count dilate iterations.
          */
         ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)),
                        cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
                        cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),
+                       Shape shape = Shape::QUAD,
                        double cannyThreshold = 50.0,
                        int dilateIteration = 3);
 
@@ -57,25 +64,26 @@ namespace Companion { namespace Algorithm { namespace Detection
         virtual ~ShapeDetection();
 
         /**
-         * Shape detection algorithm detection to obtain possible region of interest (ROI).
-         * @param frame Image frame to obtain all roi objects.
+         * Shape detection algorithm to obtain possible regions of interest (ROI).
+         * @param frame Image frame to obtain all roi objects from.
          * @throws Companion::Error::Code If an error occurred in search operation.
-         * @return An result model if an object is detected otherwise nullptr.
+         * @return A vector of frames that represent the detected shapes.
          */
         std::vector<Companion::Draw::Frame*> executeAlgorithm(cv::Mat frame);
 
         /**
-         * Indicator if this algorithm use cuda.
+         * Indicator if this algorithm uses cuda.
          * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
          */
-        bool isCuda();
-
-    private:
+        bool isCuda() const;
 
         /**
-         * Canny threshold value to obtain edges.
+         * Return the detection shape.
+         * @return Detection shape.
          */
-        double cannyThreshold;
+        Shape getShape() const;
+
+    private:
 
         /**
          * Morphology transformation kernel for morphologyEx operation.
@@ -93,9 +101,27 @@ namespace Companion { namespace Algorithm { namespace Detection
         cv::Mat dilateKernel;
 
         /**
-         * Dilate iteration counter to repeat dilate operation.
+         * Canny threshold value to obtain edges.
+         */
+        double cannyThreshold;
+
+        /**
+         * Shape type.
+         */
+        Shape shape;
+
+        /**
+         * Number of dilate iterations.
          */
         int dilateIteration;
+
+        /**
+         * Quad detection algorithm to obtain possible regions of interest (ROI).
+         * @param frame Image frame to obtain all roi objects from.
+         * @throws Companion::Error::Code If an error occurred in search operation.
+         * @return A vector of frames that represent the detected quads.
+         */
+        std::vector<Companion::Draw::Frame*> obtainQuads(cv::Mat frame);
     };
 }}}
 

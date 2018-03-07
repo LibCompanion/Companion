@@ -18,22 +18,22 @@
 
 #include "IRA.h"
 
-Companion::Algorithm::Matching::UTIL::IRA::IRA()
+Companion::Algorithm::Recognition::Matching::UTIL::IRA::IRA()
 {
     this->lop.x = NO_OBJECT_DETECTED;
     this->lop.y = NO_OBJECT_DETECTED;
 }
 
-Companion::Algorithm::Matching::UTIL::IRA::~IRA()
+Companion::Algorithm::Recognition::Matching::UTIL::IRA::~IRA()
 {
 }
 
-const cv::Rect &Companion::Algorithm::Matching::UTIL::IRA::getLastObjectPosition() const
+const cv::Rect &Companion::Algorithm::Recognition::Matching::UTIL::IRA::getLastObjectPosition() const
 {
     return this->lop;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::setLastObjectPosition(int x, int y, int width, int height)
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setLastObjectPosition(int x, int y, int width, int height)
 {
     this->lop.x = x;
     this->lop.y = y;
@@ -41,27 +41,27 @@ void Companion::Algorithm::Matching::UTIL::IRA::setLastObjectPosition(int x, int
     this->lop.height = height;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::setWidth(int width)
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setWidth(int width)
 {
     this->lop.width = width;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::setHeight(int height)
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setHeight(int height)
 {
     this->lop.height = height;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::setX(int x)
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setX(int x)
 {
     this->lop.x = x;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::setY(int y)
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setY(int y)
 {
     this->lop.y = y;
 }
 
-void Companion::Algorithm::Matching::UTIL::IRA::clear()
+void Companion::Algorithm::Recognition::Matching::UTIL::IRA::clear()
 {
     this->lop.x = NO_OBJECT_DETECTED;
     this->lop.y = NO_OBJECT_DETECTED;
@@ -69,7 +69,7 @@ void Companion::Algorithm::Matching::UTIL::IRA::clear()
     this->lop.height = NO_OBJECT_DETECTED;
 }
 
-bool Companion::Algorithm::Matching::UTIL::IRA::isObjectDetected()
+bool Companion::Algorithm::Recognition::Matching::UTIL::IRA::isObjectDetected()
 {
 	return (this->lop.width > NO_OBJECT_DETECTED) && (this->lop.height > NO_OBJECT_DETECTED);
 }

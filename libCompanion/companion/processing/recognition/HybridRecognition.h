@@ -16,43 +16,41 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef COMPANION_HYBRIDDETECTION_H
-#define COMPANION_HYBRIDDETECTION_H
+#ifndef COMPANION_HYBRIDRECOGNITION_H
+#define COMPANION_HYBRIDRECOGNITION_H
 
 #include <companion/processing/ImageProcessing.h>
-#include <companion/processing/HashDetection.h>
-#include <companion/algo/matching/Matching.h>
-#include <companion/algo/matching/FeatureMatching.h>
+#include <companion/processing/recognition/HashRecognition.h>
 #include <companion/algo/detection/ShapeDetection.h>
-#include <companion/model/Result.h>
+#include <companion/algo/recognition/matching/FeatureMatching.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/util/CompanionException.h>
 
-namespace Companion { namespace Processing
+namespace Companion { namespace Processing { namespace Recognition
 {
-
     /**
-     * Hybrid detection implementation to search for models with a hash detection and verify with a matcher for example feature matching.
+     * Hybrid recognition implementation to recognize objects based on hash values and verify with a matching alogrithm (for example feature matching).
      * @author Andreas Sekulski
      */
-    class HybridDetection : public ImageProcessing {
+    class HybridRecognition : public ImageProcessing
+    {
 
         public:
 
             /**
-             * Hybrid detection constructor to use this image processing implementation.
-             * @param hashDetection Hash detection image processing to use.
-             * @param featureMatching Feature matching to verify detected hashes.
+             * Hybrid recognition constructor.
+             * @param hashRecognition Hash recognition to use.
+             * @param featureMatching Feature matching to verify recognized hashes.
              * @param resize Resize image factor from 1 to 100. 100 original scale 1 is 99 percentage smaller image.
              */
-            HybridDetection(Companion::Processing::HashDetection *hashDetection,
-                Companion::Algorithm::Matching::Matching *featureMatching,
+            HybridRecognition(Companion::Processing::Recognition::HashRecognition *hashRecognition,
+                Companion::Algorithm::Recognition::Matching::Matching *featureMatching,
                 int resize = 100);
 
             /**
-             * Destructor
+             * Default destructor.
              */
-            virtual ~HybridDetection();
+            virtual ~HybridRecognition();
 
             /**
              * Add searching model type to search.
@@ -73,35 +71,36 @@ namespace Companion { namespace Processing
             void clearModels();
 
             /**
-             * Execution implementation from image processing class.
-             * @param frame Frame to search models.
-             * @return CALLBACK_RESULT with given models if found.
+             * Try to recognize all objects in the given frame.
+             * @param frame Frame to check for an object location.
+             * @return  An empty vector if no objects are recognized or otherwise a pair of a Drawable and the ID for
+             *          every recognized object.
              */
             CALLBACK_RESULT execute(cv::Mat frame);
 
         private:
 
             /**
-             * Hash detection processing to use to search for rois.
+             * Hash recognition to use to search for rois.
              */
-            Companion::Processing::HashDetection *hashDetection;
+            Companion::Processing::Recognition::HashRecognition *hashRecognition;
 
             /**
              * Feature matching algorithm to use for model verification.
              */
-            Companion::Algorithm::Matching::Matching *featureMatching;
+            Companion::Algorithm::Recognition::Matching::Matching *featureMatching;
 
             /**
-             * A map from all models to detect.
+             * A map from all models to recognize.
              */
             std::map<int, Companion::Model::Processing::FeatureMatchingModel*> models;
 
             /**
-             * Resize factor for detected hash models images.
+             * Resize factor for recognized hash models images.
              */
             int resize;
 
         };
-}}
+}}}
 
-#endif //COMPANION_HYBRIDDETECTION_H
+#endif //COMPANION_HYBRIDRECOGNITION_H

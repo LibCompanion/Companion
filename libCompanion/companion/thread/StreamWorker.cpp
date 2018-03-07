@@ -90,7 +90,7 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
 void Companion::Thread::StreamWorker::consume(
     Companion::Processing::ImageProcessing *processing,
     std::function<ERROR_CALLBACK> errorCallback,
-    std::function<SUCCESS_CALLBACK> callback)
+    std::function<SUCCESS_CALLBACK> successCallback)
 {
 
     cv::Mat frame;
@@ -109,7 +109,7 @@ void Companion::Thread::StreamWorker::consume(
                 frame = this->queue.front();
                 this->queue.pop();
                 Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
-                callback(processing->execute(frame), resultBGR);
+                successCallback(processing->execute(frame), resultBGR);
             }
             catch (Companion::Error::Code errorCode)
             {

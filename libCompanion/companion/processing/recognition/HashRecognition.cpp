@@ -16,11 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "HashDetection.h"
+#include "HashRecognition.h"
 
-Companion::Processing::HashDetection::HashDetection(cv::Size modelSize, 
+Companion::Processing::Recognition::HashRecognition::HashRecognition(cv::Size modelSize,
     Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
-    Companion::Algorithm::Hashing::Hashing *hashing)
+    Companion::Algorithm::Recognition::Hashing::Hashing *hashing)
 {
 	this->modelSize = modelSize;
 	this->shapeDetection = shapeDetection;
@@ -28,22 +28,22 @@ Companion::Processing::HashDetection::HashDetection(cv::Size modelSize,
 	this->model = new Companion::Model::Processing::ImageHashModel();
 }
 
-Companion::Processing::HashDetection::~HashDetection()
+Companion::Processing::Recognition::HashRecognition::~HashRecognition()
 {
 	delete this->model;
 }
 
-bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
+bool Companion::Processing::Recognition::HashRecognition::addModel(int id, cv::Mat image)
 {
 	cv::Mat descriptor;
 
 	// Resize images to correct size if needed
 	if (image.cols != this->modelSize.width || image.rows != this->modelSize.height) 
 	{
-		Companion::Util::resizeImage(image, modelSize);
+		Companion::Util::resizeImage(image, this->modelSize);
 	}
 	
-	// detection converting to 1D Matrix and store to descriptor
+	// Convert image to 1D Matrix and store to descriptor
 	image.reshape(1, 1).convertTo(descriptor, CV_32F);
 
 	// Store each 1D Matrix to dataset
@@ -57,21 +57,21 @@ bool Companion::Processing::HashDetection::addModel(int id, cv::Mat image)
 	return true;
 }
 
-CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame) 
+CALLBACK_RESULT Companion::Processing::Recognition::HashRecognition::execute(cv::Mat frame)
 {
 	cv::Mat query;
     CALLBACK_RESULT results;
-    Companion::Model::Result* result;
-    std::map<int, Companion::Model::Result*> scorings;
+    Companion::Model::Result::RecognitionResult* result;
+    std::map<int, Companion::Model::Result::RecognitionResult*> scorings;
 
-	// Obtain all shapes from image to detect.
-	std::vector<Companion::Draw::Frame*> frames = shapeDetection->executeAlgorithm(frame);
+	// Obtain all shapes from image to recognize
+	std::vector<Companion::Draw::Frame*> frames = this->shapeDetection->executeAlgorithm(frame);
     for (size_t i = 0; i < frames.size(); i++)
     {
         query = Util::cutImage(frame, frames.at(i)->cutArea());
-        Companion::Util::resizeImage(query, modelSize);
+        Companion::Util::resizeImage(query, this->modelSize);
         Companion::Util::convertColor(query, query, Companion::ColorFormat::GRAY);
-        result = hashing->executeAlgorithm(this->model, query, frames.at(i));
+        result = this->hashing->executeAlgorithm(this->model, query, frames.at(i));
         if (result != nullptr)
         {
             // Score only best results from rois
@@ -83,7 +83,7 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
         }
     }
 
-    std::map<int, Companion::Model::Result*>::iterator it = scorings.begin();
+    std::map<int, Companion::Model::Result::RecognitionResult*>::iterator it = scorings.begin();
     while (it != scorings.end())
     {
         // Obtain all results.
@@ -94,4 +94,3 @@ CALLBACK_RESULT Companion::Processing::HashDetection::execute(cv::Mat frame)
 
     return results;
 }
-

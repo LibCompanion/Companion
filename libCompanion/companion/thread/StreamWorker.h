@@ -61,13 +61,13 @@ namespace Companion { namespace Thread
 
         /**
          * Method to obtain video stream data from stored queue and process it.
-         * @param companion Configuration file which includes processing method.
+         * @param processing Processing procedure.
          * @param errorCallback Error callback handler.
-         * @param callback Callback handler to return results.
+         * @param successCallback Callback handler to return results.
          */
         void consume(Companion::Processing::ImageProcessing *processing,
             std::function<ERROR_CALLBACK> errorCallback,
-            std::function<SUCCESS_CALLBACK> callback);
+            std::function<SUCCESS_CALLBACK> successCallback);
 
     private:
 

@@ -18,11 +18,11 @@
 
 #include "LSH.h"
 
-Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(Companion::Model::Processing::ImageHashModel * model,
+Companion::Model::Result::RecognitionResult* Companion::Algorithm::Recognition::Hashing::LSH::executeAlgorithm(Companion::Model::Processing::ImageHashModel * model,
     cv::Mat query, 
     Companion::Draw::Frame *roi)
 {
-    Companion::Model::Result* result = nullptr;
+    Companion::Model::Result::RecognitionResult* result = nullptr;
     std::vector<std::pair<int, float>> scores = model->getScores();
     std::pair<cv::Mat_<float>, cv::Mat> dataset = model->generateDataset();
     cv::Mat_<float> hashImages = dataset.first;
@@ -56,14 +56,14 @@ Companion::Model::Result* Companion::Algorithm::Hashing::LSH::executeAlgorithm(C
     {
         if (r == 0)
         {
-            result = new Companion::Model::Result(static_cast<int>(rank.at(r).second), rank.at(r).first, roi);
+            result = new Companion::Model::Result::RecognitionResult(static_cast<int>(rank.at(r).second), rank.at(r).first, roi);
         }
     }
 
     return result;
 }
 
-bool Companion::Algorithm::Hashing::LSH::isCuda()
+bool Companion::Algorithm::Recognition::Hashing::LSH::isCuda() const
 {
     return false;
 }

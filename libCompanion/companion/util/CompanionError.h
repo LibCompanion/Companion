@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COMPANION_ERROR_H
-#define COMPANION_ERROR_H
+#ifndef COMPANION_COMPANIONERROR_H
+#define COMPANION_COMPANIONERROR_H
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
@@ -102,4 +102,4 @@ namespace Companion { namespace Error
     }
 }}
 
-#endif //COMPANION_ERROR_H
+#endif //COMPANION_COMPANIONERROR_H

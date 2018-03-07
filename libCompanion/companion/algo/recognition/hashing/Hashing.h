@@ -19,18 +19,18 @@
 #ifndef COMPANION_HASHING_H
 #define COMPANION_HASHING_H
 
-#include <companion/algo/ImageRecognition.h>
-#include <companion/model/Result.h>
-#include <companion/model/processing/ImageHashModel.h>
+#include <companion/algo/recognition/Recognition.h>
 #include <companion/draw/Frame.h>
+#include <companion/model/result/RecognitionResult.h>
+#include <companion/model/processing/ImageHashModel.h>
 
-namespace Companion { namespace Algorithm { namespace Hashing
+namespace Companion { namespace Algorithm { namespace Recognition { namespace Hashing
 {
     /**
      * Interface class to create hashing algorithm for image recognition for example locality sensitive hashing (lsh).
      * @author Andreas Sekulski
      */
-    class COMP_EXPORTS Hashing : public ImageRecognition
+    class COMP_EXPORTS Hashing : public Recognition
     {
 
         public:
@@ -49,17 +49,17 @@ namespace Companion { namespace Algorithm { namespace Hashing
              * @param model Image hash model to compare.
              * @param query Query image to compare with hash model.
              * @param roi Region of interest position to check.
-             * @return Nullptr if no matching success otherwise a Result.
+             * @return Nullptr if no matching success otherwise a recognition result.
              */
-            virtual Companion::Model::Result* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, 
+            virtual Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, 
                 cv::Mat query, Companion::Draw::Frame *roi) = 0;
 
             /**
-             * Indicator if this algorithm use cuda.
+             * Indicator if this algorithm uses cuda.
              * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
              */
-            virtual bool isCuda() = 0;
+            virtual bool isCuda() const = 0;
     };
-}}}
+}}}}
 
 #endif //COMPANION_HASHING_H
