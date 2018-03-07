@@ -60,6 +60,7 @@ If you prefer the CMake GUI instead, make sure to add the variable `CMAKE_TOOLCH
 
 ## License
 
+```
 This program is an image recognition library written with OpenCV.
 Copyright (C) 2016-2018 Andreas Sekulski
 
@@ -75,3 +76,4 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+```
