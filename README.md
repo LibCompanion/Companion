@@ -1,6 +1,6 @@
-![Companion](https://libcompanion.github.io/Companion/images/logo.png "Companion")
+![Companion](https://libcompanion.github.io/CompanionDoc/images/logo.png "Companion")
 
-[Companion](https://libcompanion.github.io/Companion/) is a image recognition library written with OpenCV 3.
+[Companion](https://libcompanion.github.io/CompanionDoc/) is a image recognition library written with OpenCV 3.
 
 # Documentation
 
