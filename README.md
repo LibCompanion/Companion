@@ -1,10 +1,10 @@
-![Companion](https://libcompanion.github.io/libCompanion/images/logo.png "Companion")
+![Companion](https://libcompanion.github.io/Companion/images/logo.png "Companion")
 
-[Companion](https://libcompanion.github.io/libCompanion/) is a computer vision library written with OpenCV 3.
+[Companion](https://libcompanion.github.io/Companion/) is a image recognition library written with OpenCV 3.
 
 # Documentation
 
-Documentation page can be reached at https://libcompanion.github.io/libCompanion.
+Documentation page can be reached at https://libcompanion.github.io/CompanionDoc/.
 
 # Supported Plattforms
 
@@ -19,7 +19,7 @@ Following dependencies are needed to build libCompanion.
 * OpenCV Version 3.X
 * Cuda 8 (Cuda 9 is currently not supported) to use Cuda features.
 
-# Build LibCompanion
+# Build Companion
 
 Simply use cmake or cmake-gui to build Companion for your platform.
 Enable the Cuda flag to build LibCompanion with implemented Cuda features.
@@ -32,7 +32,7 @@ make install
 
 # Build Companion Samples
 
-[Samples](https://github.com/LibCompanion/libCompanionSamples) are included as submodule or can be set in an cmake path.
+[Samples](https://github.com/LibCompanion/CompanionSamples) are included as submodule or can be set in an cmake path.
 To build samples you must enable Companion_BUILD_SAMPLES flag.
 
 ## Build Samples from Submodule
@@ -46,8 +46,8 @@ make
 ## Build Samples from Project
 
 ```
-git clone https://github.com/LibCompanion/libCompanionSamples.git
-cmake -DCompanion_BUILD_SAMPLES=ON -DCompanion_SAMPLE_MODULE=/path/to/libCompanionSamples/
+git clone https://github.com/LibCompanion/CompanionSamples.git
+cmake -DCompanion_BUILD_SAMPLES=ON -DCompanion_SAMPLE_MODULE=/path/to/CompanionSamples/
 make
 ```
 
