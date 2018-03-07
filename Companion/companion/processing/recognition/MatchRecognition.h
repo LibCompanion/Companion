@@ -112,7 +112,7 @@ namespace Companion { namespace Processing { namespace Recognition
          * @param frame Scene frame.
          * @param originalX Original x size from frame.
          * @param originalY Original y size from frame.
-         * @param objects Objects list from all recognized objects.
+         * @param objects results List from all recognized objects.
          */
         void processing(Model::Processing::FeatureMatchingModel* sceneModel,
             Model::Processing::FeatureMatchingModel* objectModel,
@@ -120,7 +120,7 @@ namespace Companion { namespace Processing { namespace Recognition
             cv::Mat frame,
             int originalX,
             int originalY,
-            CALLBACK_RESULT &objects);
+            CALLBACK_RESULT &results);
     };
 }}}
 

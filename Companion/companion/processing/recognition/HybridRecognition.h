@@ -25,6 +25,7 @@
 #include <companion/algo/recognition/matching/FeatureMatching.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 #include <companion/util/CompanionException.h>
+#include <omp.h>
 
 namespace Companion { namespace Processing { namespace Recognition
 {
@@ -104,11 +105,11 @@ namespace Companion { namespace Processing { namespace Recognition
          * Processing method to recognize objects.
          * @param hashResult Result from hash recognition.
          * @param frame Scene frame.
-         * @param objects Objects list from all recognized objects.
+         * @param results Objects list from all recognized objects.
          */
         void processing(Companion::Model::Result::RecognitionResult* hashResult,
                         cv::Mat frame,
-                        CALLBACK_RESULT &objects);
+                        CALLBACK_RESULT &results);
 
         };
 }}}

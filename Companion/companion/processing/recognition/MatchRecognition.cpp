@@ -33,12 +33,25 @@ Companion::Processing::Recognition::MatchRecognition::~MatchRecognition()
 
 CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv::Mat frame)
 {
+    CALLBACK_RESULT results;
+    std::vector<CALLBACK_RESULT> parallelizedResults;
 	Companion::Algorithm::Recognition::Matching::FeatureMatching *featureMatching;
 	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
-	CALLBACK_RESULT objects;
 	std::vector<Companion::Draw::Frame*> rois;
     std::vector<Companion::Error::Code> errors;
-	int oldX, oldY;
+	int oldX, oldY, threads;
+
+    // Create vector result list to parallelize 
+    if (this->matchingAlgo->isCuda())
+    {
+        threads = 1;
+        parallelizedResults = std::vector<CALLBACK_RESULT>(threads);
+    }
+    else
+    {
+        threads = omp_get_max_threads();
+        parallelizedResults = std::vector<CALLBACK_RESULT>(threads);
+    }
 
 	if (!frame.empty())
 	{
@@ -76,7 +89,7 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
                     frame,
                     oldX,
                     oldY,
-                    objects);
+                    parallelizedResults[omp_get_thread_num()]);
 			}
 		}
 		else
@@ -93,7 +106,7 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
                         frame,
                         oldX,
                         oldY,
-                        objects);
+                        parallelizedResults[omp_get_thread_num()]);
                 }
                 catch (Companion::Error::Code errorCode)
                 {
@@ -112,7 +125,16 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
 		delete sceneModel;
 	}
 
-	return objects;
+    #pragma omp critical
+    for (int i = 0; i < threads; i++) 
+    {
+        for (int j = 0; j < parallelizedResults[i].size(); j++) 
+        {
+            results.push_back(parallelizedResults[i].at(j));
+        }
+    }
+
+	return results;
 }
 
 void Companion::Processing::Recognition::MatchRecognition::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
@@ -121,7 +143,7 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
 	cv::Mat frame,
 	int originalX,
 	int originalY,
-	CALLBACK_RESULT &objects)
+	CALLBACK_RESULT &results)
 {
 	Companion::Model::Result::RecognitionResult* result = nullptr;
 
@@ -166,9 +188,7 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
 		// Create old image size
 		result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
         // Store recognized object and its ID to vector.
-        #pragma omp critical
-		objects.push_back(dynamic_cast<Companion::Model::Result::Result*>(result));
-
+        results.push_back(dynamic_cast<Companion::Model::Result::Result*>(result));
 	}
 }
 

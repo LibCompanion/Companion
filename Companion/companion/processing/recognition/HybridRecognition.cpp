@@ -53,12 +53,16 @@ void Companion::Processing::Recognition::HybridRecognition::clearModels()
 
 CALLBACK_RESULT Companion::Processing::Recognition::HybridRecognition::execute(cv::Mat frame)
 {
-    CALLBACK_RESULT cbResults;
+    CALLBACK_RESULT results;
+    std::vector<CALLBACK_RESULT> parallelizedResults;
     cv::Mat roiFrame;
     std::vector<Companion::Error::Code> errors;
     Companion::Model::Result::RecognitionResult* hashResult;
     std::vector<Companion::Model::Result::Result*> hashResults;
+    int threads;
 
+    threads = omp_get_max_threads();
+    parallelizedResults = std::vector<CALLBACK_RESULT>(threads);
     hashResults = this->hashRecognition->execute(frame);
 
     if (!hashResults.empty())
@@ -69,10 +73,10 @@ CALLBACK_RESULT Companion::Processing::Recognition::HybridRecognition::execute(c
         {
             try
             {
-                hashResult = dynamic_cast<Companion::Model::Result::RecognitionResult*>(hashResults.at(i % hashResults.size()));
+                hashResult = dynamic_cast<Companion::Model::Result::RecognitionResult*>(hashResults.at(i));
                 if (hashResult != nullptr)
                 {
-                    processing(hashResult, frame, cbResults);
+                    processing(hashResult, frame, parallelizedResults[omp_get_thread_num()]);
                 }
             }
             catch (Companion::Error::Code errorCode)
@@ -86,46 +90,55 @@ CALLBACK_RESULT Companion::Processing::Recognition::HybridRecognition::execute(c
         {
             throw Companion::Error::CompanionException(errors);
         }
+    }
 
+    #pragma omp critical
+    for (int i = 0; i < threads; i++)
+    {
+        for (int j = 0; j < parallelizedResults[i].size(); j++)
+        {
+            results.push_back(parallelizedResults[i].at(j));
+        }
     }
    
-    return cbResults;
+    return results;
 }
 
 void Companion::Processing::Recognition::HybridRecognition::processing(
         Companion::Model::Result::RecognitionResult* hashResult,
         cv::Mat frame,
-        CALLBACK_RESULT &cbResults)
+        CALLBACK_RESULT &results)
 {
+    
+    cv::Mat cutImage;
+    Companion::Draw::Drawable *cutDrawable;
     Companion::Model::Result::RecognitionResult *fmResult;
-    int modelID = hashResult->getId();
-    Companion::Model::Processing::FeatureMatchingModel *sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
-    Companion::Model::Processing::FeatureMatchingModel *objectModel;
+    Companion::Model::Processing::FeatureMatchingModel *sceneModel;
+    int oldX, oldY;
 
     // This frame can be cut to improve recognition
-    Companion::Draw::Drawable *cutDrawable = hashResult->getDrawable();
-    cv::Mat cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
+    cutDrawable = hashResult->getDrawable();
+    cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
 
-    int oldX = cutImage.cols;
-    int oldY = cutImage.rows;
+    oldX = cutImage.cols;
+    oldY = cutImage.rows;
+
     if(this->resize != 100)
     {
         Util::resizeImage(cutImage, cutImage.cols * this->resize / 100);
     }
 
-    sceneModel->setImage(cutImage);
+    sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
+    sceneModel->setImage(cutImage);   
 
-    objectModel = this->models[modelID];
-    objectModel->getIra()->clear();
-
-    fmResult = this->featureMatching->executeAlgorithm(sceneModel, objectModel, nullptr);
-    delete sceneModel;
-
+    fmResult = this->featureMatching->executeAlgorithm(sceneModel, this->models[hashResult->getId()], nullptr);
+    
     if (fmResult != nullptr)
     {
         fmResult->getDrawable()->ratio(cutImage.cols, cutImage.rows, oldX, oldY);
         fmResult->getDrawable()->moveOrigin(cutDrawable->getOriginX(), cutDrawable->getOriginY());
-        #pragma omp critical
-        cbResults.push_back(dynamic_cast<Companion::Model::Result::Result*>(fmResult));
+        results.push_back(dynamic_cast<Companion::Model::Result::Result*>(fmResult));
     }
+
+    delete sceneModel;
 }
