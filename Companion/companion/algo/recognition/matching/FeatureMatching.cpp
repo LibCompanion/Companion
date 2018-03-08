@@ -526,3 +526,7 @@ Companion::Draw::Drawable* Companion::Algorithm::Recognition::Matching::FeatureM
 
 	return frame;
 }
+
+void Companion::Algorithm::Recognition::Matching::FeatureMatching::setUseIRA(bool useIRA) {
+    FeatureMatching::useIRA = useIRA;
+}

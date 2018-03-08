@@ -24,6 +24,12 @@ Companion::Processing::Recognition::HybridRecognition::HybridRecognition(Compani
     this->hashRecognition = hashRecognition;
     this->featureMatching = featureMatching;
     this->resize = resize;
+
+    // Disable features from specific algorithms
+    if(dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->featureMatching) != nullptr) {
+        // Disable IRA because this is not used by hybrid recognition because ROI's are from hash recognition.
+        dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->featureMatching)->setUseIRA(false);
+    }
 }
 
 Companion::Processing::Recognition::HybridRecognition::~HybridRecognition()
@@ -97,7 +103,7 @@ CALLBACK_RESULT Companion::Processing::Recognition::HybridRecognition::execute(c
     {
         for (int j = 0; j < parallelizedResults[i].size(); j++)
         {
-            results.push_back(parallelizedResults[i].at(j));
+            results.push_back(dynamic_cast<Companion::Model::Result::Result*>(parallelizedResults[i].at(j)));
         }
     }
    

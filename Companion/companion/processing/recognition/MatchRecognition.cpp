@@ -130,7 +130,7 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
     {
         for (int j = 0; j < parallelizedResults[i].size(); j++) 
         {
-            results.push_back(parallelizedResults[i].at(j));
+            results.push_back(dynamic_cast<Companion::Model::Result::Result*>(parallelizedResults[i].at(j)));
         }
     }
 

@@ -118,6 +118,12 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
          */
 		bool isCuda() const;
 
+		/**
+		 * Set to disable or enable IRA function.
+		 * @param useIRA Use IRA algorithm to store last detected object from frame.
+		 */
+		void setUseIRA(bool useIRA);
+
 	private:
 
 		/**
