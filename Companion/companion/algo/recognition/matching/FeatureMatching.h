@@ -68,26 +68,24 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
 						int findHomographyMethod = cv::RANSAC);
 
         #if Companion_USE_CUDA
-
-                        /**
-                         * Constructor to create an cuda based feature matching.
-                         *
-                         * Following feature matching cuda algorithms can be used cv::cuda::ORB or cv::cuda::SURF.
-                         *
-                         * @param cudaFeatureMatching Cuda based feature matching algorithm.
-                         * @param minSidelLength Minimum length of the detected area's sides (in pixels). Default value is 10. 
-                         * @param countMatches How much matches need to get an good matching result. Default is by 40.
-                         * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
-                         * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
-                         * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
-                         */
-                        FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
-                                        int minSidelLength = 10,
-                                        int countMatches = 40,
-                                        double reprojThreshold = 3.0,
-                                        int ransacMaxIters = 500,
-                                        int findHomographyMethod = cv::RANSAC);
-
+        /**
+         * Constructor to create an cuda based feature matching.
+         *
+         * Following feature matching cuda algorithms can be used cv::cuda::ORB or cv::cuda::SURF.
+         *
+         * @param cudaFeatureMatching Cuda based feature matching algorithm.
+         * @param minSidelLength Minimum length of the detected area's sides (in pixels). Default value is 10. 
+         * @param countMatches How much matches need to get an good matching result. Default is by 40.
+         * @param reprojThreshold Homography parameter: Maximum allowed reprojection error to treat a point pair as an inlier. Default is by 3.0.
+         * @param ransacMaxIters Homography parameter: The maximum number of RANSAC iterations, 2000 is the maximum it can be. Default is by 500.
+         * @param findHomographyMethod Method used to computed a homography matrix. Default is by RANSAC.
+         */
+        FeatureMatching(cv::Ptr<cv::Feature2D> cudaFeatureMatching,
+                        int minSidelLength = 10,
+                        int countMatches = 40,
+                        double reprojThreshold = 3.0,
+                        int ransacMaxIters = 500,
+                        int findHomographyMethod = cv::RANSAC);
         #endif
 
 		/**

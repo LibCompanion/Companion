@@ -38,7 +38,7 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ha
              * @param roi Region of interest position to check.
              * @return Nullptr if no matching success otherwise a recognition result.
              */
-            Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, cv::Mat query,  Companion::Draw::Frame *roi);
+            Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, cv::Mat query, Companion::Draw::Frame *roi);
 
             /**
              * Indicator if this algorithm uses cuda.

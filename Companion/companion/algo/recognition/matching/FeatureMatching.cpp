@@ -528,5 +528,5 @@ Companion::Draw::Drawable* Companion::Algorithm::Recognition::Matching::FeatureM
 }
 
 void Companion::Algorithm::Recognition::Matching::FeatureMatching::setUseIRA(bool useIRA) {
-    FeatureMatching::useIRA = useIRA;
+    this->useIRA = useIRA;
 }
