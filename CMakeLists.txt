@@ -1,6 +1,6 @@
 #
-# This program is an image recognition library written with OpenCV.
-# Copyright (C) 2016-2018 Andreas Sekulski
+# This program is an object recognition framework written with OpenCV.
+# Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +45,7 @@ option(Companion_BUILD_SHARED_LIBRARY "Build Companion as shared library" OFF)
 
 # Cuda and current samples are not supported when building for Windows Store
 if(NOT WINDOWS_STORE)
-    option(Companion_BUILD_SAMPLES "Build all companion samples" OFF)
+    option(Companion_BUILD_SAMPLES "Build all Companion samples" OFF)
     option(Companion_USE_CUDA "Use cuda implementation of Companion" OFF)
     option(Companion_USE_XFEATURES_2D "Use non free module" OFF)
 endif()

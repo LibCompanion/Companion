@@ -1,6 +1,6 @@
 /*
  * This program is an image recognition library written with OpenCV.
- * Copyright (C) 2016-2018 Andreas Sekulski
+ * Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
 namespace Companion { namespace Draw
 {
     /**
-     * Class implementation to draw an single line.
-     * @author Andreas Sekulski
+     * Class implementation for a drawable line.
+     * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS Line : public Drawable
     {

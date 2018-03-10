@@ -1,6 +1,6 @@
 ![Companion](https://libcompanion.github.io/CompanionDoc/images/logo.png "Companion")
 
-[Companion](https://libcompanion.github.io/CompanionDoc/) is a image recognition library written with OpenCV 3.
+[Companion](https://libcompanion.github.io/CompanionDoc/) is a object recognition framework written with OpenCV 3.
 
 # Documentation
 
@@ -14,7 +14,7 @@ Documentation page can be reached at https://libcompanion.github.io/CompanionDoc
 
 # Dependencies
 
-Following dependencies are needed to build libCompanion.
+Following dependencies are needed to build Companion.
 
 * OpenCV Version 3.X
 * Cuda 8 (Cuda 9 is currently not supported) to use Cuda features.
@@ -61,8 +61,8 @@ If you prefer the CMake GUI instead, make sure to add the variable `CMAKE_TOOLCH
 ## License
 
 ```
-This program is an image recognition library written with OpenCV.
-Copyright (C) 2016-2018 Andreas Sekulski
+This program is an object recognition framework written with OpenCV.
+Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 /*
  * This program is an image recognition library written with OpenCV.
- * Copyright (C) 2016-2018 Andreas Sekulski
+ * Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,8 +61,8 @@ namespace Companion
 	};
 
     /**
-     * Utility class for opencv.
-     * @author Andreas Sekulksi
+     * Utility class for Companion.
+     * @author Andreas Sekulksi, Dimitri Kotlovsky
      */
     class COMP_EXPORTS Util
     {

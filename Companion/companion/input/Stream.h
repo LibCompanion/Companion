@@ -1,6 +1,6 @@
 /*
- * This program is an image recognition library written with OpenCV.
- * Copyright (C) 2016-2018 Andreas Sekulski
+ * This program is an object recognition framework written with OpenCV.
+ * Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,32 +23,32 @@
 
 namespace Companion { namespace Input
 {
-	/**
-	 * Data stream interface class to obtain image processing data for example from an video or an set of images.
-	 * @author Andreas Sekulski
-	 */
-	class COMP_EXPORTS Stream
-	{
+    /**
+     * Data stream interface class to obtain image processing data for example from a video or a set of images.
+     * @author Andreas Sekulski, Dimitri Kotlovsky
+     */
+    class COMP_EXPORTS Stream
+    {
 
-	public:
+    public:
 
-		/**
-		 * Obtain next image from open video stream.
-		 * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from image.
-		 */
-		virtual cv::Mat obtainImage() = 0;
+        /**
+         * Obtain next image from open video stream.
+         * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from the obtained image.
+         */
+        virtual cv::Mat obtainImage() = 0;
 
-		/**
-		 * Indicator if stream is finished.
-		 * @return True if video is finished otherwise false.
-		 */
-		virtual bool isFinished() = 0;
+        /**
+         * Indicator if stream has finished.
+         * @return True if video has finished otherwise false.
+         */
+        virtual bool isFinished() = 0;
 
-		/**
-		 * Stop this stream.
-		 */
-		virtual void finish() = 0;
-	};
+        /**
+         * Stop this stream.
+         */
+        virtual void finish() = 0;
+    };
 }}
 
 #endif //COMPANION_STREAM_H

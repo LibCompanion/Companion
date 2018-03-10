@@ -1,6 +1,6 @@
 /*
- * This program is an image recognition library written with OpenCV.
- * Copyright (C) 2016-2018 Andreas Sekulski
+ * This program is an object recognition framework written with OpenCV.
+ * Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,11 +26,11 @@
 namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching
 {
     /**
-	 * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
-	 * @author Andreas Sekulski
-	 */
-	class COMP_EXPORTS FeatureMatching : public Matching
-	{
+     * Feature matching algorithm implementation based on <a href="http://docs.opencv.org/3.1.0/d5/d6f/tutorial_feature_flann_matcher.html">OpenCV</a>.
+     * @author Andreas Sekulski, Dimitri Kotlovsky
+     */
+    class COMP_EXPORTS FeatureMatching : public Matching
+    {
 
 	public:
 
