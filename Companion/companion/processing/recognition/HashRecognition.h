@@ -37,8 +37,8 @@ namespace Companion { namespace Processing { namespace Recognition
     public:
 
         /**
-         * Hash recognition construtor.
-         * @param modelSize Model size in pixel.
+         * Hash recognition constructor.
+         * @param modelSize Model size in pixels.
          * @param shapeDetection Shape detection algorithm to detect ROI's.
          * @param hashing Hashing algorithm implementation, for example LSH.
          */
@@ -52,40 +52,39 @@ namespace Companion { namespace Processing { namespace Recognition
         virtual ~HashRecognition();
 
         /**
-         * Adds a model to search.
-         * @param id Identity from model.
-         * @param image Image from model to store as hash.
-         * @return TRUE if model is added otherwise false.
+         * Add search model type to search for.
+         * @param id Identity of the model.
+         * @param image Image model to store as hash.
+         * @return <code>True</code> if model is added otherwise <code>false</code>.
          */
         bool addModel(int id, cv::Mat image);
 
         /**
          * Try to recognize all objects in the given frame.
          * @param frame Frame to check for an object location.
-         * @return  An empty vector if no objects are recognized or otherwise a pair of a Drawable and the ID for
-         *          every recognized object.
+         * @return A vector of results for the given frame or an empty vector if no objects are recognized.
          */
         CALLBACK_RESULT execute(cv::Mat frame);
 
     private:
 
         /**
-         * Stores model size in pixel.
+         * Stores model size in pixels.
          */
         cv::Size modelSize;
 
         /**
-         * Stores shape detection algorithm to search for roi's.
+         * Stores shape detection algorithm to search for ROI's.
          */
         Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
 
         /**
-         * Models to recognize.
+         * Model to recognize.
          */
         Companion::Model::Processing::ImageHashModel *model;
 
         /**
-         * Stores hashing algorithm to recognized objects.
+         * Stores hashing algorithm to recognize objects.
          */
         Companion::Algorithm::Recognition::Hashing::Hashing *hashing;
     };

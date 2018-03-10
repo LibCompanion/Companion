@@ -19,12 +19,12 @@
 #include "MatchRecognition.h"
 
 Companion::Processing::Recognition::MatchRecognition::MatchRecognition(Companion::Algorithm::Recognition::Matching::Matching *matchingAlgo,
-	Companion::SCALING scaling,
-	Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
+    Companion::SCALING scaling,
+    Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
 {
-	this->matchingAlgo = matchingAlgo;
-	this->scaling = scaling;
-	this->shapeDetection = shapeDetection;
+    this->matchingAlgo = matchingAlgo;
+    this->scaling = scaling;
+    this->shapeDetection = shapeDetection;
 }
 
 Companion::Processing::Recognition::MatchRecognition::~MatchRecognition()
@@ -35,13 +35,13 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
 {
     CALLBACK_RESULT results;
     std::vector<CALLBACK_RESULT> parallelizedResults;
-	Companion::Algorithm::Recognition::Matching::FeatureMatching *featureMatching;
-	Companion::Model::Processing::FeatureMatchingModel *sceneModel;
-	std::vector<Companion::Draw::Frame*> rois;
+    Companion::Algorithm::Recognition::Matching::FeatureMatching *featureMatching;
+    Companion::Model::Processing::FeatureMatchingModel *sceneModel;
+    std::vector<Companion::Draw::Frame*> rois;
     std::vector<Companion::Error::Code> errors;
-	int oldX, oldY, threads;
+    int oldX, oldY, threads;
 
-    // Create vector result list to parallelize 
+    // Create vector result list to parallelize
     if (this->matchingAlgo->isCuda())
     {
         threads = 1;
@@ -53,36 +53,36 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
         parallelizedResults = std::vector<CALLBACK_RESULT>(threads);
     }
 
-	if (!frame.empty())
-	{
-		sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
+    if (!frame.empty())
+    {
+        sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
 
-		oldX = frame.cols;
-		oldY = frame.rows;
+        oldX = frame.cols;
+        oldY = frame.rows;
 
-		// Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
-		// https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-		Util::resizeImage(frame, this->scaling);
-		sceneModel->setImage(frame);
+        // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
+        // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
+        Util::resizeImage(frame, this->scaling);
+        sceneModel->setImage(frame);
 
-		featureMatching = dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->matchingAlgo);
-		if (featureMatching != nullptr)
-		{
-			// Matching algorithm is feature matching
-			// Pre calculate full image scene model keypoints
-			featureMatching->calculateKeyPoints(sceneModel);
-		}
+        featureMatching = dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->matchingAlgo);
+        if (featureMatching != nullptr)
+        {
+            // Matching algorithm is feature matching
+            // Pre calculate full image scene model keypoints
+            featureMatching->calculateKeyPoints(sceneModel);
+        }
 
-		if (this->shapeDetection != nullptr)
-		{
-			// If shape detection should be used obtain all posible rois from frame.
-			rois = this->shapeDetection->executeAlgorithm(sceneModel->getImage());
-		}
+        if (this->shapeDetection != nullptr)
+        {
+            // If shape detection should be used obtain all possible ROIs from frame
+            rois = this->shapeDetection->executeAlgorithm(sceneModel->getImage());
+        }
 
-		if (this->matchingAlgo->isCuda())
-		{
-			for (size_t x = 0; x < models.size(); x++)
-			{
+        if (this->matchingAlgo->isCuda())
+        {
+            for (size_t x = 0; x < models.size(); x++)
+            {
                 processing(sceneModel,
                     models.at(x),
                     rois,
@@ -90,14 +90,14 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
                     oldX,
                     oldY,
                     parallelizedResults[omp_get_thread_num()]);
-			}
-		}
-		else
-		{
+            }
+        }
+        else
+        {
             errors.clear();
             #pragma omp parallel for
-			for (int x = 0; x < models.size(); x++)
-			{
+            for (int x = 0; x < models.size(); x++)
+            {
                 try
                 {
                     processing(sceneModel,
@@ -113,17 +113,17 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
                     #pragma omp critical
                     errors.push_back(errorCode);
                 }
-			}
+            }
 
             if (!errors.empty())
             {
                 throw Companion::Error::CompanionException(errors);
             }
-		}
+        }
 
-		frame.release();
-		delete sceneModel;
-	}
+        frame.release();
+        delete sceneModel;
+    }
 
     #pragma omp critical
     for (int i = 0; i < threads; i++) 
@@ -134,43 +134,43 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
         }
     }
 
-	return results;
+    return results;
 }
 
 void Companion::Processing::Recognition::MatchRecognition::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
     Companion::Model::Processing::FeatureMatchingModel* objectModel,
-	std::vector<Companion::Draw::Frame*> rois,
-	cv::Mat frame,
-	int originalX,
-	int originalY,
-	CALLBACK_RESULT &results)
+    std::vector<Companion::Draw::Frame*> rois,
+    cv::Mat frame,
+    int originalX,
+    int originalY,
+    CALLBACK_RESULT &results)
 {
-	Companion::Model::Result::RecognitionResult* result = nullptr;
+    Companion::Model::Result::RecognitionResult* result = nullptr;
 
-	if (!objectModel)
-	{
-		// If wrong model types are used
-		throw Companion::Error::Code::wrong_model_type;
-	}
+    if (!objectModel)
+    {
+        // If wrong model types are used
+        throw Companion::Error::Code::wrong_model_type;
+    }
 
-	if (rois.size() == 0)
-	{
+    if (rois.size() == 0)
+    {
         try 
         {
-            // If rois not found or used
+            // If ROIs not found or used
             result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
         }
         catch (Companion::Error::Code errorCode)
         {
             throw errorCode;
         }
-	}
-	else
-	{
-		size_t index = 0;
-		// If rois found
-		while (index < rois.size())
-		{
+    }
+    else
+    {
+        size_t index = 0;
+        // If ROIs found
+        while (index < rois.size())
+        {
             try 
             {
                 result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
@@ -179,44 +179,44 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
             {
                 throw errorCode;
             }
-			index++;
-		}
-	}
+            index++;
+        }
+    }
 
-	if (result != nullptr)
-	{
-		// Create old image size
-		result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
+    if (result != nullptr)
+    {
+        // Create old image size
+        result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
         // Store recognized object and its ID to vector.
         results.push_back(dynamic_cast<Companion::Model::Result::Result*>(result));
-	}
+    }
 }
 
 bool Companion::Processing::Recognition::MatchRecognition::addModel(Companion::Model::Processing::FeatureMatchingModel *model)
 {
 
-	if (!model->getImage().empty())
-	{
-		this->models.push_back(model);
-		return true;
-	}
+    if (!model->getImage().empty())
+    {
+        this->models.push_back(model);
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 bool Companion::Processing::Recognition::MatchRecognition::removeModel(int modelID)
 {
-	for (size_t index = 0; index < this->models.size(); index++)
-	{
+    for (size_t index = 0; index < this->models.size(); index++)
+    {
         if (this->models.at(index)->getID() == modelID) {
-			this->models.erase(this->models.begin() + index);
-			return true;
-		}
-	}
-	return false;
+            this->models.erase(this->models.begin() + index);
+            return true;
+        }
+    }
+    return false;
 }
 
 void Companion::Processing::Recognition::MatchRecognition::clearModels()
 {
-	this->models.clear();
+    this->models.clear();
 }

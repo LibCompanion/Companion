@@ -1,6 +1,6 @@
 /*
- * This program is an image recognition library written with OpenCV.
- * Copyright (C) 2016-2018 Andreas Sekulski
+ * This program is an object recognition framework written with OpenCV.
+ * Copyright (C) 2016-2018 Andreas Sekulski, Dimitri Kotlovsky
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,6 @@
 
 Companion::Input::Video::Video(int device)
 {
-
     cv::VideoCapture cap(device);
 
     if (!cap.isOpened())
@@ -35,7 +34,6 @@ Companion::Input::Video::Video(int device)
 
 Companion::Input::Video::Video(std::string url)
 {
-
     cv::VideoCapture cap(url);
 
     if (!cap.isOpened())
@@ -49,12 +47,11 @@ Companion::Input::Video::Video(std::string url)
 
 Companion::Input::Video::~Video()
 {
-    // No need to close capture device because closing will be done from VideoCapture destructor.
+    // No need to close the capture device because closing will be done from VideoCapture destructor.
 }
 
 cv::Mat Companion::Input::Video::obtainImage()
 {
-
     cv::Mat frame;
 
     if (!this->capture.isOpened() || this->finished)
@@ -63,12 +60,12 @@ cv::Mat Companion::Input::Video::obtainImage()
         return frame;
     }
 
-    // Obtain image frame.
+    // Obtain image frame
     this->capture >> frame;
 
     if (frame.empty())
     {
-        // If frame empty video is finished.
+        // If frame empty video is finished
         this->finished = true;
     }
 

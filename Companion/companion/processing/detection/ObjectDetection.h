@@ -26,7 +26,7 @@
 namespace Companion { namespace Processing { namespace Detection
 {
     /**
-     * Object detection implementation to detect object within an image like faces or shapes.
+     * Object detection implementation to detect objects within an image like faces or shapes.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS ObjectDetection : public ImageProcessing {
@@ -34,27 +34,27 @@ namespace Companion { namespace Processing { namespace Detection
     public:
 
         /**
-         * Object detection construtor.
+         * Object detection constructor.
          * @param detection Detection algorithm to detect ROI's.
          */
         ObjectDetection(Companion::Algorithm::Detection::Detection *detection);
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~ObjectDetection();
 
         /**
          * Try to detect all objects in the given frame.
          * @param frame Frame to check for an object location.
-         * @return A vector of results for the given image or an empty vector if no objects are detected.
+         * @return A vector of results for the given frame or an empty vector if no objects are detected.
          */
         CALLBACK_RESULT execute(cv::Mat frame);
 
     private:
 
         /**
-         * Detection algorithm to search for roi's.
+         * Detection algorithm to search for ROI's.
          */
         Companion::Algorithm::Detection::Detection *detection;
     };

@@ -25,7 +25,7 @@
 namespace Companion { namespace Processing
 {
     /**
-     * Image processing interface class to create specific image processing jobs for example to recognize objects or to detect regions of interests.
+     * Image processing interface class to create specific image processing jobs for example to recognize or detect objects.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS ImageProcessing
@@ -34,9 +34,9 @@ namespace Companion { namespace Processing
     public:
 
         /**
-         * Execution from given image processing algorithm implementation like face detection or image recognition.
-         * @param frame Obtained image frame from producer thread.
-         * @return A vector of results for the given image or an empty vector if no objects are detected.
+         * Executes given image processing algorithm like object detection or object recognition.
+         * @param frame Source image for the image processing.
+         * @return A vector of results if there are any.
          */
         virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
     };

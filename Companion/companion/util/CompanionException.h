@@ -36,7 +36,7 @@ namespace Companion { namespace Error {
 
         /**
          * Constructor to store all error codes.
-         * @param errors Error codes to store to exception.
+         * @param errors Error codes to store exceptions.
          */
         CompanionException(std::vector<Companion::Error::Code> errors);
 
@@ -47,20 +47,20 @@ namespace Companion { namespace Error {
         bool hasNext();
 
         /**
-         * Obtain next error code.
-         * @return Next error code to work.
+         * Obtains next error code.
+         * @return Next error code.
          */
         Companion::Error::Code next();
 
     private:
 
         /**
-         * List from all collected error codes.
+         * List of all collected error codes.
          */
         std::vector<Companion::Error::Code> errors;
 
         /**
-         * Current index for next error codes.
+         * Current index for next error code.
          */
         size_t index;
     };

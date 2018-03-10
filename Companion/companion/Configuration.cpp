@@ -30,9 +30,9 @@ Companion::Configuration::Configuration()
 
 Companion::Configuration::~Configuration()
 {
-	delete this->source;
-	delete this->processing;
-	delete this->worker;
+    delete this->source;
+    delete this->processing;
+    delete this->worker;
 }
 
 void Companion::Configuration::run()

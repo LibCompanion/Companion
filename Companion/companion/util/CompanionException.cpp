@@ -26,12 +26,12 @@ Companion::Error::CompanionException::CompanionException(std::vector<Companion::
 
 bool Companion::Error::CompanionException::hasNext()
 {
-    return index < this->errors.size();
+    return (this->index < this->errors.size());
 }
 
 Companion::Error::Code Companion::Error::CompanionException::next()
 {
-    Companion::Error::Code code = this->errors.at(index);
-    index++;
+    Companion::Error::Code code = this->errors.at(this->index);
+    this->index++;
     return code;
 }

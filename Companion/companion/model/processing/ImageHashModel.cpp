@@ -20,7 +20,7 @@
 
 Companion::Model::Processing::ImageHashModel::ImageHashModel()
 {
-	this->newModelAdded = true;
+    this->newModelAdded = true;
 }
 
 Companion::Model::Processing::ImageHashModel::~ImageHashModel()
@@ -29,10 +29,10 @@ Companion::Model::Processing::ImageHashModel::~ImageHashModel()
 
 void Companion::Model::Processing::ImageHashModel::addDescriptor(int id, cv::Mat &descriptor)
 {
-	imageDataset.push_back(descriptor);
+    this->imageDataset.push_back(descriptor);
     
     // Store this id for a scoring
-    scores.push_back({id, 0});
+    this->scores.push_back({id, 0.0f});
     
     this->newModelAdded = true;
 }
@@ -42,54 +42,54 @@ std::pair<cv::Mat_<float>, cv::Mat> Companion::Model::Processing::ImageHashModel
     std::pair<cv::Mat_<float>, cv::Mat> dataset;
     dataset.first = generateHashImages();
     dataset.second = generateIndexDataset(dataset.first);
-	this->newModelAdded = false;
+    this->newModelAdded = false;
     return dataset;
 }
 
 cv::Mat_<float> Companion::Model::Processing::ImageHashModel::generateHashImages()
 {
-	if (newModelAdded)
-	{
-		cv::Mat_<float> hash(imageDataset.cols, 100);
-		std::default_random_engine gen;
-		std::normal_distribution<float> dist(0, 1);
+    if (this->newModelAdded)
+    {
+        cv::Mat_<float> hash(this->imageDataset.cols, 100.0f);
+        std::default_random_engine gen;
+        std::normal_distribution<float> dist(0, 1);
 
-		for (int i = 0; i < hash.rows; i++)
-		{
-			for (int j = 0; j < hash.cols; j++)
-			{
-				hash.at<float>(i, j) = dist(gen);
-			}
-		}
+        for (int i = 0; i < hash.rows; i++)
+        {
+            for (int j = 0; j < hash.cols; j++)
+            {
+                hash.at<float>(i, j) = dist(gen);
+            }
+        }
 
-		this->hash = hash;
-	}
-	
-	return this->hash;
+        this->hash = hash;
+    }
+    
+    return this->hash;
 }
 
 cv::Mat Companion::Model::Processing::ImageHashModel::generateIndexDataset(cv::Mat_<float> hash)
 {
-	if (newModelAdded)
-	{
-		cv::Mat images = imageDataset * hash;
+    if (this->newModelAdded)
+    {
+        cv::Mat images = this->imageDataset * hash;
 
-		for (size_t i = 0; i < images.rows; i++)
-		{
-			for (size_t j = 0; j < images.cols; j++)
-			{
-				images.at<float>(i, j) = images.at<float>(i, j) > 0 ? 1 : 0;
-			}
-		}
+        for (size_t i = 0; i < images.rows; i++)
+        {
+            for (size_t j = 0; j < images.cols; j++)
+            {
+                images.at<float>(i, j) = images.at<float>(i, j) > 0 ? 1 : 0;
+            }
+        }
 
-		images.convertTo(images, CV_8U);
+        images.convertTo(images, CV_8U);
 
-		this->indexDataset = images;
-	}
+        this->indexDataset = images;
+    }
 
-	return this->indexDataset;
+    return this->indexDataset;
 }
 
 const std::vector<std::pair<int, float>> &Companion::Model::Processing::ImageHashModel::getScores() const {
-    return scores;
+    return this->scores;
 }

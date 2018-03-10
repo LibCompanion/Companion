@@ -26,9 +26,8 @@
 
 namespace Companion
 {
-
     /**
-     * Enumeration class for color formats.
+     * Possible color formats.
      */
     enum class COMP_EXPORTS ColorFormat
     {
@@ -39,26 +38,26 @@ namespace Companion
         GRAY
     };
 
-	/**
-	 * Enumeration class for scaling.
-	 */
-	enum class COMP_EXPORTS SCALING
-	{
-		SCALE_2048x1152,
-		SCALE_1920x1080,
-		SCALE_1600x900,
-		SCALE_1408x792,
-		SCALE_1344x756,
-		SCALE_1280x720,
-		SCALE_1152x648,
-		SCALE_1024x576,
-		SCALE_960x540,
-		SCALE_896x504,
-		SCALE_800x450,
-		SCALE_768x432,
-		SCALE_640x360,
+    /**
+     * Possible scaling values.
+     */
+    enum class COMP_EXPORTS SCALING
+    {
+        SCALE_2048x1152,
+        SCALE_1920x1080,
+        SCALE_1600x900,
+        SCALE_1408x792,
+        SCALE_1344x756,
+        SCALE_1280x720,
+        SCALE_1152x648,
+        SCALE_1024x576,
+        SCALE_960x540,
+        SCALE_896x504,
+        SCALE_800x450,
+        SCALE_768x432,
+        SCALE_640x360,
         SCALE_320x180
-	};
+    };
 
     /**
      * Utility class for Companion.
@@ -69,19 +68,19 @@ namespace Companion
 
     public:
 
-		/**
-		* Cut given image frame from cut area.
-		* @param cutArea Area to cut subframe.
-		* @return Cutted image.
-		*/
-		static cv::Mat cutImage(cv::Mat img, cv::Rect cutArea);
+        /**
+         * Cut the given area out of the given image.
+         * @param cutArea Area to cut out.
+         * @return Cut out image.
+         */
+        static cv::Mat cutImage(cv::Mat img, cv::Rect cutArea);
 
-		/**
-		 * Checks if given image is loaded.
-		 * @param img Image to check if it's not null.
-		 * @return <code>true</code> if image is loaded, <code>false</code> otherwise
-		 */
-		static bool isImageLoaded(cv::Mat &img);
+        /**
+         * Checks if given image is loaded.
+         * @param img Image to check if it is not null.
+         * @return <code>True</code> if image is loaded, <code>false</code> otherwise.
+         */
+        static bool isImageLoaded(cv::Mat &img);
 
         /**
          * Resize given image.
@@ -90,40 +89,40 @@ namespace Companion
          */
         static void resizeImage(cv::Mat &img, SCALING scaling);
 
-		/**
-		 * Resize given image.
-		 * @param img Image to resize.
-		 * @param size Width and Height in pixel to resize image.
-		 */
-		static void resizeImage(cv::Mat &img, cv::Size size);
+        /**
+         * Resize given image.
+         * @param img Image to resize.
+         * @param size Width and height in pixels to resize image.
+         */
+        static void resizeImage(cv::Mat &img, cv::Size size);
 
         /**
-         * Resize given image to given aspect ratio width.
-         * @param width Image width in px.
-         * @param size Width and Height in pixel to resize image.
+         * Resize given image to given width (keeps aspect ratio).
+         * @param img Image to resize.
+         * @param width Image width in pixels.
          */
         static void resizeImage(cv::Mat &img, int width);
 
-		/**
-		 * Ratio to set new point from scaled frame.
-		 * @param point Point to calculate new positions.
-		 * @param cWidth Current width.
-		 * @param cHeight Current height.
-		 * @param nWidth New width.
-		 * @param nHeight New height.
-		 */
-		static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
+        /**
+         * Recalculate the coordinates of the given point from current image dimensions to new given dimensions.
+         * @param point Point the coordinates of which should be recalculated.
+         * @param cWidth Current width.
+         * @param cHeight Current height.
+         * @param nWidth New width.
+         * @param nHeight New height.
+         */
+        static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
-         * Validates the rectangular shape of a detected area.
-         * @param topRight Top right corner of the detected area.
-         * @param bottomLeft Bottom left corner of the detected area.
-         * @param topLeft Top left corner of the detected area.
-         * @param bottomRight Bottom right corner of the detected area.
-         * @param minSidelLength Minimum length of the detected area's sides (in pixels).
+         * Validates the rectangular shape of a recognized area.
+         * @param topRight Top right corner of the recognized area.
+         * @param bottomLeft Bottom left corner of the recognized area.
+         * @param topLeft Top left corner of the recognized area.
+         * @param bottomRight Bottom right corner of the recognized area.
+         * @param minSidelLength Minimum length of the recognized area's sides (in pixels).
          * @param maxSideDeviation Maximum deviation of the sides' lengths.
          * @param maxDiagonalDeviation Maximum deviation of the diagonals' lengths.
-         * @return <code>true</code> if the diagonals are long enough and both have a similar length, <code>false</code> otherwise
+         * @return <code>True</code> if the diagonals are long enough and both have a similar length, otherwise <code>false</code>.
          */
         static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
@@ -137,22 +136,21 @@ namespace Companion
 
     private:
 
-		/**
-		 * Get scaling from given enumeration as point representation.
-		 * @param scaling Scaling to obtain point.
-		 * @return Scaling as point representation which x is width and y height in px.
-		 */
-		static cv::Point getScaling(SCALING scaling);
+        /**
+         * Get scaling from given enumeration as point representation.
+         * @param scaling Scaling to obtain point.
+         * @return Scaling as point representation where x is the width and y the height in pixels.
+         */
+        static cv::Point getScaling(SCALING scaling);
 
         /**
          * Calculates the deviation between two lengths.
-         * @param x first length
-         * @param y second length
-         * return deviation in percent
+         * @param x First length.
+         * @param y Second length.
+         * return Deviation in percent.
          */
         static double getDeviation(double x, double y);
-	};
-
+    };
 }
 
 #endif //COMPANION_UTIL_H

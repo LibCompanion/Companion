@@ -30,7 +30,7 @@
 namespace Companion { namespace Processing { namespace Recognition
 {
     /**
-     * Hybrid recognition implementation to recognize objects based on hash values and verify with a matching alogrithm (for example feature matching).
+     * Hybrid recognition implementation to recognize objects based on hash values and verify with a matching algorithm (for example feature matching).
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class HybridRecognition : public ImageProcessing
@@ -42,52 +42,51 @@ namespace Companion { namespace Processing { namespace Recognition
          * Hybrid recognition constructor.
          * @param hashRecognition Hash recognition to use.
          * @param featureMatching Feature matching to verify recognized hashes.
-         * @param resize Resize image factor from 1 to 100. 100 original scale 1 is 99 percentage smaller image.
+         * @param resize Resize image factor from 1 to 100 (in percent). 100 is equal to 100% of the original scale.
          */
         HybridRecognition(Companion::Processing::Recognition::HashRecognition *hashRecognition,
             Companion::Algorithm::Recognition::Matching::Matching *featureMatching,
             int resize = 100);
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~HybridRecognition();
 
         /**
-         * Add searching model type to search.
-         * @param model Model to search.
-         * @param id Identifier from model.
+         * Add search model type to search for.
+         * @param model Model to search for.
+         * @param id Identifier of the model.
          */
         void addModel(cv::Mat image, int id);
 
         /**
-         * Removes given model if it exists. This method can only be used safetly if the searching process is not running.
+         * Remove given model if it exists. This method can only be used safely if the searching process is not running.
          * @param modelID ID of the model to remove.
          */
         void removeModel(int modelID);
 
         /**
-         * Clear all models which are searched.
+         * Clear all models which are searched for.
          */
         void clearModels();
 
         /**
          * Try to recognize all objects in the given frame.
          * @param frame Frame to check for an object location.
-         * @return  An empty vector if no objects are recognized or otherwise a pair of a Drawable and the ID for
-         *          every recognized object.
+         * @return A vector of results for the given frame or an empty vector if no objects are recognized.
          */
         CALLBACK_RESULT execute(cv::Mat frame);
 
     private:
 
         /**
-         * Resize factor for recognized hash models images.
+         * Resize factor for recognized hash model images.
          */
         int resize;
 
         /**
-         * Hash recognition to use to search for rois.
+         * Hash recognition for object recognition.
          */
         Companion::Processing::Recognition::HashRecognition *hashRecognition;
 
@@ -97,7 +96,7 @@ namespace Companion { namespace Processing { namespace Recognition
         Companion::Algorithm::Recognition::Matching::Matching *featureMatching;
 
         /**
-         * A map from all models to recognize.
+         * A map of all models that are recognize.
          */
         std::map<int, Companion::Model::Processing::FeatureMatchingModel*> models;
 
@@ -105,7 +104,7 @@ namespace Companion { namespace Processing { namespace Recognition
          * Processing method to recognize objects.
          * @param hashResult Result from hash recognition.
          * @param frame Scene frame.
-         * @param results Objects list from all recognized objects.
+         * @param results List of all recognized objects.
          */
         void processing(Companion::Model::Result::RecognitionResult* hashResult,
                         cv::Mat frame,

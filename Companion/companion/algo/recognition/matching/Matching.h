@@ -33,25 +33,25 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
     class COMP_EXPORTS Matching : public Recognition
     {
 
-	public:
+    public:
 
-		/**
+        /**
          * Matching algorithm implementation to search in an scene model this given object model.
          * @param sceneModel Scene model to verify for matching.
          * @param objectModel Object model to search in scene.
          * @param roi A region of interest for object search (not used if nullptr).
          * @return A recognition result model if an object is recognized otherwise nullptr.
          */
-		virtual Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
+        virtual Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
                                                                               Companion::Model::Processing::FeatureMatchingModel *objectModel,
                                                                               Companion::Draw::Frame *roi) = 0;
 
-		/**
+        /**
          * Indicator if this algorithm uses cuda.
          * @return True if cuda will be used otherwise false.
          */
-		virtual bool isCuda() const = 0;
-	};
+        virtual bool isCuda() const = 0;
+    };
 }}}}
 
 #endif //COMPANION_MATCHING_H

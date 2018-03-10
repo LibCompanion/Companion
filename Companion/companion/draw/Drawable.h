@@ -31,72 +31,73 @@ namespace Companion { namespace Draw
     class COMP_EXPORTS Drawable
     {
 
-	public:
-		/**
-		 * Draw given object to image.
-		 * @param image Image to draw an object.
-		 */
-		virtual void draw(cv::Mat image) = 0;
-
-		/**
-		 * Ratio to scale position from drawable to new location.
-		 * @param cWidth Current width.
-		 * @param cHeight Current height.
-		 * @param nWidth New width.
-		 * @param nHeight New height.
-		 */
-		virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
+    public:
 
         /**
-         * Obtain cut area from drawable.
-         * @return Cut area as rect for a cut frame.
+         * Draw this drawable object to the given image.
+         * @param image Image on which to draw the object.
          */
-        virtual cv::Rect cutArea() = 0;
+        virtual void draw(cv::Mat image) = 0;
 
         /**
-         * Obtain origin x position.
-         * @return X coordinate from drawable object.
+         * Scale this drawable from the current image dimensions to new image dimensions.
+         * @param cWidth Current image width.
+         * @param cHeight Current image height.
+         * @param nWidth New image width.
+         * @param nHeight New image height.
          */
-		virtual int getOriginX() = 0;
+        virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
 
         /**
-         * Obtain origin y position.
-         * @return Y coordinate from drawable object.
+         * Get cut area around this drawable.
+         * @return Cut area around this drawable as a cv::Rect.
          */
-		virtual int getOriginY() = 0;
+        virtual cv::Rect getCutArea() = 0;
 
         /**
-         * Move from origin drawable.
-         * @param x X vector to move.
-         * @param y Y vector to move.
+         * Obtain the origin's x coordinate.
+         * @return X coordinate of the drawable object's origin.
          */
-		virtual void moveOrigin(int x, int y) = 0;
+        virtual int getOriginX() = 0;
 
         /**
-         * Set color from drawable.
-         * @param color Color to set.
+         * Obtain the origin's y coordinate.
+         * @return Y coordinate of the drawable object's origin.
+         */
+        virtual int getOriginY() = 0;
+
+        /**
+         * Move the drawable object's origin.
+         * @param x Relative distance to move the origin on the x axis.
+         * @param y Relative distance to move the origin on the y axis.
+         */
+        virtual void moveOrigin(int x, int y) = 0;
+
+        /**
+         * Set drawable color.
+         * @param color Drawable color to set.
          */
         virtual void setColor(const cv::Scalar &color) = 0;
 
         /**
-         * Get color from drawable.
-         * @return Scalar color from frame.
+         * Get the color of the drawable.
+         * @return Drawable color.
          */
         virtual const cv::Scalar &getColor() const = 0;
 
         /**
-         * Get thickness size from drawable.
-         * @return Get thickness size from frame.
+         * Get thickness of this drawable.
+         * @return Drawable thickness.
          */
         virtual int getThickness() const = 0;
 
         /**
-          * Set thickness size from drawable.
-          * @param thickness Thickness size.
-          */
+         * Set thickness of the drawable.
+         * @param thickness Drawable thickness.
+         */
         virtual void setThickness(int thickness) = 0;
 
-	};
+    };
 }}
 
 #endif //COMPANION_DRAWABLE_H

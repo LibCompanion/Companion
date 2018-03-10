@@ -35,170 +35,170 @@ namespace Companion { namespace Draw
 
     public:
 
-	    /**
-		 * Constructor to create an frame.
-		 * @param topLeft Top left position.
-		 * @param topRight Top right position.
-		 * @param bottomLeft Bottom left position.
-		 * @param bottomRight Bottom right position.
-		 * @param color Color from frame.
-		 * @param thickness Thickness from frame.
-		 */
-	    Frame(cv::Point topLeft,
-		    cv::Point topRight,
-		    cv::Point bottomLeft,
-		    cv::Point bottomRight,
-		    cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
-		    int thickness = 4);
-
-	    /**
-		 * Destructor.
-		 */
-	    virtual ~Frame();
-
-	    /**
-		 * Draw lines to image.
-		 * @param image Image to draw lines.
-		 */
-	    virtual void draw(cv::Mat image);
-
-	    /**
-		 * Ratio to scale position from drawable to new location.
-		 * @param cWidth Current width.
-		 * @param cHeight Current height.
-		 * @param nWidth New width.
-		 * @param nHeight New height.
-		 */
-	    virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+        /**
+         * Constructor to create a drawable frame.
+         * @param topLeft Top left position.
+         * @param topRight Top right position.
+         * @param bottomLeft Bottom left position.
+         * @param bottomRight Bottom right position.
+         * @param color Color of the frame.
+         * @param thickness Thickness of the frame.
+         */
+        Frame(cv::Point topLeft,
+              cv::Point topRight,
+              cv::Point bottomLeft,
+              cv::Point bottomRight,
+              cv::Scalar color = cv::Scalar(0.0, 255.0, 0.0, 255.0),
+              int thickness = 4);
 
         /**
-         * Obtain origin x position.
-         * @return X coordinate from drawable object.
+         * Destructor.
+         */
+        virtual ~Frame();
+
+        /**
+         * Draw this frame to the given image.
+         * @param image Image on which to draw the object.
+         */
+        virtual void draw(cv::Mat image);
+
+        /**
+         * Scale this frame from the current image size to a new image size.
+         * @param cWidth Current image width.
+         * @param cHeight Current image height.
+         * @param nWidth New image width.
+         * @param nHeight New image height.
+         */
+        virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
+
+        /**
+         * Obtain the origin's x coordinate.
+         * @return X coordinate of the frames's origin.
          */
         virtual int getOriginX();
 
         /**
-         * Obtain origin y position.
-         * @return Y coordinate from drawable object.
+         * Obtain the origin's y coordinate.
+         * @return Y coordinate of the frames's origin.
          */
         virtual int getOriginY();
 
         /**
-         * Move from origin drawable.
-         * @param x X vector to move.
-         * @param y Y vector to move.
+         * Move the frame's origin.
+         * @param x Relative distance to move the origin on the x axis.
+         * @param y Relative distance to move the origin on the y axis.
          */
         virtual void moveOrigin(int x, int y);
 
         /**
-         * Set color frame.
-         * @param color Color frame to set.
+         * Set frame color.
+         * @param color Frame color to set.
          */
         virtual void setColor(const cv::Scalar &color);
 
         /**
-         * Obtain cut area from frame.
-         * @return Cut area as rect to use to cut a subframe.
+         * Get cut area around this frame.
+         * @return Cut area around this frame as a cv::Rect.
          */
-        virtual cv::Rect cutArea();
-
-	    /**
-		 * Get color frame code.
-		 * @return Scalar color from frame.
-		 */
-        virtual const cv::Scalar &getColor() const;
-
-	    /**
-		 * Get thickness size from frame, if 0 no frame will be drawn.
-		 * @return Get thickness size from frame.
-		 */
-        virtual int getThickness() const;
-
-		/**
- 		 * Set thickness size from frame.
- 		 * @param thickness Thickness size.
- 		 */
-        virtual void setThickness(int thickness);
-
-	    /**
-		 * Set top left position from frame.
-		 * @param topLeft Top left frame position.
-		 */
-	    void setTopLeft(const cv::Point &topLeft);
-
-	    /**
-		 * Set top right position from frame.
-		 * @param topRight Top right frame position.
-		 */
-	    void setTopRight(const cv::Point &topRight);
-
-	    /**
-		 * Set bottom left position from frame.
-		 * @param bottomLeft Bottom left frame position.
-		 */
-	    void setBottomLeft(const cv::Point &bottomLeft);
-
-	    /**
-		 * Set bottom right position from frame.
-		 * @param bottomRight Bottom right frame position.
-		 */
-	    void setBottomRight(const cv::Point &bottomRight);
+        virtual cv::Rect getCutArea();
 
         /**
-         * Get top left point position from frame.
-         * @return Top left point position.
+         * Get the color of the frame.
+         * @return Frame color.
+         */
+        virtual const cv::Scalar &getColor() const;
+
+        /**
+         * Get thickness of the frame, if 0 no frame will be drawn.
+         * @return Frame thickness.
+         */
+        virtual int getThickness() const;
+
+        /**
+         * Set thickness of the frame.
+         * @param thickness Frame thickness.
+         */
+        virtual void setThickness(int thickness);
+
+        /**
+         * Set top left corner of the frame.
+         * @param topLeft Top left corner.
+         */
+        void setTopLeft(const cv::Point &topLeft);
+
+        /**
+         * Set top right corner of the frame.
+         * @param topRight Top right corner.
+         */
+        void setTopRight(const cv::Point &topRight);
+
+        /**
+         * Set bottom left corner of the frame.
+         * @param bottomLeft Bottom left corner.
+         */
+        void setBottomLeft(const cv::Point &bottomLeft);
+
+        /**
+         * Set bottom right corner of the frame.
+         * @param bottomRight Bottom right corner.
+         */
+        void setBottomRight(const cv::Point &bottomRight);
+
+        /**
+         * Get top left corner of the frame.
+         * @return Top left corner.
          */
         const cv::Point &getTopLeft() const;
 
         /**
-         * Get top right point position from frame.
-         * @return Top right point position.
+         * Get top right corner of the frame.
+         * @return Top right corner.
          */
         const cv::Point &getTopRight() const;
 
         /**
-         * Get bottom left point position from frame.
-         * @return Bottom left point position.
+         * Get bottom left corner of the frame.
+         * @return Bottom left corner.
          */
         const cv::Point &getBottomLeft() const;
 
         /**
-         * Get bottom right point position from frame.
-         * @return Bottom right point position.
+         * Get bottom right corner of the frame.
+         * @return Bottom right corner.
          */
         const cv::Point &getBottomRight() const;
 
     private:
 
-	    /**
-		 * Top left position from frame.
-		 */
-	    cv::Point topLeft;
+        /**
+         * Top left corner of the frame.
+         */
+        cv::Point topLeft;
 
-	    /**
-		 * Top right position from frame.
-		 */
-	    cv::Point topRight;
+        /**
+         * Top right corner of the frame.
+         */
+        cv::Point topRight;
 
-	    /**
-		 * Bottom left position from frame.
-		 */
-	    cv::Point bottomLeft;
+        /**
+         * Bottom left corner of the frame.
+         */
+        cv::Point bottomLeft;
 
-	    /**
-		 * Bottom right position from frame.
-		 */
-	    cv::Point bottomRight;
+        /**
+         * Bottom right corner of the frame.
+         */
+        cv::Point bottomRight;
 
-	    /**
-		 * Color from frame.
-		 */
-	    cv::Scalar color;
+        /**
+         * Color of the frame.
+         */
+        cv::Scalar color;
 
-	    /**
-		 * Thickness size from frame.
-		 */
-	    int thickness;
+        /**
+         * Thickness of the frame.
+         */
+        int thickness;
     };
 }}
 

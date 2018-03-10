@@ -20,7 +20,7 @@
 
 Companion::Processing::Detection::ObjectDetection::ObjectDetection(Companion::Algorithm::Detection::Detection *detection)
 {
-	this->detection = detection;
+    this->detection = detection;
 }
 
 Companion::Processing::Detection::ObjectDetection::~ObjectDetection()

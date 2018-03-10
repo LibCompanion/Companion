@@ -55,13 +55,13 @@ namespace Companion { namespace Model { namespace Result
          * Return object description.
          * @return Object description.
          */
-        std::string getDescription() const;
+        virtual std::string getDescription() const;
 
         /**
          * Return the type of this result.
          * @return Result type.
          */
-        ResultType getType() const;
+        virtual ResultType getType() const;
 
     private:
 

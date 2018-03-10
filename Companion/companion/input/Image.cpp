@@ -25,7 +25,9 @@ Companion::Input::Image::Image(int maxImages)
     this->maxImages = maxImages;
 }
 
-Companion::Input::Image::~Image() {}
+Companion::Input::Image::~Image()
+{
+}
 
 bool Companion::Input::Image::addImage(std::string imgPath)
 {
@@ -34,13 +36,12 @@ bool Companion::Input::Image::addImage(std::string imgPath)
 
 bool Companion::Input::Image::addImage(cv::Mat img)
 {
-
     if (!img.empty())
     {
         // Limit queue size to keep memory low
         std::unique_lock<std::mutex> lk(this->mx);
         this->cv.wait(lk, [this] { return this->images.size() < this->maxImages; });
-        // Stores only img which exists.
+        // Stores only images which exist
         this->images.push(img);
         return true;
     }
@@ -55,7 +56,6 @@ bool Companion::Input::Image::addImage(int width, int height, int type, uchar* d
 
 cv::Mat Companion::Input::Image::obtainImage()
 {
-
     cv::Mat image;
     std::unique_lock<std::mutex> lk(this->mx);
     if (!this->images.empty())

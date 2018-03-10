@@ -25,7 +25,7 @@
 namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching { namespace UTIL
 {
     /**
-     * Image reduction algorithm (IRA) implementation to improve performance for an supported image recognition.
+     * Image reduction algorithm (IRA) to improve performance for a supported object recognition.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS IRA
@@ -39,71 +39,71 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
         IRA();
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~IRA();
 
         /**
-         * Gets last object detection position if exists.
-         * @return Gets last object detection position if exists, otherwise position is -1.
+         * Gets last recognized object's position if exists.
+         * @return Gets last recognized object's position if exists, otherwise position is -1.
          */
         const cv::Rect &getLastObjectPosition() const;
 
         /**
-         * Sets last object position from detection.
-         * @param x X-Axis position from object.
-         * @param y Y-Axis position from object.
-         * @param width Width from object.
-         * @param height Height from object.
+         * Sets last recognized object's position.
+         * @param x X-Axis position of the object.
+         * @param y Y-Axis position of the object.
+         * @param width Width of the object.
+         * @param height Height of the object.
          */
         void setLastObjectPosition(int x, int y, int width, int height);
 
         /**
-         * Sets width from detected object.
-         * @param width Width from homography object.
+         * Sets width of the object.
+         * @param width Width of the object.
          */
         void setWidth(int width);
 
         /**
-         * Sets height from detected object.
-         * @param height Height from homography object.
+         * Sets height of the object.
+         * @param height Height of the object.
          */
         void setHeight(int height);
 
         /**
-         * Sets x position from object.
-         * @param x X position from homography object.
+         * Sets x position of the object.
+         * @param x X position of the object.
          */
         void setX(int x);
 
         /**
-         * Sets y position from object.
-         * @param y Y position from homography object.
+         * Sets y position of the object.
+         * @param y Y position of the object.
          */
         void setY(int y);
 
         /**
-         * Clears last object detection position.
+         * Clears last recognized object's position.
          */
         void clear();
 
         /**
          * Checks if last position from object exists.
-         * @return <b>true<br> if last position is set otherwise <b>false</b>
+         * @return <code>True</code> if last position is set, otherwise <code>false</code>.
          */
-        bool isObjectDetected();
+        bool isObjectRecognized();
 
     private:
 
         /**
-         * Last object position (lop) from detected object from last scene image.
+         * Last object position (lop) of the recognized object from the last frame.
          */
         cv::Rect lop;
 
         /**
-         * Default initial position if no object was detected in last frame.
+         * Default initial position if no object was recognized in the last frame.
          */
-        static constexpr int NO_OBJECT_DETECTED = 0;
+        static constexpr int NO_OBJECT_RECOGNIZED = 0;
 
     };
 }}}}}

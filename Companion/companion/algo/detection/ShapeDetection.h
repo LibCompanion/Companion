@@ -34,7 +34,7 @@ namespace Companion { namespace Algorithm { namespace Detection
     };
 
     /**
-     * Shape detection implementation to detect specifially shaped regions of interest.
+     * Shape detection implementation to detect specifically shaped regions of interest.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS ShapeDetection : public Detection
@@ -43,7 +43,7 @@ namespace Companion { namespace Algorithm { namespace Detection
     public:
 
         /**
-         * Shape detection construtor. Shape detection functions are used in this order: dilate(erode(morph(image))).
+         * Shape detection constructor. Shape detection functions are used in this order: dilate(erode(morph(image))).
          * @param morphKernel Morphology kernel size.
          * @param erodeKernel Erode kernel size.
          * @param dilateKernel Dilate kernel size.
@@ -59,7 +59,7 @@ namespace Companion { namespace Algorithm { namespace Detection
                        int dilateIteration = 3);
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~ShapeDetection();
 
@@ -91,7 +91,7 @@ namespace Companion { namespace Algorithm { namespace Detection
         cv::Mat morphKernel;
 
         /**
-         * Erode tranformation kernel for erode operation.
+         * Erode transformation kernel for erode operation.
          */
         cv::Mat erodeKernel;
 

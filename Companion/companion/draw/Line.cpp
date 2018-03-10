@@ -77,7 +77,7 @@ void Companion::Draw::Line::ratio(int cWidth, int cHeight, int nWidth, int nHeig
     Util::ratioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
 }
 
-cv::Rect Companion::Draw::Line::cutArea()
+cv::Rect Companion::Draw::Line::getCutArea()
 {
     return cv::Rect(this->start.x, this->start.y, this->start.x + this->end.x, this->start.y + this->end.y);
 }
@@ -93,7 +93,6 @@ int Companion::Draw::Line::getOriginY() {
 void Companion::Draw::Line::moveOrigin(int x, int y) {
     this->start.x = this->start.x + x;
     this->start.y = this->start.y + y;
-
     this->end.x = this->end.x + x;
     this->end.y = this->end.y + y;
 }

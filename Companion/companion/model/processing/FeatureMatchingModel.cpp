@@ -19,14 +19,14 @@
 #include "FeatureMatchingModel.h"
 
 Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
-	this->ira = new Companion::Algorithm::Recognition::Matching::UTIL::IRA();
+    this->ira = new Companion::Algorithm::Recognition::Matching::UTIL::IRA();
 }
 
 Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
 {
-	this->keypoints.clear();
-	this->descriptors.release();
-	delete this->ira;
+    this->keypoints.clear();
+    this->descriptors.release();
+    delete this->ira;
 }
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const
@@ -52,7 +52,7 @@ void Companion::Model::Processing::FeatureMatchingModel::setKeypoints(const std:
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
-    cv::Ptr<cv::DescriptorExtractor> extractor)
+                                                                                          cv::Ptr<cv::DescriptorExtractor> extractor)
 {
     // Generates problems with detect and compute because image is not an mat object it is an gpu::mat
     this->keypoints.clear();
@@ -68,17 +68,17 @@ bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated()
 
 const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getImage() const
 {
-	return this->image;
+    return this->image;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setImage(const cv::Mat &image)
 {
-	this->image = image;
+    this->image = image;
 }
 
 Companion::Algorithm::Recognition::Matching::UTIL::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
 {
-	return this->ira;
+    return this->ira;
 }
 
 void Companion::Model::Processing::FeatureMatchingModel::setID(int id)
@@ -88,5 +88,5 @@ void Companion::Model::Processing::FeatureMatchingModel::setID(int id)
 
 const int Companion::Model::Processing::FeatureMatchingModel::getID() const
 {
-	return this->id;
+    return this->id;
 }

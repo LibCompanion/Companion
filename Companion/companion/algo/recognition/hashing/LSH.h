@@ -24,7 +24,7 @@
 namespace Companion { namespace Algorithm { namespace Recognition { namespace Hashing
 {
     /**
-     * Local sensitive hashing implemetation for hash image compare.
+     * Local Sensitive Hashing (LSH) implementation for hash image comparison.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS LSH : public Hashing {
@@ -32,10 +32,10 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ha
         public:
 
             /**
-             * LSH algorithm execution method to check image hash model to a query.
+             * LSH algorithm execution method to compare an image hash model with a query.
              * @param model Image hash model to compare.
              * @param query Query image to compare with hash model.
-             * @param roi Region of interest position to check.
+             * @param roi Region of interest to check.
              * @return Nullptr if no matching success otherwise a recognition result.
              */
             Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, cv::Mat query, Companion::Draw::Frame *roi);

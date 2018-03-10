@@ -73,15 +73,15 @@ namespace Companion
          */
         void setSource(Companion::Input::Stream *source);
 
-		/**
-		 * Gets current processing algorithm which should be used.
-		 * @throws Companion::Error::Code Companion error code if image processing is not set.
-		 * @return Image processing algorithm which should be used.
-		 */
-		Companion::Processing::ImageProcessing *getProcessing() const;
+        /**
+         * Gets current processing algorithm which should be used.
+         * @throws Companion::Error::Code Companion error code if image processing is not set.
+         * @return Image processing algorithm which should be used.
+         */
+        Companion::Processing::ImageProcessing *getProcessing() const;
 
         /**
-         * Set image processing algorithm, for example object detection or image recognition.
+         * Set image processing algorithm, for example object detection or recognition.
          * @param processing Image processing algorithm to use.
          */
         void setProcessing(Companion::Processing::ImageProcessing *processing);
@@ -99,24 +99,24 @@ namespace Companion
         void setSkipFrame(int skipFrame);
 
         /**
-        * Get image buffer store rate.
-        * @return Image buffer frame rate default 5 images are stored to buffer.
-        */
+         * Get image buffer store rate.
+         * @return Image buffer frame rate default 5 images are stored to buffer.
+         */
         int getImageBuffer() const;
 
         /**
-        * Sets image buffer size to store.
-        * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
-        */
+         * Sets image buffer size to store.
+         * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
+         */
         void setImageBuffer(int imageBuffer);
 
-		/**
-		 * Sets a result callback handler.
-		 * The source image will be converted to the given format.
-		 * @param callback Function pointer which contains result event handler.
-		 * @param colorFormat Color format of the returned image.
-		 */
-		void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
+        /**
+         * Sets a result callback handler.
+         * The source image will be converted to the given format.
+         * @param callback Function pointer which contains result event handler.
+         * @param colorFormat Color format of the returned image.
+         */
+        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
         /**
          * Gets an callback handler if set.
@@ -155,17 +155,17 @@ namespace Companion
          */
         Companion::Input::Stream* source;
 
-		/**
-		 * Image processing implementation, for example an object detection or image recognition.
-		 */
-		Companion::Processing::ImageProcessing* processing;
+        /**
+         * Image processing implementation, for example an object detection or recognition.
+         */
+        Companion::Processing::ImageProcessing* processing;
 
         /**
          * Number of frames to skip to process next image.
          */
         int skipFrame;
 
-        /*
+        /**
          * Image buffer size to store image. Default is 5.
          */
         int imageBuffer;

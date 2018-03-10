@@ -38,11 +38,11 @@ namespace Companion { namespace Draw
     public:
 
         /**
-         * Constructor to create an single line.
-         * @param start Start draw position from line.
-         * @param end End draw position from line
-         * @param color Color from line.
-         * @param thickness Thickness from line.
+         * Constructor to create a drawable line.
+         * @param start Starting position of the line.
+         * @param end Ending position of the line.
+         * @param color Color of the line.
+         * @param thickness Thickness of the line.
          */
         Line(cv::Point start,
              cv::Point end,
@@ -50,107 +50,107 @@ namespace Companion { namespace Draw
              int thickness = 4);
 
         /**
-         * Draw an single line to image.
-         * @param image Image to draw lines.
+         * Draw this line to the given image.
+         * @param image Image on which to draw the object.
          */
         virtual void draw(cv::Mat image);
 
         /**
-         * Ratio to scale position from drawable to new location.
-         * @param cWidth Current width.
-         * @param cHeight Current height.
-         * @param nWidth New width.
-         * @param nHeight New height.
+         * Scale this line from the current image size to a new image size.
+         * @param cWidth Current image width.
+         * @param cHeight Current image height.
+         * @param nWidth New image width.
+         * @param nHeight New image height.
          */
         virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
-         * Obtain cut area from drawable.
-         * @return Cut area as rect for a cut frame.
+         * Get cut area around this line.
+         * @return Cut area around this line as a cv::Rect.
          */
-        virtual cv::Rect cutArea();
+        virtual cv::Rect getCutArea();
 
         /**
-         * Obtain ground zero x position.
-         * @return X coordinate from drawable object.
+         * Obtain the origin's x coordinate.
+         * @return X coordinate of the line's origin.
          */
         virtual int getOriginX();
 
         /**
-         * Obtain ground zero y position.
-         * @return Y coordinate from drawable object.
+         * Obtain the origin's y coordinate.
+         * @return Y coordinate of the line's origin.
          */
         virtual int getOriginY();
 
         /**
-         * Move from ground zero drawable.
-         * @param x X vector to move.
-         * @param y Y vector to move.
+         * Move the line's origin.
+         * @param x Relative distance to move the origin on the x axis.
+         * @param y Relative distance to move the origin on the y axis.
          */
         virtual void moveOrigin(int x, int y);
 
         /**
-         * Sets given color code for line.
-         * @param color Color to draw line.
+         * Set line color.
+         * @param color Line color to set.
          */
         virtual void setColor(const cv::Scalar &color);
 
         /**
-         * Get color from line.
-         * @return Color code from line.
+         * Get the color of the line.
+         * @return Line color.
          */
         virtual const cv::Scalar &getColor() const;
 
         /**
-         * Sets given line thickness must be greater or equal 1.
-         * @param thickness Thickness to set.
+         * Set thickness of the line.
+         * @param thickness Line thickness.
          */
         virtual void setThickness(int thickness);
 
         /**
-         * Get thickness from line.
-         * @return Line thicknees.
+         * Get thickness of this line, if 0 no line will be drawn.
+         * @return Line thickness.
          */
         virtual int getThickness() const;
 
         /**
-         * Get starting point from line to draw.
-         * @return Starting point from line.
+         * Get starting point of this line.
+         * @return Starting point of this line.
          */
         const cv::Point &getStart() const;
 
         /**
-         * Sets an given starting point from line.
-         * @param start Starting point to set from line.
+         * Set a given starting point for this line.
+         * @param start Starting point to set for this line.
          */
         void setStart(const cv::Point &start);
 
         /**
-         * Get endpoint from line.
-         * @return Endpoint from line.
+         * Get endpoint of this line.
+         * @return Endpoint of this line.
          */
         const cv::Point &getEnd() const;
 
         /**
-         * Sets given endpoint from line.
-         * @param end Endpoint to set.
+         * Set a given endpoint for this line.
+         * @param end Endpoint to set for this line.
          */
         void setEnd(const cv::Point &end);
 
     private:
 
         /**
-         * Starting point from line.
+         * Starting point of this line.
          */
         cv::Point start;
 
         /**
-         * Endpoint from line.
+         * Endpoint of this line.
          */
         cv::Point end;
 
         /**
-         * Color code from line.
+         * Line color.
          */
         cv::Scalar color;
 

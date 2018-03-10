@@ -22,37 +22,37 @@ endif()
 
 # Add source files
 set(SOURCE
-        Configuration.cpp Configuration.h
-        algo/detection/Detection.h
-        algo/detection/ShapeDetection.cpp algo/detection/ShapeDetection.h
-        algo/recognition/Recognition.h
-        algo/recognition/hashing/Hashing.h 
-        algo/recognition/hashing/LSH.cpp algo/recognition/hashing/LSH.h
-        algo/recognition/matching/Matching.h
-        algo/recognition/matching/FeatureMatching.cpp algo/recognition/matching/FeatureMatching.h
-        algo/recognition/matching/util/IRA.cpp algo/recognition/matching/util/IRA.h
-        draw/Drawable.h
-        draw/Frame.cpp draw/Frame.h
-        draw/Line.cpp draw/Line.h
-        input/Stream.h
-        input/Video.cpp input/Video.h
-        input/Image.cpp input/Image.h
-        model/result/Result.h model/result/Result.cpp
-        model/result/DetectionResult.cpp model/result/DetectionResult.h
-        model/result/RecognitionResult.cpp model/result/RecognitionResult.h
-        model/processing/FeatureMatchingModel.cpp model/processing/FeatureMatchingModel.h
-        model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h
-        processing/ImageProcessing.h
-        processing/detection/ObjectDetection.cpp processing/detection/ObjectDetection.h
-        processing/recognition/MatchRecognition.cpp processing/recognition/MatchRecognition.h
-        processing/recognition/HashRecognition.cpp processing/recognition/HashRecognition.h
-        processing/recognition/HybridRecognition.cpp processing/recognition/HybridRecognition.h
-        thread/StreamWorker.cpp thread/StreamWorker.h
-        util/CompanionError.h
-        util/Util.cpp util/Util.h
-        util/Definitions.h
-        util/exportapi/ExportAPIDefinitions.h
-        util/CompanionException.cpp util/CompanionException.h)
+    Configuration.cpp Configuration.h
+    algo/detection/Detection.h
+    algo/detection/ShapeDetection.cpp algo/detection/ShapeDetection.h
+    algo/recognition/Recognition.h
+    algo/recognition/hashing/Hashing.h 
+    algo/recognition/hashing/LSH.cpp algo/recognition/hashing/LSH.h
+    algo/recognition/matching/Matching.h
+    algo/recognition/matching/FeatureMatching.cpp algo/recognition/matching/FeatureMatching.h
+    algo/recognition/matching/util/IRA.cpp algo/recognition/matching/util/IRA.h
+    draw/Drawable.h
+    draw/Frame.cpp draw/Frame.h
+    draw/Line.cpp draw/Line.h
+    input/Stream.h
+    input/Video.cpp input/Video.h
+    input/Image.cpp input/Image.h
+    model/result/Result.h model/result/Result.cpp
+    model/result/DetectionResult.cpp model/result/DetectionResult.h
+    model/result/RecognitionResult.cpp model/result/RecognitionResult.h
+    model/processing/FeatureMatchingModel.cpp model/processing/FeatureMatchingModel.h
+    model/processing/ImageHashModel.cpp model/processing/ImageHashModel.h
+    processing/ImageProcessing.h
+    processing/detection/ObjectDetection.cpp processing/detection/ObjectDetection.h
+    processing/recognition/MatchRecognition.cpp processing/recognition/MatchRecognition.h
+    processing/recognition/HashRecognition.cpp processing/recognition/HashRecognition.h
+    processing/recognition/HybridRecognition.cpp processing/recognition/HybridRecognition.h
+    thread/StreamWorker.cpp thread/StreamWorker.h
+    util/CompanionError.h
+    util/Util.cpp util/Util.h
+    util/Definitions.h
+    util/exportapi/ExportAPIDefinitions.h
+    util/CompanionException.cpp util/CompanionException.h)
 
 # Create MSVC filter
 if(MSVC)

@@ -41,51 +41,50 @@ namespace Companion { namespace Processing { namespace Recognition
     public:
 
         /**
-         * Constructor to create an matching algorithm implementation.
+         * Match recognition constructor.
          * @param matchingAlgo Matching algorithm to use, for example feature matching.
-         * @param scaling Scaling to resize an image. Default is full hd.
-         * @param shapeDetection Shape detection algorithm to detect roi's in images (if not set the whole image will be searched).
+         * @param scaling Scaling to resize an image. Default is 1920x1080.
+         * @param shapeDetection Shape detection algorithm to detect ROI's in images (if not set the whole image will be searched).
          */
         MatchRecognition(Companion::Algorithm::Recognition::Matching::Matching *matchingAlgo,
             Companion::SCALING scaling = Companion::SCALING::SCALE_1920x1080,
             Companion::Algorithm::Detection::ShapeDetection *shapeDetection = nullptr);
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~MatchRecognition();
 
         /**
-         * Add searching model type. For example an object (feature) which should be recognized.
-         * @param model Model to search.
-         * @return True if model is added false if not.
+         * Add search model type to search for.
+         * @param model Model to search for.
+         * @return <code>True</code> if model is added, <code>false</code> otherwise.
          */
         bool addModel(Companion::Model::Processing::FeatureMatchingModel *model);
 
         /**
-         * Removes given model if it exists. This method can only be used safetly if the searching process is not running.
+         * Remove given model if it exists. This method can only be used safely if the searching process is not running.
          * @param modelID ID of the model to remove.
-         * @return True if model deleted otherwise false.
+         * @return <code>True</code> if the model was deleted, otherwise <code>false</code>.
          */
         bool removeModel(int modelID);
 
         /**
-         * Clear all models which are searched.
+         * Clear all models which are searched for.
          */
         void clearModels();
 
         /**
          * Try to recognize all objects in the given frame.
          * @param frame Frame to check for an object location.
-         * @return  An empty vector if no objects are recognized or otherwise a pair of a Drawable and the ID for
-         *          every recognized object.
+         * @return A vector of results for the given frame or an empty vector if no objects are recognized.
          */
         CALLBACK_RESULT execute(cv::Mat frame);
 
     private:
 
         /**
-         * Scaling enumerator to resize image.
+         * Scaling value to resize image.
          */
         Companion::SCALING scaling;
 
@@ -108,11 +107,11 @@ namespace Companion { namespace Processing { namespace Recognition
          * Processing method to recognize objects.
          * @param sceneModel Scene model to check.
          * @param objectModel Object model to search in scene.
-         * @param rois Region of interests list if exists.
+         * @param rois List of ROIs if existent.
          * @param frame Scene frame.
-         * @param originalX Original x size from frame.
-         * @param originalY Original y size from frame.
-         * @param objects results List from all recognized objects.
+         * @param originalX Original width of the scene frame.
+         * @param originalY Original height of the scene frame.
+         * @param results List of all recognized objects.
          */
         void processing(Model::Processing::FeatureMatchingModel* sceneModel,
             Model::Processing::FeatureMatchingModel* objectModel,

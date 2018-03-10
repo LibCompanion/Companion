@@ -23,11 +23,13 @@
 
 namespace Companion { namespace Error
 {
-    /// Enumeration class for error codes
+    /**
+     * Possible error codes.
+     */
     enum class COMP_EXPORTS Code
     {
         image_not_found, ///< If image not found error.
-        dimension_error, ///< If dimensions from given images inequal.
+        dimension_error, ///< If dimensions from given images unequal.
         template_dimension_error, ///< If dimensions from template is wrong.
         feature_detector_not_found, ///< If given feature detector not supported.
         descriptor_extractor_not_found, ///< If given descriptor extractor not supported.
@@ -43,59 +45,58 @@ namespace Companion { namespace Error
     };
 
     /**
-     * @brief Gets from given error code an corresponding error message.
+     * Gets from given error code an corresponding error message.
      * @param code The error code to get corresponding error message.
      * @return String message from given error.
      */
     inline std::string COMP_EXPORTS getError(Code code)
     {
-
         std::string error = "Unknown Error";
 
         switch (code)
         {
-        case Code::descriptor_extractor_not_found:
-            error = "Given descriptor not supported.";
-            break;
-        case Code::descriptor_matcher_not_found:
-            error = "Given descriptor matcher not supported.";
-            break;
-        case Code::dimension_error:
-            error = "Dimensions not equal.";
-            break;
-        case Code::feature_detector_not_found:
-            error = "Given feature not supported.";
-            break;
-        case Code::image_not_found:
-            error = "Could not open or find image.";
-            break;
-        case Code::template_dimension_error:
-            error = "Template size must be smaller or equal than image.";
-            break;
-        case Code::wrong_model_type:
-            error = "This model type class is not supported for this image recognition algorithm.";
-            break;
-        case Code::invalid_companion_config:
-            error = "Invalid companion configuration.";
-            break;
-        case Code::stream_src_not_set:
-            error = "Stream source not set.";
-            break;
-        case Code::invalid_video_src:
-            error = "Video src is not obtainable.";
-            break;
-        case Code::no_image_processing_algo_set:
-            error = "No image processing algorithm is used.";
-            break;
-        case Code::no_handler_set:
-            error = "No callback handler set.";
-            break;
-        case Code::no_cuda_device:
-            error = "No CUDA device can be used.";
-            break;
-        case Code ::not_implemented:
-            error = "Method not implemented.";
-            break;
+            case Code::descriptor_extractor_not_found:
+                error = "Given descriptor not supported.";
+                break;
+            case Code::descriptor_matcher_not_found:
+                error = "Given descriptor matcher not supported.";
+                break;
+            case Code::dimension_error:
+                error = "Dimensions not equal.";
+                break;
+            case Code::feature_detector_not_found:
+                error = "Given feature not supported.";
+                break;
+            case Code::image_not_found:
+                error = "Could not open or find image.";
+                break;
+            case Code::template_dimension_error:
+                error = "Template size must be smaller or equal than image.";
+                break;
+            case Code::wrong_model_type:
+                error = "This model type class is not supported for this image recognition algorithm.";
+                break;
+            case Code::invalid_companion_config:
+                error = "Invalid companion configuration.";
+                break;
+            case Code::stream_src_not_set:
+                error = "Stream source not set.";
+                break;
+            case Code::invalid_video_src:
+                error = "Video src is not obtainable.";
+                break;
+            case Code::no_image_processing_algo_set:
+                error = "No image processing algorithm is used.";
+                break;
+            case Code::no_handler_set:
+                error = "No callback handler set.";
+                break;
+            case Code::no_cuda_device:
+                error = "No CUDA device can be used.";
+                break;
+            case Code ::not_implemented:
+                error = "Method not implemented.";
+                break;
         }
 
         return error;

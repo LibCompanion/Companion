@@ -33,7 +33,9 @@ Companion::Draw::Frame::Frame(cv::Point topLeft,
     this->thickness = thickness;
 }
 
-Companion::Draw::Frame::~Frame() {}
+Companion::Draw::Frame::~Frame()
+{
+}
 
 void Companion::Draw::Frame::draw(cv::Mat image)
 {
@@ -88,9 +90,9 @@ const cv::Scalar &Companion::Draw::Frame::getColor() const
     return this->color;
 }
 
-cv::Rect Companion::Draw::Frame::cutArea()
+cv::Rect Companion::Draw::Frame::getCutArea()
 {
-	return cv::Rect(this->topLeft.x, this->topLeft.y, this->bottomRight.x - this->topLeft.x, this->bottomRight.y - this->topLeft.y);
+    return cv::Rect(this->topLeft.x, this->topLeft.y, this->bottomRight.x - this->topLeft.x, this->bottomRight.y - this->topLeft.y);
 }
 
 int Companion::Draw::Frame::getThickness() const
@@ -133,7 +135,7 @@ int Companion::Draw::Frame::getOriginX() {
 }
 
 int Companion::Draw::Frame::getOriginY() {
-	return this->topRight.y;
+    return this->topRight.y;
 }
 
 void Companion::Draw::Frame::moveOrigin(int x, int y) {

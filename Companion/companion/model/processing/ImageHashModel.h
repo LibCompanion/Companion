@@ -39,25 +39,25 @@ namespace Companion { namespace Model { namespace Processing
     public:
 
         /**
-         * Default constructor.
+         * Constructor.
          */
         ImageHashModel();
 
         /**
-         * Default destructor.
+         * Destructor.
          */
         virtual ~ImageHashModel();
 
         /**
-         * Add descriptor from given image.
-         * @param id ID from model.
+         * Adds descriptor from given image.
+         * @param id ID of the model.
          * @param descriptor Descriptor to add.
          */
         void addDescriptor(int id, cv::Mat &descriptor);
 
         /**
          * Generates dataset from current image hash model.
-         * @return Generated dataset contains in first element hashed images and second index dataset.
+         * @return Generated dataset that contains as first element the hashed images and as second element the index dataset.
          */
         std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
 
@@ -75,7 +75,7 @@ namespace Companion { namespace Model { namespace Processing
         bool newModelAdded;
 
         /**
-         * RAWR image models to compare in a 1 dimensional array.
+         * Raw image models to compare in an one dimensional array.
          */
         cv::Mat imageDataset;
 
@@ -90,20 +90,20 @@ namespace Companion { namespace Model { namespace Processing
         cv::Mat indexDataset;
 
         /**
-         * Score pair from all given models.
+         * Scores from all given models.
          */
         std::vector<std::pair<int, float>> scores;
 
         /**
-         * Generates from all image descriptors hash values.
-         * @return 1D Image hashes matrix.
+         * Generates hash values from all image descriptors.
+         * @return 1D Image hash matrix.
          */
         cv::Mat_<float> generateHashImages();
 
         /**
          * Generates index dataset from given hash.
-         * @param hash Hash images to generate index dataset.
-         * @return Index dataset from hash image.
+         * @param hash Image hash to generate index dataset.
+         * @return Index dataset from image hash.
          */
         cv::Mat generateIndexDataset(cv::Mat_<float> hash);
     };

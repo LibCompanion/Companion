@@ -20,8 +20,8 @@
 
 Companion::Algorithm::Recognition::Matching::UTIL::IRA::IRA()
 {
-    this->lop.x = NO_OBJECT_DETECTED;
-    this->lop.y = NO_OBJECT_DETECTED;
+    this->lop.x = NO_OBJECT_RECOGNIZED;
+    this->lop.y = NO_OBJECT_RECOGNIZED;
 }
 
 Companion::Algorithm::Recognition::Matching::UTIL::IRA::~IRA()
@@ -63,13 +63,13 @@ void Companion::Algorithm::Recognition::Matching::UTIL::IRA::setY(int y)
 
 void Companion::Algorithm::Recognition::Matching::UTIL::IRA::clear()
 {
-    this->lop.x = NO_OBJECT_DETECTED;
-    this->lop.y = NO_OBJECT_DETECTED;
-    this->lop.width = NO_OBJECT_DETECTED;
-    this->lop.height = NO_OBJECT_DETECTED;
+    this->lop.x = NO_OBJECT_RECOGNIZED;
+    this->lop.y = NO_OBJECT_RECOGNIZED;
+    this->lop.width = NO_OBJECT_RECOGNIZED;
+    this->lop.height = NO_OBJECT_RECOGNIZED;
 }
 
-bool Companion::Algorithm::Recognition::Matching::UTIL::IRA::isObjectDetected()
+bool Companion::Algorithm::Recognition::Matching::UTIL::IRA::isObjectRecognized()
 {
-	return (this->lop.width > NO_OBJECT_DETECTED) && (this->lop.height > NO_OBJECT_DETECTED);
+    return (this->lop.width > NO_OBJECT_RECOGNIZED) && (this->lop.height > NO_OBJECT_RECOGNIZED);
 }

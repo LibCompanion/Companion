@@ -26,7 +26,7 @@
 namespace Companion { namespace Model { namespace Processing
 {
     /**
-     * Comparison data model to store search results from an feature matching algo.
+     * Comparison data model to store search results from a feature matching algorithm.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS FeatureMatchingModel
@@ -35,36 +35,36 @@ namespace Companion { namespace Model { namespace Processing
     public:
 
         /**
-         * Constructor to create an feature matching model.
+         * Constructor.
          */
         FeatureMatchingModel();
 
         /**
-         * Destructor from feature matching model.
+         * Destructor.
          */
         virtual ~FeatureMatchingModel();
 
         /**
-         * Get descriptors from feature matching if exists.
-         * @return An empty cv::Mat descriptor if no matching exists otherwise an cv::Mat descriptor.
+         * Gets the descriptors from feature matching if exists.
+         * @return An empty cv::Mat if no matching exists, otherwise a cv::Mat of descriptors.
          */
         const cv::Mat &getDescriptors() const;
 
         /**
-         * Sets an descriptor matching.
-         * @param descriptors Descriptor matching to set.
+         * Sets feature matching descriptors.
+         * @param descriptors Feature matching descriptors to set.
          */
         void setDescriptors(const cv::Mat &descriptors);
 
         /**
-         * Get all keypoints from matching.
-         * @return If keypoints not exists keypoints is empty otherwise an filled keypoints set.
+         * Gets all keypoints from matching.
+         * @return If keypoints do not exist, keypoints is empty otherwise a filled keypoints vector.
          */
         const std::vector<cv::KeyPoint> &getKeypoints() const;
 
         /**
          * Checks if keypoints are already calculated.
-         * @return <b>True</b> if keypoints are calculated otherwise <b>False</b>
+         * @return <code>True</code> if keypoints are calculated otherwise <code>false</code>
          */
         bool keypointsCalculated();
 
@@ -75,13 +75,13 @@ namespace Companion { namespace Model { namespace Processing
         void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
         /**
-         * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores this. This operation
-         * not working for Cuda feature detectors because they need cv::gpu::Mat.
-         * @param detector FeatureDetector to use.
+         * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores them. This operation
+         * does not work for Cuda feature detectors, because they need cv::gpu::Mat.
+         * @param detector Detector to use.
          * @param extractor Extractor to use.
          */
         void calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
-            cv::Ptr<cv::DescriptorExtractor> extractor);
+                                              cv::Ptr<cv::DescriptorExtractor> extractor);
 
         /**
          * Gets image which is stored, if no image is stored image is empty.

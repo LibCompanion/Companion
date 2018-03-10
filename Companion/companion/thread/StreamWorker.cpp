@@ -49,15 +49,15 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
                 // If skip frame is not used...
                 if (skipFrame <= 0 && storeFrame(frame))
                 {
-                    // obtain next frame to store.
+                    // Obtain next frame to store
                     frame = stream->obtainImage();
                 }
                 else if (skipFrame > 0)
                 {
-                    // ... check if skip frame nr is reached and If frame was stored
+                    // ... check if skip frame number is reached and If frame was stored
                     if (skipFrameNr == skipFrame && storeFrame(frame))
                     {
-                        // obtain next frame to store.
+                        // Obtain next frame to store
                         frame = stream->obtainImage();
                         skipFrameNr = 0;
                     }
@@ -71,7 +71,7 @@ void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
             }
             else
             {
-                // If frames are empty loop.
+                // If frames are empty loop
                 frame = stream->obtainImage();
             }
         }
@@ -118,7 +118,7 @@ void Companion::Thread::StreamWorker::consume(
             }
             catch (Companion::Error::CompanionException ex)
             {
-                // Multiple error messages only called by parallelized methods.
+                // Multiple error messages only called by parallelized methods
                 while (ex.hasNext())
                 {
                     errorCallback(ex.next());
@@ -138,7 +138,7 @@ bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame)
     std::lock_guard<std::mutex> lk(this->mx);
     if (this->queue.size() >= this->buffer)
     {
-        // If buffer full try to notify producer and wait current frame and do nothing.
+        // If buffer full try to notify producer and wait current frame and do nothing
         this->cv.notify_one();
         return false;
     }

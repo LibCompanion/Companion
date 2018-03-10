@@ -124,7 +124,7 @@ void Companion::Processing::Recognition::HybridRecognition::processing(
 
     // This frame can be cut to improve recognition
     cutDrawable = hashResult->getDrawable();
-    cutImage = Companion::Util::cutImage(frame, cutDrawable->cutArea());
+    cutImage = Companion::Util::cutImage(frame, cutDrawable->getCutArea());
 
     oldX = cutImage.cols;
     oldY = cutImage.rows;
