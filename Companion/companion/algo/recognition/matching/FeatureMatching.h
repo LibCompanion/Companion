@@ -243,7 +243,7 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
                                             std::vector<cv::Point2f> &feature_points_scene);
 
         /**
-         * Calculates area position from recognized object in scene.
+         * Calculate area position from recognized object in scene.
          * @param homography Homography to find objects position.
          * @param sceneImage Scene image to recognize object image.
          * @param objectImage Object image to recognize in scene.

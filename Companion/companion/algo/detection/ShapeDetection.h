@@ -26,7 +26,7 @@
 namespace Companion { namespace Algorithm { namespace Detection
 {
     /**
-     * Possible shapes.
+     * Shapes.
      */
     enum class COMP_EXPORTS Shape
     {

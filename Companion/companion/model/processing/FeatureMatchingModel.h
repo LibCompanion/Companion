@@ -45,37 +45,37 @@ namespace Companion { namespace Model { namespace Processing
         virtual ~FeatureMatchingModel();
 
         /**
-         * Gets the descriptors from feature matching if exists.
+         * Get the descriptors from feature matching if exists.
          * @return An empty cv::Mat if no matching exists, otherwise a cv::Mat of descriptors.
          */
         const cv::Mat &getDescriptors() const;
 
         /**
-         * Sets feature matching descriptors.
+         * Set feature matching descriptors.
          * @param descriptors Feature matching descriptors to set.
          */
         void setDescriptors(const cv::Mat &descriptors);
 
         /**
-         * Gets all keypoints from matching.
+         * Get all keypoints from matching.
          * @return If keypoints do not exist, keypoints is empty otherwise a filled keypoints vector.
          */
         const std::vector<cv::KeyPoint> &getKeypoints() const;
 
         /**
-         * Checks if keypoints are already calculated.
+         * Check if keypoints are already calculated.
          * @return <code>True</code> if keypoints are calculated otherwise <code>false</code>
          */
         bool keypointsCalculated();
 
         /**
-         * Sets given keypoints from matching.
+         * Set given keypoints from matching.
          * @param keypoints Keypoints to set.
          */
         void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
         /**
-         * Calculates cv::Mat keypoints and descriptors from given detector and extractor and stores them. This operation
+         * Calculate cv::Mat keypoints and descriptors from given detector and extractor and stores them. This operation
          * does not work for Cuda feature detectors, because they need cv::gpu::Mat.
          * @param detector Detector to use.
          * @param extractor Extractor to use.
@@ -84,31 +84,31 @@ namespace Companion { namespace Model { namespace Processing
                                               cv::Ptr<cv::DescriptorExtractor> extractor);
 
         /**
-         * Gets image which is stored, if no image is stored image is empty.
+         * Get image which is stored, if no image is stored image is empty.
          * @return An image if is set otherwise image is empty.
          */
         const cv::Mat &getImage() const;
 
         /**
-         * Sets given image.
+         * Set given image.
          * @param image Image to set.
          */
         void setImage(const cv::Mat &image);
 
         /**
-         * Gets IRA class to store last recognized object's location.
+         * Get IRA class to store last recognized object's location.
          * @return IRA class to obtain informations about last recognized object' location.
          */
         Companion::Algorithm::Recognition::Matching::UTIL::IRA *getIra() const;
 
         /**
-         * Sets the ID for this model.
+         * Set the ID for this model.
          * @param id ID to set.
          */
         void setID(int id);
 
         /**
-         * Gets the ID of this model.
+         * Get the ID of this model.
          * @return  The ID of this model.
          */
         const int getID() const;

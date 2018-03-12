@@ -24,7 +24,7 @@
 namespace Companion { namespace Error
 {
     /**
-     * Possible error codes.
+     * Error codes.
      */
     enum class COMP_EXPORTS Code
     {
@@ -45,8 +45,8 @@ namespace Companion { namespace Error
     };
 
     /**
-     * Gets from given error code an corresponding error message.
-     * @param code The error code to get corresponding error message.
+     * Get a corresponding error message from given error code.
+     * @param code The error code to get corresponding error message from.
      * @return String message from given error.
      */
     inline std::string COMP_EXPORTS getError(Code code)

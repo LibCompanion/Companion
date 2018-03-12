@@ -50,13 +50,13 @@ namespace Companion
         virtual ~Configuration();
 
         /**
-         * Executes companion configuration.
+         * Execute companion configuration.
          * @throws error Companion::Error::Code error code if an invalid configuration is set.
          */
         void run();
 
         /**
-         * Stops current running stream worker if it's executes.
+         * Stop current running stream worker if it's executes.
          */
         void stop();
 
@@ -74,7 +74,7 @@ namespace Companion
         void setSource(Companion::Input::Stream *source);
 
         /**
-         * Gets current processing algorithm which should be used.
+         * Get current processing algorithm which should be used.
          * @throws Companion::Error::Code Companion error code if image processing is not set.
          * @return Image processing algorithm which should be used.
          */
@@ -93,7 +93,7 @@ namespace Companion
         int getSkipFrame() const;
 
         /**
-         * Sets skip frame rate.
+         * Set skip frame rate.
          * @param skipFrame Number of frames which should be skipped after image processing should be used.
          */
         void setSkipFrame(int skipFrame);
@@ -105,13 +105,13 @@ namespace Companion
         int getImageBuffer() const;
 
         /**
-         * Sets image buffer size to store.
+         * Set image buffer size to store.
          * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
          */
         void setImageBuffer(int imageBuffer);
 
         /**
-         * Sets a result callback handler.
+         * Set a result callback handler.
          * The source image will be converted to the given format.
          * @param callback Function pointer which contains result event handler.
          * @param colorFormat Color format of the returned image.
@@ -119,14 +119,14 @@ namespace Companion
         void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
         /**
-         * Gets an callback handler if set.
+         * Get an callback handler if set.
          * @throws Companion::Error::Code Companion error code if callback is not set.
          * @return An callback handler if set.
          */
         const std::function<SUCCESS_CALLBACK> &getCallback() const;
 
         /**
-         * Sets an error callback handler.
+         * Set an error callback handler.
          * @param callback Error handler to set.
          */
         void setErrorHandler(std::function<ERROR_CALLBACK> callback);
@@ -171,7 +171,7 @@ namespace Companion
         int imageBuffer;
 
         /**
-         * @brief threadsRunning Indicator if threads currently running.
+         * Indicator if threads are currently running.
          */
         bool threadsRunning;
 

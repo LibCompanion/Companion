@@ -37,14 +37,14 @@ namespace Companion { namespace Input
     public:
 
         /**
-         * Connects to a given physical video device.
+         * Connect to a given physical video device.
          * @param device Device number to connect to.
          * @throws Companion::Error::Code if wrong device number is selected.
          */
         Video(int device);
 
         /**
-         * Plays a video stream from the given URL.
+         * Play a video stream from the given URL.
          * @param url Path to video stream.
          * @throws Companion::Error::Code if invalid URL is used.
          */

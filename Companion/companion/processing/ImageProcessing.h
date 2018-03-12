@@ -34,7 +34,7 @@ namespace Companion { namespace Processing
     public:
 
         /**
-         * Executes given image processing algorithm like object detection or object recognition.
+         * Execute given image processing algorithm like object detection or object recognition.
          * @param frame Source image for the image processing.
          * @return A vector of results if there are any.
          */

@@ -86,7 +86,7 @@ namespace Companion { namespace Processing { namespace Recognition
         int resize;
 
         /**
-         * Hash recognition for object recognition.
+         * Hash recognition.
          */
         Companion::Processing::Recognition::HashRecognition *hashRecognition;
 
@@ -96,7 +96,7 @@ namespace Companion { namespace Processing { namespace Recognition
         Companion::Algorithm::Recognition::Matching::Matching *featureMatching;
 
         /**
-         * A map of all models that are recognize.
+         * A map of all models to recognize.
          */
         std::map<int, Companion::Model::Processing::FeatureMatchingModel*> models;
 

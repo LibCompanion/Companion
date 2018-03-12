@@ -24,9 +24,9 @@
 namespace Companion { namespace Algorithm { namespace Recognition
 {
     /**
-    * Recognition abstract class to implement specific recognition algorithms.
-    * @author Andreas Sekulski, Dimitri Kotlovsky
-    */
+     * Recognition abstract class to implement specific recognition algorithms.
+     * @author Andreas Sekulski, Dimitri Kotlovsky
+     */
     class COMP_EXPORTS Recognition
     {
 

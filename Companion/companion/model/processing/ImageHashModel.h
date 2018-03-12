@@ -31,7 +31,7 @@ namespace Companion { namespace Model { namespace Processing
 {
 
     /**
-     * Image hashing model to generate from images a hash representation.
+     * Image hashing model to generate a hash representation of images.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
     class COMP_EXPORTS ImageHashModel {
@@ -49,20 +49,20 @@ namespace Companion { namespace Model { namespace Processing
         virtual ~ImageHashModel();
 
         /**
-         * Adds descriptor from given image.
+         * Add descriptor from given image.
          * @param id ID of the model.
          * @param descriptor Descriptor to add.
          */
         void addDescriptor(int id, cv::Mat &descriptor);
 
         /**
-         * Generates dataset from current image hash model.
+         * Generate dataset from current image hash model.
          * @return Generated dataset that contains as first element the hashed images and as second element the index dataset.
          */
         std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
 
         /**
-         * Returns the result scores.
+         * Return the result scores.
          * @return Result scores.
          */
         const std::vector<std::pair<int, float>> &getScores() const;
@@ -95,13 +95,13 @@ namespace Companion { namespace Model { namespace Processing
         std::vector<std::pair<int, float>> scores;
 
         /**
-         * Generates hash values from all image descriptors.
+         * Generate hash values from all image descriptors.
          * @return 1D Image hash matrix.
          */
         cv::Mat_<float> generateHashImages();
 
         /**
-         * Generates index dataset from given hash.
+         * Generate index dataset from given hash.
          * @param hash Image hash to generate index dataset.
          * @return Index dataset from image hash.
          */

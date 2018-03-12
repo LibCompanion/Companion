@@ -44,13 +44,13 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
         virtual ~IRA();
 
         /**
-         * Gets last recognized object's position if exists.
+         * Get last recognized object's position if exists.
          * @return Gets last recognized object's position if exists, otherwise position is -1.
          */
         const cv::Rect &getLastObjectPosition() const;
 
         /**
-         * Sets last recognized object's position.
+         * Set last recognized object's position.
          * @param x X-Axis position of the object.
          * @param y Y-Axis position of the object.
          * @param width Width of the object.
@@ -59,36 +59,36 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
         void setLastObjectPosition(int x, int y, int width, int height);
 
         /**
-         * Sets width of the object.
+         * Set width of the object.
          * @param width Width of the object.
          */
         void setWidth(int width);
 
         /**
-         * Sets height of the object.
+         * Set height of the object.
          * @param height Height of the object.
          */
         void setHeight(int height);
 
         /**
-         * Sets x position of the object.
+         * Set x position of the object.
          * @param x X position of the object.
          */
         void setX(int x);
 
         /**
-         * Sets y position of the object.
+         * Set y position of the object.
          * @param y Y position of the object.
          */
         void setY(int y);
 
         /**
-         * Clears last recognized object's position.
+         * Clear last recognized object's position.
          */
         void clear();
 
         /**
-         * Checks if last position from object exists.
+         * Check if last position from object exists.
          * @return <code>True</code> if last position is set, otherwise <code>false</code>.
          */
         bool isObjectRecognized();

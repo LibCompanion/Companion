@@ -27,7 +27,7 @@
 namespace Companion
 {
     /**
-     * Possible color formats.
+     * Color formats.
      */
     enum class COMP_EXPORTS ColorFormat
     {
@@ -39,7 +39,7 @@ namespace Companion
     };
 
     /**
-     * Possible scaling values.
+     * Scaling resolutions.
      */
     enum class COMP_EXPORTS SCALING
     {
@@ -76,7 +76,7 @@ namespace Companion
         static cv::Mat cutImage(cv::Mat img, cv::Rect cutArea);
 
         /**
-         * Checks if given image is loaded.
+         * Check if given image is loaded.
          * @param img Image to check if it is not null.
          * @return <code>True</code> if image is loaded, <code>false</code> otherwise.
          */
@@ -114,7 +114,7 @@ namespace Companion
         static void ratioPosition(cv::Point &point, int cWidth, int cHeight, int nWidth, int nHeight);
 
         /**
-         * Validates the rectangular shape of a recognized area.
+         * Validate the rectangular shape of a recognized area.
          * @param topRight Top right corner of the recognized area.
          * @param bottomLeft Bottom left corner of the recognized area.
          * @param topLeft Top left corner of the recognized area.
@@ -127,7 +127,7 @@ namespace Companion
         static bool validateShape(cv::Point2f topRight, cv::Point2f bottomLeft, cv::Point2f topLeft, cv::Point2f bottomRight, int minSidelLength = 10, float maxSideDeviation = 0.5f, float maxDiagonalDeviation = 0.1f);
 
         /**
-         * Converts an image to the given color format. BGR is expected as source format.
+         * Convert an image to the given color format. BGR is expected as source format.
          * @param src Source image.
          * @param dst Destination image.
          * @param colorFormat Color format for the converted image.
@@ -144,7 +144,7 @@ namespace Companion
         static cv::Point getScaling(SCALING scaling);
 
         /**
-         * Calculates the deviation between two lengths.
+         * Calculate the deviation between two lengths.
          * @param x First length.
          * @param y Second length.
          * return Deviation in percent.

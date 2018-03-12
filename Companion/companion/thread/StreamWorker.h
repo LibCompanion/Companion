@@ -43,7 +43,7 @@ namespace Companion { namespace Thread
     public:
 
         /**
-         * Creates a stream worker to obtain images from a stream and store to a queue.
+         * Create a stream worker to obtain images from a stream and store to a queue.
          * @param buffer Buffer size to store images. Default is one image.
          * @param colorFormat Color format of the returned image.
          */
@@ -102,7 +102,7 @@ namespace Companion { namespace Thread
         std::queue<cv::Mat> queue;
 
         /**
-         * Stores frame to queue.
+         * Store a frame to queue.
          * @param frame Frame to store to queue.
          * @return <code>True</code> if the frame was stored, <code>flase</code> otherwise.
          */
