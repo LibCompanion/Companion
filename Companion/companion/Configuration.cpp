@@ -30,8 +30,6 @@ Companion::Configuration::Configuration()
 
 Companion::Configuration::~Configuration()
 {
-    delete this->source;
-    delete this->processing;
     delete this->worker;
 }
 
@@ -67,7 +65,7 @@ void Companion::Configuration::run()
 
 void Companion::Configuration::stop()
 {
-    if (this->threadsRunning && this->source != nullptr && !this->source->isFinished())
+    if (this->threadsRunning && (this->source != nullptr) && !this->source->isFinished())
     {
         // To stop running worker threads stop streams.
         this->source->finish();
