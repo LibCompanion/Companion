@@ -40,14 +40,7 @@ CALLBACK_RESULT Companion::Processing::Detection::ObjectDetection::execute(cv::M
         std::vector<Companion::Draw::Frame*> frames = this->detection->executeAlgorithm(frame);
         for (size_t i = 0; i < frames.size(); i++)
         {
-            std::string description = "";
-            switch (shapeDetection->getShape())
-            {
-                case Companion::Algorithm::Detection::Shape::QUAD:
-                    description = "Quad";
-                    break;
-            }
-            results.push_back(new Companion::Model::Result::DetectionResult(100, description, frames[i]));
+            results.push_back(new Companion::Model::Result::DetectionResult(100, shapeDetection->getDescription(), frames[i]));
         }
     }
 

@@ -18,14 +18,24 @@
 
 #include "ShapeDetection.h"
 
-Companion::Algorithm::Detection::ShapeDetection::ShapeDetection(cv::Mat morphKernel, cv::Mat erodeKernel, cv::Mat dilateKernel, Shape shape, double cannyThreshold, int dilateIteration)
+Companion::Algorithm::Detection::ShapeDetection::ShapeDetection(
+    int minCorners,
+    int maxCorners,
+    std::string shapeDescription,
+    double cannyThreshold,
+    int dilateIteration,
+    cv::Mat morphKernel,
+    cv::Mat erodeKernel,
+    cv::Mat dilateKernel)
 {
+    this->minCorners = minCorners;
+    this->maxCorners = maxCorners;
+    this->shapeDescription = shapeDescription;
+    this->cannyThreshold = cannyThreshold;
+    this->dilateIteration = dilateIteration;
     this->morphKernel = morphKernel;
     this->erodeKernel = erodeKernel;
     this->dilateKernel = dilateKernel;
-    this->shape = shape;
-    this->cannyThreshold = cannyThreshold;
-    this->dilateIteration = dilateIteration;
 }
 
 Companion::Algorithm::Detection::ShapeDetection::~ShapeDetection()
@@ -35,34 +45,10 @@ Companion::Algorithm::Detection::ShapeDetection::~ShapeDetection()
 std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetection::executeAlgorithm(cv::Mat frame)
 {
     std::vector<Companion::Draw::Frame*> rois;
-    switch (this->shape) {
-        case Shape::QUAD:
-            rois = this->obtainQuads(frame);
-            break;
-    }
-
-    return rois;
-}
-
-std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetection::obtainQuads(cv::Mat frame)
-{
-    cv::Point topLeft; // Top left coordinate from rectangle
-    cv::Point bottomRight; // Bottom right coordinate from rectangle
-    cv::Point diff;
-    int minDistance;
-    int mostLeftCoordinate;
-    int mostRightCoordinate;
-    int heighestCoordinate;
-    int lowestCoordinate;
-
-    int width; // Width from rectangle
-    int height; // Height from rectangle
-
-    cv::Mat result = cv::Mat::zeros(frame.size(), CV_8UC3);
-    std::vector<Companion::Draw::Frame*> rois;
     std::vector<std::vector<cv::Point> > contours;
     std::vector<cv::Vec4i> hierarchy;
     std::vector<cv::Point> approx;
+    int minDistance = frame.size().width / 4.0f;
 
     if (frame.empty())
     {
@@ -84,37 +70,21 @@ std::vector<Companion::Draw::Frame*> Companion::Algorithm::Detection::ShapeDetec
     for (size_t i = 0; i < contours.size(); i++)
     {
         cv::approxPolyDP(cv::Mat(contours[i]), approx, cv::arcLength(cv::Mat(contours[i]), true) * 0.01, true);
+        cv::Rect rect = cv::boundingRect(approx);
 
-        // Default values
-        mostLeftCoordinate = result.size().width;
-        lowestCoordinate = result.size().height;
-        mostRightCoordinate = 0;
-        heighestCoordinate = 0;
-
-        if ((approx.size() >= 4) && (approx.size() <= 20))
+        // Check number of corners (vertices)
+        if ((approx.size() >= this->minCorners) && (approx.size() <= this->maxCorners))
         {
-            for (size_t i = 0; i < approx.size(); i++)
+            // Check size
+            double diagonale = sqrt((rect.width * rect.width) + (rect.height * rect.height));
+            if (diagonale > minDistance)
             {
-                mostLeftCoordinate = (approx.at(i).x < mostLeftCoordinate) ? approx.at(i).x : mostLeftCoordinate;
-                lowestCoordinate = (approx.at(i).y < lowestCoordinate) ? approx.at(i).y : lowestCoordinate;
-                mostRightCoordinate = (approx.at(i).x > mostRightCoordinate) ? approx.at(i).x : mostRightCoordinate;
-                heighestCoordinate = (approx.at(i).y > heighestCoordinate) ? approx.at(i).y : heighestCoordinate;
-            }
-
-            topLeft = cv::Point(mostLeftCoordinate, lowestCoordinate);
-            bottomRight = cv::Point(mostRightCoordinate, heighestCoordinate);
-            diff = bottomRight - topLeft;
-            minDistance = result.size().width / 4.0f;
-
-            if (sqrt(diff.x * diff.x + diff.y * diff.y) > minDistance)
-            {
-                width = bottomRight.x - topLeft.x;
-                height = bottomRight.y - topLeft.y;
-
-                rois.push_back(new Companion::Draw::Frame(topLeft,
-                    cv::Point(topLeft.x + width, topLeft.y),
-                    cv::Point(topLeft.x, topLeft.y + height),
-                    bottomRight));
+                rois.push_back(new Companion::Draw::Frame(
+                    cv::Point(rect.x, rect.y),
+                    cv::Point(rect.x + rect.width, rect.y),
+                    cv::Point(rect.x, rect.y + rect.height),
+                    cv::Point(rect.x + rect.width, rect.y + rect.height)
+                ));
             }
         }
     }
@@ -127,7 +97,7 @@ bool Companion::Algorithm::Detection::ShapeDetection::isCuda() const
     return false;
 }
 
-Companion::Algorithm::Detection::Shape Companion::Algorithm::Detection::ShapeDetection::getShape() const
+std::string Companion::Algorithm::Detection::ShapeDetection::getDescription() const
 {
-    return this->shape;
+    return this->shapeDescription;
 }

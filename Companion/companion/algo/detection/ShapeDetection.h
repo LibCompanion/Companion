@@ -26,14 +26,6 @@
 namespace Companion { namespace Algorithm { namespace Detection
 {
     /**
-     * Shapes.
-     */
-    enum class COMP_EXPORTS Shape
-    {
-        QUAD
-    };
-
-    /**
      * Shape detection implementation to detect specifically shaped regions of interest.
      * @author Andreas Sekulski, Dimitri Kotlovsky
      */
@@ -44,19 +36,23 @@ namespace Companion { namespace Algorithm { namespace Detection
 
         /**
          * Shape detection constructor. Shape detection functions are used in this order: dilate(erode(morph(image))).
+         * @param minCorners Minimum number of shape corners.
+         * @param maxCorners Maximum number of shape corners.
+         * @param shapeDescription Shape description.
+         * @param cannyThreshold Canny threshold to indicate corners.
+         * @param dilateIteration Count dilate iterations.
          * @param morphKernel Morphology kernel size.
          * @param erodeKernel Erode kernel size.
          * @param dilateKernel Dilate kernel size.
-         * @param shape Shape type (default is QUAD).
-         * @param cannyThreshold Canny threshold to indicate corners.
-         * @param dilateIteration Count dilate iterations.
          */
-        ShapeDetection(cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)),
-                       cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
-                       cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)),
-                       Shape shape = Shape::QUAD,
+        ShapeDetection(int minCorners = 4,
+                       int maxCorners = 20,
+                       std::string shapeDescription = "Polygon",
                        double cannyThreshold = 50.0,
-                       int dilateIteration = 3);
+                       int dilateIteration = 3,
+                       cv::Mat morphKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(30, 30)),
+                       cv::Mat erodeKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(10, 10)),
+                       cv::Mat dilateKernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(40, 40)));
 
         /**
          * Destructor.
@@ -78,10 +74,9 @@ namespace Companion { namespace Algorithm { namespace Detection
         bool isCuda() const;
 
         /**
-         * Return the detection shape.
-         * @return Detection shape.
+         * Get shape description.
          */
-        Shape getShape() const;
+        std::string getDescription() const;
 
     private:
 
@@ -106,22 +101,24 @@ namespace Companion { namespace Algorithm { namespace Detection
         double cannyThreshold;
 
         /**
-         * Shape type.
+         * Minimum number of shape corners.
          */
-        Shape shape;
+        int minCorners;
+
+        /**
+         * Maximum number of shape corners.
+         */
+        int maxCorners;
+
+        /**
+         * Shape description.
+         */
+        std::string shapeDescription;
 
         /**
          * Number of dilate iterations.
          */
         int dilateIteration;
-
-        /**
-         * Quad detection algorithm to obtain possible regions of interest (ROI).
-         * @param frame Image frame to obtain all roi objects from.
-         * @throws Companion::Error::Code If an error occurred in search operation.
-         * @return A vector of frames that represent the detected quads.
-         */
-        std::vector<Companion::Draw::Frame*> obtainQuads(cv::Mat frame);
     };
 }}}
 
