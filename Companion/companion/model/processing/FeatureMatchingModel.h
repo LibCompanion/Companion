@@ -75,7 +75,7 @@ namespace Companion { namespace Model { namespace Processing
         void setKeypoints(const std::vector<cv::KeyPoint> &keypoints);
 
         /**
-         * Calculate cv::Mat keypoints and descriptors from given detector and extractor and stores them. This operation
+         * Calculate cv::Mat keypoints and descriptors from given detector and extractor and store them. This operation
          * does not work for Cuda feature detectors, because they need cv::gpu::Mat.
          * @param detector Detector to use.
          * @param extractor Extractor to use.
