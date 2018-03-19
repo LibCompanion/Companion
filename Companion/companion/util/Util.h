@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /// @file
 #ifndef COMPANION_UTIL_H
 #define COMPANION_UTIL_H
 
@@ -29,34 +30,34 @@ namespace Companion
     /**
      * Color formats.
      */
-    enum class COMP_EXPORTS ColorFormat
+    enum class ColorFormat
     {
-        RGB,
-        RGBA,
-        BGR,
-        BGRA,
-        GRAY
+        RGB, ///< RGB color format.
+        RGBA, ///< RGBA color format.
+        BGR, ///< BGR color format.
+        BGRA, ///< BGRA color format.
+        GRAY ///< GRAY color format.
     };
 
     /**
      * Scaling resolutions.
      */
-    enum class COMP_EXPORTS SCALING
+    enum class SCALING
     {
-        SCALE_2048x1152,
-        SCALE_1920x1080,
-        SCALE_1600x900,
-        SCALE_1408x792,
-        SCALE_1344x756,
-        SCALE_1280x720,
-        SCALE_1152x648,
-        SCALE_1024x576,
-        SCALE_960x540,
-        SCALE_896x504,
-        SCALE_800x450,
-        SCALE_768x432,
-        SCALE_640x360,
-        SCALE_320x180
+        SCALE_2048x1152, ///< Scaling resolution of 2048 x 1152 pixels.
+        SCALE_1920x1080, ///< Scaling resolution of 1920 x 1080 pixels.
+        SCALE_1600x900, ///< Scaling resolution of 1600 x 900 pixels.
+        SCALE_1408x792, ///< Scaling resolution of 1408 x 792 pixels.
+        SCALE_1344x756, ///< Scaling resolution of 1344 x 756 pixels.
+        SCALE_1280x720, ///< Scaling resolution of 1280 x 720 pixels.
+        SCALE_1152x648, ///< Scaling resolution of 1152 x 648 pixels.
+        SCALE_1024x576, ///< Scaling resolution of 1024 x 576 pixels.
+        SCALE_960x540, ///< Scaling resolution of 960 x 540 pixels.
+        SCALE_896x504, ///< Scaling resolution of 896 x 504 pixels.
+        SCALE_800x450, ///< Scaling resolution of 800 x 450 pixels.
+        SCALE_768x432, ///< Scaling resolution of 768 x 432 pixels.
+        SCALE_640x360, ///< Scaling resolution of 640 x 360 pixels.
+        SCALE_320x180 ///< Scaling resolution of 320 x 180 pixels.
     };
 
     /**
@@ -70,6 +71,7 @@ namespace Companion
 
         /**
          * Cut the given area out of the given image.
+         * @param img Source image.
          * @param cutArea Area to cut out.
          * @return Cut out image.
          */

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /// @file
 #ifndef COMPANION_COMPANIONERROR_H
 #define COMPANION_COMPANIONERROR_H
 
@@ -26,7 +27,7 @@ namespace Companion { namespace Error
     /**
      * Error codes.
      */
-    enum class COMP_EXPORTS Code
+    enum class Code
     {
         image_not_found, ///< If image not found error.
         dimension_error, ///< If dimensions from given images unequal.

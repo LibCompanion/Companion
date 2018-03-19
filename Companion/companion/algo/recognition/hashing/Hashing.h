@@ -39,6 +39,10 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ha
              * Ranking method to sort pairs.
              */
             struct sortRank {
+
+                /**
+                 * Operator overloading method to sort pairs.
+                 */
                 bool operator()(const std::pair<int,int> &left, const std::pair<int,int> &right) {
                     return left.second < right.second;
                 }

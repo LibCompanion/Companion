@@ -55,7 +55,7 @@ namespace Companion { namespace Processing { namespace Recognition
 
         /**
          * Add search model type to search for.
-         * @param model Model to search for.
+         * @param image Image model to search for.
          * @param id Identifier of the model.
          */
         void addModel(cv::Mat image, int id);

@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+ /// @file
 #ifndef COMPANION_RESULT_H
 #define COMPANION_RESULT_H
 
@@ -27,9 +28,9 @@ namespace Companion { namespace Model { namespace Result
     /**
      * Result types.
      */
-    enum class COMP_EXPORTS ResultType {
-        RECOGNITION,
-        DETECTION
+    enum class ResultType {
+        RECOGNITION, ///< Object recognition result.
+        DETECTION ///< Object detection result.
     };
 
     /**
