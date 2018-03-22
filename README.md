@@ -1,5 +1,7 @@
 ![Companion](https://libcompanion.github.io/CompanionDoc/images/logo.png "Companion")
 
+[![Build Status](https://travis-ci.org/LibCompanion/Companion.svg?branch=master)](https://travis-ci.org/LibCompanion/Companion)
+
 [Companion](https://libcompanion.github.io/CompanionDoc/) is a object recognition framework written with OpenCV 3.
 
 # Documentation

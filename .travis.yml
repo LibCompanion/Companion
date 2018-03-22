@@ -1,0 +1,22 @@
+language: cpp
+compiler: gcc
+
+env:
+  - OMP_NUM_THREADS=4
+
+before_script:
+  - git clone https://github.com/opencv/opencv.git
+  - cd opencv
+  - git checkout 3.3.0
+  - mkdir build
+  - cd build
+  - cmake .. -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF
+  - make -j8
+  - sudo make -j8 install
+  - cd ../..
+  - mkdir build
+  - cd build
+  - cmake .. -DCompanion_BUILD_SAMPLES=ON
+  - cd CompanionSamples
+
+script: make -j8
