@@ -62,6 +62,22 @@ Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(
     this->ransacMaxIters = ransacMaxIters;
     this->findHomographyMethod = findHomographyMethod;
 }
+
+Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(cv::cuda::SURF_CUDA cudaFeatureMatching,
+                                                                              int minSidelLength, int countMatches,
+                                                                              double reprojThreshold,
+                                                                              int ransacMaxIters,
+                                                                              int findHomographyMethod) {
+
+    this->surf_cuda = cudaFeatureMatching;
+    this->minSidelLength = minSidelLength;
+    this->countMatches = countMatches;
+    this->useIRA = false;
+    this->cudaUsed = true;
+    this->reprojThreshold = reprojThreshold;
+    this->ransacMaxIters = ransacMaxIters;
+    this->findHomographyMethod = findHomographyMethod;
+}
 #endif
 
 Companion::Algorithm::Recognition::Matching::FeatureMatching::~FeatureMatching()
@@ -207,17 +223,28 @@ Companion::Model::Result::RecognitionResult *Companion::Algorithm::Recognition::
         cv::cuda::GpuMat gpu_scene(sceneImage); // Load scene as an gpu mat
         cv::cuda::GpuMat gpu_object(objectImage); // Load object as an gpu mat
         cv::cuda::GpuMat gpu_descriptors_scene, gpu_descriptors_object;
+        cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher;
 
-        this->cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypointsScene, gpu_descriptors_scene);
-        this->cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypointsObject, gpu_descriptors_object);
-
-        cv::Ptr<cv::cuda::DescriptorMatcher> gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(this->cudaFeatureMatching->defaultNorm());
-
-        gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
+        if(cudaFeatureMatching != nullptr)
+        {
+            this->cudaFeatureMatching->detectAndCompute(gpu_scene, cv::noArray(), keypointsScene, gpu_descriptors_scene);
+            this->cudaFeatureMatching->detectAndCompute(gpu_object, cv::noArray(), keypointsObject, gpu_descriptors_object);
+            gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(this->cudaFeatureMatching->defaultNorm());
+            gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
+        }
+        else
+        {
+            surf_cuda(gpu_scene, cv::cuda::GpuMat(), keypointsScene, gpu_descriptors_scene);
+            surf_cuda(gpu_object, cv::cuda::GpuMat(), keypointsObject, gpu_descriptors_object);
+            gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(surf_cuda.defaultNorm());
+            gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
+        }
 
         gpu_scene.release();
         gpu_object.release();
 
+        // ToDO := Default RATIO Value must be set as configuration value
+        // ToDo := SURF_CUDA results are not good
         // Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
         // Neighborhoods comparison
         ratioTest(matches, goodMatches, DEFAULT_RATIO_VALUE);
@@ -534,3 +561,5 @@ void Companion::Algorithm::Recognition::Matching::FeatureMatching::setUseIRA(boo
 {
     this->useIRA = useIRA;
 }
+
+
