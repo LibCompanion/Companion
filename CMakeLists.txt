@@ -62,6 +62,7 @@ endif()
 
 if(Companion_USE_XFEATURES_2D)
     set(OpenCVComponents ${OpenCVComponents} "xfeatures2d")
+    add_definitions(-DCompanion_USE_XFEATURES_2D)
 endif()
 
 find_package(OpenCV REQUIRED ${OpenCVComponents})

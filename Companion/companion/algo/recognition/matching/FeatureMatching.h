@@ -86,7 +86,9 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
                         double reprojThreshold = 3.0,
                         int ransacMaxIters = 500,
                         int findHomographyMethod = cv::RANSAC);
+        #endif
 
+        #if Companion_USE_XFEATURES_2D && Companion_USE_CUDA
         /**
          * Constructor to create an cuda based surf feature matching.
          *
@@ -219,7 +221,9 @@ namespace Companion { namespace Algorithm { namespace Recognition { namespace Ma
          * Cuda feature matching algorithm.
          */
         cv::Ptr<cv::Feature2D> cudaFeatureMatching;
+        #endif
 
+        #if Companion_USE_XFEATURES_2D && Companion_USE_CUDA
         /**
          * Cuda feature matching algorithm for surf.
          */

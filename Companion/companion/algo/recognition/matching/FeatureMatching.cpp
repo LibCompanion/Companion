@@ -62,7 +62,9 @@ Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(
     this->ransacMaxIters = ransacMaxIters;
     this->findHomographyMethod = findHomographyMethod;
 }
+#endif
 
+#if Companion_USE_XFEATURES_2D && Companion_USE_CUDA
 Companion::Algorithm::Recognition::Matching::FeatureMatching::FeatureMatching(cv::cuda::SURF_CUDA cudaFeatureMatching,
                                                                               int minSidelLength, int countMatches,
                                                                               double reprojThreshold,
@@ -232,6 +234,7 @@ Companion::Model::Result::RecognitionResult *Companion::Algorithm::Recognition::
             gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(this->cudaFeatureMatching->defaultNorm());
             gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
         }
+        #if Companion_USE_XFEATURES_2D && Companion_USE_CUDA
         else
         {
             surf_cuda(gpu_scene, cv::cuda::GpuMat(), keypointsScene, gpu_descriptors_scene);
@@ -239,6 +242,7 @@ Companion::Model::Result::RecognitionResult *Companion::Algorithm::Recognition::
             gpu_matcher = cv::cuda::DescriptorMatcher::createBFMatcher(surf_cuda.defaultNorm());
             gpu_matcher->knnMatch(gpu_descriptors_object, gpu_descriptors_scene, matches, 2);
         }
+        #endif
 
         gpu_scene.release();
         gpu_object.release();
