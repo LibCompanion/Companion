@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
+cmake_minimum_required(VERSION 3.1)
 
 # Set installation directory for WIN32 (on UNIX '/usr/local' should be the default)
 if(WIN32)
@@ -24,8 +25,9 @@ endif()
 # Configure CMake project
 project(Companion)
 
-cmake_minimum_required(VERSION 3.9.2)
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release)
