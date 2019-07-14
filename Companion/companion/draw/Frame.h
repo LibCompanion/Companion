@@ -23,7 +23,6 @@
 #include "Line.h"
 
 #include <opencv2/core/core.hpp>
-#include <memory>
 
 namespace Companion {
 	namespace Draw

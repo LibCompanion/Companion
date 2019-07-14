@@ -24,12 +24,8 @@ endif()
 # Configure CMake project
 project(Companion)
 
-# Define CMake minimum version
-if(WINDOWS_STORE)
-    cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
-else()
-    cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-endif()
+cmake_minimum_required(VERSION 3.10.2)
+set(CMAKE_CXX_STANDARD 14)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release)
