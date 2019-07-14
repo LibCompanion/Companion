@@ -20,6 +20,8 @@
 #ifndef COMPANION_DEFINITIONS_H
 #define COMPANION_DEFINITIONS_H
 
+#include <memory>
+
 namespace Companion
 {
 	// Companion
