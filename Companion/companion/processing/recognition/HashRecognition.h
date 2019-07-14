@@ -25,69 +25,73 @@
 #include <companion/algo/recognition/hashing/Hashing.h>
 #include <companion/util/Util.h>
 
-namespace Companion { namespace Processing { namespace Recognition
-{
-    /**
-     * Hash recognition implementation to recognize objects based on hash values.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS HashRecognition : public ImageProcessing
-    {
+namespace Companion {
+	namespace Processing {
+		namespace Recognition
+		{
+			/**
+			 * Hash recognition implementation to recognize objects based on hash values.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS HashRecognition : public ImageProcessing
+			{
 
-    public:
+			public:
 
-        /**
-         * Hash recognition constructor.
-         * @param modelSize Model size in pixels.
-         * @param shapeDetection Shape detection algorithm to detect ROI's.
-         * @param hashing Hashing algorithm implementation, for example LSH.
-         */
-        HashRecognition(cv::Size modelSize,
-            Companion::Algorithm::Detection::ShapeDetection *shapeDetection,
-            Companion::Algorithm::Recognition::Hashing::Hashing *hashing);
+				/**
+				 * Hash recognition constructor.
+				 * @param modelSize Model size in pixels.
+				 * @param shapeDetection Shape detection algorithm to detect ROI's.
+				 * @param hashing Hashing algorithm implementation, for example LSH.
+				 */
+				HashRecognition(cv::Size modelSize,
+					PTR_SHAPE_DETECTION shapeDetection,
+					PTR_HASHING hashing);
 
-        /**
-         * Default destructor.
-         */
-        virtual ~HashRecognition();
+				/**
+				 * Default destructor.
+				 */
+				virtual ~HashRecognition() = default;
 
-        /**
-         * Add search model type to search for.
-         * @param id Identity of the model.
-         * @param image Image model to store as hash.
-         * @return <code>True</code> if model is added otherwise <code>false</code>.
-         */
-        bool addModel(int id, cv::Mat image);
+				/**
+				 * Add search model type to search for.
+				 * @param id Identity of the model.
+				 * @param image Image model to store as hash.
+				 * @return <code>True</code> if model is added otherwise <code>false</code>.
+				 */
+				bool AddModel(int id, cv::Mat image);
 
-        /**
-         * Try to recognize all objects in the given frame.
-         * @param frame Frame to check for an object location.
-         * @return A vector of results for the given frame or an empty vector if no objects are recognized.
-         */
-        CALLBACK_RESULT execute(cv::Mat frame);
+				/**
+				 * Try to recognize all objects in the given frame.
+				 * @param frame Frame to check for an object location.
+				 * @return A vector of results for the given frame or an empty vector if no objects are recognized.
+				 */
+				CALLBACK_RESULT Execute(cv::Mat frame);
 
-    private:
+			private:
 
-        /**
-         * Stores model size in pixels.
-         */
-        cv::Size modelSize;
+				/**
+				 * Stores model size in pixels.
+				 */
+				cv::Size modelSize;
 
-        /**
-         * Stores shape detection algorithm to search for ROI's.
-         */
-        Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
+				/**
+				 * Stores shape detection algorithm to search for ROI's.
+				 */
+				PTR_SHAPE_DETECTION shapeDetection;
 
-        /**
-         * Model to recognize.
-         */
-        Companion::Model::Processing::ImageHashModel *model;
+				/**
+				 * Model to recognize.
+				 */
+				PTR_MODEL_IMAGE_HASHING model;
 
-        /**
-         * Stores hashing algorithm to recognize objects.
-         */
-        Companion::Algorithm::Recognition::Hashing::Hashing *hashing;
-    };
-}}}
+				/**
+				 * Stores hashing algorithm to recognize objects.
+				 */
+				PTR_HASHING hashing;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_HASHRECOGNITION_H

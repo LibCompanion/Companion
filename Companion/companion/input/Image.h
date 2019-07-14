@@ -28,106 +28,108 @@
 
 #include "Stream.h"
 
-namespace Companion { namespace Input
-{
-    /**
-     * Streaming class implementation for an image stream.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Image : public Stream
-    {
+namespace Companion {
+	namespace Input
+	{
+		/**
+		 * Streaming class implementation for an image stream.
+		 * @author Andreas Sekulski, Dimitri Kotlovsky
+		 */
+		class COMP_EXPORTS Image : public Stream
+		{
 
-    public:
+		public:
 
-        /**
-         * Default constructor to create an empty image stream.
-         * @param maxImages Maximum amount of images that can be loaded at the same time.
-         */
-        Image(int maxImages);
+			/**
+			 * Default constructor to create an empty image stream.
+			 * @param maxImages Maximum amount of images that can be loaded at the same time.
+			 */
+			Image(int maxImages);
 
-        /**
-         * Destructor;
-         */
-        virtual ~Image();
+			/**
+			 * Destructor;
+			 */
+			virtual ~Image() = default;
 
-        /**
-         * Store image from given path to FIFO.
-         * @param imgPath Image path to store image from.
-         * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
-         */
-        bool addImage(std::string imgPath);
+			/**
+			 * Store image from given path to FIFO.
+			 * @param imgPath Image path to store image from.
+			 * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
+			 */
+			bool AddImage(std::string imgPath);
 
-        /**
-         * Store a given image to FIFO.
-         * @param img Image to store.
-         * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
-         */
-        bool addImage(cv::Mat img);
+			/**
+			 * Store a given image to FIFO.
+			 * @param img Image to store.
+			 * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
+			 */
+			bool AddImage(cv::Mat img);
 
-        /**
-         * Store a given image to FIFO.
-         * @param width Width of the image to store.
-         * @param height Height of the image to store.
-         * @param type Type of the image to store.
-         * @param data Raw image data to store.
-         * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
-         */
-        bool addImage(int width, int height, int type, uchar* data);
+			/**
+			 * Store a given image to FIFO.
+			 * @param width Width of the image to store.
+			 * @param height Height of the image to store.
+			 * @param type Type of the image to store.
+			 * @param data Raw image data to store.
+			 * @return <code>True</code> if the image was stored and <code>false</code> if image not exists.
+			 */
+			bool AddImage(int width, int height, int type, uchar* data);
 
-        /**
-         * Obtain next image from open image stream.
-         * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from the obtained image.
-         */
-        cv::Mat obtainImage();
+			/**
+			 * Obtain next image from open image stream.
+			 * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from the obtained image.
+			 */
+			cv::Mat ObtainImage();
 
-        /**
-         * Indicator if stream has finished.
-         * @return <code>True</code> if image stream has finished, <code>false</code> otherwise.
-         */
-        bool isFinished();
+			/**
+			 * Indicator if stream has finished.
+			 * @return <code>True</code> if image stream has finished, <code>false</code> otherwise.
+			 */
+			bool IsFinished();
 
-        /**
-         * Stop this stream.
-         */
-        void finish();
+			/**
+			 * Stop this stream.
+			 */
+			void Finish();
 
-        /**
-         * Stop image stream after all images were processed.
-         */
-        void finishAfterProcessing();
+			/**
+			 * Stop image stream after all images were processed.
+			 */
+			void FinishAfterProcessing();
 
-    private:
+		private:
 
-        /**
-         * Indicator to stop this stream.
-         */
-        bool exitStream;
+			/**
+			 * Indicator to stop this stream.
+			 */
+			bool exitStream;
 
-        /**
-         * Indicator to stop this stream after all images were processed.
-         */
-        bool exitAfterProcessing;
+			/**
+			 * Indicator to stop this stream after all images were processed.
+			 */
+			bool exitAfterProcessing;
 
-        /**
-         * List of all stored images as FIFO;
-         */
-        std::queue<cv::Mat> images;
+			/**
+			 * List of all stored images as FIFO;
+			 */
+			std::queue<cv::Mat> images;
 
-        /**
-         * Mutex to control the image stream to keep memory low.
-         */
-        std::mutex mx;
+			/**
+			 * Mutex to control the image stream to keep memory low.
+			 */
+			std::mutex mx;
 
-        /**
-         * Waiting condition for image input stream;
-         */
-        std::condition_variable cv;
+			/**
+			 * Waiting condition for image input stream;
+			 */
+			std::condition_variable cv;
 
-        /**
-         * Maximum amount of images that can be loaded at the same time.
-         */
-        int maxImages;
-    };
-}}
+			/**
+			 * Maximum amount of images that can be loaded at the same time.
+			 */
+			int maxImages;
+		};
+	}
+}
 
 #endif //COMPANION_IMAGE_H

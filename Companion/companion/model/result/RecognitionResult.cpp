@@ -18,26 +18,22 @@
 
 #include "RecognitionResult.h"
 
-Companion::Model::Result::RecognitionResult::RecognitionResult(int scoring, int id, Companion::Draw::Drawable *drawable) : Result(scoring, drawable)
+Companion::Model::Result::RecognitionResult::RecognitionResult(int scoring, int id, PTR_DRAW drawable) : Result(scoring, drawable)
 {
-    this->id = id;
+	this->id = id;
 }
 
-Companion::Model::Result::RecognitionResult::~RecognitionResult()
+int Companion::Model::Result::RecognitionResult::Id() const
 {
+	return this->id;
 }
 
-int Companion::Model::Result::RecognitionResult::getId() const
+std::string Companion::Model::Result::RecognitionResult::Description() const
 {
-    return this->id;
+	return std::to_string(this->id);
 }
 
-std::string Companion::Model::Result::RecognitionResult::getDescription() const
+Companion::Model::Result::ResultType Companion::Model::Result::RecognitionResult::Type() const
 {
-    return std::to_string(this->id);
-}
-
-Companion::Model::Result::ResultType Companion::Model::Result::RecognitionResult::getType() const
-{
-    return ResultType::RECOGNITION;
+	return ResultType::RECOGNITION;
 }

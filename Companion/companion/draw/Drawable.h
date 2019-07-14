@@ -22,82 +22,84 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion { namespace Draw
-{
-    /**
-     * Abstract class for a drawable object.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Drawable
-    {
+namespace Companion {
+	namespace Draw
+	{
+		/**
+		 * Abstract class for a drawable object.
+		 * @author Andreas Sekulski, Dimitri Kotlovsky
+		 */
+		class COMP_EXPORTS Drawable
+		{
 
-    public:
+		public:
 
-        /**
-         * Draw this drawable object to the given image.
-         * @param image Image on which to draw the object.
-         */
-        virtual void draw(cv::Mat image) = 0;
+			/**
+			 * Draw this drawable object to the given image.
+			 * @param image Image on which to draw the object.
+			 */
+			virtual void Draw(cv::Mat image) = 0;
 
-        /**
-         * Scale this drawable from the current image dimensions to new image dimensions.
-         * @param cWidth Current image width.
-         * @param cHeight Current image height.
-         * @param nWidth New image width.
-         * @param nHeight New image height.
-         */
-        virtual void ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
+			/**
+			 * Scale this drawable from the current image dimensions to new image dimensions.
+			 * @param cWidth Current image width.
+			 * @param cHeight Current image height.
+			 * @param nWidth New image width.
+			 * @param nHeight New image height.
+			 */
+			virtual void Ratio(int cWidth, int cHeight, int nWidth, int nHeight) = 0;
 
-        /**
-         * Get cut area around this drawable.
-         * @return Cut area around this drawable as a cv::Rect.
-         */
-        virtual cv::Rect getCutArea() = 0;
+			/**
+			 * Get cut area around this drawable.
+			 * @return Cut area around this drawable as a cv::Rect.
+			 */
+			virtual cv::Rect CutArea() = 0;
 
-        /**
-         * Obtain the origin's x coordinate.
-         * @return X coordinate of the drawable object's origin.
-         */
-        virtual int getOriginX() = 0;
+			/**
+			 * Obtain the origin's x coordinate.
+			 * @return X coordinate of the drawable object's origin.
+			 */
+			virtual int OriginX() = 0;
 
-        /**
-         * Obtain the origin's y coordinate.
-         * @return Y coordinate of the drawable object's origin.
-         */
-        virtual int getOriginY() = 0;
+			/**
+			 * Obtain the origin's y coordinate.
+			 * @return Y coordinate of the drawable object's origin.
+			 */
+			virtual int OriginY() = 0;
 
-        /**
-         * Move the drawable object's origin.
-         * @param x Relative distance to move the origin on the x axis.
-         * @param y Relative distance to move the origin on the y axis.
-         */
-        virtual void moveOrigin(int x, int y) = 0;
+			/**
+			 * Move the drawable object's origin.
+			 * @param x Relative distance to move the origin on the x axis.
+			 * @param y Relative distance to move the origin on the y axis.
+			 */
+			virtual void MoveOrigin(int x, int y) = 0;
 
-        /**
-         * Set drawable color.
-         * @param color Drawable color to set.
-         */
-        virtual void setColor(const cv::Scalar &color) = 0;
+			/**
+			 * Set drawable color.
+			 * @param color Drawable color to set.
+			 */
+			virtual void Color(const cv::Scalar& color) = 0;
 
-        /**
-         * Get the color of the drawable.
-         * @return Drawable color.
-         */
-        virtual const cv::Scalar &getColor() const = 0;
+			/**
+			 * Get the color of the drawable.
+			 * @return Drawable color.
+			 */
+			virtual const cv::Scalar& Color() const = 0;
 
-        /**
-         * Get thickness of this drawable.
-         * @return Drawable thickness.
-         */
-        virtual int getThickness() const = 0;
+			/**
+			 * Get thickness of this drawable.
+			 * @return Drawable thickness.
+			 */
+			virtual int Thickness() const = 0;
 
-        /**
-         * Set thickness of the drawable.
-         * @param thickness Drawable thickness.
-         */
-        virtual void setThickness(int thickness) = 0;
+			/**
+			 * Set thickness of the drawable.
+			 * @param thickness Drawable thickness.
+			 */
+			virtual void Thickness(int thickness) = 0;
 
-    };
-}}
+		};
+	}
+}
 
 #endif //COMPANION_DRAWABLE_H

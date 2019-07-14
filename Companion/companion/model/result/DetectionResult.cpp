@@ -18,26 +18,22 @@
 
 #include "DetectionResult.h"
 
-Companion::Model::Result::DetectionResult::DetectionResult(int scoring, std::string objectType, Companion::Draw::Drawable *drawable) : Result(scoring, drawable)
+Companion::Model::Result::DetectionResult::DetectionResult(int scoring, std::string objectType, PTR_DRAW drawable) : Result(scoring, drawable)
 {
     this->objectType = objectType;
 }
 
-Companion::Model::Result::DetectionResult::~DetectionResult()
-{
-}
-
-std::string Companion::Model::Result::DetectionResult::getObjectType() const
+std::string Companion::Model::Result::DetectionResult::ObjectType() const
 {
     return this->objectType;
 }
 
-std::string Companion::Model::Result::DetectionResult::getDescription() const
+std::string Companion::Model::Result::DetectionResult::Description() const
 {
     return this->objectType;
 }
 
-Companion::Model::Result::ResultType Companion::Model::Result::DetectionResult::getType() const
+Companion::Model::Result::ResultType Companion::Model::Result::DetectionResult::Type() const
 {
     return ResultType::DETECTION;
 }

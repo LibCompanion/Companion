@@ -19,135 +19,125 @@
 #include "Frame.h"
 
 Companion::Draw::Frame::Frame(cv::Point topLeft,
-    cv::Point topRight,
-    cv::Point bottomLeft,
-    cv::Point bottomRight,
-    cv::Scalar color,
-    int thickness)
+	cv::Point topRight,
+	cv::Point bottomLeft,
+	cv::Point bottomRight,
+	cv::Scalar color,
+	int thickness)
 {
-    this->topLeft = topLeft;
-    this->topRight = topRight;
-    this->bottomLeft = bottomLeft;
-    this->bottomRight = bottomRight;
-    this->color = color;
-    this->thickness = thickness;
+	this->topLeft = topLeft;
+	this->topRight = topRight;
+	this->bottomLeft = bottomLeft;
+	this->bottomRight = bottomRight;
+	this->color = color;
+	this->thickness = thickness;
 }
 
-Companion::Draw::Frame::~Frame()
+void Companion::Draw::Frame::Draw(cv::Mat image)
 {
+	auto top = std::make_unique<DRAW_LINE>(this->topLeft, this->topRight, this->color, this->thickness);
+	auto left = std::make_unique<DRAW_LINE>(this->topLeft, this->bottomLeft, this->color, this->thickness);
+	auto right = std::make_unique<DRAW_LINE>(this->topRight, this->bottomRight, this->color, this->thickness);
+	auto bikini_bottom = std::make_unique<DRAW_LINE>(this->bottomLeft, this->bottomRight, this->color, this->thickness); // Easter egg :-)
+
+	// Draw it
+	top->Draw(image);
+	left->Draw(image);
+	right->Draw(image);
+	bikini_bottom->Draw(image);
 }
 
-void Companion::Draw::Frame::draw(cv::Mat image)
+void Companion::Draw::Frame::Ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-    Line* top = new Companion::Draw::Line(this->topLeft, this->topRight, this->color, this->thickness);
-    Line* left = new Companion::Draw::Line(this->topLeft, this->bottomLeft, this->color, this->thickness);
-    Line* right = new Companion::Draw::Line(this->topRight, this->bottomRight, this->color, this->thickness);
-    Line* bikini_bottom = new Companion::Draw::Line(this->bottomLeft, this->bottomRight, this->color, this->thickness); // Easter egg :-)
-
-    // Draw it
-    top->draw(image);
-    left->draw(image);
-    right->draw(image);
-    bikini_bottom->draw(image);
-
-    // Cleanup after draw
-    delete top;
-    delete left;
-    delete right;
-    delete bikini_bottom;
+	Util::RatioPosition(this->topLeft, cWidth, cHeight, nWidth, nHeight);
+	Util::RatioPosition(this->topRight, cWidth, cHeight, nWidth, nHeight);
+	Util::RatioPosition(this->bottomLeft, cWidth, cHeight, nWidth, nHeight);
+	Util::RatioPosition(this->bottomRight, cWidth, cHeight, nWidth, nHeight);
 }
 
-void Companion::Draw::Frame::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
+const cv::Point& Companion::Draw::Frame::TopLeft() const
 {
-    Util::ratioPosition(this->topLeft, cWidth, cHeight, nWidth, nHeight);
-    Util::ratioPosition(this->topRight, cWidth, cHeight, nWidth, nHeight);
-    Util::ratioPosition(this->bottomLeft, cWidth, cHeight, nWidth, nHeight);
-    Util::ratioPosition(this->bottomRight, cWidth, cHeight, nWidth, nHeight);
+	return this->topLeft;
 }
 
-const cv::Point &Companion::Draw::Frame::getTopLeft() const
+const cv::Point& Companion::Draw::Frame::TopRight() const
 {
-    return this->topLeft;
+	return this->topRight;
 }
 
-const cv::Point &Companion::Draw::Frame::getTopRight() const
+const cv::Point& Companion::Draw::Frame::BottomLeft() const
 {
-    return this->topRight;
+	return this->bottomLeft;
 }
 
-const cv::Point &Companion::Draw::Frame::getBottomLeft() const
+const cv::Point& Companion::Draw::Frame::BottomRight() const
 {
-    return this->bottomLeft;
+	return this->bottomRight;
 }
 
-const cv::Point &Companion::Draw::Frame::getBottomRight() const
+const cv::Scalar& Companion::Draw::Frame::Color() const
 {
-    return this->bottomRight;
+	return this->color;
 }
 
-const cv::Scalar &Companion::Draw::Frame::getColor() const
+cv::Rect Companion::Draw::Frame::CutArea()
 {
-    return this->color;
+	return cv::Rect(this->topLeft.x, this->topLeft.y, this->bottomRight.x - this->topLeft.x, this->bottomRight.y - this->topLeft.y);
 }
 
-cv::Rect Companion::Draw::Frame::getCutArea()
+int Companion::Draw::Frame::Thickness() const
 {
-    return cv::Rect(this->topLeft.x, this->topLeft.y, this->bottomRight.x - this->topLeft.x, this->bottomRight.y - this->topLeft.y);
+	return this->thickness;
 }
 
-int Companion::Draw::Frame::getThickness() const
+void Companion::Draw::Frame::TopLeft(const cv::Point& topLeft)
 {
-    return this->thickness;
+	this->topLeft = topLeft;
 }
 
-void Companion::Draw::Frame::setTopLeft(const cv::Point &topLeft)
+void Companion::Draw::Frame::TopRight(const cv::Point& topRight)
 {
-    this->topLeft = topLeft;
+	this->topRight = topRight;
 }
 
-void Companion::Draw::Frame::setTopRight(const cv::Point &topRight)
+void Companion::Draw::Frame::BottomLeft(const cv::Point& bottomLeft)
 {
-    this->topRight = topRight;
+	this->bottomLeft = bottomLeft;
 }
 
-void Companion::Draw::Frame::setBottomLeft(const cv::Point &bottomLeft)
+void Companion::Draw::Frame::BottomRight(const cv::Point& bottomRight)
 {
-    this->bottomLeft = bottomLeft;
+	this->bottomRight = bottomRight;
 }
 
-void Companion::Draw::Frame::setBottomRight(const cv::Point &bottomRight)
+void Companion::Draw::Frame::Color(const cv::Scalar& color)
 {
-    this->bottomRight = bottomRight;
+	this->color = color;
 }
 
-void Companion::Draw::Frame::setColor(const cv::Scalar &color)
+void Companion::Draw::Frame::Thickness(int thickness)
 {
-    this->color = color;
+	this->thickness = thickness;
 }
 
-void Companion::Draw::Frame::setThickness(int thickness)
-{
-    this->thickness = thickness;
+int Companion::Draw::Frame::OriginX() {
+	return this->topLeft.x;
 }
 
-int Companion::Draw::Frame::getOriginX() {
-    return this->topLeft.x;
+int Companion::Draw::Frame::OriginY() {
+	return this->topRight.y;
 }
 
-int Companion::Draw::Frame::getOriginY() {
-    return this->topRight.y;
-}
+void Companion::Draw::Frame::MoveOrigin(int x, int y) {
+	this->topLeft.x = this->topLeft.x + x;
+	this->topLeft.y = this->topLeft.y + y;
 
-void Companion::Draw::Frame::moveOrigin(int x, int y) {
-    this->topLeft.x = this->topLeft.x + x;
-    this->topLeft.y = this->topLeft.y + y;
+	this->topRight.x = this->topRight.x + x;
+	this->topRight.y = this->topRight.y + y;
 
-    this->topRight.x = this->topRight.x + x;
-    this->topRight.y = this->topRight.y + y;
+	this->bottomLeft.x = this->bottomLeft.x + x;
+	this->bottomLeft.y = this->bottomLeft.y + y;
 
-    this->bottomLeft.x = this->bottomLeft.x + x;
-    this->bottomLeft.y = this->bottomLeft.y + y;
-
-    this->bottomRight.x = this->bottomRight.x + x;
-    this->bottomRight.y = this->bottomRight.y + y;
+	this->bottomRight.x = this->bottomRight.x + x;
+	this->bottomRight.y = this->bottomRight.y + y;
 };

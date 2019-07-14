@@ -22,90 +22,95 @@
 #include <opencv2/core/core.hpp>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching { namespace UTIL
-{
-    /**
-     * Image reduction algorithm (IRA) to improve performance for a supported object recognition.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS IRA
-    {
+namespace Companion {
+	namespace Algorithm {
+		namespace Recognition {
+			namespace Matching {
+				/**
+				 * Image reduction algorithm (IRA) to improve performance for a supported object recognition.
+				 * @author Andreas Sekulski, Dimitri Kotlovsky
+				 */
+				class COMP_EXPORTS IRA
+				{
 
-    public:
+				public:
 
-        /**
-         * Default constructor to create an empty IRA object.
-         */
-        IRA();
+					/**
+					 * Default constructor to create an empty IRA object.
+					 */
+					IRA();
 
-        /**
-         * Destructor.
-         */
-        virtual ~IRA();
+					/**
+					 * Destructor.
+					 */
+					virtual ~IRA() = default;
 
-        /**
-         * Get last recognized object's position if exists.
-         * @return Gets last recognized object's position if exists, otherwise position is -1.
-         */
-        const cv::Rect &getLastObjectPosition() const;
+					/**
+					 * Get last recognized object's position if exists.
+					 * @return Gets last recognized object's position if exists, otherwise position is -1.
+					 */
+					const cv::Rect& LastObjectPosition() const;
 
-        /**
-         * Set last recognized object's position.
-         * @param x X-Axis position of the object.
-         * @param y Y-Axis position of the object.
-         * @param width Width of the object.
-         * @param height Height of the object.
-         */
-        void setLastObjectPosition(int x, int y, int width, int height);
+					/**
+					 * Set last recognized object's position.
+					 * @param x X-Axis position of the object.
+					 * @param y Y-Axis position of the object.
+					 * @param width Width of the object.
+					 * @param height Height of the object.
+					 */
+					void LastObjectPosition(int x, int y, int width, int height);
 
-        /**
-         * Set width of the object.
-         * @param width Width of the object.
-         */
-        void setWidth(int width);
+					/**
+					 * Set width of the object.
+					 * @param width Width of the object.
+					 */
+					void Width(int width);
 
-        /**
-         * Set height of the object.
-         * @param height Height of the object.
-         */
-        void setHeight(int height);
+					/**
+					 * Set height of the object.
+					 * @param height Height of the object.
+					 */
+					void Height(int height);
 
-        /**
-         * Set x position of the object.
-         * @param x X position of the object.
-         */
-        void setX(int x);
+					/**
+					 * Set x position of the object.
+					 * @param x X position of the object.
+					 */
+					void X(int x);
 
-        /**
-         * Set y position of the object.
-         * @param y Y position of the object.
-         */
-        void setY(int y);
+					/**
+					 * Set y position of the object.
+					 * @param y Y position of the object.
+					 */
+					void Y(int y);
 
-        /**
-         * Clear last recognized object's position.
-         */
-        void clear();
+					/**
+					 * Clear last recognized object's position.
+					 */
+					void Clear();
 
-        /**
-         * Check if last position from object exists.
-         * @return <code>True</code> if last position is set, otherwise <code>false</code>.
-         */
-        bool isObjectRecognized();
+					/**
+					 * Check if last position from object exists.
+					 * @return <code>True</code> if last position is set, otherwise <code>false</code>.
+					 */
+					bool IsObjectRecognized();
 
-    private:
+				private:
 
-        /**
-         * Last object position (lop) of the recognized object from the last frame.
-         */
-        cv::Rect lop;
+					/**
+					 * Last object position (lop) of the recognized object from the last frame.
+					 */
+					cv::Rect lop;
 
-        /**
-         * Default initial position if no object was recognized in the last frame.
-         */
-        static constexpr int NO_OBJECT_RECOGNIZED = 0;
+					/**
+					 * Default initial position if no object was recognized in the last frame.
+					 */
+					static constexpr int NO_OBJECT_RECOGNIZED = 0;
 
-    };
-}}}}}
+				};
+			}
+		}
+	}
+}
 
 #endif //COMPANION_IRA_H

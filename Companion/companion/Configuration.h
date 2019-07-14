@@ -29,172 +29,172 @@
 namespace Companion
 {
 
-    /**
-     * Companion configuration class to setup an computer vision usage like feature matching.
-     *
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Configuration
-    {
+	/**
+	 * Companion configuration class to setup an computer vision usage like feature matching.
+	 *
+	 * @author Andreas Sekulski, Dimitri Kotlovsky
+	 */
+	class COMP_EXPORTS Configuration
+	{
 
-    public:
+	public:
 
-        /**
-         * Constructor to create an companion helper class to start image processing setup.
-         */
-        Configuration();
+		/**
+		 * Constructor to create an companion helper class to start image processing setup.
+		 */
+		Configuration();
 
-        /**
-         * Default destructor.
-         */
-        virtual ~Configuration();
+		/**
+		 * Default destructor.
+		 */
+		virtual ~Configuration() = default;
 
-        /**
-         * Execute companion configuration.
-         * @throws error Companion::Error::Code error code if an invalid configuration is set.
-         */
-        void run();
+		/**
+		 * Execute companion configuration.
+		 * @throws error Companion::Error::Code error code if an invalid configuration is set.
+		 */
+		void Run();
 
-        /**
-         * Stop current running stream worker if it's executes.
-         */
-        void stop();
+		/**
+		 * Stop current running stream worker if it's executes.
+		 */
+		void Stop();
 
-        /**
-         * Obtain streaming source pointer if set.
-         * @throws Companion::Error::Code Companion error code if video source is not set.
-         * @return Streaming source to obtain images.
-         */
-        Companion::Input::Stream *getSource() const;
+		/**
+		 * Obtain streaming source pointer if set.
+		 * @throws Companion::Error::Code Companion error code if video source is not set.
+		 * @return Streaming source to obtain images.
+		 */
+		PTR_STREAM Source() const;
 
-        /**
-         * Set streaming source to companion.
-         * @param source Video source to set like an camera or video.
-         */
-        void setSource(Companion::Input::Stream *source);
+		/**
+		 * Set streaming source to companion.
+		 * @param source Video source to set like an camera or video.
+		 */
+		void Source(PTR_STREAM source);
 
-        /**
-         * Get current processing algorithm which should be used.
-         * @throws Companion::Error::Code Companion error code if image processing is not set.
-         * @return Image processing algorithm which should be used.
-         */
-        Companion::Processing::ImageProcessing *getProcessing() const;
+		/**
+		 * Get current processing algorithm which should be used.
+		 * @throws Companion::Error::Code Companion error code if image processing is not set.
+		 * @return Image processing algorithm which should be used.
+		 */
+		PTR_IMAGE_PROCESSING Processing() const;
 
-        /**
-         * Set image processing algorithm, for example object detection or recognition.
-         * @param processing Image processing algorithm to use.
-         */
-        void setProcessing(Companion::Processing::ImageProcessing *processing);
+		/**
+		 * Set image processing algorithm, for example object detection or recognition.
+		 * @param processing Image processing algorithm to use.
+		 */
+		void Processing(PTR_IMAGE_PROCESSING processing);
 
-        /**
-         * Get skip frame rate.
-         * @return Skip frame rate, how many frames should be skipped.
-         */
-        int getSkipFrame() const;
+		/**
+		 * Get skip frame rate.
+		 * @return Skip frame rate, how many frames should be skipped.
+		 */
+		int SkipFrame() const;
 
-        /**
-         * Set skip frame rate.
-         * @param skipFrame Number of frames which should be skipped after image processing should be used.
-         */
-        void setSkipFrame(int skipFrame);
+		/**
+		 * Set skip frame rate.
+		 * @param skipFrame Number of frames which should be skipped after image processing should be used.
+		 */
+		void SkipFrame(int skipFrame);
 
-        /**
-         * Get image buffer store rate.
-         * @return Image buffer frame rate default 5 images are stored to buffer.
-         */
-        int getImageBuffer() const;
+		/**
+		 * Get image buffer store rate.
+		 * @return Image buffer frame rate default 5 images are stored to buffer.
+		 */
+		int ImageBuffer() const;
 
-        /**
-         * Set image buffer size to store.
-         * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
-         */
-        void setImageBuffer(int imageBuffer);
+		/**
+		 * Set image buffer size to store.
+		 * @param imageBuffer Number of images who should be stored. If imageBuffer <= 0 buffer will be set to 5 images.
+		 */
+		void ImageBuffer(int imageBuffer);
 
-        /**
-         * Set a result callback handler.
-         * The source image will be converted to the given format.
-         * @param callback Function pointer which contains result event handler.
-         * @param colorFormat Color format of the returned image.
-         */
-        void setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
+		/**
+		 * Set a result callback handler.
+		 * The source image will be converted to the given format.
+		 * @param callback Function pointer which contains result event handler.
+		 * @param colorFormat Color format of the returned image.
+		 */
+		void ResultCallback(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat = Companion::ColorFormat::BGR);
 
-        /**
-         * Get an callback handler if set.
-         * @throws Companion::Error::Code Companion error code if callback is not set.
-         * @return An callback handler if set.
-         */
-        const std::function<SUCCESS_CALLBACK> &getCallback() const;
+		/**
+		 * Get an callback handler if set.
+		 * @throws Companion::Error::Code Companion error code if callback is not set.
+		 * @return An callback handler if set.
+		 */
+		const std::function<SUCCESS_CALLBACK>& ResultCallback() const;
 
-        /**
-         * Set an error callback handler.
-         * @param callback Error handler to set.
-         */
-        void setErrorHandler(std::function<ERROR_CALLBACK> callback);
+		/**
+		 * Set an error callback handler.
+		 * @param callback Error handler to set.
+		 */
+		void ErrorCallback(std::function<ERROR_CALLBACK> callback);
 
-        /**
-         * Get error callback if exists.
-         * @throws Companion::Error::Code Companion error code if callback is not set.
-         * @return Error callback if set.
-         */
-        const std::function<ERROR_CALLBACK> &getErrorCallback() const;
+		/**
+		 * Get error callback if exists.
+		 * @throws Companion::Error::Code Companion error code if callback is not set.
+		 * @return Error callback if set.
+		 */
+		const std::function<ERROR_CALLBACK>& ErrorCallback() const;
 
-    private:
+	private:
 
-        /**
-         * Callback event handler to send results back to main application.
-         */
-        std::function<SUCCESS_CALLBACK> callback;
+		/**
+		 * Callback event handler to send results back to main application.
+		 */
+		std::function<SUCCESS_CALLBACK> callback;
 
-        /**
-         * Callback for an error.
-         */
-        std::function<ERROR_CALLBACK> errorCallback;
+		/**
+		 * Callback for an error.
+		 */
+		std::function<ERROR_CALLBACK> errorCallback;
 
-        /**
-         * Data stream source to obtain images.
-         */
-        Companion::Input::Stream* source;
+		/**
+		 * Data stream source to obtain images.
+		 */
+		PTR_STREAM source;
 
-        /**
-         * Image processing implementation, for example an object detection or recognition.
-         */
-        Companion::Processing::ImageProcessing* processing;
+		/**
+		 * Image processing implementation, for example an object detection or recognition.
+		 */
+		PTR_IMAGE_PROCESSING processing;
 
-        /**
-         * Number of frames to skip to process next image.
-         */
-        int skipFrame;
+		/**
+		 * Stream worker which runs an single job.
+		 */
+		PTR_STREAM_WORKER worker;
 
-        /**
-         * Image buffer size to store image. Default is 5.
-         */
-        int imageBuffer;
+		/**
+		 * Number of frames to skip to process next image.
+		 */
+		int skipFrame;
 
-        /**
-         * Indicator if threads are currently running.
-         */
-        bool threadsRunning;
+		/**
+		 * Image buffer size to store image. Default is 5.
+		 */
+		int imageBuffer;
 
-        /**
-         * Consumer thread to store image data.
-         */
-        std::thread consumer;
+		/**
+		 * Indicator if threads are currently running.
+		 */
+		bool threadsRunning;
 
-        /**
-         * Producer thread to image processing given image data.
-         */
-        std::thread producer;
+		/**
+		 * Consumer thread to store image data.
+		 */
+		std::thread consumer;
 
-        /**
-         * Stream worker which runs an single job.
-         */
-        Companion::Thread::StreamWorker* worker;
+		/**
+		 * Producer thread to image processing given image data.
+		 */
+		std::thread producer;
 
-        /**
-         * Color format of the image in the result callback.
-         */
-        Companion::ColorFormat colorFormat;
-    };
+		/**
+		 * Color format of the image in the result callback.
+		 */
+		ColorFormat colorFormat;
+	};
 }
 
 #endif //COMPANION_CONFIGURATION_H

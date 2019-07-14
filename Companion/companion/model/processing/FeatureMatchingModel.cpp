@@ -18,75 +18,75 @@
 
 #include "FeatureMatchingModel.h"
 
-Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel() {
-    this->ira = new Companion::Algorithm::Recognition::Matching::UTIL::IRA();
+Companion::Model::Processing::FeatureMatchingModel::FeatureMatchingModel()
+{
+	this->ira = std::make_shared<IMAGE_REDUCTION_ALGORITHM>();
 }
 
 Companion::Model::Processing::FeatureMatchingModel::~FeatureMatchingModel()
 {
-    this->keypoints.clear();
-    this->descriptors.release();
-    delete this->ira;
+	this->keypoints.clear();
+	this->descriptors.release();
 }
 
-const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getDescriptors() const
+const cv::Mat& Companion::Model::Processing::FeatureMatchingModel::Descriptors() const
 {
-    return this->descriptors;
+	return this->descriptors;
 }
 
-void Companion::Model::Processing::FeatureMatchingModel::setDescriptors(const cv::Mat &descriptors)
+void Companion::Model::Processing::FeatureMatchingModel::Descriptors(const cv::Mat& descriptors)
 {
-    this->descriptors.empty();
-    this->descriptors = descriptors;
+	this->descriptors.empty();
+	this->descriptors = descriptors;
 }
 
-const std::vector<cv::KeyPoint> &Companion::Model::Processing::FeatureMatchingModel::getKeypoints() const
+const std::vector<cv::KeyPoint>& Companion::Model::Processing::FeatureMatchingModel::Keypoints() const
 {
-    return this->keypoints;
+	return this->keypoints;
 }
 
-void Companion::Model::Processing::FeatureMatchingModel::setKeypoints(const std::vector<cv::KeyPoint> &keypoints)
+void Companion::Model::Processing::FeatureMatchingModel::Keypoints(const std::vector<cv::KeyPoint>& keypoints)
 {
-    this->keypoints.clear();
-    this->keypoints = keypoints;
+	this->keypoints.clear();
+	this->keypoints = keypoints;
 }
 
-void Companion::Model::Processing::FeatureMatchingModel::calculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
-                                                                                          cv::Ptr<cv::DescriptorExtractor> extractor)
+void Companion::Model::Processing::FeatureMatchingModel::CalculateKeyPointsAndDescriptors(cv::Ptr<cv::FeatureDetector> detector,
+	cv::Ptr<cv::DescriptorExtractor> extractor)
 {
-    // Generates problems with detect and compute because image is not an mat object it is an gpu::mat
-    this->keypoints.clear();
-    this->descriptors.empty();
-    detector->detect(this->image, this->keypoints);
-    extractor->compute(this->image, this->keypoints, this->descriptors);
+	// Generates problems with detect and compute because image is not an mat object it is an gpu::mat
+	this->keypoints.clear();
+	this->descriptors.empty();
+	detector->detect(this->image, this->keypoints);
+	extractor->compute(this->image, this->keypoints, this->descriptors);
 }
 
-bool Companion::Model::Processing::FeatureMatchingModel::keypointsCalculated()
+bool Companion::Model::Processing::FeatureMatchingModel::KeypointsCalculated()
 {
-    return !this->keypoints.empty();
+	return !this->keypoints.empty();
 }
 
-const cv::Mat &Companion::Model::Processing::FeatureMatchingModel::getImage() const
+const cv::Mat& Companion::Model::Processing::FeatureMatchingModel::Image() const
 {
-    return this->image;
+	return this->image;
 }
 
-void Companion::Model::Processing::FeatureMatchingModel::setImage(const cv::Mat &image)
+void Companion::Model::Processing::FeatureMatchingModel::Image(const cv::Mat& image)
 {
-    this->image = image;
+	this->image = image;
 }
 
-Companion::Algorithm::Recognition::Matching::UTIL::IRA *Companion::Model::Processing::FeatureMatchingModel::getIra() const
+PTR_IMAGE_REDUCTION_ALGORITHM Companion::Model::Processing::FeatureMatchingModel::Ira() const
 {
-    return this->ira;
+	return this->ira;
 }
 
-void Companion::Model::Processing::FeatureMatchingModel::setID(int id)
+void Companion::Model::Processing::FeatureMatchingModel::ID(int id)
 {
-    this->id = id;
+	this->id = id;
 }
 
-const int Companion::Model::Processing::FeatureMatchingModel::getID() const
+const int Companion::Model::Processing::FeatureMatchingModel::ID() const
 {
-    return this->id;
+	return this->id;
 }

@@ -18,134 +18,127 @@
 
 #include "StreamWorker.h"
 
-Companion::Thread::StreamWorker::StreamWorker(int buffer, Companion::ColorFormat colorFormat)
+Companion::Thread::StreamWorker::StreamWorker(int buffer, ColorFormat colorFormat)
 {
-    this->finished = false;
-    this->colorFormat = colorFormat;
-    this->buffer = buffer;
-    if (this->buffer <= 0)
-    {
-        this->buffer = 1;
-    }
+	this->finished = false;
+	this->colorFormat = colorFormat;
+	this->buffer = buffer;
+	if (this->buffer <= 0)
+	{
+		this->buffer = 1;
+	}
 }
 
-void Companion::Thread::StreamWorker::produce(Companion::Input::Stream *stream,
-    int skipFrame,
-    std::function<ERROR_CALLBACK> errorCallback)
+void Companion::Thread::StreamWorker::Produce(PTR_STREAM stream, int skipFrame, std::function<ERROR_CALLBACK> errorCallback)
 {
 
-    int skipFrameNr = 0;
-    cv::Mat frame;
+	int skipFrameNr = 0;
+	cv::Mat frame;
 
-    try
-    {
-        frame = stream->obtainImage();
+	try
+	{
+		frame = stream->ObtainImage();
 
-        while (!stream->isFinished())
-        {
+		while (!stream->IsFinished())
+		{
 
-            if (!frame.empty())
-            {
-                // If skip frame is not used...
-                if (skipFrame <= 0 && storeFrame(frame))
-                {
-                    // Obtain next frame to store
-                    frame = stream->obtainImage();
-                }
-                else if (skipFrame > 0)
-                {
-                    // ... check if skip frame number is reached and If frame was stored
-                    if (skipFrameNr == skipFrame && storeFrame(frame))
-                    {
-                        // Obtain next frame to store
-                        frame = stream->obtainImage();
-                        skipFrameNr = 0;
-                    }
-                    else if (skipFrameNr != skipFrame)
-                    {
-                        frame.release();
-                        frame = stream->obtainImage();
-                        skipFrameNr++;
-                    }
-                }
-            }
-            else
-            {
-                // If frames are empty loop
-                frame = stream->obtainImage();
-            }
-        }
+			if (!frame.empty())
+			{
+				// If skip frame is not used...
+				if (skipFrame <= 0 && StoreFrame(frame))
+				{
+					// Obtain next frame to store
+					frame = stream->ObtainImage();
+				}
+				else if (skipFrame > 0)
+				{
+					// ... check if skip frame number is reached and If frame was stored
+					if (skipFrameNr == skipFrame && StoreFrame(frame))
+					{
+						// Obtain next frame to store
+						frame = stream->ObtainImage();
+						skipFrameNr = 0;
+					}
+					else if (skipFrameNr != skipFrame)
+					{
+						frame.release();
+						frame = stream->ObtainImage();
+						skipFrameNr++;
+					}
+				}
+			}
+			else
+			{
+				// If frames are empty loop
+				frame = stream->ObtainImage();
+			}
+		}
 
-        std::lock_guard<std::mutex> lk(this->mx);
-        this->finished = true;
-        this->cv.notify_all();
+		std::lock_guard<std::mutex> lk(this->mx);
+		this->finished = true;
+		this->cv.notify_all();
 
-    }
-    catch (Companion::Error::Code error)
-    {
-        errorCallback(error);
-    }
+	}
+	catch (Error::Code error)
+	{
+		errorCallback(error);
+	}
 }
 
-void Companion::Thread::StreamWorker::consume(
-    Companion::Processing::ImageProcessing *processing,
-    std::function<ERROR_CALLBACK> errorCallback,
-    std::function<SUCCESS_CALLBACK> successCallback)
+void Companion::Thread::StreamWorker::Consume(PTR_IMAGE_PROCESSING processing, std::function<ERROR_CALLBACK> errorCallback, std::function<SUCCESS_CALLBACK> successCallback)
 {
 
-    cv::Mat frame;
-    cv::Mat resultBGR;
+	cv::Mat frame;
+	cv::Mat resultBGR;
 
-    while (!this->finished)
-    {
+	while (!this->finished)
+	{
 
-        std::unique_lock<std::mutex> lk(this->mx);
-        this->cv.wait(lk, [this] {return this->finished || !this->queue.empty(); });
+		std::unique_lock<std::mutex> lk(this->mx);
+		this->cv.wait(lk, [this] {return this->finished || !this->queue.empty(); });
 
-        if (!this->queue.empty())
-        {
-            try
-            {
-                frame = this->queue.front();
-                this->queue.pop();
-                Companion::Util::convertColor(frame, resultBGR, this->colorFormat);
-                successCallback(processing->execute(frame), resultBGR);
-            }
-            catch (Companion::Error::Code errorCode)
-            {
-                // Single error messages from processing
-                errorCallback(errorCode);
-            }
-            catch (Companion::Error::CompanionException ex)
-            {
-                // Multiple error messages only called by parallelized methods
-                while (ex.hasNext())
-                {
-                    errorCallback(ex.next());
-                }
-            }
+		if (!this->queue.empty())
+		{
+			try
+			{
+				frame = this->queue.front();
+				this->queue.pop();
+				Util::ConvertColor(frame, resultBGR, this->colorFormat);
+				successCallback(processing->Execute(frame), resultBGR);
+			}
+			catch (Error::Code errorCode)
+			{
+				// Single error messages from processing
+				errorCallback(errorCode);
+			}
+			catch (Error::CompanionException ex)
+			{
+				// Multiple error messages only called by parallelized methods
+				while (ex.HasNext())
+				{
+					errorCallback(ex.Next());
+				}
+			}
 
-            frame.release();
-            resultBGR.release();
-        }
-
-    }
-    
+			frame.release();
+			resultBGR.release();
+		}
+	}
 }
 
-bool Companion::Thread::StreamWorker::storeFrame(cv::Mat frame)
+bool Companion::Thread::StreamWorker::StoreFrame(cv::Mat frame)
 {
-    std::lock_guard<std::mutex> lk(this->mx);
-    if (this->queue.size() >= this->buffer)
-    {
-        // If buffer full try to notify producer and wait current frame and do nothing
-        this->cv.notify_one();
-        return false;
-    }
-    else
-    {
-        this->queue.push(frame);
-        this->cv.notify_one();
-        return true;
-    }
+	std::lock_guard<std::mutex> lk(this->mx);
+	if (this->queue.size() >= this->buffer)
+	{
+		// If buffer full try to notify producer and wait current frame and do nothing
+		this->cv.notify_one();
+		return false;
+	}
+	else
+	{
+		this->queue.push(frame);
+		this->cv.notify_one();
+		return true;
+	}
 }

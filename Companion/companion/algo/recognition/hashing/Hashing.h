@@ -24,46 +24,52 @@
 #include <companion/model/result/RecognitionResult.h>
 #include <companion/model/processing/ImageHashModel.h>
 
-namespace Companion { namespace Algorithm { namespace Recognition { namespace Hashing
-{
-    /**
-     * Interface class to create hashing algorithms for object recognition, for example Locality Sensitive Hashing (LSH).
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Hashing : public Recognition
-    {
+namespace Companion {
+	namespace Algorithm {
+		namespace Recognition {
+			namespace Hashing
+			{
+				/**
+				 * Interface class to create hashing algorithms for object recognition, for example Locality Sensitive Hashing (LSH).
+				 * @author Andreas Sekulski, Dimitri Kotlovsky
+				 */
+				class COMP_EXPORTS Hashing : public Recognition
+				{
 
-        public:
+				public:
 
-            /**
-             * Ranking method to sort pairs.
-             */
-            struct sortRank {
+					/**
+					 * Ranking method to sort pairs.
+					 */
+					struct SortRank {
 
-                /**
-                 * Operator overloading method to sort pairs.
-                 */
-                bool operator()(const std::pair<int,int> &left, const std::pair<int,int> &right) {
-                    return left.second < right.second;
-                }
-            };
+						/**
+						 * Operator overloading method to sort pairs.
+						 */
+						bool operator()(const std::pair<int, int>& left, const std::pair<int, int>& right) {
+							return left.second < right.second;
+						}
+					};
 
-            /**
-             * Specific algorithm implementation for a hashing process.
-             * @param model Image hash model to compare.
-             * @param query Query image to compare with hash model.
-             * @param roi Region of interest to check.
-             * @return Nullptr if no matching success otherwise a recognition result.
-             */
-            virtual Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, 
-                cv::Mat query, Companion::Draw::Frame *roi) = 0;
+					/**
+					 * Specific algorithm implementation for a hashing process.
+					 * @param model Image hash model to compare.
+					 * @param query Query image to compare with hash model.
+					 * @param roi Region of interest to check.
+					 * @return Nullptr if no matching success otherwise a recognition result.
+					 */
+					virtual PTR_RESULT_RECOGNITION ExecuteAlgorithm(PTR_MODEL_IMAGE_HASHING model,
+						cv::Mat query, PTR_DRAW_FRAME roi) = 0;
 
-            /**
-             * Indicator if this algorithm uses cuda.
-             * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-             */
-            virtual bool isCuda() const = 0;
-    };
-}}}}
+					/**
+					 * Indicator if this algorithm uses cuda.
+					 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+					 */
+					virtual bool IsCuda() const = 0;
+				};
+			}
+		}
+	}
+}
 
 #endif //COMPANION_HASHING_H

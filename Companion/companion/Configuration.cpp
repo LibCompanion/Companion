@@ -28,53 +28,48 @@ Companion::Configuration::Configuration()
     this->imageBuffer = 5;
 }
 
-Companion::Configuration::~Configuration()
-{
-    delete this->worker;
-}
-
-void Companion::Configuration::run()
+void Companion::Configuration::Run()
 {
     if (this->threadsRunning)
     {
         // Stop active worker if running
-        this->stop();
+        this->Stop();
     }
     else
     {
-        // Create new worker for execution only if no threads are active
-        this->worker = new Companion::Thread::StreamWorker(this->imageBuffer, this->colorFormat);
+        // Create a new worker thread for execution only if no threads are active
+		this->worker = std::make_shared<STREAM_WORKER>(this->imageBuffer, this->colorFormat);
 
         // Get all configuration data
         // Throws Error if invalid settings are set.
-        Companion::Input::Stream* stream = this->getSource();
-        Companion::Processing::ImageProcessing* imageProcessing = this->getProcessing();
-        int skipFrame = this->getSkipFrame();
-        std::function<ERROR_CALLBACK> errorCallback = this->getErrorCallback();
-        std::function<SUCCESS_CALLBACK> successCallback = this->getCallback();
+		PTR_STREAM stream = this->Source();
+        PTR_IMAGE_PROCESSING imageProcessing = this->Processing();
+        int skipFrame = this->SkipFrame();
+        std::function<ERROR_CALLBACK> errorCallback = this->ErrorCallback();
+        std::function<SUCCESS_CALLBACK> successCallback = this->ResultCallback();
 
         // Run new worker class.
         this->threadsRunning = true;
-        this->producer = std::thread(&Thread::StreamWorker::produce, this->worker, stream, skipFrame, errorCallback);
-        this->consumer = std::thread(&Thread::StreamWorker::consume, this->worker, imageProcessing, errorCallback, successCallback);
+        this->producer = std::thread(&Thread::StreamWorker::Produce, this->worker, stream, skipFrame, errorCallback);
+        this->consumer = std::thread(&Thread::StreamWorker::Consume, this->worker, imageProcessing, errorCallback, successCallback);
         this->producer.join();
         this->consumer.join();
         this->threadsRunning = false;
     }
 }
 
-void Companion::Configuration::stop()
+void Companion::Configuration::Stop()
 {
-    if (this->threadsRunning && (this->source != nullptr) && !this->source->isFinished())
+    if (this->threadsRunning && (this->source != nullptr) && !this->source->IsFinished())
     {
         // To stop running worker threads stop streams.
-        this->source->finish();
+        this->source->Finish();
         this->source = nullptr;
         this->worker = nullptr;
     }
 }
 
-Companion::Input::Stream *Companion::Configuration::getSource() const
+PTR_STREAM Companion::Configuration::Source() const
 {
 
     if (this->source == nullptr)
@@ -85,12 +80,12 @@ Companion::Input::Stream *Companion::Configuration::getSource() const
     return this->source;
 }
 
-void Companion::Configuration::setSource(Companion::Input::Stream *source)
+void Companion::Configuration::Source(PTR_STREAM source)
 {
     this->source = source;
 }
 
-Companion::Processing::ImageProcessing *Companion::Configuration::getProcessing() const
+PTR_IMAGE_PROCESSING Companion::Configuration::Processing() const
 {
 
     if (this->processing == nullptr)
@@ -101,17 +96,17 @@ Companion::Processing::ImageProcessing *Companion::Configuration::getProcessing(
     return this->processing;
 }
 
-void Companion::Configuration::setProcessing(Companion::Processing::ImageProcessing *processing)
+void Companion::Configuration::Processing(PTR_IMAGE_PROCESSING processing)
 {
     this->processing = processing;
 }
 
-int Companion::Configuration::getSkipFrame() const
+int Companion::Configuration::SkipFrame() const
 {
     return this->skipFrame;
 }
 
-void Companion::Configuration::setSkipFrame(int skipFrame)
+void Companion::Configuration::SkipFrame(int skipFrame)
 {
 
     if (skipFrame <= 0)
@@ -122,12 +117,12 @@ void Companion::Configuration::setSkipFrame(int skipFrame)
     this->skipFrame = skipFrame;
 }
 
-int Companion::Configuration::getImageBuffer() const
+int Companion::Configuration::ImageBuffer() const
 {
     return this->imageBuffer;
 }
 
-void Companion::Configuration::setImageBuffer(int imageBuffer)
+void Companion::Configuration::ImageBuffer(int imageBuffer)
 {
 
     if (imageBuffer <= 0)
@@ -138,31 +133,29 @@ void Companion::Configuration::setImageBuffer(int imageBuffer)
     this->imageBuffer = imageBuffer;
 }
 
-
-void Companion::Configuration::setResultHandler(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat)
+void Companion::Configuration::ResultCallback(std::function<SUCCESS_CALLBACK> callback, Companion::ColorFormat colorFormat)
 {
     this->callback = callback;
     this->colorFormat = colorFormat;
 }
 
-void Companion::Configuration::setErrorHandler(std::function<ERROR_CALLBACK> callback)
+const std::function<SUCCESS_CALLBACK>& Companion::Configuration::ResultCallback() const
+{
+
+	if (!this->callback)
+	{
+		throw Error::Code::no_handler_set;
+	}
+
+	return this->callback;
+}
+
+void Companion::Configuration::ErrorCallback(std::function<ERROR_CALLBACK> callback)
 {
     this->errorCallback = callback;
 }
 
-const std::function<SUCCESS_CALLBACK> &Companion::Configuration::getCallback() const
-{
-
-    if (!this->callback)
-    {
-        throw Error::Code::no_handler_set;
-    }
-
-    return this->callback;
-}
-
-
-const std::function<ERROR_CALLBACK> &Companion::Configuration::getErrorCallback() const
+const std::function<ERROR_CALLBACK> &Companion::Configuration::ErrorCallback() const
 {
 
     if (!this->errorCallback)

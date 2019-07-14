@@ -44,13 +44,13 @@ namespace Companion { namespace Error {
          * Check if exception has errors to execute.
          * @return True if has next error codes otherwise false.
          */
-        bool hasNext();
+        bool HasNext();
 
         /**
          * Obtain next error code.
          * @return Next error code.
          */
-        Companion::Error::Code next();
+        Companion::Error::Code Next();
 
     private:
 

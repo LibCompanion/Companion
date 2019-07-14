@@ -27,90 +27,94 @@
 #include <companion/util/CompanionException.h>
 #include <omp.h>
 
-namespace Companion { namespace Processing { namespace Recognition
-{
-    /**
-     * Hybrid recognition implementation to recognize objects based on hash values and verify with a matching algorithm (for example feature matching).
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class HybridRecognition : public ImageProcessing
-    {
+namespace Companion {
+	namespace Processing {
+		namespace Recognition
+		{
+			/**
+			 * Hybrid recognition implementation to recognize objects based on hash values and verify with a matching algorithm (for example feature matching).
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class HybridRecognition : public ImageProcessing
+			{
 
-    public:
+			public:
 
-        /**
-         * Hybrid recognition constructor.
-         * @param hashRecognition Hash recognition to use.
-         * @param featureMatching Feature matching to verify recognized hashes.
-         * @param resize Resize image factor from 1 to 100 (in percent). 100 is equal to 100% of the original scale.
-         */
-        HybridRecognition(Companion::Processing::Recognition::HashRecognition *hashRecognition,
-            Companion::Algorithm::Recognition::Matching::Matching *featureMatching,
-            int resize = 100);
+				/**
+				 * Hybrid recognition constructor.
+				 * @param hashRecognition Hash recognition to use.
+				 * @param featureMatching Feature matching to verify recognized hashes.
+				 * @param resize Resize image factor from 1 to 100 (in percent). 100 is equal to 100% of the original scale.
+				 */
+				HybridRecognition(PTR_HASH_RECOGNITION hashRecognition,
+					PTR_FEATURE_MATCHING featureMatching,
+					int resize = 100);
 
-        /**
-         * Destructor.
-         */
-        virtual ~HybridRecognition();
+				/**
+				 * Destructor.
+				 */
+				virtual ~HybridRecognition() = default;
 
-        /**
-         * Add search model type to search for.
-         * @param image Image model to search for.
-         * @param id Identifier of the model.
-         */
-        void addModel(cv::Mat image, int id);
+				/**
+				 * Add search model type to search for.
+				 * @param image Image model to search for.
+				 * @param id Identifier of the model.
+				 */
+				void AddModel(cv::Mat image, int id);
 
-        /**
-         * Remove given model if it exists. This method can only be used safely if the searching process is not running.
-         * @param modelID ID of the model to remove.
-         */
-        void removeModel(int modelID);
+				/**
+				 * Remove given model if it exists. This method can only be used safely if the searching process is not running.
+				 * @param modelID ID of the model to remove.
+				 */
+				void RemoveModel(int modelID);
 
-        /**
-         * Clear all models which are searched for.
-         */
-        void clearModels();
+				/**
+				 * Clear all models which are searched for.
+				 */
+				void ClearModels();
 
-        /**
-         * Try to recognize all objects in the given frame.
-         * @param frame Frame to check for an object location.
-         * @return A vector of results for the given frame or an empty vector if no objects are recognized.
-         */
-        CALLBACK_RESULT execute(cv::Mat frame);
+				/**
+				 * Try to recognize all objects in the given frame.
+				 * @param frame Frame to check for an object location.
+				 * @return A vector of results for the given frame or an empty vector if no objects are recognized.
+				 */
+				CALLBACK_RESULT Execute(cv::Mat frame);
 
-    private:
+			private:
 
-        /**
-         * Resize factor for recognized hash model images.
-         */
-        int resize;
+				/**
+				 * Resize factor for recognized hash model images.
+				 */
+				int resize;
 
-        /**
-         * Hash recognition.
-         */
-        Companion::Processing::Recognition::HashRecognition *hashRecognition;
+				/**
+				 * Hash recognition.
+				 */
+				PTR_HASH_RECOGNITION hashRecognition;
 
-        /**
-         * Feature matching algorithm to use for model verification.
-         */
-        Companion::Algorithm::Recognition::Matching::Matching *featureMatching;
+				/**
+				 * Feature matching algorithm to use for model verification.
+				 */
+				PTR_FEATURE_MATCHING featureMatching;
 
-        /**
-         * A map of all models to recognize.
-         */
-        std::map<int, Companion::Model::Processing::FeatureMatchingModel*> models;
+				/**
+				 * A map of all models to recognize.
+				 */
+				std::map<int, PTR_MODEL_FEATURE_MATCHING> models;
 
-        /**
-         * Processing method to recognize objects.
-         * @param hashResult Result from hash recognition.
-         * @param frame Scene frame.
-         * @param results List of all recognized objects.
-         */
-        void processing(Companion::Model::Result::RecognitionResult* hashResult,
-                        cv::Mat frame,
-                        CALLBACK_RESULT &results);
+				/**
+				 * Processing method to recognize objects.
+				 * @param hashResult Result from hash recognition.
+				 * @param frame Scene frame.
+				 * @param results List of all recognized objects.
+				 */
+				void Processing(PTR_RESULT hashResult,
+					cv::Mat frame,
+					CALLBACK_RESULT& results);
 
-        };
-}}}
+			};
+		}
+	}
+}
 
 #endif //COMPANION_HYBRIDRECOGNITION_H

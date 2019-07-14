@@ -50,7 +50,7 @@ namespace Companion { namespace Error
      * @param code The error code to get corresponding error message from.
      * @return String message from given error.
      */
-    inline std::string COMP_EXPORTS getError(Code code)
+    inline std::string COMP_EXPORTS Error(Code code)
     {
         std::string error = "Unknown Error";
 

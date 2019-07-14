@@ -18,30 +18,22 @@
 
 #include "ObjectDetection.h"
 
-Companion::Processing::Detection::ObjectDetection::ObjectDetection(Companion::Algorithm::Detection::Detection *detection)
+Companion::Processing::Detection::ObjectDetection::ObjectDetection(PTR_SHAPE_DETECTION detection)
 {
     this->detection = detection;
 }
 
-Companion::Processing::Detection::ObjectDetection::~ObjectDetection()
+CALLBACK_RESULT Companion::Processing::Detection::ObjectDetection::Execute(cv::Mat frame)
 {
-}
+	CALLBACK_RESULT results;
 
-CALLBACK_RESULT Companion::Processing::Detection::ObjectDetection::execute(cv::Mat frame)
-{
-    Companion::Algorithm::Detection::ShapeDetection *shapeDetection;
-    CALLBACK_RESULT results;
-
-    shapeDetection = dynamic_cast<Companion::Algorithm::Detection::ShapeDetection*>(this->detection);
-    if (shapeDetection != nullptr)
+    // Detection algorithm is shape detection
+    // Obtain all detectable objects from the given image
+    std::vector<PTR_DRAW_FRAME> frames = this->detection->ExecuteAlgorithm(frame);
+    for (size_t i = 0; i < frames.size(); i++)
     {
-        // Detection algorithm is shape detection
-        // Obtain all detectable objects from the given image
-        std::vector<Companion::Draw::Frame*> frames = this->detection->executeAlgorithm(frame);
-        for (size_t i = 0; i < frames.size(); i++)
-        {
-            results.push_back(new Companion::Model::Result::DetectionResult(100, shapeDetection->getDescription(), frames[i]));
-        }
+		PTR_RESULT_DETECTION result = std::make_shared<RESULT_DETECTION>(100, detection->Description(), frames[i]);
+        results.push_back(result);
     }
 
     return results;

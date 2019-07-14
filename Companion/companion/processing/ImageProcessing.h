@@ -20,26 +20,29 @@
 #define COMPANION_IMAGEPROCESSING_H
 
 #include <opencv2/core/core.hpp>
+#include <companion/model/result/Result.h>
 #include <companion/util/Definitions.h>
 
-namespace Companion { namespace Processing
-{
-    /**
-     * Image processing interface class to create specific image processing jobs for example to recognize or detect objects.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS ImageProcessing
-    {
+namespace Companion {
+	namespace Processing
+	{
+		/**
+		 * Image processing interface class to create specific image processing jobs for example to recognize or detect objects.
+		 * @author Andreas Sekulski, Dimitri Kotlovsky
+		 */
+		class COMP_EXPORTS ImageProcessing
+		{
 
-    public:
+		public:
 
-        /**
-         * Execute given image processing algorithm like object detection or object recognition.
-         * @param frame Source image for the image processing.
-         * @return A vector of results if there are any.
-         */
-        virtual CALLBACK_RESULT execute(cv::Mat frame) = 0;
-    };
-}}
+			/**
+			 * Execute given image processing algorithm like object detection or object recognition.
+			 * @param frame Source image for the image processing.
+			 * @return A vector of results if there are any.
+			 */
+			virtual CALLBACK_RESULT Execute(cv::Mat frame) = 0;
+		};
+	}
+}
 
 #endif //COMPANION_IMAGEPROCESSING_H

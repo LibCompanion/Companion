@@ -21,30 +21,34 @@
 
 #include <companion/draw/Frame.h>
 
-namespace Companion { namespace Algorithm { namespace Detection
-{
-    /**
-     * Detection abstract class to detect specific regions of interest.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Detection
-    {
+namespace Companion {
+	namespace Algorithm {
+		namespace Detection
+		{
+			/**
+			 * Detection abstract class to detect specific regions of interest.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS Detection
+			{
 
-    public:
+			public:
 
-        /**
-         * Detection algorithm to detect specific regions of interest (ROI).
-         * @param frame Image frame to obtain all roi objects from.
-         * @return A vector of frames that represent the detected regions.
-         */
-        virtual std::vector<Companion::Draw::Frame*> executeAlgorithm(cv::Mat frame) = 0;
+				/**
+				 * Detection algorithm to detect specific regions of interest (ROI).
+				 * @param frame Image frame to obtain all roi objects from.
+				 * @return A vector of frames that represent the detected regions.
+				 */
+				virtual std::vector<PTR_DRAW_FRAME> ExecuteAlgorithm(cv::Mat frame) = 0;
 
-        /**
-         * Indicator if this algorithm uses cuda.
-         * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-         */
-        virtual bool isCuda() const = 0;
-    };
-}}}
+				/**
+				 * Indicator if this algorithm uses cuda.
+				 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+				 */
+				virtual bool IsCuda() const = 0;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_DETECTION_H

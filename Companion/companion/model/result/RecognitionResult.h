@@ -21,55 +21,59 @@
 
 #include <companion/model/result/Result.h>
 
-namespace Companion { namespace Model { namespace Result
-{
-    /**
-     * Recognition result model class to store image recognition results.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS RecognitionResult : public Result
-    {
+namespace Companion {
+	namespace Model {
+		namespace Result
+		{
+			/**
+			 * Recognition result model class to store image recognition results.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS RecognitionResult : public Result
+			{
 
-    public:
+			public:
 
-        /**
-         * Constructor to create a recognition result model.
-         * @param scoring Scoring value from matching between 0 and 100 percent.
-         * @param id Model ID.
-         * @param drawable Drawable result that shows the location of the recognized object in the image.
-         */
-        RecognitionResult(int scoring, int id, Draw::Drawable *drawable);
+				/**
+				 * Constructor to create a recognition result model.
+				 * @param scoring Scoring value from matching between 0 and 100 percent.
+				 * @param id Model ID.
+				 * @param drawable Drawable result that shows the location of the recognized object in the image.
+				 */
+				RecognitionResult(int scoring, int id, PTR_DRAW drawable);
 
-        /**
-         * Default destructor
-         */
-        virtual ~RecognitionResult();
+				/**
+				 * Default destructor
+				 */
+				virtual ~RecognitionResult() = default;
 
-        /**
-         * Return object ID.
-         * @return Object ID.
-         */
-        int getId() const;
+				/**
+				 * Return object ID.
+				 * @return Object ID.
+				 */
+				int Id() const;
 
-        /**
-         * Return object description.
-         * @return Object description.
-         */
-        virtual std::string getDescription() const;
+				/**
+				 * Return object description.
+				 * @return Object description.
+				 */
+				virtual std::string Description() const;
 
-        /**
-         * Return the type of this result.
-         * @return Result type.
-         */
-        virtual ResultType getType() const;
+				/**
+				 * Return the type of this result.
+				 * @return Result type.
+				 */
+				virtual ResultType Type() const;
 
-    private:
+			private:
 
-        /**
-         * Object ID.
-         */
-        int id;
-    };
-}}}
+				/**
+				 * Object ID.
+				 */
+				int id;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_RECOGNITIONRESULT_H

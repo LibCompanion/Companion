@@ -23,41 +23,45 @@
 #include <companion/model/result/DetectionResult.h>
 #include <companion/processing/ImageProcessing.h>
 
-namespace Companion { namespace Processing { namespace Detection
-{
-    /**
-     * Object detection implementation to detect objects within an image like faces or shapes.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS ObjectDetection : public ImageProcessing {
+namespace Companion {
+	namespace Processing {
+		namespace Detection
+		{
+			/**
+			 * Object detection implementation to detect objects within an image like faces or shapes.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS ObjectDetection : public ImageProcessing {
 
-    public:
+			public:
 
-        /**
-         * Object detection constructor.
-         * @param detection Detection algorithm to detect ROI's.
-         */
-        ObjectDetection(Companion::Algorithm::Detection::Detection *detection);
+				/**
+				 * Object detection constructor.
+				 * @param detection Detection algorithm to detect ROI's.
+				 */
+				ObjectDetection(PTR_SHAPE_DETECTION detection);
 
-        /**
-         * Destructor.
-         */
-        virtual ~ObjectDetection();
+				/**
+				 * Destructor.
+				 */
+				virtual ~ObjectDetection() = default;
 
-        /**
-         * Try to detect all objects in the given frame.
-         * @param frame Frame to check for an object location.
-         * @return A vector of results for the given frame or an empty vector if no objects are detected.
-         */
-        CALLBACK_RESULT execute(cv::Mat frame);
+				/**
+				 * Try to detect all objects in the given frame.
+				 * @param frame Frame to check for an object location.
+				 * @return A vector of results for the given frame or an empty vector if no objects are detected.
+				 */
+				CALLBACK_RESULT Execute(cv::Mat frame);
 
-    private:
+			private:
 
-        /**
-         * Detection algorithm to search for ROI's.
-         */
-        Companion::Algorithm::Detection::Detection *detection;
-    };
-}}}
+				/**
+				 * Detection algorithm to search for ROI's.
+				 */
+				PTR_SHAPE_DETECTION detection;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_OBJECTDETECTION_H

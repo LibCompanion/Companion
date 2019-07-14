@@ -20,79 +20,79 @@
 
 Companion::Draw::Line::Line(cv::Point start, cv::Point end, cv::Scalar color, int thickness)
 {
-    this->start = start;
-    this->end = end;
-    this->color = color;
-    this->thickness = thickness;
+	this->start = start;
+	this->end = end;
+	this->color = color;
+	this->thickness = thickness;
 }
 
-const cv::Point &Companion::Draw::Line::getStart() const
+const cv::Point& Companion::Draw::Line::Start() const
 {
-    return this->start;
+	return this->start;
 }
 
-void Companion::Draw::Line::setStart(const cv::Point &start)
+void Companion::Draw::Line::Start(const cv::Point& start)
 {
-    this->start = start;
+	this->start = start;
 }
 
-const cv::Point &Companion::Draw::Line::getEnd() const
+const cv::Point& Companion::Draw::Line::End() const
 {
-    return this->end;
+	return this->end;
 }
 
-void Companion::Draw::Line::setEnd(const cv::Point &end)
+void Companion::Draw::Line::End(const cv::Point& end)
 {
-    this->end = end;
+	this->end = end;
 }
 
-const cv::Scalar &Companion::Draw::Line::getColor() const
+const cv::Scalar& Companion::Draw::Line::Color() const
 {
-    return this->color;
+	return this->color;
 }
 
-void Companion::Draw::Line::setColor(const cv::Scalar &color)
+void Companion::Draw::Line::Color(const cv::Scalar& color)
 {
-    this->color = color;
+	this->color = color;
 }
 
-int Companion::Draw::Line::getThickness() const
+int Companion::Draw::Line::Thickness() const
 {
-    return this->thickness;
+	return this->thickness;
 }
 
-void Companion::Draw::Line::setThickness(int thickness)
+void Companion::Draw::Line::Thickness(int thickness)
 {
-    this->thickness = thickness;
+	this->thickness = thickness;
 }
 
-void Companion::Draw::Line::draw(cv::Mat image)
+void Companion::Draw::Line::Draw(cv::Mat image)
 {
-    cv::line(image, this->start, this->end, this->color, this->thickness);
+	cv::line(image, this->start, this->end, this->color, this->thickness);
 }
 
-void Companion::Draw::Line::ratio(int cWidth, int cHeight, int nWidth, int nHeight)
+void Companion::Draw::Line::Ratio(int cWidth, int cHeight, int nWidth, int nHeight)
 {
-    Util::ratioPosition(this->start, cWidth, cHeight, nWidth, nHeight);
-    Util::ratioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
+	Util::RatioPosition(this->start, cWidth, cHeight, nWidth, nHeight);
+	Util::RatioPosition(this->end, cWidth, cHeight, nWidth, nHeight);
 }
 
-cv::Rect Companion::Draw::Line::getCutArea()
+cv::Rect Companion::Draw::Line::CutArea()
 {
-    return cv::Rect(this->start.x, this->start.y, this->start.x + this->end.x, this->start.y + this->end.y);
+	return cv::Rect(this->start.x, this->start.y, this->start.x + this->end.x, this->start.y + this->end.y);
 }
 
-int Companion::Draw::Line::getOriginX() {
-    return this->start.x;
+int Companion::Draw::Line::OriginX() {
+	return this->start.x;
 }
 
-int Companion::Draw::Line::getOriginY() {
-    return this->start.y;
+int Companion::Draw::Line::OriginY() {
+	return this->start.y;
 }
 
-void Companion::Draw::Line::moveOrigin(int x, int y) {
-    this->start.x = this->start.x + x;
-    this->start.y = this->start.y + y;
-    this->end.x = this->end.x + x;
-    this->end.y = this->end.y + y;
+void Companion::Draw::Line::MoveOrigin(int x, int y) {
+	this->start.x = this->start.x + x;
+	this->start.y = this->start.y + y;
+	this->end.x = this->end.x + x;
+	this->end.y = this->end.y + y;
 }

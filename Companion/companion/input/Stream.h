@@ -21,34 +21,36 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion { namespace Input
-{
-    /**
-     * Data stream interface class to obtain image processing data for example from a video or a set of images.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Stream
-    {
+namespace Companion {
+	namespace Input
+	{
+		/**
+		 * Data stream interface class to obtain image processing data for example from a video or a set of images.
+		 * @author Andreas Sekulski, Dimitri Kotlovsky
+		 */
+		class COMP_EXPORTS Stream
+		{
 
-    public:
+		public:
 
-        /**
-         * Obtain next image from open video stream.
-         * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from the obtained image.
-         */
-        virtual cv::Mat obtainImage() = 0;
+			/**
+			 * Obtain next image from open video stream.
+			 * @return An empty cv::Mat object if no image is obtained otherwise an cv::Mat entity from the obtained image.
+			 */
+			virtual cv::Mat ObtainImage() = 0;
 
-        /**
-         * Indicator if stream has finished.
-         * @return True if video has finished otherwise false.
-         */
-        virtual bool isFinished() = 0;
+			/**
+			 * Indicator if stream has finished.
+			 * @return True if video has finished otherwise false.
+			 */
+			virtual bool IsFinished() = 0;
 
-        /**
-         * Stop this stream.
-         */
-        virtual void finish() = 0;
-    };
-}}
+			/**
+			 * Stop this stream.
+			 */
+			virtual void Finish() = 0;
+		};
+	}
+}
 
 #endif //COMPANION_STREAM_H

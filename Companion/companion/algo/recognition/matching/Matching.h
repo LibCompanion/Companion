@@ -24,34 +24,40 @@
 #include <companion/model/result/RecognitionResult.h>
 #include <companion/model/processing/FeatureMatchingModel.h>
 
-namespace Companion { namespace Algorithm { namespace Recognition { namespace Matching
-{
-    /**
-     * Abstract matching class implementation for all default matching algorithms like feature matching or template matching.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Matching : public Recognition
-    {
+namespace Companion {
+	namespace Algorithm {
+		namespace Recognition {
+			namespace Matching
+			{
+				/**
+				 * Abstract matching class implementation for all default matching algorithms like feature matching or template matching.
+				 * @author Andreas Sekulski, Dimitri Kotlovsky
+				 */
+				class COMP_EXPORTS Matching : public Recognition
+				{
 
-    public:
+				public:
 
-        /**
-         * Matching algorithm implementation to search in an scene model this given object model.
-         * @param sceneModel Scene model to verify for matching.
-         * @param objectModel Object model to search in scene.
-         * @param roi A region of interest for object search (not used if nullptr).
-         * @return A recognition result model if an object is recognized otherwise nullptr.
-         */
-        virtual Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::FeatureMatchingModel *sceneModel,
-                                                                              Companion::Model::Processing::FeatureMatchingModel *objectModel,
-                                                                              Companion::Draw::Frame *roi) = 0;
+					/**
+					 * Matching algorithm implementation to search in an scene model this given object model.
+					 * @param sceneModel Scene model to verify for matching.
+					 * @param objectModel Object model to search in scene.
+					 * @param roi A region of interest for object search (not used if nullptr).
+					 * @return A recognition result model if an object is recognized otherwise nullptr.
+					 */
+					virtual PTR_RESULT_RECOGNITION ExecuteAlgorithm(PTR_MODEL_FEATURE_MATCHING sceneModel,
+						PTR_MODEL_FEATURE_MATCHING objectModel,
+						PTR_DRAW_FRAME roi) = 0;
 
-        /**
-         * Indicator if this algorithm uses cuda.
-         * @return True if cuda will be used otherwise false.
-         */
-        virtual bool isCuda() const = 0;
-    };
-}}}}
+					/**
+					 * Indicator if this algorithm uses cuda.
+					 * @return True if cuda will be used otherwise false.
+					 */
+					virtual bool IsCuda() const = 0;
+				};
+			}
+		}
+	}
+}
 
 #endif //COMPANION_MATCHING_H

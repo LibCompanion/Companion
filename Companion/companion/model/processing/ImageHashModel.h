@@ -27,86 +27,90 @@
 #include <companion/util/Definitions.h>
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion { namespace Model { namespace Processing
-{
+namespace Companion {
+	namespace Model {
+		namespace Processing
+		{
 
-    /**
-     * Image hashing model to generate a hash representation of images.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS ImageHashModel {
+			/**
+			 * Image hashing model to generate a hash representation of images.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS ImageHashModel {
 
-    public:
+			public:
 
-        /**
-         * Constructor.
-         */
-        ImageHashModel();
+				/**
+				 * Constructor.
+				 */
+				ImageHashModel();
 
-        /**
-         * Destructor.
-         */
-        virtual ~ImageHashModel();
+				/**
+				 * Destructor.
+				 */
+				virtual ~ImageHashModel() = default;
 
-        /**
-         * Add descriptor from given image.
-         * @param id ID of the model.
-         * @param descriptor Descriptor to add.
-         */
-        void addDescriptor(int id, cv::Mat &descriptor);
+				/**
+				 * Add descriptor from given image.
+				 * @param id ID of the model.
+				 * @param descriptor Descriptor to add.
+				 */
+				void AddDescriptor(int id, cv::Mat& descriptor);
 
-        /**
-         * Generate dataset from current image hash model.
-         * @return Generated dataset that contains as first element the hashed images and as second element the index dataset.
-         */
-        std::pair<cv::Mat_<float>, cv::Mat> generateDataset();
+				/**
+				 * Generate dataset from current image hash model.
+				 * @return Generated dataset that contains as first element the hashed images and as second element the index dataset.
+				 */
+				std::pair<cv::Mat_<float>, cv::Mat> GenerateDataset();
 
-        /**
-         * Return the result scores.
-         * @return Result scores.
-         */
-        const std::vector<std::pair<int, float>> &getScores() const;
+				/**
+				 * Return the result scores.
+				 * @return Result scores.
+				 */
+				const std::vector<std::pair<int, float>>& Scores() const;
 
-    private:
+			private:
 
-        /**
-         * Indicates whether a new model was added.
-         */
-        bool newModelAdded;
+				/**
+				 * Indicates whether a new model was added.
+				 */
+				bool newModelAdded;
 
-        /**
-         * Raw image models to compare in an one dimensional array.
-         */
-        cv::Mat imageDataset;
+				/**
+				 * Raw image models to compare in an one dimensional array.
+				 */
+				cv::Mat imageDataset;
 
-        /**
-         * Hash values to store from all models.
-         */
-        cv::Mat_<float> hash;
+				/**
+				 * Hash values to store from all models.
+				 */
+				cv::Mat_<float> hash;
 
-        /**
-         * Index dataset from all models.
-         */
-        cv::Mat indexDataset;
+				/**
+				 * Index dataset from all models.
+				 */
+				cv::Mat indexDataset;
 
-        /**
-         * Scores from all given models.
-         */
-        std::vector<std::pair<int, float>> scores;
+				/**
+				 * Scores from all given models.
+				 */
+				std::vector<std::pair<int, float>> scores;
 
-        /**
-         * Generate hash values from all image descriptors.
-         * @return 1D Image hash matrix.
-         */
-        cv::Mat_<float> generateHashImages();
+				/**
+				 * Generate hash values from all image descriptors.
+				 * @return 1D Image hash matrix.
+				 */
+				cv::Mat_<float> GenerateHashImages();
 
-        /**
-         * Generate index dataset from given hash.
-         * @param hash Image hash to generate index dataset.
-         * @return Index dataset from image hash.
-         */
-        cv::Mat generateIndexDataset(cv::Mat_<float> hash);
-    };
-}}}
+				/**
+				 * Generate index dataset from given hash.
+				 * @param hash Image hash to generate index dataset.
+				 * @return Index dataset from image hash.
+				 */
+				cv::Mat GenerateIndexDataset(cv::Mat_<float> hash);
+			};
+		}
+	}
+}
 
 #endif //COMPANION_IMAGEHASHMODEL_H

@@ -21,31 +21,37 @@
 
 #include "Hashing.h"
 
-namespace Companion { namespace Algorithm { namespace Recognition { namespace Hashing
-{
-    /**
-     * Local Sensitive Hashing (LSH) implementation for hash image comparison.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS LSH : public Hashing {
+namespace Companion {
+	namespace Algorithm {
+		namespace Recognition {
+			namespace Hashing
+			{
+				/**
+				 * Local Sensitive Hashing (LSH) implementation for hash image comparison.
+				 * @author Andreas Sekulski, Dimitri Kotlovsky
+				 */
+				class COMP_EXPORTS LSH : public Hashing {
 
-        public:
+				public:
 
-            /**
-             * LSH algorithm execution method to compare an image hash model with a query.
-             * @param model Image hash model to compare.
-             * @param query Query image to compare with hash model.
-             * @param roi Region of interest to check.
-             * @return Nullptr if no matching success otherwise a recognition result.
-             */
-            Companion::Model::Result::RecognitionResult* executeAlgorithm(Companion::Model::Processing::ImageHashModel *model, cv::Mat query, Companion::Draw::Frame *roi);
+					/**
+					 * LSH algorithm execution method to compare an image hash model with a query.
+					 * @param model Image hash model to compare.
+					 * @param query Query image to compare with hash model.
+					 * @param roi Region of interest to check.
+					 * @return Nullptr if no matching success otherwise a recognition result.
+					 */
+					PTR_RESULT_RECOGNITION ExecuteAlgorithm(PTR_MODEL_IMAGE_HASHING model, cv::Mat query, PTR_DRAW_FRAME roi);
 
-            /**
-             * Indicator if this algorithm uses cuda.
-             * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-             */
-            bool isCuda() const;
-    };
-}}}}
+					/**
+					 * Indicator if this algorithm uses cuda.
+					 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+					 */
+					bool IsCuda() const;
+				};
+			}
+		}
+	}
+}
 
 #endif //COMPANION_LSH_H

@@ -18,52 +18,52 @@
 
 #include "LSH.h"
 
-Companion::Model::Result::RecognitionResult* Companion::Algorithm::Recognition::Hashing::LSH::executeAlgorithm(Companion::Model::Processing::ImageHashModel * model,
-    cv::Mat query, 
-    Companion::Draw::Frame *roi)
+PTR_RESULT_RECOGNITION Companion::Algorithm::Recognition::Hashing::LSH::ExecuteAlgorithm(PTR_MODEL_IMAGE_HASHING model,
+	cv::Mat query,
+	PTR_DRAW_FRAME roi)
 {
-    Companion::Model::Result::RecognitionResult* result = nullptr;
-    std::vector<std::pair<int, float>> scores = model->getScores();
-    std::pair<cv::Mat_<float>, cv::Mat> dataset = model->generateDataset();
-    cv::Mat_<float> hashImages = dataset.first;
-    cv::Mat datasetImages = dataset.second;
+	PTR_RESULT_RECOGNITION result = nullptr;
+	std::vector<std::pair<int, float>> scores = model->Scores();
+	std::pair<cv::Mat_<float>, cv::Mat> dataset = model->GenerateDataset();
+	cv::Mat_<float> hashImages = dataset.first;
+	cv::Mat datasetImages = dataset.second;
 
-    query.reshape(1, 1).convertTo(query, CV_32F);
-    query = query * hashImages;
+	query.reshape(1, 1).convertTo(query, CV_32F);
+	query = query * hashImages;
 
-    for (size_t i = 0; i < query.rows; i++)
-    {
-        for (size_t j = 0; j < query.cols; j++)
-        {
-            query.at<float>(i, j) = query.at<float>(i, j) > 0 ? 1 : 0;
-        }
-    }
+	for (size_t i = 0; i < query.rows; i++)
+	{
+		for (size_t j = 0; j < query.cols; j++)
+		{
+			query.at<float>(i, j) = query.at<float>(i, j) > 0 ? 1 : 0;
+		}
+	}
 
-    query.convertTo(query, CV_8U);
+	query.convertTo(query, CV_8U);
 
-    //Search for similar samples in the dataset
-    for (size_t row = 0; row < datasetImages.rows; ++row)
-    {
-        scores[row].second = norm(query, datasetImages.row(row), cv::NORM_HAMMING);
-    }
+	//Search for similar samples in the dataset
+	for (size_t row = 0; row < datasetImages.rows; ++row)
+	{
+		scores[row].second = norm(query, datasetImages.row(row), cv::NORM_HAMMING);
+	}
 
-    //Make a copy of scores and rank them
-    std::vector<std::pair<int, float>> rank;
-    rank.assign(scores.begin(), scores.end());
-    sort(rank.begin(), rank.end(), sortRank());
+	//Make a copy of scores and rank them
+	std::vector<std::pair<int, float>> rank;
+	rank.assign(scores.begin(), scores.end());
+	sort(rank.begin(), rank.end(), SortRank());
 
-    for (size_t r = 0; r < std::min(10, (int)rank.size()); ++r)
-    {
-        if (r == 0)
-        {
-            result = new Companion::Model::Result::RecognitionResult(static_cast<int>(rank.at(r).second), rank.at(r).first, roi);
-        }
-    }
+	for (size_t r = 0; r < std::min(10, (int)rank.size()); ++r)
+	{
+		if (r == 0)
+		{
+			result = std::make_shared<RESULT_RECOGNITION>(static_cast<int>(rank.at(r).second), rank.at(r).first, roi);
+		}
+	}
 
-    return result;
+	return result;
 }
 
-bool Companion::Algorithm::Recognition::Hashing::LSH::isCuda() const
+bool Companion::Algorithm::Recognition::Hashing::LSH::IsCuda() const
 {
-    return false;
+	return false;
 }

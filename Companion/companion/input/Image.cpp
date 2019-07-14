@@ -20,72 +20,68 @@
 
 Companion::Input::Image::Image(int maxImages)
 {
-    this->exitStream = false;
-    this->exitAfterProcessing = false;
-    this->maxImages = maxImages;
+	this->exitStream = false;
+	this->exitAfterProcessing = false;
+	this->maxImages = maxImages;
 }
 
-Companion::Input::Image::~Image()
+bool Companion::Input::Image::AddImage(std::string imgPath)
 {
+	return AddImage(cv::imread(imgPath));
 }
 
-bool Companion::Input::Image::addImage(std::string imgPath)
+bool Companion::Input::Image::AddImage(cv::Mat img)
 {
-    return addImage(cv::imread(imgPath));
+	if (!img.empty())
+	{
+		// Limit queue size to keep memory low
+		std::unique_lock<std::mutex> lk(this->mx);
+		this->cv.wait(lk, [this] { return this->images.size() < this->maxImages; });
+		// Stores only images which exist
+		this->images.push(img);
+		return true;
+	}
+
+	return false;
 }
 
-bool Companion::Input::Image::addImage(cv::Mat img)
+bool Companion::Input::Image::AddImage(int width, int height, int type, uchar* data)
 {
-    if (!img.empty())
-    {
-        // Limit queue size to keep memory low
-        std::unique_lock<std::mutex> lk(this->mx);
-        this->cv.wait(lk, [this] { return this->images.size() < this->maxImages; });
-        // Stores only images which exist
-        this->images.push(img);
-        return true;
-    }
-
-    return false;
+	return AddImage(cv::Mat(cv::Size(width, height), type, data));
 }
 
-bool Companion::Input::Image::addImage(int width, int height, int type, uchar* data)
+cv::Mat Companion::Input::Image::ObtainImage()
 {
-    return addImage(cv::Mat(cv::Size(width, height), type, data));
+	cv::Mat image;
+	std::unique_lock<std::mutex> lk(this->mx);
+	if (!this->images.empty())
+	{
+		// Get first image from fifo
+		image = this->images.front();
+		this->images.pop();
+
+		// Notify image input stream
+		if (this->images.size() < this->maxImages)
+		{
+			this->cv.notify_one();
+		}
+	}
+
+	return image;
 }
 
-cv::Mat Companion::Input::Image::obtainImage()
+bool Companion::Input::Image::IsFinished()
 {
-    cv::Mat image;
-    std::unique_lock<std::mutex> lk(this->mx);
-    if (!this->images.empty())
-    {
-        // Get first image from fifo
-        image = this->images.front();
-        this->images.pop();
-
-        // Notify image input stream
-        if (this->images.size() < this->maxImages)
-        {
-            this->cv.notify_one();
-        }
-    }
-
-    return image;
+	std::unique_lock<std::mutex> lk(this->mx);
+	return this->exitStream || (this->exitAfterProcessing && this->images.empty());
 }
 
-bool Companion::Input::Image::isFinished()
+void Companion::Input::Image::Finish()
 {
-    std::unique_lock<std::mutex> lk(this->mx);
-    return this->exitStream || (this->exitAfterProcessing && this->images.empty());
+	this->exitStream = true;
 }
 
-void Companion::Input::Image::finish()
+void Companion::Input::Image::FinishAfterProcessing()
 {
-    this->exitStream = true;
-}
-
-void Companion::Input::Image::finishAfterProcessing()
-{
-    this->exitAfterProcessing = true;
+	this->exitAfterProcessing = true;
 }

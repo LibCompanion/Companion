@@ -24,12 +24,12 @@ Companion::Error::CompanionException::CompanionException(std::vector<Companion::
     this->index = 0;
 }
 
-bool Companion::Error::CompanionException::hasNext()
+bool Companion::Error::CompanionException::HasNext()
 {
     return (this->index < this->errors.size());
 }
 
-Companion::Error::Code Companion::Error::CompanionException::next()
+Companion::Error::Code Companion::Error::CompanionException::Next()
 {
     Companion::Error::Code code = this->errors.at(this->index);
     this->index++;

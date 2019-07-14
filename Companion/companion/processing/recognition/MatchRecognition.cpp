@@ -18,31 +18,27 @@
 
 #include "MatchRecognition.h"
 
-Companion::Processing::Recognition::MatchRecognition::MatchRecognition(Companion::Algorithm::Recognition::Matching::Matching *matchingAlgo,
+Companion::Processing::Recognition::MatchRecognition::MatchRecognition(PTR_MATCHING_RECOGNITION matchingAlgo,
     Companion::SCALING scaling,
-    Companion::Algorithm::Detection::ShapeDetection *shapeDetection)
+	PTR_SHAPE_DETECTION shapeDetection)
 {
     this->matchingAlgo = matchingAlgo;
     this->scaling = scaling;
     this->shapeDetection = shapeDetection;
 }
 
-Companion::Processing::Recognition::MatchRecognition::~MatchRecognition()
-{
-}
-
-CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv::Mat frame)
+CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::Execute(cv::Mat frame)
 {
     CALLBACK_RESULT results;
     std::vector<CALLBACK_RESULT> parallelizedResults;
-    Companion::Algorithm::Recognition::Matching::FeatureMatching *featureMatching;
-    Companion::Model::Processing::FeatureMatchingModel *sceneModel;
-    std::vector<Companion::Draw::Frame*> rois;
+	PTR_FEATURE_MATCHING featureMatching;
+	PTR_MODEL_FEATURE_MATCHING sceneModel = std::make_shared<MODEL_FEATURE_MATCHING>();;
+    std::vector<PTR_DRAW_FRAME> rois;
     std::vector<Companion::Error::Code> errors;
     int oldX, oldY, threads;
 
     // Create vector result list to parallelize
-    if (this->matchingAlgo->isCuda())
+    if (this->matchingAlgo->IsCuda())
     {
         threads = 1;
         parallelizedResults = std::vector<CALLBACK_RESULT>(threads);
@@ -55,35 +51,33 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
 
     if (!frame.empty())
     {
-        sceneModel = new Companion::Model::Processing::FeatureMatchingModel();
-
         oldX = frame.cols;
         oldY = frame.rows;
 
         // Shrink the image with a given scale factor or a given output width. Use this list for good 16:9 image sizes:
         // https://antifreezedesign.wordpress.com/2011/05/13/permutations-of-1920x1080-for-perfect-scaling-at-1-77/
-        Util::resizeImage(frame, this->scaling);
-        sceneModel->setImage(frame);
+        Util::ResizeImage(frame, this->scaling);
+        sceneModel->Image(frame);
 
-        featureMatching = dynamic_cast<Companion::Algorithm::Recognition::Matching::FeatureMatching*>(this->matchingAlgo);
+        featureMatching = std::dynamic_pointer_cast<FEATURE_MATCHING>(this->matchingAlgo);
         if (featureMatching != nullptr)
         {
             // Matching algorithm is feature matching
             // Pre calculate full image scene model keypoints
-            featureMatching->calculateKeyPoints(sceneModel);
+            featureMatching->CalculateKeyPoints(sceneModel);
         }
 
         if (this->shapeDetection != nullptr)
         {
             // If shape detection should be used obtain all possible ROIs from frame
-            rois = this->shapeDetection->executeAlgorithm(sceneModel->getImage());
+            rois = this->shapeDetection->ExecuteAlgorithm(sceneModel->Image());
         }
 
-        if (this->matchingAlgo->isCuda())
+        if (this->matchingAlgo->IsCuda())
         {
             for (size_t x = 0; x < models.size(); x++)
             {
-                processing(sceneModel,
+                Processing(sceneModel,
                     models.at(x),
                     rois,
                     frame,
@@ -100,7 +94,7 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
             {
                 try
                 {
-                    processing(sceneModel,
+                    Processing(sceneModel,
                         models.at(x),
                         rois,
                         frame,
@@ -122,7 +116,6 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
         }
 
         frame.release();
-        delete sceneModel;
     }
 
     #pragma omp critical
@@ -130,22 +123,22 @@ CALLBACK_RESULT Companion::Processing::Recognition::MatchRecognition::execute(cv
     {
         for (int j = 0; j < parallelizedResults[i].size(); j++) 
         {
-            results.push_back(dynamic_cast<Companion::Model::Result::Result*>(parallelizedResults[i].at(j)));
+            results.push_back(parallelizedResults[i].at(j));
         }
     }
 
     return results;
 }
 
-void Companion::Processing::Recognition::MatchRecognition::processing(Companion::Model::Processing::FeatureMatchingModel* sceneModel,
-    Companion::Model::Processing::FeatureMatchingModel* objectModel,
-    std::vector<Companion::Draw::Frame*> rois,
+void Companion::Processing::Recognition::MatchRecognition::Processing(PTR_MODEL_FEATURE_MATCHING sceneModel,
+	PTR_MODEL_FEATURE_MATCHING objectModel,
+    std::vector<PTR_DRAW_FRAME> rois,
     cv::Mat frame,
     int originalX,
     int originalY,
     CALLBACK_RESULT &results)
 {
-    Companion::Model::Result::RecognitionResult* result = nullptr;
+	PTR_RESULT result = nullptr;
 
     if (!objectModel)
     {
@@ -158,7 +151,7 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
         try 
         {
             // If ROIs not found or used
-            result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, nullptr);
+            result = std::shared_ptr<RESULT>(this->matchingAlgo->ExecuteAlgorithm(sceneModel, objectModel, nullptr));
         }
         catch (Companion::Error::Code errorCode)
         {
@@ -173,7 +166,7 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
         {
             try 
             {
-                result = this->matchingAlgo->executeAlgorithm(sceneModel, objectModel, rois.at(index));
+                result = std::shared_ptr<RESULT>(this->matchingAlgo->ExecuteAlgorithm(sceneModel, objectModel, rois.at(index)));
             }
             catch (Companion::Error::Code errorCode)
             {
@@ -186,16 +179,16 @@ void Companion::Processing::Recognition::MatchRecognition::processing(Companion:
     if (result != nullptr)
     {
         // Create old image size
-        result->getDrawable()->ratio(frame.cols, frame.rows, originalX, originalY);
+        result->Drawable()->Ratio(frame.cols, frame.rows, originalX, originalY);
         // Store recognized object and its ID to vector.
-        results.push_back(dynamic_cast<Companion::Model::Result::Result*>(result));
+        results.push_back(result);
     }
 }
 
-bool Companion::Processing::Recognition::MatchRecognition::addModel(Companion::Model::Processing::FeatureMatchingModel *model)
+bool Companion::Processing::Recognition::MatchRecognition::AddModel(PTR_MODEL_FEATURE_MATCHING model)
 {
 
-    if (!model->getImage().empty())
+    if (!model->Image().empty())
     {
         this->models.push_back(model);
         return true;
@@ -204,11 +197,11 @@ bool Companion::Processing::Recognition::MatchRecognition::addModel(Companion::M
     return false;
 }
 
-bool Companion::Processing::Recognition::MatchRecognition::removeModel(int modelID)
+bool Companion::Processing::Recognition::MatchRecognition::RemoveModel(int modelID)
 {
     for (size_t index = 0; index < this->models.size(); index++)
     {
-        if (this->models.at(index)->getID() == modelID) {
+        if (this->models.at(index)->ID() == modelID) {
             this->models.erase(this->models.begin() + index);
             return true;
         }
@@ -216,7 +209,7 @@ bool Companion::Processing::Recognition::MatchRecognition::removeModel(int model
     return false;
 }
 
-void Companion::Processing::Recognition::MatchRecognition::clearModels()
+void Companion::Processing::Recognition::MatchRecognition::ClearModels()
 {
     this->models.clear();
 }

@@ -21,23 +21,27 @@
 
 #include <companion/util/exportapi/ExportAPIDefinitions.h>
 
-namespace Companion { namespace Algorithm { namespace Recognition
-{
-    /**
-     * Recognition abstract class to implement specific recognition algorithms.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Recognition
-    {
+namespace Companion {
+	namespace Algorithm {
+		namespace Recognition
+		{
+			/**
+			 * Recognition abstract class to implement specific recognition algorithms.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS Recognition
+			{
 
-    public:
+			public:
 
-        /**
-         * Indicator if this algorithm uses cuda.
-         * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
-         */
-        virtual bool isCuda() const = 0;
-    };
-}}}
+				/**
+				 * Indicator if this algorithm uses cuda.
+				 * @return True if cuda will be used otherwise false for CPU/OpenCL usage.
+				 */
+				virtual bool IsCuda() const = 0;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_RECOGNITION_H

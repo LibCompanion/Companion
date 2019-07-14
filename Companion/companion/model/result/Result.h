@@ -22,69 +22,74 @@
 
 #include <string>
 #include <companion/draw/Drawable.h>
+#include <companion/util/Definitions.h>
 
-namespace Companion { namespace Model { namespace Result
-{
-    /**
-     * Result types.
-     */
-    enum class ResultType {
-        RECOGNITION, ///< Object recognition result.
-        DETECTION ///< Object detection result.
-    };
+namespace Companion {
+	namespace Model {
+		namespace Result
+		{
+			/**
+			 * Result types.
+			 */
+			enum class ResultType {
+				RECOGNITION, ///< Object recognition result.
+				DETECTION ///< Object detection result.
+			};
 
-    /**
-     * Result model abstract class to store object detection or image recognition results.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS Result
-    {
+			/**
+			 * Result model abstract class to store object detection or image recognition results.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS Result
+			{
 
-    public:
+			public:
 
-        /**
-         * Constructor to create a result model.
-         * @param scoring Scoring value from matching between 0 and 100 percent.
-         * @param drawable Drawable result that shows the location of the detected or recognized object in the image.
-         */
-        Result(int scoring, Draw::Drawable *drawable);
+				/**
+				 * Constructor to create a result model.
+				 * @param scoring Scoring value from matching between 0 and 100 percent.
+				 * @param drawable Drawable result that shows the location of the detected or recognized object in the image.
+				 */
+				Result(int scoring, PTR_DRAW drawable);
 
-        /**
-         * Return scoring value between 0 to 100 percent. 100% means total match, 0% means no match.
-         * @return Scoring value of the detected or recognized object.
-         */
-        int getScoring() const;
+				/**
+				 * Return scoring value between 0 to 100 percent. 100% means total match, 0% means no match.
+				 * @return Scoring value of the detected or recognized object.
+				 */
+				int Scoring() const;
 
-        /**
-         * Return the drawable result that shows the location of the detected or recognized object in the image.
-         * @return Drawable result.
-         */
-        Draw::Drawable *getDrawable() const;
+				/**
+				 * Return the drawable result that shows the location of the detected or recognized object in the image.
+				 * @return Drawable result.
+				 */
+				PTR_DRAW Drawable() const;
 
-        /**
-         * Return object description. This may be the ID or the object type.
-         * @return Object description.
-         */
-        virtual std::string getDescription() const = 0;
+				/**
+				 * Return object description. This may be the ID or the object type.
+				 * @return Object description.
+				 */
+				virtual std::string Description() const = 0;
 
-        /**
-         * Return the type of this result.
-         * @return Result type.
-         */
-        virtual ResultType getType() const = 0;
+				/**
+				 * Return the type of this result.
+				 * @return Result type.
+				 */
+				virtual ResultType Type() const = 0;
 
-    private:
+			private:
 
-        /**
-         * Scoring value between 0 to 100 percent.
-         */
-        int scoring;
+				/**
+				 * Scoring value between 0 to 100 percent.
+				 */
+				int scoring;
 
-        /**
-         * Drawable result.
-         */
-        Companion::Draw::Drawable *drawable;
-    };
-}}}
+				/**
+				 * Drawable result.
+				 */
+				PTR_DRAW drawable;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_RESULT_H

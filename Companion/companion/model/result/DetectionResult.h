@@ -21,55 +21,59 @@
 
 #include <companion/model/result/Result.h>
 
-namespace Companion { namespace Model { namespace Result
-{
-    /**
-     * Result model class to store object detection results.
-     * @author Andreas Sekulski, Dimitri Kotlovsky
-     */
-    class COMP_EXPORTS DetectionResult : public Result
-    {
+namespace Companion {
+	namespace Model {
+		namespace Result
+		{
+			/**
+			 * Result model class to store object detection results.
+			 * @author Andreas Sekulski, Dimitri Kotlovsky
+			 */
+			class COMP_EXPORTS DetectionResult : public Result
+			{
 
-    public:
+			public:
 
-        /**
-         * Constructor to create a detection result model.
-         * @param scoring Scoring value from matching between 0 and 100 percent.
-         * @param objectType Object type.
-         * @param drawable Drawable result that shows the location of the detected object in the image.
-         */
-        DetectionResult(int scoring, std::string objectType, Draw::Drawable *drawable);
+				/**
+				 * Constructor to create a detection result model.
+				 * @param scoring Scoring value from matching between 0 and 100 percent.
+				 * @param objectType Object type.
+				 * @param drawable Drawable result that shows the location of the detected object in the image.
+				 */
+				DetectionResult(int scoring, std::string objectType, PTR_DRAW drawable);
 
-        /**
-         * Default destructor
-         */
-        virtual ~DetectionResult();
+				/**
+				 * Default destructor
+				 */
+				virtual ~DetectionResult() = default;
 
-        /**
-         * Return object type.
-         * @return Object type.
-         */
-        std::string getObjectType() const;
+				/**
+				 * Return object type.
+				 * @return Object type.
+				 */
+				std::string ObjectType() const;
 
-        /**
-         * Return object description.
-         * @return Object description.
-         */
-        virtual std::string getDescription() const;
+				/**
+				 * Return object description.
+				 * @return Object description.
+				 */
+				virtual std::string Description() const;
 
-        /**
-         * Return the type of this result.
-         * @return Result type.
-         */
-        virtual ResultType getType() const;
+				/**
+				 * Return the type of this result.
+				 * @return Result type.
+				 */
+				virtual ResultType Type() const;
 
-    private:
+			private:
 
-        /**
-         * Object type.
-         */
-        std::string objectType;
-    };
-}}}
+				/**
+				 * Object type.
+				 */
+				std::string objectType;
+			};
+		}
+	}
+}
 
 #endif //COMPANION_DETECTIONRESULT_H
