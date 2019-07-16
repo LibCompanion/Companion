@@ -247,9 +247,9 @@ PTR_RESULT_RECOGNITION Companion::Algorithm::Recognition::Matching::FeatureMatch
 		// ToDo := SURF_CUDA results are not good
 		// Ratio test for good matches - http://www.cs.ubc.ca/~lowe/papers/ijcv04.pdf#page=20
 		// Neighborhoods comparison
-		ratioTest(matches, goodMatches, DEFAULT_RATIO_VALUE);
+		RatioTest(matches, goodMatches, DEFAULT_RATIO_VALUE);
 
-		drawable = obtainMatchingResult(sceneImage,
+		drawable = ObtainMatchingResult(sceneImage,
 			objectImage,
 			goodMatches,
 			keypointsObject,
