@@ -55,13 +55,13 @@ std::vector<PTR_DRAW_FRAME> Companion::Algorithm::Detection::ShapeDetection::Exe
 	cv::Canny(frame, frame, this->cannyThreshold, this->cannyThreshold * 3.0, 3);
 
 	// Morphological Transformations - http://docs.opencv.org/trunk/d9/d61/tutorial_py_morphological_ops.html
-	morphologyEx(frame, frame, CV_MOP_CLOSE, this->morphKernel);
+	morphologyEx(frame, frame, cv::MORPH_CLOSE, this->morphKernel);
 	erode(frame, frame, this->erodeKernel);
 	dilate(frame, frame, this->dilateKernel, cv::Point(-1, -1), this->dilateIteration);
 
 	// Contour Retrieval Mode - http://docs.opencv.org/3.1.0/d9/d8b/tutorial_py_contours_hierarchy.html
 	// CV_RETR_EXTERNAL, CV_RETR_LIST, CV_RETR_CCOMP, CV_RETR_TREE
-	findContours(frame, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
+	findContours(frame, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE, cv::Point(0, 0));
 
 	for (size_t i = 0; i < contours.size(); i++)
 	{

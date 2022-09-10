@@ -116,7 +116,7 @@ PTR_RESULT_RECOGNITION Companion::Algorithm::Recognition::Matching::FeatureMatch
 		throw Companion::Error::Code::image_not_found;
 	}
 
-	cvtColor(sceneImage, sceneImage, CV_BGR2GRAY); // Convert image to grayscale
+	cvtColor(sceneImage, sceneImage, cv::COLOR_BGR2GRAY); // Convert image to grayscale
 
 	// --------------------------------------------------
 	// Scene and model preparation start
@@ -452,10 +452,10 @@ PTR_DRAW Companion::Algorithm::Recognition::Matching::FeatureMatching::Calculate
 
 	//-- Get the corners from the image_1 (the object to be recognized)
 	std::vector<cv::Point2f> obj_corners(4);
-	obj_corners[0] = cvPoint(0, 0);
-	obj_corners[1] = cvPoint(objectImage.cols, 0);
-	obj_corners[2] = cvPoint(objectImage.cols, objectImage.rows);
-	obj_corners[3] = cvPoint(0, objectImage.rows);
+	obj_corners[0] = cv::Point2f(0, 0);
+	obj_corners[1] = cv::Point2f(objectImage.cols, 0);
+	obj_corners[2] = cv::Point2f(objectImage.cols, objectImage.rows);
+	obj_corners[3] = cv::Point2f(0, objectImage.rows);
 
 	std::vector<cv::Point2f> scene_corners(4);
 	cv::perspectiveTransform(obj_corners, scene_corners, homography);
